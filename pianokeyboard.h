@@ -27,6 +27,11 @@ protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    struct key {
+        bool isEnabled;
+        bool isPressed;
+    };
+
     static const int blackPositions[];
 };
 
