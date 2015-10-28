@@ -1,8 +1,20 @@
 #include "pianokeyboard.h"
 #include <QPainter>
 
-const int PianoKeyboard::blackPositions[] = {1, 2, 4, 5, 6};
-
+const PianoKeyboard::keyGfxTrait PianoKeyboard::octaveTraits[] = {
+    {false, 0},     // C
+    {true, 1},      // Cis
+    {false, 1},     // D
+    {true, 2},      // Dis
+    {false, 2},     // E
+    {false, 3},     // F
+    {true, 4},      // Fis
+    {false, 4},     // G
+    {true, 5},      // Gis
+    {false, 5},     // A
+    {true, 6},      // Ais
+    {false, 6}      // H
+};
 
 
 PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
@@ -17,15 +29,22 @@ void PianoKeyboard::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setPen(Qt::black);
     // White keys
-    for (int i = 0; i < numWhiteKeys; ++i) {
-        painter.fillRect(i*keyWidth, 0, keyWidth, keyHeight, Qt::white);
-        painter.drawRect(i*keyWidth, 0, keyWidth, keyHeight);
+    for (int octave = 0; octave < numOctaves; ++octave) {
+        for (int i  = 0; i < numKeysPerOctave; ++i) {
+            if (!octaveTraits[i].isBlack) {
+                const int xPos = octave*keyWidth*numWhiteKeysPerOctave + keyWidth*octaveTraits[i].posIndex;
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, Qt::white);
+                painter.drawRect(xPos, 0, keyWidth, keyHeight);
+            }
+        }
     }
     // Black keys
     for (int octave = 0; octave < numOctaves; ++octave) {
-        for (int i  = 0; i < 5; ++i) {
-            const int xPos = (octave*7+blackPositions[i])*keyWidth - blackKeyWidth/2;
-            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, Qt::black);
+        for (int i  = 0; i < numKeysPerOctave; ++i) {
+            if (octaveTraits[i].isBlack) {
+                const int xPos = octave*keyWidth*numWhiteKeysPerOctave + keyWidth*octaveTraits[i].posIndex - blackKeyWidth/2;
+                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, Qt::black);
+            }
         }
     }
 

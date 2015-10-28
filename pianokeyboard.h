@@ -8,8 +8,9 @@ class PianoKeyboard : public QWidget
     Q_OBJECT
 public:
     static const int numOctaves = 7;
+    static const int numWhiteKeysPerOctave = 7;
+    static const int numKeysPerOctave = 12;
     static const int numWhiteKeys = numOctaves*7;
-    static const int numBlackKeys = numOctaves*5;
     static const int keyWidth = 20;
     static const int keyHeight = 100;
     static const int blackKeyWidth = keyWidth-4;
@@ -23,16 +24,19 @@ signals:
 
 public slots:
 
+
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
 
-private:
-    struct key {
-        bool isEnabled;
-        bool isPressed;
+    struct keyGfxTrait {
+        bool isBlack;
+        int posIndex;   // with regards to white or black row
     };
+    static const keyGfxTrait octaveTraits[];
 
-    static const int blackPositions[];
+
+private:
+
 };
 
 #endif // PIANOKEYBOARD_H
