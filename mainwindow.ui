@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>854</width>
-    <height>748</height>
+    <width>1178</width>
+    <height>773</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,6 +42,16 @@
       </widget>
      </widget>
     </item>
+    <item>
+     <widget class="PianoKeyboard" name="widget" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>800</width>
+        <height>200</height>
+       </size>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -49,7 +59,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>854</width>
+     <width>1178</width>
      <height>21</height>
     </rect>
    </property>
@@ -111,6 +121,14 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PianoKeyboard</class>
+   <extends>QWidget</extends>
+   <header>pianokeyboard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

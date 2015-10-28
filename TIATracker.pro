@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    pianokeyboard.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    pianokeyboard.h
 
 FORMS    += mainwindow.ui
