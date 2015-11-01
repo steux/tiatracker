@@ -19,12 +19,14 @@ const PianoKeyboard::keyGfxTrait PianoKeyboard::octaveTraits[] = {
 
 PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 {
-
+    keyFont.setPixelSize(keyFontSize);
+    QFontMetrics fontMetrics(keyFont);
+    keyFontHeight = fontMetrics.height();
 }
 
 
 
-void PianoKeyboard::paintEvent(QPaintEvent *event)
+void PianoKeyboard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);
@@ -48,10 +50,8 @@ void PianoKeyboard::paintEvent(QPaintEvent *event)
         }
     }
 
-    QFont font("Helvetica");
-    font.setPixelSize(8);
-    painter.setFont(font);
-
+    // Hints
+    painter.setFont(keyFont);
     painter.setPen(Qt::white);
     painter.drawText(keyWidth - blackKeyWidth/2, 0, blackKeyWidth, blackKeyHeight, Qt::AlignBottom|Qt::AlignHCenter, "-37");
 

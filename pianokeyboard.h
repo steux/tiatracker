@@ -26,7 +26,7 @@ public slots:
 
 
 protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
     struct keyGfxTrait {
         bool isBlack;
@@ -36,7 +36,11 @@ protected:
 
 
 private:
+    static const int keyFontSize = 8;
+    static const int keyFontPadding = 4;    // Top/Bottom padding for key hint lines
 
+    QFont keyFont{"Helvetica"};
+    int keyFontHeight;
 };
 
 #endif // PIANOKEYBOARD_H
