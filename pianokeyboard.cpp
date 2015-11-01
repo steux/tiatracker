@@ -1,6 +1,7 @@
 #include "pianokeyboard.h"
 #include <QPainter>
 
+// Fixed key traits (black yes/no, position index)
 const PianoKeyboard::keyGfxTrait PianoKeyboard::octaveTraits[] = {
     {false, 0},     // C
     {true, 1},      // Cis
@@ -17,11 +18,18 @@ const PianoKeyboard::keyGfxTrait PianoKeyboard::octaveTraits[] = {
 };
 
 
+
 PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 {
+    for (int i = 0; i < numKeys; ++i) {
+        isPressed << false;
+    }
     keyFont.setPixelSize(keyFontSize);
     QFontMetrics fontMetrics(keyFont);
     keyFontHeight = fontMetrics.height();
+
+    setFixedWidth(keyboardWidth);
+    setFixedHeight(keyboardHeight);
 }
 
 
