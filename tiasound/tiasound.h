@@ -41,7 +41,8 @@ namespace TiaSound {
         ELECTRONIC_HIGH=15
     };
 
-    /* Get a distortion name as QString from Distortion index */
+    /* Get a distortion name as QString from Distortion index
+     */
     QString getDistorionName(Distortion dist);
 
 }

@@ -2,18 +2,34 @@
 #define INSTRUMENTPITCHGUIDE_H
 
 #include <QString>
-
+#include "tiasound.h"
 
 namespace TiaSound {
 
+    /* Pitch guide for one frequency value
+     */
+    struct FrequencyPitchGuide {
+        Note note;
+        int percentOff;
+    };
+
+
+
+    /* Pitch guide for one distortion for all 32 frequencies
+     */
     class InstrumentPitchGuide
     {
     public:
-        InstrumentPitchGuide();
-
-    protected:
+        Distortion distortion;
         QString name;
 
+        InstrumentPitchGuide(Distortion dist, QString name, QList<FrequencyPitchGuide> freqPitchGuides);
+
+        Note getNote(int frequency);
+        int getPercentOff(int frequency);
+
+    protected:
+        QList<FrequencyPitchGuide> freqPitchGuides;
     };
 
 }
