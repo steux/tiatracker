@@ -28,8 +28,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
     QFontMetrics fontMetrics(keyFont);
     keyFontHeight = fontMetrics.height();
 
-    setFixedWidth(keyboardWidth);
-    setFixedHeight(keyboardHeight);
+    setFixedWidth(keyboardWidth+1);
+    setFixedHeight(keyboardHeight+1);
 }
 
 
@@ -38,23 +38,21 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);
+
     // White keys
-    for (int octave = 0; octave < numOctaves; ++octave) {
-        for (int i  = 0; i < numKeysPerOctave; ++i) {
-            if (!octaveTraits[i].isBlack) {
-                const int xPos = octave*keyWidth*numWhiteKeysPerOctave + keyWidth*octaveTraits[i].posIndex;
-                painter.fillRect(xPos, 0, keyWidth, keyHeight, Qt::white);
-                painter.drawRect(xPos, 0, keyWidth, keyHeight);
-            }
+    for (int key = 0; key < numKeys; ++key) {
+        if (!octaveTraits[key%numKeysPerOctave].isBlack) {
+            const int xPos = calcWhiteKeyXPos(key);
+            painter.fillRect(xPos, 0, keyWidth, keyHeight, Qt::white);
+            painter.drawRect(xPos, 0, keyWidth, keyHeight);
         }
     }
+
     // Black keys
-    for (int octave = 0; octave < numOctaves; ++octave) {
-        for (int i  = 0; i < numKeysPerOctave; ++i) {
-            if (octaveTraits[i].isBlack) {
-                const int xPos = octave*keyWidth*numWhiteKeysPerOctave + keyWidth*octaveTraits[i].posIndex - blackKeyWidth/2;
-                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, Qt::black);
-            }
+    for (int key = 0; key < numKeys; ++key) {
+        if (octaveTraits[key%numKeysPerOctave].isBlack) {
+            const int xPos = calcBlackKeyXPos(key);
+            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, Qt::black);
         }
     }
 
@@ -63,4 +61,24 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
     painter.setPen(Qt::white);
     painter.drawText(keyWidth - blackKeyWidth/2, 0, blackKeyWidth, blackKeyHeight, Qt::AlignBottom|Qt::AlignHCenter, "-37");
 
+}
+
+
+
+int PianoKeyboard::calcWhiteKeyXPos(int key)
+{
+    int keyInOctave = key%numKeysPerOctave;
+    int octave = int(key/numKeysPerOctave);
+    int octaveXPos = octave*keyWidth*numWhiteKeysPerOctave;
+    return octaveXPos + octaveTraits[keyInOctave].posIndex*keyWidth;
+}
+
+
+
+int PianoKeyboard::calcBlackKeyXPos(int key)
+{
+    int keyInOctave = key%numKeysPerOctave;
+    int octave = int(key/numKeysPerOctave);
+    int octaveXPos = octave*keyWidth*numWhiteKeysPerOctave;
+    return octaveXPos + octaveTraits[keyInOctave].posIndex*keyWidth - blackKeyWidth/2;
 }

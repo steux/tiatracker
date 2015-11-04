@@ -48,6 +48,9 @@ private:
 
     QFont keyFont{"Helvetica"};
     int keyFontHeight;
+
+    int calcWhiteKeyXPos(int key);
+    int calcBlackKeyXPos(int key);
 };
 
 #endif // PIANOKEYBOARD_H
