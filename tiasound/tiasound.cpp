@@ -21,4 +21,30 @@ namespace TiaSound {
         return noteNames[noteIndexInOctave].arg(octave);
     }
 
+
+
+    QString getDistorionName(Distortion dist)
+    {
+        static const QList<QString> distNames{{
+                "Silent",           // 0
+                "Buzzy",            // 1
+                "Buzzy/Rumble",     // 2
+                "Flangy/Wavering",  // 3
+                "Pure High",        // 4
+                "Pure High",        // 5
+                "Pure Buzzy",       // 6
+                "Reedy/Rumble",     // 7
+                "White Noise",      // 8
+                "Reedy/Rumble",     // 9
+                "Pure Buzzy",       // 10
+                "Silent",           // 11
+                "Pure Low",         // 12
+                "Pure Low",         // 13
+                "Electronic Low",   // 14
+                "Electronic High"   // 15
+                                              }};
+
+        return distNames[static_cast<int>(dist)];
+    }
+
 }

@@ -24,6 +24,26 @@ namespace TiaSound {
     /* Get a note name as QString from note index, with octave number */
     QString getNoteNameWithOctave(Note note);
 
-};
+
+
+    /* Distortions
+     */
+    enum class Distortion : int {
+        BUZZY=1,
+        BUZZY_RUMBLE=2,
+        FLANGY_WAVERING=3,
+        PURE_HIGH=4,
+        PURE_BUZZY=6,
+        REEDY_RUMBLE=7,
+        WHITE_NOISE=8,
+        PURE_LOW=12,
+        ELECTRONIC_LOW=14,
+        ELECTRONIC_HIGH=15
+    };
+
+    /* Get a distortion name as QString from Distortion index */
+    QString getDistorionName(Distortion dist);
+
+}
 
 #endif // TIASOUND_H
