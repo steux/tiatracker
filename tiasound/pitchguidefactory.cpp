@@ -7,4 +7,16 @@ namespace TiaSound {
 
     }
 
+
+
+    PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
+        return palGuide;
+    }
+
+
+
+    PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
+        return ntscGuide;
+    }
+
 }
