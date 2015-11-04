@@ -22,3 +22,5 @@ HEADERS  += mainwindow.h \
     tiasound/tiasound.h
 
 FORMS    += mainwindow.ui
+
+CONFIG += c++11

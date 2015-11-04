@@ -11,7 +11,7 @@ class TiaSound;
 /* Utility class providing definitons and helper functions for dealing
  * with TIA sound.
  */
-class TiaSound
+class TiaSound::TiaSound
 {
 public:
     // Note constants that can be used as indexes
@@ -26,10 +26,13 @@ public:
         NotANote
     };
 
-    // Note names without octave number
-    const QList<QString> noteNames;
 
     TiaSound();
+
+protected:
+    // Note names without octave number
+    const QList<QString> noteNames{{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"}};
+
 
 };
 
