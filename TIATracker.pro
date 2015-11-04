@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     pianokeyboard.cpp \
-    tiasound/tiasound.cpp
+    tiasound/tiasound.cpp \
+    tiasound/instrumentpitchguide.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
-    tiasound/tiasound.h
+    tiasound/tiasound.h \
+    tiasound/instrumentpitchguide.h
 
 FORMS    += mainwindow.ui
 
