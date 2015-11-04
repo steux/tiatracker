@@ -16,12 +16,16 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     pianokeyboard.cpp \
     tiasound/tiasound.cpp \
-    tiasound/instrumentpitchguide.cpp
+    tiasound/instrumentpitchguide.cpp \
+    tiasound/pitchguide.cpp \
+    tiasound/pitchguidefactory.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
     tiasound/tiasound.h \
-    tiasound/instrumentpitchguide.h
+    tiasound/instrumentpitchguide.h \
+    tiasound/pitchguide.h \
+    tiasound/pitchguidefactory.h
 
 FORMS    += mainwindow.ui
 
