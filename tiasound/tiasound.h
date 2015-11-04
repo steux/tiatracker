@@ -5,16 +5,9 @@
 #include <QList>
 
 namespace TiaSound {
-class TiaSound;
-}
 
-/* Utility class providing definitons and helper functions for dealing
- * with TIA sound.
- */
-class TiaSound::TiaSound
-{
-public:
-    // Note constants that can be used as indexes
+    /* Note names for use as index
+     */
     enum class Note : int {
         C_0 = 0, Cis_0, D_0, Dis_0, E_0, F_0, Fis_0, G_0, Gis_0, A_0, Ais_0, H_0,
         C_1, Cis_1, D_1, Dis_1, E_1, F_1, Fis_1, G_1, Gis_1, A_1, Ais_1, H_1,
@@ -26,13 +19,10 @@ public:
         NotANote
     };
 
-
-    TiaSound();
-
-protected:
-    // Note names without octave number
-    const QList<QString> noteNames{{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"}};
-
+    /* Get a note name as QString from note index, without octave number */
+    QString getNoteName(Note note);
+    /* Get a note name as QString from note index, with octave number */
+    QString getNoteNameWithOctave(Note note);
 
 };
 

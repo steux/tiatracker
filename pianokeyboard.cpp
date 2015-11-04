@@ -34,6 +34,8 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 
 
 
+/* Paint keyboard
+ */
 void PianoKeyboard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -65,6 +67,8 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
 
 
 
+/* Calc x-pos for a given white key (0..numKeys)
+ */
 int PianoKeyboard::calcWhiteKeyXPos(int key)
 {
     int keyInOctave = key%numKeysPerOctave;
@@ -75,6 +79,8 @@ int PianoKeyboard::calcWhiteKeyXPos(int key)
 
 
 
+/* Calc x-pos for a given black key (0..numKeys)
+ */
 int PianoKeyboard::calcBlackKeyXPos(int key)
 {
     int keyInOctave = key%numKeysPerOctave;

@@ -49,6 +49,8 @@ private:
     QFont keyFont{"Helvetica"};
     int keyFontHeight;
 
+    /* Calc x-pos for a given white or black key (0..numKeys)
+     */
     int calcWhiteKeyXPos(int key);
     int calcBlackKeyXPos(int key);
 };
