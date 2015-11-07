@@ -2,9 +2,4 @@
 
 namespace TiaSound {
 
-    PitchGuide::PitchGuide()
-    {
-
-    }
-
 }

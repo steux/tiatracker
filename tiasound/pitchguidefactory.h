@@ -1,6 +1,9 @@
 #ifndef PITCHGUIDEFACTORY_H
 #define PITCHGUIDEFACTORY_H
 
+#include <QList>
+#include <QString>
+
 #include "pitchguide.h"
 
 namespace TiaSound {
@@ -14,8 +17,9 @@ namespace TiaSound {
         PitchGuide getPitchPerfectNtscGuide();
 
     private:
-        PitchGuide palGuide;
-        PitchGuide ntscGuide;
+
+        PitchGuide palGuide{"Pitch-perfect PAL", TvStandard::PAL};
+        PitchGuide ntscGuide{"Pitch-perfect NTSC", TvStandard::NTSC};
     };
 
 }

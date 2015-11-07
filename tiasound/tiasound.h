@@ -45,6 +45,13 @@ namespace TiaSound {
      */
     QString getDistorionName(Distortion dist);
 
+
+    /* TV Standards
+     */
+    enum class TvStandard {
+        PAL, NTSC
+    };
+
 }
 
 #endif // TIASOUND_H
