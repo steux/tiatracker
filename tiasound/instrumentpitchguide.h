@@ -15,7 +15,7 @@ namespace TiaSound {
 
 
 
-    /* Pitch guide for one distortion for all 32 frequencies
+    /* Frequencies pitch guide for one distortion
      */
     class InstrumentPitchGuide
     {
@@ -29,6 +29,7 @@ namespace TiaSound {
             distortion(dist), name(name), freqPitchGuides(freqPitchGuides)
         {}
 
+        int getNumFrequencies();
         Note getNote(int frequency);
         int getPercentOff(int frequency);
 

@@ -4,6 +4,8 @@
 #include <QWidget>
 
 #include "tiasound/tiasound.h"
+#include "tiasound/instrumentpitchguide.h"
+
 
 class PianoKeyboard : public QWidget
 {
@@ -24,6 +26,10 @@ public:
     static const int keyboardHeight = keyHeight;
 
     explicit PianoKeyboard(QWidget *parent = 0);
+
+    /* Set current instrument pitch guide
+     */
+    void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide);
 
 signals:
 
@@ -46,7 +52,7 @@ private:
         int frequency;
         TiaSound::Note note;
         int off;
-        bool isPressed;
+        bool isEnabled;
     };
 
     KeyInformation keyInfo[numKeys]{};

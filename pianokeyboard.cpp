@@ -31,6 +31,40 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 
 
 
+/* Inits all isEnabled to false, then goes through list in pitchGuide.
+ * Keys for found notes are activated and frequeny, note and off-tune value
+ * are stored. If a note has multiple entries, the one with the least
+ * off-tune value is chosen.
+ */
+void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide)
+{
+    for (int i = 0; i < numKeys; ++i) {
+        keyInfo[i].isEnabled = false;
+    }
+    for (int freq = 0; freq < pitchGuide.getNumFrequencies(); ++freq) {
+        TiaSound::Note note = pitchGuide.getNote(freq);
+        int iNote = static_cast<int>(note);
+        int off = pitchGuide.getPercentOff(freq);
+        if (keyInfo[iNote].isEnabled) {
+            // Duplicate note: Choose note with smaller off-tune value
+            if (off < keyInfo[iNote].off) {
+                keyInfo[iNote].isEnabled = true;
+                keyInfo[iNote].frequency = freq;
+                keyInfo[iNote].note = note;
+                keyInfo[iNote].off = off;
+            }
+        } else {
+            // Enable key for this note
+            keyInfo[iNote].isEnabled = true;
+            keyInfo[iNote].frequency = freq;
+            keyInfo[iNote].note = note;
+            keyInfo[iNote].off = off;
+        }
+    }
+}
+
+
+
 /* Paint keyboard
  */
 void PianoKeyboard::paintEvent(QPaintEvent *)
