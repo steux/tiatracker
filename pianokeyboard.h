@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+#include "tiasound/tiasound.h"
+
 class PianoKeyboard : public QWidget
 {
     Q_OBJECT
@@ -31,16 +33,23 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
-    struct keyGfxTrait {
+    struct KeyGfxTrait {
         bool isBlack;
         int posIndex;   // with regards to white or black row
     };
-    static const keyGfxTrait octaveTraits[];
+    static const KeyGfxTrait octaveTraits[];
 
 
 private:
-    // Key state
-    QList<bool> isPressed;
+    // Key states and pitch info
+    struct KeyInformation {
+        int frequency;
+        TiaSound::Note note;
+        int off;
+        bool isPressed;
+    };
+
+    KeyInformation keyInfo[numKeys]{};
 
     // Key hints
     static const int keyFontSize = 8;
