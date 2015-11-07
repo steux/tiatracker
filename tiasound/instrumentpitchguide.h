@@ -23,7 +23,11 @@ namespace TiaSound {
         Distortion distortion;
         QString name;
 
-        InstrumentPitchGuide(Distortion dist, QString name, QList<FrequencyPitchGuide> freqPitchGuides);
+        InstrumentPitchGuide() {}
+
+        InstrumentPitchGuide(Distortion dist, QString name, QList<FrequencyPitchGuide> freqPitchGuides) :
+            distortion(dist), name(name), freqPitchGuides(freqPitchGuides)
+        {}
 
         Note getNote(int frequency);
         int getPercentOff(int frequency);

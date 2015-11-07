@@ -1,7 +1,7 @@
 #ifndef PITCHGUIDE_H
 #define PITCHGUIDE_H
 
-#include <QHash>
+#include <QMap>
 #include <QString>
 
 #include "tiasound.h"
@@ -14,7 +14,7 @@ namespace TiaSound {
     public:
         QString name;
         TvStandard tvStandard;
-        QHash<Distortion, InstrumentPitchGuide> instrumentGuides;
+        QMap<Distortion, InstrumentPitchGuide> instrumentGuides;
 
         PitchGuide(QString name, TvStandard standard) : name(name), tvStandard(standard)
         {}

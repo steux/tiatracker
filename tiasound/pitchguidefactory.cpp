@@ -1,10 +1,11 @@
 #include "pitchguidefactory.h"
+#include "pitchperfectpal.h"
 
 namespace TiaSound {
 
     PitchGuideFactory::PitchGuideFactory()
     {
-
+        palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
     }
 
 
