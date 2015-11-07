@@ -43,7 +43,7 @@
      </widget>
     </item>
     <item>
-     <widget class="PianoKeyboard" name="widget" native="true"/>
+     <widget class="PianoKeyboard" name="pianoKeyboard" native="true"/>
     </item>
    </layout>
   </widget>
