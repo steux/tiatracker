@@ -27,6 +27,7 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
     keyFont.setPixelSize(keyFontSize);
     QFontMetrics fontMetrics(keyFont);
     keyFontHeight = fontMetrics.height();
+    keyInfoRectHeight = keyFontHeight + keyFontPadding;
 
     setFixedWidth(keyboardWidth+1);
     setFixedHeight(keyboardHeight+1);
@@ -113,7 +114,9 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
             if (keyInfo[key].off >= offThreshold) {
                 painter.setPen(Qt::red);
             }
-            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
+            painter.drawText(xPos, rectHeight - 3*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].frequency));
+            painter.drawText(xPos, rectHeight - 2*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].off));
+            painter.drawText(xPos, rectHeight - 1*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
         }
     }
 

@@ -19,7 +19,7 @@ public:
     static const int numKeys = numOctaves*numKeysPerOctave;
     // GFX constants
     static const int keyWidth = 20;
-    static const int keyHeight = 100;
+    static const int keyHeight = 110;
     static const int blackKeyWidth = keyWidth-4;
     static const int blackKeyHeight = int(0.6*keyHeight);
     static const int keyboardWidth = keyWidth*numWhiteKeys;
@@ -62,10 +62,11 @@ private:
 
     // Key hints
     static const int keyFontSize = 9;
-    static const int keyFontPadding = 4;    // Top/Bottom padding for key hint lines
+    static const int keyFontPadding = 1;    // Top/Bottom padding for key hint lines
 
     QFont keyFont{"Helvetica"};
     int keyFontHeight;
+    int keyInfoRectHeight;
 
     /* Calc x-pos for a given white or black key (0..numKeys)
      */
