@@ -25,6 +25,9 @@ public:
     static const int keyboardWidth = keyWidth*numWhiteKeys;
     static const int keyboardHeight = keyHeight;
 
+    // Threshold for unacceptable off-tune percentage
+    int offThreshold = 10;
+
     explicit PianoKeyboard(QWidget *parent = 0);
 
     /* Set current instrument pitch guide
@@ -58,7 +61,7 @@ private:
     KeyInformation keyInfo[numKeys]{};
 
     // Key hints
-    static const int keyFontSize = 8;
+    static const int keyFontSize = 9;
     static const int keyFontPadding = 4;    // Top/Bottom padding for key hint lines
 
     QFont keyFont{"Helvetica"};

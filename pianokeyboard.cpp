@@ -1,5 +1,8 @@
-#include "pianokeyboard.h"
 #include <QPainter>
+
+#include "pianokeyboard.h"
+#include "mainwindow.h"
+
 
 // Fixed key traits (black yes/no, position index)
 const PianoKeyboard::KeyGfxTrait PianoKeyboard::octaveTraits[] = {
@@ -70,13 +73,13 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitch
 void PianoKeyboard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setPen(Qt::black);
+    painter.setPen(MainWindow::dark);
 
     // White keys
     for (int key = 0; key < numKeys; ++key) {
         if (!octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcWhiteKeyXPos(key);
-            painter.fillRect(xPos, 0, keyWidth, keyHeight, Qt::white);
+            painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::light);
             painter.drawRect(xPos, 0, keyWidth, keyHeight);
         }
     }
@@ -85,7 +88,7 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
     for (int key = 0; key < numKeys; ++key) {
         if (octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcBlackKeyXPos(key);
-            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, Qt::black);
+            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::dark);
         }
     }
 
@@ -97,17 +100,20 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
             int rectWidth;
             int rectHeight;
             if (octaveTraits[key%numKeysPerOctave].isBlack) {
-                painter.setPen(Qt::white);
+                painter.setPen(MainWindow::light);
                 xPos = calcBlackKeyXPos(key);
                 rectWidth = blackKeyWidth;
                 rectHeight = blackKeyHeight;
             } else {
-                painter.setPen(Qt::black);
+                painter.setPen(MainWindow::dark);
                 xPos = calcWhiteKeyXPos(key);
                 rectWidth = keyWidth;
                 rectHeight = keyHeight;
             }
-            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteNameWithOctave(keyInfo[key].note));
+            if (keyInfo[key].off >= offThreshold) {
+                painter.setPen(Qt::red);
+            }
+            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
         }
     }
 
