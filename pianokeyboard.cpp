@@ -91,9 +91,6 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
 
     // Hints
     painter.setFont(keyFont);
-//    painter.setPen(Qt::white);
-//    painter.drawText(keyWidth - blackKeyWidth/2, 0, blackKeyWidth, blackKeyHeight, Qt::AlignBottom|Qt::AlignHCenter, "-37");
-
     for (int key = 0; key < numKeys; ++key) {
         if (keyInfo[key].isEnabled) {
             int xPos;
@@ -110,7 +107,7 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
                 rectWidth = keyWidth;
                 rectHeight = keyHeight;
             }
-            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
+            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteNameWithOctave(keyInfo[key].note));
         }
     }
 
