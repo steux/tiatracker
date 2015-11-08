@@ -110,7 +110,7 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
                 rectWidth = keyWidth;
                 rectHeight = keyHeight;
             }
-            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter, TiaSound::getNoteName(keyInfo[key].note));
+            painter.drawText(xPos, 0, rectWidth, rectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
         }
     }
 
