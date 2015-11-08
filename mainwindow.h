@@ -20,7 +20,9 @@ public:
     static const QColor light;
     static const QColor lightHighlighted;
     static const QColor contentDark;
-    static const QColor contenLight;
+    static const QColor contentDarker;
+    static const QColor contentLight;
+    static const QColor contentLighter;
     static const QColor red;
 
 

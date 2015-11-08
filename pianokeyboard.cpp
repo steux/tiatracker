@@ -74,9 +74,9 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitch
 void PianoKeyboard::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setPen(MainWindow::dark);
 
     // White keys
+    painter.setPen(MainWindow::dark);
     for (int key = 0; key < numKeys; ++key) {
         if (!octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcWhiteKeyXPos(key);
@@ -85,7 +85,17 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
         }
     }
 
+    // Octave number hints
+    painter.setPen(MainWindow::contentDark);
+    painter.setFont(keyFont);
+    for (int octave = 0; octave < numOctaves; ++octave) {
+        const int xPos = octave*numWhiteKeysPerOctave*keyWidth - 2;
+        const int yPos = keyHeight/2 - 4*keyFontHeight;
+        painter.drawText(xPos, yPos, keyWidth, keyFontHeight, Qt::AlignHCenter, QString::number(octave + 1));
+    }
+
     // Black keys
+    painter.setPen(MainWindow::dark);
     for (int key = 0; key < numKeys; ++key) {
         if (octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcBlackKeyXPos(key);
