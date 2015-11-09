@@ -80,7 +80,11 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
     for (int key = 0; key < numKeys; ++key) {
         if (!octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcWhiteKeyXPos(key);
-            painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::light);
+            if (keyInfo[key].isEnabled) {
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::light);
+            } else {
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::lightHighlighted);
+            }
             painter.drawRect(xPos, 0, keyWidth, keyHeight);
         }
     }
@@ -95,11 +99,14 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
     }
 
     // Black keys
-    painter.setPen(MainWindow::dark);
     for (int key = 0; key < numKeys; ++key) {
         if (octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcBlackKeyXPos(key);
-            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::dark);
+            if (keyInfo[key].isEnabled) {
+                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::dark);
+            } else {
+                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::darkHighlighted);
+            }
         }
     }
 
