@@ -24,6 +24,7 @@ public:
     static const QColor contentLight;
     static const QColor contentLighter;
     static const QColor red;
+    static const QColor orange;
 
 
 

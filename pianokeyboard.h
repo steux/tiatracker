@@ -61,8 +61,7 @@ private:
     KeyInformation keyInfo[numKeys]{};
 
     // Key hints
-    static const int keyFontSize = 9;
-    static const int keyFontPadding = 1;    // Top/Bottom padding for key hint lines
+    static const int keyFontSize = 10;
 
     QFont keyFont{"Helvetica"};
     int keyFontHeight;
