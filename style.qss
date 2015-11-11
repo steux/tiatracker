@@ -1,1 +1,53 @@
-QMainWindow { background: yellow }
+QMainWindow {
+    background: #eee8d5;
+}
+
+
+
+QTabWidget::pane {
+    background: #fdf6e3;
+    border: 1px solid #657b83;
+    top: -1px;
+}
+
+QTabBar::tab {
+    border: 1px solid #657b83;
+    border-bottom: 0px;
+    min-width: 28ex;
+    padding: 4px;
+    margin-right: 2px;
+}
+
+QTabBar::tab:selected {
+    background: #fdf6e3;
+}
+
+
+
+QMenuBar {
+    background-color: #eee8d5;
+}
+
+QMenuBar::item {
+    background: transparent;
+    padding: 8px;
+}
+
+QMenuBar::item:selected {
+    background: #fdf6e3;
+}
+
+QMenu {
+    background-color: #fdf6e3;
+    border: 1px solid #002b36;
+}
+
+QMenu::item {
+    color: #002b36;
+    background-color: #fdf6e3;
+}
+
+QMenu::item:selected {
+    color: #002b36;
+    background-color: #eee8d5;
+}
