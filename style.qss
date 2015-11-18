@@ -3,13 +3,11 @@ QMainWindow {
 }
 
 
-
 QTabWidget::pane {
     background: #fdf6e3;
     border: 1px solid #657b83;
     top: -1px;
 }
-
 QTabBar::tab {
     border: 1px solid #657b83;
     border-bottom: 0px;
@@ -18,41 +16,33 @@ QTabBar::tab {
     margin-right: 2px;
     color: #002b36;
 }
-
 QTabBar::tab:selected {
     background: #fdf6e3;
 }
 
 
-
 QMenuBar {
     background-color: #eee8d5;
 }
-
 QMenuBar::item {
     background: transparent;
     padding: 8px;
 }
-
 QMenuBar::item:selected {
     background: #fdf6e3;
 }
-
 QMenu {
     background-color: #fdf6e3;
     border: 1px solid #002b36;
 }
-
 QMenu::item {
     color: #002b36;
     background-color: #fdf6e3;
 }
-
 QMenu::item:selected {
     color: #002b36;
     background-color: #eee8d5;
 }
-
 
 
 QLabel {
@@ -67,7 +57,6 @@ QPushButton {
     border: 1px solid #657b83;
     padding: 6px 18px 6px 18px;
 }
-
 QPushButton:pressed, QPushButton:hover {
     background-color: #eee8d5;
 }
@@ -79,9 +68,17 @@ QComboBox {
     border: 1px solid #657b83;
     padding: 1px 6px 1px 6px;
 }
-
 QComboBox::drop-down {
-    border: 0px solid #657b83;
+    border: 0px;
     color: #002b36;
 }
-
+QComboBox::down-arrow {
+    image: url(:/graphics/arrow_down.png);
+}
+QComboBox QAbstractItemView {
+    border: 1px solid #657b83;
+    background-color: #fdf6e3;
+    selection-background-color: #eee8d5;
+    color: #002b36;
+    selection-color: #002b36;
+}
