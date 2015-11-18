@@ -65,6 +65,8 @@ QPushButton:pressed, QPushButton:hover {
 QComboBox {
     background-color: #eee8d5;
     color: #002b36;
+    selection-background-color: #fdf6e3;
+    selection-color: #002b36;
     border: 1px solid #657b83;
     padding: 0px 6px 0px 6px;
 }
