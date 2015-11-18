@@ -42,7 +42,7 @@
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Instrument 2:</string>
+              <string>Instrument:</string>
              </property>
             </widget>
            </item>
@@ -53,6 +53,9 @@
              </property>
              <property name="insertPolicy">
               <enum>QComboBox::InsertAtCurrent</enum>
+             </property>
+             <property name="minimumContentsLength">
+              <number>32</number>
              </property>
             </widget>
            </item>
