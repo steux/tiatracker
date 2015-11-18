@@ -16,6 +16,7 @@ QTabBar::tab {
     min-width: 28ex;
     padding: 4px;
     margin-right: 2px;
+    color: #002b36;
 }
 
 QTabBar::tab:selected {
@@ -49,5 +50,24 @@ QMenu::item {
 
 QMenu::item:selected {
     color: #002b36;
+    background-color: #eee8d5;
+}
+
+
+
+QLabel {
+    background-color: #fdf6e3;
+    color: #002b36;
+}
+
+
+QPushButton {
+    background-color: #fdf6e3;
+    color: #002b36;
+    border: 1px solid #657b83;
+    padding: 6px 18px 6px 18px;
+}
+
+QPushButton:pressed, QPushButton:hover {
     background-color: #eee8d5;
 }
