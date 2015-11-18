@@ -44,6 +44,19 @@ int main(int argc, char *argv[])
                               TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_HIGH)
                           });
 
+    // Instrument list
+    QComboBox *cbInstruments = w.findChild<QComboBox *>("comboBoxInstruments");
+    cbInstruments->addItems({
+                                "1: ---",
+                                "2: ---",
+                                "3: ---",
+                                "4: ---",
+                                "5: ---",
+                                "6: ---",
+                                "7: ---"
+                          });
+
+
     w.show();
 
     return a.exec();

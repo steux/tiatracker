@@ -42,14 +42,17 @@
            <item>
             <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Instrument:</string>
+              <string>Instrument 2:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox">
+            <widget class="QComboBox" name="comboBoxInstruments">
              <property name="editable">
               <bool>true</bool>
+             </property>
+             <property name="insertPolicy">
+              <enum>QComboBox::InsertAtCurrent</enum>
              </property>
             </widget>
            </item>
