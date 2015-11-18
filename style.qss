@@ -66,7 +66,7 @@ QComboBox {
     background-color: #eee8d5;
     color: #002b36;
     border: 1px solid #657b83;
-    padding: 1px 6px 1px 6px;
+    padding: 0px 6px 0px 6px;
 }
 QComboBox::drop-down {
     border: 0px;
@@ -81,4 +81,22 @@ QComboBox QAbstractItemView {
     selection-background-color: #eee8d5;
     color: #002b36;
     selection-color: #002b36;
+}
+
+
+QSpinBox {
+    background-color: #eee8d5;
+    color: #002b36;
+    selection-background-color: #fdf6e3;
+    selection-color: #073642;
+    border: 1px solid #657b83;
+    padding: 0px 2px 0px 2px;
+}
+QSpinBox::up-button {
+    border: 1px;
+    image: url(:/graphics/spin_up.png);
+}
+QSpinBox::down-button {
+    border: 1px;
+    image: url(:/graphics/spin_down.png);
 }
