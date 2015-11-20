@@ -7,6 +7,7 @@
 #include "tiasound/tiasound.h"
 #include "pianokeyboard.h"
 #include "tiasound/pitchperfectpal.h"
+#include "waveformshaper.h"
 
 #include <iostream>
 
@@ -56,6 +57,11 @@ int main(int argc, char *argv[])
                                 "---"
                           });
 
+    // Volume shaper
+    WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
+    vs->name = "Volume";
+    vs->scaleMin = 0;
+    vs->scaleMax = 15;
 
     w.show();
 

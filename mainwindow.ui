@@ -103,6 +103,9 @@
           </layout>
          </widget>
         </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="WaveformShaper" name="volumeShaper" native="true"/>
+        </item>
         <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
@@ -320,6 +323,12 @@
    <class>PianoKeyboard</class>
    <extends>QWidget</extends>
    <header>pianokeyboard.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WaveformShaper</class>
+   <extends>QWidget</extends>
+   <header>waveformshaper.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
