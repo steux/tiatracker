@@ -47,13 +47,13 @@ int main(int argc, char *argv[])
     // Instrument list
     QComboBox *cbInstruments = w.findChild<QComboBox *>("comboBoxInstruments");
     cbInstruments->addItems({
-                                "1: ---",
-                                "2: ---",
-                                "3: ---",
-                                "4: ---",
-                                "5: ---",
-                                "6: ---",
-                                "7: ---"
+                                "---",
+                                "---",
+                                "---",
+                                "---",
+                                "---",
+                                "---",
+                                "---"
                           });
 
 

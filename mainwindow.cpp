@@ -12,6 +12,7 @@ const QColor MainWindow::contentLight{"#839496"};
 const QColor MainWindow::contentLighter{"#93a1a1"};
 const QColor MainWindow::red{"#dc322f"};
 const QColor MainWindow::orange{"#cb4b16"};
+const QColor MainWindow::blue{"#268bd2"};
 
 
 

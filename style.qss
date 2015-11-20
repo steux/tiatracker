@@ -1,19 +1,20 @@
 QMainWindow {
-    background: #eee8d5;
+    background: #839496;
 }
 
 
 QTabWidget::pane {
     background: #fdf6e3;
-    border: 1px solid #657b83;
+    border: 1px solid #002b36;
     top: -1px;
 }
 QTabBar::tab {
-    border: 1px solid #657b83;
+    background: #eee8d5;
+    border: 1px solid #002b36;
     border-bottom: 0px;
     min-width: 28ex;
     padding: 4px;
-    margin-right: 2px;
+    margin-right: 4px;
     color: #002b36;
 }
 QTabBar::tab:selected {
