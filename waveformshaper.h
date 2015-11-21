@@ -42,7 +42,12 @@ private:
     int sustainStart;
     int releaseStart;
 
-    int calcWidth() { return 2*legendCellSize + values.size()*cellWidth; }
+    static const int legendScaleSize = 11;
+    static const int legendNameSize = 14;
+    QFont legendFont{"Helvetica"};
+    int nameFontHeight;
+
+    int calcWidth() { return legendCellSize + values.size()*cellWidth; }
 };
 
 #endif // WAVEFORMSHAPER_H

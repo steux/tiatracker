@@ -8,7 +8,9 @@ WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(calcWidth());
     setFixedHeight(widgetHeight);
-
+    legendFont.setPixelSize(legendNameSize);
+    QFontMetrics fontMetrics(legendFont);
+    nameFontHeight = fontMetrics.height();
 }
 
 void WaveformShaper::setScale(int min, int max)
@@ -24,8 +26,43 @@ void WaveformShaper::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    painter.setPen(MainWindow::dark);
-    painter.fillRect(0, 0, width(), height(), MainWindow::dark);
+    const int valuesXPos = legendCellSize;
+    const int valuesHeight = widgetHeight - legendCellSize;
+
+    /* Legend */
+    // Left side
+    painter.fillRect(0, 0, legendCellSize, widgetHeight, MainWindow::lightHighlighted);
+    // Bottom
+    painter.fillRect(valuesXPos, widgetHeight - legendCellSize, values.size()*cellWidth, legendCellSize, MainWindow::lightHighlighted);
+    // Name
+    painter.setPen(MainWindow::contentDarker);
+    legendFont.setBold(true);
+    legendFont.setPixelSize(legendNameSize);
+    painter.setFont(legendFont);
+    painter.save();
+    painter.rotate(-90);
+    int nameLength = painter.fontMetrics().width(name);
+    painter.drawText(0-(valuesHeight - nameLength)/2 - nameLength, 14, name);
+    painter.restore();
+    // Scale
+    legendFont.setBold(false);
+    legendFont.setPixelSize(legendScaleSize);
+    painter.setFont(legendFont);
+    painter.drawText(0, 0, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMax));
+    painter.drawText(0, valuesHeight - nameFontHeight, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMin));
+    // Frame numbers
+    for (int frame = 0; frame < values.size(); ++frame) {
+        int xPos = legendCellSize + frame*cellWidth;
+        painter.drawText(xPos, valuesHeight, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(frame + 1));
+    }
+
+    /* Values */
+    // Attack/Decay
+    painter.fillRect(valuesXPos, 0, sustainStart*cellWidth, valuesHeight, MainWindow::darkHighlighted);
+    // Sustain
+    painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::dark);
+    // Release
+    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
 }
 
 QList<int> WaveformShaper::getValues() const
