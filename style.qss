@@ -27,7 +27,7 @@ QMenuBar {
 }
 QMenuBar::item {
     background: transparent;
-    padding: 8px;
+    padding: 4px 10px 4px 10px;
 }
 QMenuBar::item:selected {
     background: #fdf6e3;
