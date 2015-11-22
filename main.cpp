@@ -65,6 +65,14 @@ int main(int argc, char *argv[])
     vs->setSustainStart(5);
     vs->setReleaseStart(9);
 
+    // Frequency shaper
+    WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
+    fs->name = "Frequency";
+    fs->setScale(-8, 7);
+    fs->setValues({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+    fs->setSustainStart(5);
+    fs->setReleaseStart(9);
+
     w.show();
 
     return a.exec();

@@ -75,16 +75,19 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     painter.setPen(MainWindow::contentLight);
     for (int i = 0; i < values.size(); ++i) {
         int xPos = int(valuesXPos + i*cellWidth + cellWidth/2);
-        int yPos = valuesHeight - int(values[i]*cellHeight + cellHeight/2);
+        int deviceValue = scaleMax - values[i];
+        int yPos = int(deviceValue*cellHeight + cellHeight/2);
         painter.drawEllipse(xPos - valueCircleRadius, yPos - valueCircleRadius, 2*valueCircleRadius - 1, 2*valueCircleRadius - 1);
     }
     // Value lines
     painter.setPen(QPen(MainWindow::blue, 2, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
     for (int i = 1; i < values.size(); ++i) {
         int fromX = int(valuesXPos + (i - 1)*cellWidth + cellWidth/2);
-        int fromY = valuesHeight - int(values[i - 1]*cellHeight + cellHeight/2);
+        int deviceValueFrom = scaleMax - values[i - 1];
+        int fromY = int(deviceValueFrom*cellHeight + cellHeight/2);
         int toX = int(valuesXPos + i*cellWidth + cellWidth/2);
-        int toY = valuesHeight - int(values[i]*cellHeight + cellHeight/2);
+        int deviceValueTo = scaleMax - values[i];
+        int toY = int(deviceValueTo*cellHeight + cellHeight/2);
         painter.drawLine(fromX, fromY, toX, toY);
     }
 }
