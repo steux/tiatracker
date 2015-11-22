@@ -58,11 +58,11 @@ void WaveformShaper::paintEvent(QPaintEvent *)
 
     /* Values */
     // Attack/Decay
-    painter.fillRect(valuesXPos, 0, sustainStart*cellWidth, valuesHeight, MainWindow::darkHighlighted);
+    painter.fillRect(valuesXPos, 0, sustainStart*cellWidth, valuesHeight, MainWindow::dark);
     // Sustain
-    painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::dark);
+    painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
     // Release
-    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
+    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
 
     /* Waveform */
     // Value numbers

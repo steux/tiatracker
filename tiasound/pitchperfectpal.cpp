@@ -77,4 +77,42 @@ namespace TiaSound {
             {Note::H_4, -23}
         }
     };
+
+    const InstrumentPitchGuide perfectPalDist6{
+        Distortion::PURE_HIGH, "Pitch-perfect PAL Pure Low", {
+            {Note::H_5, +32},
+            {Note::H_4, +32},
+            {Note::E_4, +30},
+            {Note::H_3, +32},
+            {Note::G_3, +45},
+            {Note::E_3, +30},
+            {Note::D_3, -37},
+            {Note::H_2, +32},
+            {Note::A_2, +28},
+            {Note::G_2, +45},
+            {Note::Fis_2, -19},
+            {Note::E_2, +31},
+            {Note::Dis_2, -9},
+            {Note::D_2, -37},
+            {Note::C_2, +44},
+            {Note::H_1, +32},
+            {Note::Ais_1, +26},
+            {Note::A_1, +27},
+            {Note::Gis_1, +35},
+            {Note::G_1, +45},
+            {Note::G_1, -39},
+            {Note::Fis_1, -20},
+            {Note::F_1, +4},
+            {Note::E_1, +28},
+            {Note::E_1, -39},
+            {Note::Dis_1, -9},
+            {Note::D_1, +27},
+            {Note::D_1, -38},
+            {Note::Cis_1, +5},
+            {Note::C_1, +42},
+            {Note::C_1, -11},
+            {Note::NotANote, +33}
+        }
+    };
+
 }

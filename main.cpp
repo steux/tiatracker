@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
-    pk->setInstrumentPitchGuide(TiaSound::perfectPalDist4);
+    pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
 
     // Instrument waveforms
     QComboBox *cbWaveforms = w.findChild<QComboBox *>("comboBoxWaveforms");
@@ -61,17 +61,17 @@ int main(int argc, char *argv[])
     WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
     vs->name = "Volume";
     vs->setScale(0, 15);
-    vs->setValues({0, 5, 10, 15, 11, 8, 8, 8, 8, 6, 4, 2, 0});
-    vs->setSustainStart(5);
-    vs->setReleaseStart(9);
+    vs->setValues({0, 3, 6, 10, 14, 10, 7, 7, 7, 6, 5, 6, 7, 7, 7, 8, 9, 8, 7, 7, 6, 5, 4, 3, 2, 1, 0});
+    vs->setSustainStart(6);
+    vs->setReleaseStart(18);
 
     // Frequency shaper
     WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
     fs->name = "Frequency";
     fs->setScale(-8, 7);
-    fs->setValues({0, 0, -1, 0, 0, +1, 0, 0, -1, 0, 0, +1, 0});
-    fs->setSustainStart(5);
-    fs->setReleaseStart(9);
+    fs->setValues({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+    fs->setSustainStart(6);
+    fs->setReleaseStart(18);
 
     // Shrink window size to minimum and show
     w.resize(0, 0);
