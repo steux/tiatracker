@@ -59,9 +59,9 @@ int main(int argc, char *argv[])
 
     // Volume shaper
     WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
-    vs->name = "V o l u m e";
+    vs->name = "Volume";
     vs->setScale(0, 15);
-    vs->setValues({0, 4, 8, 12, 10, 8, 8, 8, 8, 6, 4, 2, 0});
+    vs->setValues({0, 5, 10, 15, 11, 8, 8, 8, 8, 6, 4, 2, 0});
     vs->setSustainStart(5);
     vs->setReleaseStart(9);
 

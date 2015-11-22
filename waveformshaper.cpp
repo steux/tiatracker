@@ -36,13 +36,13 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     painter.fillRect(valuesXPos, widgetHeight - legendCellSize, values.size()*cellWidth, legendCellSize, MainWindow::lightHighlighted);
     // Name
     painter.setPen(MainWindow::contentDarker);
-    legendFont.setBold(true);
+    legendFont.setBold(false);
     legendFont.setPixelSize(legendNameSize);
     painter.setFont(legendFont);
     painter.save();
     painter.rotate(-90);
     int nameLength = painter.fontMetrics().width(name);
-    painter.drawText(0-(valuesHeight - nameLength)/2 - nameLength, 14, name);
+    painter.drawText(0-(valuesHeight - nameLength)/2 - nameLength, 16, name);
     painter.restore();
     // Scale
     legendFont.setBold(false);
@@ -63,6 +63,30 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::dark);
     // Release
     painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
+
+    /* Waveform */
+    // Value numbers
+    painter.setPen(MainWindow::contentLight);
+    for (int iValue = 0; iValue < values.size(); ++iValue) {
+        int value = values[iValue];
+        painter.drawText(valuesXPos + iValue*cellWidth, 0, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(value));
+    }
+    // Value circles
+    painter.setPen(MainWindow::contentLight);
+    for (int i = 0; i < values.size(); ++i) {
+        int xPos = int(valuesXPos + i*cellWidth + cellWidth/2);
+        int yPos = valuesHeight - int(values[i]*cellHeight + cellHeight/2);
+        painter.drawEllipse(xPos - valueCircleRadius, yPos - valueCircleRadius, 2*valueCircleRadius - 1, 2*valueCircleRadius - 1);
+    }
+    // Value lines
+    painter.setPen(QPen(MainWindow::blue, 2, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
+    for (int i = 1; i < values.size(); ++i) {
+        int fromX = int(valuesXPos + (i - 1)*cellWidth + cellWidth/2);
+        int fromY = valuesHeight - int(values[i - 1]*cellHeight + cellHeight/2);
+        int toX = int(valuesXPos + i*cellWidth + cellWidth/2);
+        int toY = valuesHeight - int(values[i]*cellHeight + cellHeight/2);
+        painter.drawLine(fromX, fromY, toX, toY);
+    }
 }
 
 QList<int> WaveformShaper::getValues() const

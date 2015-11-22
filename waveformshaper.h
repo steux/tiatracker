@@ -43,9 +43,10 @@ private:
     int releaseStart;
 
     static const int legendScaleSize = 11;
-    static const int legendNameSize = 14;
+    static const int legendNameSize = 17;
     QFont legendFont{"Helvetica"};
     int nameFontHeight;
+    static const int valueCircleRadius = 4;
 
     int calcWidth() { return legendCellSize + values.size()*cellWidth; }
 };
