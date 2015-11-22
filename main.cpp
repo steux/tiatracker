@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
     fs->name = "Frequency";
     fs->setScale(-8, 7);
-    fs->setValues({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+    fs->setValues({0, 0, -1, 0, 0, +1, 0, 0, -1, 0, 0, +1, 0});
     fs->setSustainStart(5);
     fs->setReleaseStart(9);
 

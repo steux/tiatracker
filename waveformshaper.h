@@ -9,7 +9,7 @@ class WaveformShaper : public QWidget
 {
     Q_OBJECT
 public:
-    static const int widgetHeight = 200;
+    static const int widgetHeight = 196;
 
     QString name{};
 
