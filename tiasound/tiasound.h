@@ -16,6 +16,7 @@ namespace TiaSound {
         C_5, Cis_5, D_5, Dis_5, E_5, F_5, Fis_5, G_5, Gis_5, A_5, Ais_5, H_5,
         C_6, Cis_6, D_6, Dis_6, E_6, F_6, Fis_6, G_6, Gis_6, A_6, Ais_6, H_6,
         C_7, Cis_7, D_7, Dis_7, E_7, F_7, Fis_7, G_7, Gis_7, A_7, Ais_7, H_7,
+        C_8, Cis_8, D_8, Dis_8, E_8, F_8, Fis_8, G_8, Gis_8, A_8, Ais_8, H_8,
         NotANote
     };
 

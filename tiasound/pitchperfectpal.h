@@ -4,6 +4,7 @@
 namespace TiaSound {
 
     extern const InstrumentPitchGuide perfectPalDist1;
+    extern const InstrumentPitchGuide perfectPalDist4;
 
 }
 

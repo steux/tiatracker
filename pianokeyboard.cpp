@@ -47,22 +47,26 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitch
     }
     for (int freq = 0; freq < pitchGuide.getNumFrequencies(); ++freq) {
         TiaSound::Note note = pitchGuide.getNote(freq);
-        int iNote = static_cast<int>(note);
-        int off = pitchGuide.getPercentOff(freq);
-        if (keyInfo[iNote].isEnabled) {
-            // Duplicate note: Choose note with smaller off-tune value
-            if (off < keyInfo[iNote].off) {
-                keyInfo[iNote].isEnabled = true;
-                keyInfo[iNote].frequency = freq;
-                keyInfo[iNote].note = note;
-                keyInfo[iNote].off = off;
+        if (note != TiaSound::Note::NotANote) {
+            int iNote = static_cast<int>(note);
+            if (iNote >= 0 && iNote < numKeys) {
+                int off = pitchGuide.getPercentOff(freq);
+                if (keyInfo[iNote].isEnabled) {
+                    // Duplicate note: Choose note with smaller off-tune value
+                    if (off < keyInfo[iNote].off) {
+                        keyInfo[iNote].isEnabled = true;
+                        keyInfo[iNote].frequency = freq;
+                        keyInfo[iNote].note = note;
+                        keyInfo[iNote].off = off;
+                    }
+                } else {
+                    // Enable key for this note
+                    keyInfo[iNote].isEnabled = true;
+                    keyInfo[iNote].frequency = freq;
+                    keyInfo[iNote].note = note;
+                    keyInfo[iNote].off = off;
+                }
             }
-        } else {
-            // Enable key for this note
-            keyInfo[iNote].isEnabled = true;
-            keyInfo[iNote].frequency = freq;
-            keyInfo[iNote].note = note;
-            keyInfo[iNote].off = off;
         }
     }
 }

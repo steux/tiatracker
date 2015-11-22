@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
-    pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
+    pk->setInstrumentPitchGuide(TiaSound::perfectPalDist4);
 
     // Instrument waveforms
     QComboBox *cbWaveforms = w.findChild<QComboBox *>("comboBoxWaveforms");
@@ -73,6 +73,8 @@ int main(int argc, char *argv[])
     fs->setSustainStart(5);
     fs->setReleaseStart(9);
 
+    // Shrink window size to minimum and show
+    w.resize(0, 0);
     w.show();
 
     return a.exec();
