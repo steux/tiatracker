@@ -2,19 +2,27 @@
 #define INSTRUMENT_H
 
 #include <QString>
+#include <QList>
 
-class Instrument
-{
-public:
-    Instrument();
+namespace Track {
 
-    QString name{};
+    class Instrument
+    {
+    public:
+        Instrument(QString name) : name(name) {}
 
-    int waveformLength;
-    int sustainStart;
-    int releaseStart;
+        QString name;
+        QList<int> volumes{0, 0};
+        QList<int> frequencies{0, 0};
 
-private:
-};
+        int getWaveformLength() { return volumes.size(); }
+        void setSustainAndRelease(int newSustainStart, int newReleaseStart);
+
+    private:
+        int sustainStart = 0;
+        int releaseStart = 1;
+    };
+
+}
 
 #endif // INSTRUMENT_H
