@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     tiasound/pitchguide.cpp \
     tiasound/pitchguidefactory.cpp \
     tiasound/pitchperfectpal.cpp \
-    waveformshaper.cpp
+    waveformshaper.cpp \
+    track/instrument.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     tiasound/pitchguide.h \
     tiasound/pitchguidefactory.h \
     tiasound/pitchperfectpal.h \
-    waveformshaper.h
+    waveformshaper.h \
+    track/instrument.h
 
 FORMS    += mainwindow.ui
 
