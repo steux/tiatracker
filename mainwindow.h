@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "track/track.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -12,9 +14,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
     static const QColor dark;
     static const QColor darkHighlighted;
     static const QColor light;
@@ -26,6 +25,11 @@ public:
     static const QColor red;
     static const QColor orange;
     static const QColor blue;
+
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+    void initInstrumentsTab(const Track::Track &newTrack);
 
 private slots:
     void on_buttonInstrumentDelete_clicked();

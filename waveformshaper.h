@@ -20,10 +20,6 @@ public:
     void registerTrack(Track::Track *newPTrack) {pTrack = newPTrack;}
 
     void setScale(int min, int max);
-    int getSustainStart() const;
-    void setSustainStart(int value);
-    int getReleaseStart() const;
-    void setReleaseStart(int value);
 
     QList<int> getValues() const;
     void setValues(const QList<int> &value);

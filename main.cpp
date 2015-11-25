@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
     // GUI
     MainWindow w;
 
+    w.initInstrumentsTab(myTrack);
+
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
@@ -49,34 +51,18 @@ int main(int argc, char *argv[])
                               TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_HIGH)
                           });
 
-    // Instrument list
-    QComboBox *cbInstruments = w.findChild<QComboBox *>("comboBoxInstruments");
-    cbInstruments->addItems({
-                                "---",
-                                "---",
-                                "---",
-                                "---",
-                                "---",
-                                "---",
-                                "---"
-                          });
-
     // Volume shaper
     WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
     vs->registerTrack(&myTrack);
     vs->name = "Volume";
     vs->setScale(0, 15);
-    vs->setValues({0, 3, 6, 10, 14, 10, 7, 7, 7, 6, 5, 6, 7, 7, 7, 8, 9, 8, 7, 7, 6, 5, 4, 3, 2, 1, 0});
-    vs->setSustainStart(6);
-    vs->setReleaseStart(18);
+    vs->setValues(myTrack.instruments[0].volumes);
 
     // Frequency shaper
     WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
     fs->name = "Frequency";
     fs->setScale(-8, 7);
-    fs->setValues({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
-    fs->setSustainStart(6);
-    fs->setReleaseStart(18);
+    fs->setValues(myTrack.instruments[0].frequencies);
 
     // Shrink window size to minimum and show
     w.resize(0, 0);

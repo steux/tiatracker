@@ -134,23 +134,3 @@ void WaveformShaper::setValues(const QList<int> &value)
     values = value;
     setFixedWidth(calcWidth());
 }
-
-int WaveformShaper::getReleaseStart() const
-{
-    return releaseStart;
-}
-
-void WaveformShaper::setReleaseStart(int value)
-{
-    releaseStart = value;
-}
-
-int WaveformShaper::getSustainStart() const
-{
-    return sustainStart;
-}
-
-void WaveformShaper::setSustainStart(int value)
-{
-    sustainStart = value;
-}

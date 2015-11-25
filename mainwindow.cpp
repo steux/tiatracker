@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
+#include "track/instrument.h"
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -30,6 +31,21 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+
+
+/**************************************************************************
+ * Populate the widgets in the instruments tab with real data from the
+ * track.
+ *************************************************************************/
+void MainWindow::initInstrumentsTab(const Track::Track &newTrack)
+{
+    QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
+    foreach(Track::Instrument ins, newTrack.instruments) {
+        cbInstruments->addItem(ins.name);
+    }
+}
+
 
 
 void MainWindow::on_buttonInstrumentDelete_clicked()
