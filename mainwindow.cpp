@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <iostream>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -28,4 +29,11 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::on_buttonInstrumentDelete_clicked()
+{
+    // TODO: Delete
+    QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
 }

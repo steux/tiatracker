@@ -27,7 +27,8 @@ public:
     static const QColor orange;
     static const QColor blue;
 
-
+private slots:
+    void on_buttonInstrumentDelete_clicked();
 
 private:
     Ui::MainWindow *ui;
