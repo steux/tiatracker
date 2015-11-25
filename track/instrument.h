@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QList>
+#include "tiasound/tiasound.h"
+
 
 namespace Track {
 
@@ -12,6 +14,7 @@ namespace Track {
         Instrument(QString name) : name(name) {}
 
         QString name;
+        TiaSound::Distortion baseDistortion;
         QList<int> volumes{0, 0};
         QList<int> frequencies{0, 0};
 

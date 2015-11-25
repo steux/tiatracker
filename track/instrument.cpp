@@ -11,7 +11,6 @@ namespace Track {
                 || newReleaseStart >= volumes.size()) {
             throw std::invalid_argument("Invalid new sustain/release index values!");
         }
-
         sustainStart = newSustainStart;
         releaseStart = newReleaseStart;
     }
