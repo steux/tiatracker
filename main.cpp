@@ -8,6 +8,7 @@
 #include "pianokeyboard.h"
 #include "tiasound/pitchperfectpal.h"
 #include "waveformshaper.h"
+#include "track/track.h"
 
 #include <iostream>
 
@@ -21,6 +22,9 @@ int main(int argc, char *argv[])
     QFile styleFile(":/style.qss");
     styleFile.open(QFile::ReadOnly);
     a.setStyleSheet(styleFile.readAll());
+
+    // Track
+    Track::Track myTrack{};
 
     // GUI
     MainWindow w;
@@ -59,6 +63,7 @@ int main(int argc, char *argv[])
 
     // Volume shaper
     WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
+    vs->registerTrack(&myTrack);
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues({0, 3, 6, 10, 14, 10, 7, 7, 7, 6, 5, 6, 7, 7, 7, 8, 9, 8, 7, 7, 6, 5, 4, 3, 2, 1, 0});

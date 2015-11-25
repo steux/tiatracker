@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QString>
 #include <QList>
+#include "track/track.h"
 
 class WaveformShaper : public QWidget
 {
@@ -14,6 +15,9 @@ public:
     QString name{};
 
     explicit WaveformShaper(QWidget *parent);
+
+    // Register the track with the instruments to modify
+    void registerTrack(Track::Track *newPTrack) {pTrack = newPTrack;}
 
     void setScale(int min, int max);
     int getSustainStart() const;
@@ -38,6 +42,9 @@ protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
 private:
+    // The Track containing the instruments to edit
+    Track::Track *pTrack = nullptr;
+
     int scaleMin = 0;
     int scaleMax = 15;
     QList<int> values{};
