@@ -6,9 +6,12 @@
 #include <QList>
 
 namespace Track {
+
     class Track
     {
     public:
+        QString name{"New track"};
+
         QList<Instrument> instruments{
             {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
         };

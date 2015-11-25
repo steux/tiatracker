@@ -4,6 +4,10 @@
 
 #include <iostream>
 
+
+/**************************************************************************
+ * Constructor
+ *************************************************************************/
 WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(calcWidth());
@@ -13,6 +17,11 @@ WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
     nameFontHeight = fontMetrics.height();
 }
 
+
+
+/**************************************************************************
+ * Set min and max for scale
+ *************************************************************************/
 void WaveformShaper::setScale(int min, int max)
 {
     scaleMin = min;
@@ -22,14 +31,11 @@ void WaveformShaper::setScale(int min, int max)
 
 
 
-void WaveformShaper::paintEvent(QPaintEvent *)
+/**************************************************************************
+ * Paint event with helper functions
+ *************************************************************************/
+void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const int valuesHeight)
 {
-    QPainter painter(this);
-
-    const int valuesXPos = legendCellSize;
-    const int valuesHeight = widgetHeight - legendCellSize;
-
-    /* Legend */
     // Left side
     painter.fillRect(0, 0, legendCellSize, widgetHeight, MainWindow::lightHighlighted);
     // Bottom
@@ -55,16 +61,22 @@ void WaveformShaper::paintEvent(QPaintEvent *)
         int xPos = legendCellSize + frame*cellWidth;
         painter.drawText(xPos, valuesHeight, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(frame + 1));
     }
+}
 
-    /* Values */
+
+void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, const int valuesHeight)
+{
     // Attack/Decay
     painter.fillRect(valuesXPos, 0, sustainStart*cellWidth, valuesHeight, MainWindow::dark);
     // Sustain
     painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
     // Release
     painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
+}
 
-    /* Waveform */
+
+void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
+{
     // Value numbers
     painter.setPen(MainWindow::contentLight);
     for (int iValue = 0; iValue < values.size(); ++iValue) {
@@ -92,6 +104,26 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     }
 }
 
+
+void WaveformShaper::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+
+    const int valuesXPos = legendCellSize;
+    const int valuesHeight = widgetHeight - legendCellSize;
+
+    drawLegend(painter, valuesXPos, valuesHeight);
+    drawAttackDecay(painter, valuesXPos, valuesHeight);
+
+    /* Waveform */
+    drawWaveform(painter, valuesXPos);
+}
+
+
+
+/**************************************************************************
+ * Getter/setter
+ *************************************************************************/
 QList<int> WaveformShaper::getValues() const
 {
     return values;
@@ -122,4 +154,3 @@ void WaveformShaper::setSustainStart(int value)
 {
     sustainStart = value;
 }
-

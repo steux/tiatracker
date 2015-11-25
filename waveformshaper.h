@@ -32,6 +32,9 @@ protected:
     static const int legendCellSize = 20;
     static const int cellWidth = 16;
 
+    void drawLegend(QPainter &painter, const int valuesXPos, const int valuesHeight);
+    void drawAttackDecay(QPainter &painter, const int valuesXPos, const int valuesHeight);
+    void drawWaveform(QPainter &painter, const int valuesXPos);
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
 private:
