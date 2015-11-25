@@ -38,16 +38,39 @@ MainWindow::~MainWindow()
  * Populate the widgets in the instruments tab with real data from the
  * track.
  *************************************************************************/
-void MainWindow::initInstrumentsTab(const Track::Track &newTrack)
+void MainWindow::initInstrumentsTab(Track::Track &newTrack)
 {
+    // Instrument names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     foreach(Track::Instrument ins, newTrack.instruments) {
         cbInstruments->addItem(ins.name);
     }
+
+    // Instrument waveforms
+    QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
+    cbWaveforms->addItems({
+                              TiaSound::getDistorionName(TiaSound::Distortion::BUZZY),
+                              TiaSound::getDistorionName(TiaSound::Distortion::BUZZY_RUMBLE),
+                              TiaSound::getDistorionName(TiaSound::Distortion::FLANGY_WAVERING),
+                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_HIGH),
+                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_BUZZY),
+                              TiaSound::getDistorionName(TiaSound::Distortion::REEDY_RUMBLE),
+                              TiaSound::getDistorionName(TiaSound::Distortion::WHITE_NOISE),
+                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_LOW),
+                              TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_LOW),
+                              TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_HIGH)
+                          });
+    // Number of waveform frames used
+    QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
+    int framesUsed = newTrack.getUsedWaveformFrames();
+    lWaveformsUsed->setText("(" + QString::number(framesUsed) + " of 256 used)");
 }
 
 
 
+/**************************************************************************
+ * Instruments tab widget events.
+ *************************************************************************/
 void MainWindow::on_buttonInstrumentDelete_clicked()
 {
     // TODO: Delete

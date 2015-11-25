@@ -60,7 +60,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_4">
+            <widget class="QLabel" name="labelInstrumentsUsed">
              <property name="text">
               <string>(2 of 7 used)</string>
              </property>
@@ -172,7 +172,7 @@
             <widget class="QSpinBox" name="spinBox"/>
            </item>
            <item>
-            <widget class="QLabel" name="label_5">
+            <widget class="QLabel" name="labelWaveformFramesUsed">
              <property name="text">
               <string>(50 of 256 used)</string>
              </property>

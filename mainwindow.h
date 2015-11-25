@@ -29,7 +29,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void initInstrumentsTab(const Track::Track &newTrack);
+    void initInstrumentsTab(Track::Track &newTrack);
 
 private slots:
     void on_buttonInstrumentDelete_clicked();

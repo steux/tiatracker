@@ -17,6 +17,8 @@ namespace Track {
         };
 
         Track();
+
+        int getUsedWaveformFrames();
     };
 }
 
