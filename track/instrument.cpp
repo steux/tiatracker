@@ -4,6 +4,21 @@
 
 namespace Track {
 
+bool Instrument::isEmpty()
+{
+    bool empty = true;
+    if (name != "---"
+            || volumes.size() > 2
+            || frequencies.size() > 2
+            || volumes[0] != 0 || volumes[1] != 0
+            || frequencies[0] != 0 || frequencies[1] != 0) {
+        empty = false;
+    }
+
+    return empty;
+}
+
+
 int Instrument::getEnvelopeLength()
 {
      return volumes.size();

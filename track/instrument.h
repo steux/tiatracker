@@ -18,6 +18,7 @@ namespace Track {
         QList<int> volumes{0, 0};
         QList<int> frequencies{0, 0};
 
+        bool isEmpty();
         int getEnvelopeLength();
         void setSustainAndRelease(int newSustainStart, int newReleaseStart);
         int getSustainStart() const;

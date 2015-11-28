@@ -80,6 +80,13 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>New</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButton">
              <property name="text">
               <string>Import</string>
