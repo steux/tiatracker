@@ -4,7 +4,14 @@
 
 namespace Track {
 
-    void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart)
+int Instrument::getEnvelopeLength()
+{
+     return volumes.size();
+}
+
+
+
+void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart)
     {
         if (newReleaseStart <= newSustainStart
                 || newSustainStart >= volumes.size() - 1

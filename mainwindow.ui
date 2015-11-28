@@ -162,14 +162,21 @@
             <widget class="QComboBox" name="comboBoxWaveforms"/>
            </item>
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="labelInstrumentEnvelopeLength">
              <property name="text">
-              <string>Waveform length:</string>
+              <string>Envelope length:</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBox"/>
+            <widget class="QSpinBox" name="spinBoxInstrumentEnvelopeLength">
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>240</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="labelWaveformFramesUsed">

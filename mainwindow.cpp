@@ -3,6 +3,7 @@
 #include <iostream>
 #include "track/instrument.h"
 #include <QLineEdit>
+#include <QSpinBox>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -41,6 +42,7 @@ MainWindow::~MainWindow()
  *************************************************************************/
 void MainWindow::initInstrumentsTab(Track::Track &newTrack)
 {
+    /* Global values */
     // Instrument names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     cbInstruments->lineEdit()->setMaxLength(maxInstrumentNameLength);
@@ -71,6 +73,12 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     int instrumentsUsed = newTrack.getNumInstruments();
     lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
 
+    /* Values specific to the selected intrument */
+    int curInstrument = getSelectedInstrument();
+    // Envelope length
+    QSpinBox *spEnvelopeLength = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
+    int envelopeLength = newTrack.instruments[curInstrument].getEnvelopeLength();
+    spEnvelopeLength->setValue(envelopeLength);
 }
 
 
