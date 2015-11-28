@@ -4,6 +4,7 @@
 #include "track/instrument.h"
 #include <QLineEdit>
 #include <QSpinBox>
+#include <cassert>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -18,6 +19,18 @@ const QColor MainWindow::red{"#dc322f"};
 const QColor MainWindow::orange{"#cb4b16"};
 const QColor MainWindow::blue{"#268bd2"};
 
+const QList<TiaSound::Distortion> MainWindow::availableWaveforms{
+    TiaSound::Distortion::BUZZY,
+    TiaSound::Distortion::BUZZY_RUMBLE,
+    TiaSound::Distortion::FLANGY_WAVERING,
+    TiaSound::Distortion::PURE_HIGH,
+    TiaSound::Distortion::PURE_BUZZY,
+    TiaSound::Distortion::REEDY_RUMBLE,
+    TiaSound::Distortion::WHITE_NOISE,
+    TiaSound::Distortion::PURE_LOW,
+    TiaSound::Distortion::ELECTRONIC_LOW,
+    TiaSound::Distortion::ELECTRONIC_HIGH
+};
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -52,18 +65,9 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
 
     // Instrument waveforms
     QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
-    cbWaveforms->addItems({
-                              TiaSound::getDistorionName(TiaSound::Distortion::BUZZY),
-                              TiaSound::getDistorionName(TiaSound::Distortion::BUZZY_RUMBLE),
-                              TiaSound::getDistorionName(TiaSound::Distortion::FLANGY_WAVERING),
-                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_HIGH),
-                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_BUZZY),
-                              TiaSound::getDistorionName(TiaSound::Distortion::REEDY_RUMBLE),
-                              TiaSound::getDistorionName(TiaSound::Distortion::WHITE_NOISE),
-                              TiaSound::getDistorionName(TiaSound::Distortion::PURE_LOW),
-                              TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_LOW),
-                              TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_HIGH)
-                          });
+    foreach (TiaSound::Distortion distortion, availableWaveforms) {
+        cbWaveforms->addItem(TiaSound::getDistorionName(distortion));
+    }
     // Number of envelope frames used
     QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
     int framesUsed = newTrack.getNumUsedWaveformFrames();
@@ -93,6 +97,11 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     QSpinBox *spReleaseStart = findChild<QSpinBox *>("spinBoxReleaseStart");
     int releaseStart = newTrack.instruments[curInstrument].getReleaseStart();
     spReleaseStart->setValue(releaseStart);
+    // Base waveform
+    TiaSound::Distortion curDistortion = newTrack.instruments[curInstrument].baseDistortion;
+    int iWaveform = availableWaveforms.indexOf(curDistortion);
+    assert(iWaveform != -1);
+    cbWaveforms->setCurrentIndex(iWaveform);
 }
 
 

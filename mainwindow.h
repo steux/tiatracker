@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include "track/track.h"
+#include "tiasound/tiasound.h"
+#include <QList>
 
 
 namespace Ui {
@@ -36,6 +38,7 @@ private slots:
     void on_buttonInstrumentDelete_clicked();
 
 private:
+    static const QList<TiaSound::Distortion> availableWaveforms;
     static const int maxInstrumentNameLength = 64;
 
     Ui::MainWindow *ui;

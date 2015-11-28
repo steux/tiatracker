@@ -14,7 +14,7 @@ namespace Track {
         Instrument(QString name) : name(name) {}
 
         QString name;
-        TiaSound::Distortion baseDistortion;
+        TiaSound::Distortion baseDistortion{TiaSound::Distortion::BUZZY};
         QList<int> volumes{0, 0};
         QList<int> frequencies{0, 0};
 
