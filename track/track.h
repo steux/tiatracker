@@ -10,6 +10,8 @@ namespace Track {
     class Track
     {
     public:
+        static const int numInstruments = 7;
+
         QString name{"New track"};
 
         QList<Instrument> instruments{
@@ -18,7 +20,8 @@ namespace Track {
 
         Track();
 
-        int getUsedWaveformFrames();
+        int getNumUsedWaveformFrames();
+        int getNumInstruments();
     };
 }
 

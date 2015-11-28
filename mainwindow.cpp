@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include "track/instrument.h"
+#include <QLineEdit>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -42,6 +43,7 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
 {
     // Instrument names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
+    cbInstruments->lineEdit()->setMaxLength(maxInstrumentNameLength);
     foreach(Track::Instrument ins, newTrack.instruments) {
         cbInstruments->addItem(ins.name);
     }
@@ -62,8 +64,25 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
                           });
     // Number of waveform frames used
     QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
-    int framesUsed = newTrack.getUsedWaveformFrames();
+    int framesUsed = newTrack.getNumUsedWaveformFrames();
     lWaveformsUsed->setText("(" + QString::number(framesUsed) + " of 256 used)");
+    // Number of instruments used
+    QLabel *lInstrumentsUsed = findChild<QLabel *>("labelInstrumentsUsed");
+    int instrumentsUsed = newTrack.getNumInstruments();
+    lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
+
+}
+
+
+
+/**************************************************************************
+ * Returns the index of the selected instrument (0..7) in the instruments
+ * tab.
+ *************************************************************************/
+int MainWindow::getSelectedInstrument()
+{
+    QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
+    return cbInstruments->currentIndex();
 }
 
 
@@ -74,5 +93,5 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
 void MainWindow::on_buttonInstrumentDelete_clicked()
 {
     // TODO: Delete
-    QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
+    //QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
 }

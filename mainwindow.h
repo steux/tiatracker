@@ -30,11 +30,14 @@ public:
     ~MainWindow();
 
     void initInstrumentsTab(Track::Track &newTrack);
+    int getSelectedInstrument();
 
 private slots:
     void on_buttonInstrumentDelete_clicked();
 
 private:
+    static const int maxInstrumentNameLength = 64;
+
     Ui::MainWindow *ui;
 };
 
