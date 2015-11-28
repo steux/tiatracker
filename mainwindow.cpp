@@ -64,10 +64,17 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
                               TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_LOW),
                               TiaSound::getDistorionName(TiaSound::Distortion::ELECTRONIC_HIGH)
                           });
-    // Number of waveform frames used
+    // Number of envelope frames used
     QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
     int framesUsed = newTrack.getNumUsedWaveformFrames();
-    lWaveformsUsed->setText("(" + QString::number(framesUsed) + " of 256 used)");
+    QString framesUsedString;
+    if (framesUsed < 256) {
+        framesUsedString = "(" + QString::number(framesUsed) + " of 256 used)";
+
+    } else {
+        framesUsedString = "<font color=\"#dc322f\">(" + QString::number(framesUsed) + " of 256 used)</>";
+    }
+    lWaveformsUsed->setText(framesUsedString);
     // Number of instruments used
     QLabel *lInstrumentsUsed = findChild<QLabel *>("labelInstrumentsUsed");
     int instrumentsUsed = newTrack.getNumInstruments();
