@@ -79,6 +79,13 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     QSpinBox *spEnvelopeLength = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int envelopeLength = newTrack.instruments[curInstrument].getEnvelopeLength();
     spEnvelopeLength->setValue(envelopeLength);
+    // Sustain and release start values
+    QSpinBox *spSustainStart = findChild<QSpinBox *>("spinBoxSustainStart");
+    int sustainStart = newTrack.instruments[curInstrument].getSustainStart();
+    spSustainStart->setValue(sustainStart);
+    QSpinBox *spReleaseStart = findChild<QSpinBox *>("spinBoxReleaseStart");
+    int releaseStart = newTrack.instruments[curInstrument].getReleaseStart();
+    spReleaseStart->setValue(releaseStart);
 }
 
 
