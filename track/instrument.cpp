@@ -4,6 +4,10 @@
 
 namespace Track {
 
+
+/* TODO: More sensible empty detection, like a bool flag that gets
+ * changed whenever the instrument data gets updated by the GUI...
+ */
 bool Instrument::isEmpty()
 {
     bool empty = true;
@@ -11,7 +15,10 @@ bool Instrument::isEmpty()
             || volumes.size() > 2
             || frequencies.size() > 2
             || volumes[0] != 0 || volumes[1] != 0
-            || frequencies[0] != 0 || frequencies[1] != 0) {
+            || frequencies[0] != 0 || frequencies[1] != 0
+            || sustainStart != 0 || releaseStart != 1
+            || baseDistortion != TiaSound::Distortion::BUZZY
+            ) {
         empty = false;
     }
 

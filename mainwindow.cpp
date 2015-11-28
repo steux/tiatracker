@@ -85,20 +85,23 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
 
     /* Values specific to the selected intrument */
-    int curInstrument = getSelectedInstrument();
+    int iCurInstrument = getSelectedInstrument();
+    QLabel *lInstrumentNumber = findChild<QLabel *>("labelInstrumentNumber");
+    lInstrumentNumber->setText("Instrument " + QString::number(iCurInstrument + 1));
+    Track::Instrument& curInstrument = newTrack.instruments[iCurInstrument];
     // Envelope length
     QSpinBox *spEnvelopeLength = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
-    int envelopeLength = newTrack.instruments[curInstrument].getEnvelopeLength();
+    int envelopeLength = curInstrument.getEnvelopeLength();
     spEnvelopeLength->setValue(envelopeLength);
     // Sustain and release start values
     QSpinBox *spSustainStart = findChild<QSpinBox *>("spinBoxSustainStart");
-    int sustainStart = newTrack.instruments[curInstrument].getSustainStart();
+    int sustainStart = curInstrument.getSustainStart();
     spSustainStart->setValue(sustainStart);
     QSpinBox *spReleaseStart = findChild<QSpinBox *>("spinBoxReleaseStart");
-    int releaseStart = newTrack.instruments[curInstrument].getReleaseStart();
+    int releaseStart = curInstrument.getReleaseStart();
     spReleaseStart->setValue(releaseStart);
     // Base waveform
-    TiaSound::Distortion curDistortion = newTrack.instruments[curInstrument].baseDistortion;
+    TiaSound::Distortion curDistortion = curInstrument.baseDistortion;
     int iWaveform = availableWaveforms.indexOf(curDistortion);
     assert(iWaveform != -1);
     cbWaveforms->setCurrentIndex(iWaveform);
