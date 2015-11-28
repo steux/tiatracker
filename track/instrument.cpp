@@ -20,6 +20,16 @@ void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart)
         }
         sustainStart = newSustainStart;
         releaseStart = newReleaseStart;
-    }
+}
+
+int Instrument::getSustainStart() const
+{
+    return sustainStart;
+}
+
+int Instrument::getReleaseStart() const
+{
+    return releaseStart;
+}
 
 }

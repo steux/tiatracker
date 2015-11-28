@@ -1,6 +1,7 @@
 #include "waveformshaper.h"
 #include <QPainter>
 #include "mainwindow.h"
+#include <cassert>
 
 #include <iostream>
 
@@ -15,6 +16,16 @@ WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
     legendFont.setPixelSize(legendNameSize);
     QFontMetrics fontMetrics(legendFont);
     nameFontHeight = fontMetrics.height();
+}
+
+
+
+/**************************************************************************
+ * Register the track, for data retrieval.
+ *************************************************************************/
+void WaveformShaper::registerInstrument(Track::Instrument *newInstrument)
+{
+     pInstrument = newInstrument;
 }
 
 
@@ -66,6 +77,11 @@ void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const i
 
 void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, const int valuesHeight)
 {
+    assert(pInstrument != nullptr);
+
+    int sustainStart = pInstrument->getSustainStart();
+    int releaseStart = pInstrument->getReleaseStart();
+
     // Attack/Decay
     painter.fillRect(valuesXPos, 0, sustainStart*cellWidth, valuesHeight, MainWindow::dark);
     // Sustain

@@ -17,7 +17,7 @@ public:
     explicit WaveformShaper(QWidget *parent);
 
     // Register the track with the instruments to modify
-    void registerTrack(Track::Track *newPTrack) {pTrack = newPTrack;}
+    void registerInstrument(Track::Instrument *newInstrument);
 
     void setScale(int min, int max);
 
@@ -38,15 +38,13 @@ protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
 private:
-    // The Track containing the instruments to edit
-    Track::Track *pTrack = nullptr;
+    // The instrument to edit
+    Track::Instrument *pInstrument = nullptr;
 
     int scaleMin = 0;
     int scaleMax = 15;
     QList<int> values{};
     int cellHeight;
-    int sustainStart;
-    int releaseStart;
 
     static const int legendScaleSize = 11;
     static const int legendNameSize = 17;

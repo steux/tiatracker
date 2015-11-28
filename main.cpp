@@ -38,13 +38,14 @@ int main(int argc, char *argv[])
 
     // Volume shaper
     WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
-    vs->registerTrack(&myTrack);
+    vs->registerInstrument(&myTrack.instruments[0]);
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues(myTrack.instruments[0].volumes);
 
     // Frequency shaper
     WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
+    fs->registerInstrument(&myTrack.instruments[0]);
     fs->name = "Frequency";
     fs->setScale(-8, 7);
     fs->setValues(myTrack.instruments[0].frequencies);

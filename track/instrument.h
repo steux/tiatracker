@@ -20,6 +20,8 @@ namespace Track {
 
         int getEnvelopeLength();
         void setSustainAndRelease(int newSustainStart, int newReleaseStart);
+        int getSustainStart() const;
+        int getReleaseStart() const;
 
     private:
         int sustainStart = 0;
