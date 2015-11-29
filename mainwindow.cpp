@@ -151,15 +151,6 @@ void MainWindow::on_buttonInstrumentDelete_clicked()
 /**************************************************************************
  * User changed the length of the envelope
  *************************************************************************/
-void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength)
-{
-//    int iCurInstrument = getSelectedInstrument();
-//    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
-//    curInstrument->setEnvelopeLength(newLength);
-//    initInstrumentsTab();
-//    update();
-}
-
 void MainWindow::on_spinBoxInstrumentEnvelopeLength_editingFinished()
 {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
@@ -169,4 +160,13 @@ void MainWindow::on_spinBoxInstrumentEnvelopeLength_editingFinished()
     curInstrument->setEnvelopeLength(newLength);
     updateInstrumentsTab();
     update();
+}
+
+void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength)
+{
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    if (std::abs(newLength - curInstrument->getEnvelopeLength()) == 1) {
+        on_spinBoxInstrumentEnvelopeLength_editingFinished();
+    }
 }

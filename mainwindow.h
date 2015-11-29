@@ -39,9 +39,9 @@ public:
 private slots:
     void on_buttonInstrumentDelete_clicked();
 
-    void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
-
     void on_spinBoxInstrumentEnvelopeLength_editingFinished();
+
+    void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
