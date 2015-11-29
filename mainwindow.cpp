@@ -112,6 +112,11 @@ void MainWindow::initInstrumentsTab()
     int iWaveform = availableWaveforms.indexOf(curDistortion);
     assert(iWaveform != -1);
     cbWaveforms->setCurrentIndex(iWaveform);
+    // WaveformShaper sizes
+    WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
+    wsVolume->updateSize();
+    WaveformShaper *wsFrequency = findChild<WaveformShaper *>("frequencyShaper");
+    wsFrequency->updateSize();
 }
 
 

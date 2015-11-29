@@ -123,9 +123,6 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
 
 void WaveformShaper::paintEvent(QPaintEvent *)
 {
-    std::cout << "values->size(): " << values->size() << "\n";
-    std::cout.flush();
-
     QPainter painter(this);
 
     const int valuesXPos = legendCellSize;
@@ -138,6 +135,8 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     drawWaveform(painter, valuesXPos);
 }
 
+
+
 int WaveformShaper::calcWidth()
 {
     int width = legendCellSize;
@@ -145,6 +144,13 @@ int WaveformShaper::calcWidth()
         width += values->size()*cellWidth;
     }
     return width;
+}
+
+
+
+void WaveformShaper::updateSize()
+{
+    setFixedWidth(calcWidth());
 }
 
 
@@ -160,5 +166,6 @@ QList<int>* WaveformShaper::getValues()
 void WaveformShaper::setValues(QList<int> *newValues)
 {
     values = newValues;
-    setFixedWidth(calcWidth());
+    updateSize();
 }
+

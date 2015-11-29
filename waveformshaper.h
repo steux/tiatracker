@@ -23,6 +23,7 @@ public:
 
     QList<int> *getValues();
     void setValues(QList<int> *newValues);
+    void updateSize();
 
 signals:
 
