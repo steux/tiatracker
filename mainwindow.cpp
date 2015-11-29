@@ -47,19 +47,26 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::registerTrack(Track::Track *newTrack)
+{
+    pTrack = newTrack;
+}
+
 
 
 /**************************************************************************
  * Populate the widgets in the instruments tab with real data from the
  * track.
  *************************************************************************/
-void MainWindow::initInstrumentsTab(Track::Track &newTrack)
+void MainWindow::initInstrumentsTab()
 {
+    assert(pTrack != nullptr);
+
     /* Global values */
     // Instrument names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     cbInstruments->lineEdit()->setMaxLength(maxInstrumentNameLength);
-    foreach(Track::Instrument ins, newTrack.instruments) {
+    foreach(Track::Instrument ins, pTrack->instruments) {
         cbInstruments->addItem(ins.name);
     }
 
@@ -70,7 +77,7 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     }
     // Number of envelope frames used
     QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
-    int framesUsed = newTrack.getNumUsedWaveformFrames();
+    int framesUsed = pTrack->getNumUsedWaveformFrames();
     QString framesUsedString;
     if (framesUsed < 256) {
         framesUsedString = "(" + QString::number(framesUsed) + " of 256 used)";
@@ -81,14 +88,14 @@ void MainWindow::initInstrumentsTab(Track::Track &newTrack)
     lWaveformsUsed->setText(framesUsedString);
     // Number of instruments used
     QLabel *lInstrumentsUsed = findChild<QLabel *>("labelInstrumentsUsed");
-    int instrumentsUsed = newTrack.getNumInstruments();
+    int instrumentsUsed = pTrack->getNumInstruments();
     lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
 
     /* Values specific to the selected intrument */
     int iCurInstrument = getSelectedInstrument();
     QLabel *lInstrumentNumber = findChild<QLabel *>("labelInstrumentNumber");
     lInstrumentNumber->setText("Instrument " + QString::number(iCurInstrument + 1));
-    Track::Instrument& curInstrument = newTrack.instruments[iCurInstrument];
+    Track::Instrument& curInstrument = pTrack->instruments[iCurInstrument];
     // Envelope length
     QSpinBox *spEnvelopeLength = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int envelopeLength = curInstrument.getEnvelopeLength();
@@ -128,4 +135,18 @@ void MainWindow::on_buttonInstrumentDelete_clicked()
 {
     // TODO: Delete
     //QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
+}
+
+
+
+/**************************************************************************
+ * User changed the length of the envelope
+ *************************************************************************/
+void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength)
+{
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    curInstrument->changeEnvelopeLength(newLength);
+    initInstrumentsTab();
+    update();
 }

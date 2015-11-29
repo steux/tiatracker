@@ -20,6 +20,8 @@ namespace Track {
 
         bool isEmpty();
         int getEnvelopeLength();
+        void changeEnvelopeLength(int newSize);
+        void validateSustainReleaseValues();
         void setSustainAndRelease(int newSustainStart, int newReleaseStart);
         int getSustainStart() const;
         int getReleaseStart() const;

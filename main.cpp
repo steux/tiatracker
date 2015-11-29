@@ -29,7 +29,8 @@ int main(int argc, char *argv[])
     // GUI
     MainWindow w;
 
-    w.initInstrumentsTab(myTrack);
+    w.registerTrack(&myTrack);
+    w.initInstrumentsTab();
 
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide

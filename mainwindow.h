@@ -31,15 +31,20 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void initInstrumentsTab(Track::Track &newTrack);
+    void registerTrack(Track::Track *newTrack);
+    void initInstrumentsTab();
     int getSelectedInstrument();
 
 private slots:
     void on_buttonInstrumentDelete_clicked();
 
+    void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
+
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
     static const int maxInstrumentNameLength = 64;
+
+    Track::Track *pTrack = nullptr;
 
     Ui::MainWindow *ui;
 };

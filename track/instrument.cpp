@@ -28,7 +28,41 @@ bool Instrument::isEmpty()
 
 int Instrument::getEnvelopeLength()
 {
-     return volumes.size();
+    return volumes.size();
+}
+
+
+
+void Instrument::changeEnvelopeLength(int newSize)
+{
+    if (newSize > getEnvelopeLength()) {
+        // grow
+        int lastVolume = volumes[volumes.size() - 1];
+        int lastFrequency = frequencies[volumes.size() - 1];
+        while (volumes.size() != newSize) {
+            volumes.append(lastVolume);
+            frequencies.append(lastFrequency);
+        }
+    } else {
+        // shrink
+        while (volumes.size() != newSize) {
+            volumes.removeLast();
+            frequencies.removeLast();
+        }
+    }
+    validateSustainReleaseValues();
+}
+
+
+
+void Instrument::validateSustainReleaseValues()
+{
+    if (releaseStart >= getEnvelopeLength()) {
+        releaseStart = getEnvelopeLength() - 1;
+    }
+    if (sustainStart >= releaseStart) {
+        sustainStart = releaseStart - 1;
+    }
 }
 
 
