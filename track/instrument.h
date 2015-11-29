@@ -20,13 +20,14 @@ namespace Track {
 
         bool isEmpty();
         int getEnvelopeLength();
-        void changeEnvelopeLength(int newSize);
+        void setEnvelopeLength(int newSize);
         void validateSustainReleaseValues();
         void setSustainAndRelease(int newSustainStart, int newReleaseStart);
         int getSustainStart() const;
         int getReleaseStart() const;
 
     private:
+        int envelopeLength = 2;
         int sustainStart = 0;
         int releaseStart = 1;
     };

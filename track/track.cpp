@@ -13,9 +13,10 @@ namespace Track {
         int numFrames = 0;
         for (int i = 0; i < numInstruments; ++i) {
             if (!instruments[i].isEmpty()) {
-                numFrames += instruments[i].volumes.size();
+                int envelopeLength = instruments[i].getEnvelopeLength();
+                numFrames += envelopeLength;
                 // If last volume/frequency frames are not 0, add one (0 is mandatory)
-                int iLast = instruments[i].volumes.size() - 1;
+                int iLast = envelopeLength - 1;
                 if (instruments[i].volumes[iLast] != 0 || instruments[i].frequencies[iLast] != 0) {
                     numFrames++;
                 }

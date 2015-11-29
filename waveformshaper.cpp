@@ -47,10 +47,12 @@ void WaveformShaper::setScale(int min, int max)
  *************************************************************************/
 void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const int valuesHeight)
 {
+    int envelopeLength = pInstrument->getEnvelopeLength();
+
     // Left side
     painter.fillRect(0, 0, legendCellSize, widgetHeight, MainWindow::lightHighlighted);
     // Bottom
-    painter.fillRect(valuesXPos, widgetHeight - legendCellSize, values->size()*cellWidth, legendCellSize, MainWindow::lightHighlighted);
+    painter.fillRect(valuesXPos, widgetHeight - legendCellSize, envelopeLength*cellWidth, legendCellSize, MainWindow::lightHighlighted);
     // Name
     painter.setPen(MainWindow::contentDarker);
     legendFont.setBold(false);
@@ -68,7 +70,7 @@ void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const i
     painter.drawText(0, 0, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMax));
     painter.drawText(0, valuesHeight - nameFontHeight, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMin));
     // Frame numbers
-    for (int frame = 0; frame < values->size(); ++frame) {
+    for (int frame = 0; frame < envelopeLength; ++frame) {
         int xPos = legendCellSize + frame*cellWidth;
         painter.drawText(xPos, valuesHeight, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(frame + 1));
     }
@@ -79,6 +81,7 @@ void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, co
 {
     assert(pInstrument != nullptr);
 
+    int envelopeLength = pInstrument->getEnvelopeLength();
     int sustainStart = pInstrument->getSustainStart();
     int releaseStart = pInstrument->getReleaseStart();
 
@@ -87,21 +90,23 @@ void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, co
     // Sustain
     painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
     // Release
-    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values->size() - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
+    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (envelopeLength - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
 }
 
 
 void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
 {
+    int envelopeLength = pInstrument->getEnvelopeLength();
+
     // Value numbers
     painter.setPen(MainWindow::contentLight);
-    for (int iValue = 0; iValue < values->size(); ++iValue) {
+    for (int iValue = 0; iValue < envelopeLength; ++iValue) {
         int value = (*values)[iValue];
         painter.drawText(valuesXPos + iValue*cellWidth, 0, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(value));
     }
     // Value circles
     painter.setPen(MainWindow::contentLight);
-    for (int i = 0; i < values->size(); ++i) {
+    for (int i = 0; i < envelopeLength; ++i) {
         int xPos = int(valuesXPos + i*cellWidth + cellWidth/2);
         int deviceValue = scaleMax - (*values)[i];
         int yPos = int(deviceValue*cellHeight + cellHeight/2);
@@ -109,7 +114,7 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
     }
     // Value lines
     painter.setPen(QPen(MainWindow::blue, 2, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
-    for (int i = 1; i < values->size(); ++i) {
+    for (int i = 1; i < envelopeLength; ++i) {
         int fromX = int(valuesXPos + (i - 1)*cellWidth + cellWidth/2);
         int deviceValueFrom = scaleMax - (*values)[i - 1];
         int fromY = int(deviceValueFrom*cellHeight + cellHeight/2);
@@ -139,9 +144,14 @@ void WaveformShaper::paintEvent(QPaintEvent *)
 
 int WaveformShaper::calcWidth()
 {
+    int envelopeLength = 2;
+    // During init, no instrument is registered yet
+    if (pInstrument != nullptr) {
+        envelopeLength = pInstrument->getEnvelopeLength();
+    }
     int width = legendCellSize;
     if (values != nullptr) {
-        width += values->size()*cellWidth;
+        width += envelopeLength*cellWidth;
     }
     return width;
 }

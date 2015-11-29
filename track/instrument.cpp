@@ -1,6 +1,8 @@
 #include "instrument.h"
 
 #include <stdexcept>
+#include <iostream>
+
 
 namespace Track {
 
@@ -12,7 +14,7 @@ bool Instrument::isEmpty()
 {
     bool empty = true;
     if (name != "---"
-            || volumes.size() > 2
+            || envelopeLength > 2
             || frequencies.size() > 2
             || volumes[0] != 0 || volumes[1] != 0
             || frequencies[0] != 0 || frequencies[1] != 0
@@ -28,14 +30,14 @@ bool Instrument::isEmpty()
 
 int Instrument::getEnvelopeLength()
 {
-    return volumes.size();
+    return envelopeLength;
 }
 
 
 
-void Instrument::changeEnvelopeLength(int newSize)
+void Instrument::setEnvelopeLength(int newSize)
 {
-    if (newSize > getEnvelopeLength()) {
+    if (newSize > volumes.size()) {
         // grow
         int lastVolume = volumes[volumes.size() - 1];
         int lastFrequency = frequencies[volumes.size() - 1];
@@ -43,13 +45,8 @@ void Instrument::changeEnvelopeLength(int newSize)
             volumes.append(lastVolume);
             frequencies.append(lastFrequency);
         }
-    } else {
-        // shrink
-        while (volumes.size() != newSize) {
-            volumes.removeLast();
-            frequencies.removeLast();
-        }
     }
+    envelopeLength = newSize;
     validateSustainReleaseValues();
 }
 
@@ -57,8 +54,8 @@ void Instrument::changeEnvelopeLength(int newSize)
 
 void Instrument::validateSustainReleaseValues()
 {
-    if (releaseStart >= getEnvelopeLength()) {
-        releaseStart = getEnvelopeLength() - 1;
+    if (releaseStart >= envelopeLength) {
+        releaseStart = envelopeLength - 1;
     }
     if (sustainStart >= releaseStart) {
         sustainStart = releaseStart - 1;
@@ -70,8 +67,8 @@ void Instrument::validateSustainReleaseValues()
 void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart)
     {
         if (newReleaseStart <= newSustainStart
-                || newSustainStart >= volumes.size() - 1
-                || newReleaseStart >= volumes.size()) {
+                || newSustainStart >= envelopeLength - 1
+                || newReleaseStart >= envelopeLength) {
             throw std::invalid_argument("Invalid new sustain/release index values!");
         }
         sustainStart = newSustainStart;

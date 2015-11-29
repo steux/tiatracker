@@ -33,12 +33,15 @@ public:
 
     void registerTrack(Track::Track *newTrack);
     void initInstrumentsTab();
+    void updateInstrumentsTab();
     int getSelectedInstrument();
 
 private slots:
     void on_buttonInstrumentDelete_clicked();
 
     void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
+
+    void on_spinBoxInstrumentEnvelopeLength_editingFinished();
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
