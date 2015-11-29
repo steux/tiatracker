@@ -21,8 +21,8 @@ public:
 
     void setScale(int min, int max);
 
-    QList<int> getValues() const;
-    void setValues(const QList<int> &value);
+    QList<int> *getValues();
+    void setValues(QList<int> *newValues);
 
 signals:
 
@@ -43,7 +43,7 @@ private:
 
     int scaleMin = 0;
     int scaleMax = 15;
-    QList<int> values{};
+    QList<int> *values = nullptr;
     int cellHeight;
 
     static const int legendScaleSize = 11;
@@ -52,7 +52,7 @@ private:
     int nameFontHeight;
     static const int valueCircleRadius = 4;
 
-    int calcWidth() { return legendCellSize + values.size()*cellWidth; }
+    int calcWidth();
 };
 
 #endif // WAVEFORMSHAPER_H

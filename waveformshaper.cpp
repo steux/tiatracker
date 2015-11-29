@@ -50,7 +50,7 @@ void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const i
     // Left side
     painter.fillRect(0, 0, legendCellSize, widgetHeight, MainWindow::lightHighlighted);
     // Bottom
-    painter.fillRect(valuesXPos, widgetHeight - legendCellSize, values.size()*cellWidth, legendCellSize, MainWindow::lightHighlighted);
+    painter.fillRect(valuesXPos, widgetHeight - legendCellSize, values->size()*cellWidth, legendCellSize, MainWindow::lightHighlighted);
     // Name
     painter.setPen(MainWindow::contentDarker);
     legendFont.setBold(false);
@@ -68,7 +68,7 @@ void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const i
     painter.drawText(0, 0, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMax));
     painter.drawText(0, valuesHeight - nameFontHeight, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMin));
     // Frame numbers
-    for (int frame = 0; frame < values.size(); ++frame) {
+    for (int frame = 0; frame < values->size(); ++frame) {
         int xPos = legendCellSize + frame*cellWidth;
         painter.drawText(xPos, valuesHeight, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(frame + 1));
     }
@@ -87,7 +87,7 @@ void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, co
     // Sustain
     painter.fillRect(valuesXPos + sustainStart*cellWidth, 0, (releaseStart - sustainStart)*cellWidth, valuesHeight, MainWindow::darkHighlighted);
     // Release
-    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values.size() - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
+    painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (values->size() - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
 }
 
 
@@ -95,26 +95,26 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
 {
     // Value numbers
     painter.setPen(MainWindow::contentLight);
-    for (int iValue = 0; iValue < values.size(); ++iValue) {
-        int value = values[iValue];
+    for (int iValue = 0; iValue < values->size(); ++iValue) {
+        int value = (*values)[iValue];
         painter.drawText(valuesXPos + iValue*cellWidth, 0, cellWidth, legendCellSize, Qt::AlignCenter, QString::number(value));
     }
     // Value circles
     painter.setPen(MainWindow::contentLight);
-    for (int i = 0; i < values.size(); ++i) {
+    for (int i = 0; i < values->size(); ++i) {
         int xPos = int(valuesXPos + i*cellWidth + cellWidth/2);
-        int deviceValue = scaleMax - values[i];
+        int deviceValue = scaleMax - (*values)[i];
         int yPos = int(deviceValue*cellHeight + cellHeight/2);
         painter.drawEllipse(xPos - valueCircleRadius, yPos - valueCircleRadius, 2*valueCircleRadius - 1, 2*valueCircleRadius - 1);
     }
     // Value lines
     painter.setPen(QPen(MainWindow::blue, 2, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin));
-    for (int i = 1; i < values.size(); ++i) {
+    for (int i = 1; i < values->size(); ++i) {
         int fromX = int(valuesXPos + (i - 1)*cellWidth + cellWidth/2);
-        int deviceValueFrom = scaleMax - values[i - 1];
+        int deviceValueFrom = scaleMax - (*values)[i - 1];
         int fromY = int(deviceValueFrom*cellHeight + cellHeight/2);
         int toX = int(valuesXPos + i*cellWidth + cellWidth/2);
-        int deviceValueTo = scaleMax - values[i];
+        int deviceValueTo = scaleMax - (*values)[i];
         int toY = int(deviceValueTo*cellHeight + cellHeight/2);
         painter.drawLine(fromX, fromY, toX, toY);
     }
@@ -123,6 +123,9 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
 
 void WaveformShaper::paintEvent(QPaintEvent *)
 {
+    std::cout << "values->size(): " << values->size() << "\n";
+    std::cout.flush();
+
     QPainter painter(this);
 
     const int valuesXPos = legendCellSize;
@@ -135,18 +138,27 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     drawWaveform(painter, valuesXPos);
 }
 
+int WaveformShaper::calcWidth()
+{
+    int width = legendCellSize;
+    if (values != nullptr) {
+        width += values->size()*cellWidth;
+    }
+    return width;
+}
+
 
 
 /**************************************************************************
  * Getter/setter
  *************************************************************************/
-QList<int> WaveformShaper::getValues() const
+QList<int>* WaveformShaper::getValues()
 {
     return values;
 }
 
-void WaveformShaper::setValues(const QList<int> &value)
+void WaveformShaper::setValues(QList<int> *newValues)
 {
-    values = value;
+    values = newValues;
     setFixedWidth(calcWidth());
 }
