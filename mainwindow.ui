@@ -206,7 +206,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="spinBoxSustainStart"/>
+            <widget class="QSpinBox" name="spinBoxSustainStart">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_7">
@@ -218,7 +222,7 @@
            <item>
             <widget class="QSpinBox" name="spinBoxReleaseStart">
              <property name="minimum">
-              <number>1</number>
+              <number>2</number>
              </property>
             </widget>
            </item>
