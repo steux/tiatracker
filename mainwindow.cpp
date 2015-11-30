@@ -194,7 +194,6 @@ void MainWindow::on_spinBoxSustainStart_editingFinished()
     }
     updateInstrumentsTab();
     update();
-
 }
 
 
@@ -210,10 +209,27 @@ void MainWindow::on_spinBoxSustainStart_valueChanged(int newStart)
 
 void MainWindow::on_spinBoxReleaseStart_editingFinished()
 {
-
+    QSpinBox *sb = findChild<QSpinBox *>("spinBoxReleaseStart");
+    int newStart = sb->value();
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    if (newStart < curInstrument->getEnvelopeLength()
+            && newStart > curInstrument->getSustainStart()) {
+        // valid new value
+        curInstrument->setSustainAndRelease(curInstrument->getSustainStart(), newStart);
+    } else {
+        // invalid new value
+        sb->setValue(curInstrument->getReleaseStart());
+    }
+    updateInstrumentsTab();
+    update();
 }
 
-void MainWindow::on_spinBoxReleaseStart_valueChanged(int arg1)
+void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart)
 {
-
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    if (std::abs(newStart - curInstrument->getReleaseStart()) == 1) {
+        on_spinBoxReleaseStart_editingFinished();
+    }
 }
