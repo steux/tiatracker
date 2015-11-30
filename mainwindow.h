@@ -43,6 +43,14 @@ private slots:
 
     void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
 
+    void on_spinBoxSustainStart_editingFinished();
+
+    void on_spinBoxSustainStart_valueChanged(int newStart);
+
+    void on_spinBoxReleaseStart_editingFinished();
+
+    void on_spinBoxReleaseStart_valueChanged(int arg1);
+
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
     static const int maxInstrumentNameLength = 64;
