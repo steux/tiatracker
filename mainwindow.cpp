@@ -243,10 +243,32 @@ void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart)
 
 void MainWindow::on_spinBoxInstrumentVolume_editingFinished()
 {
-
+    QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentVolume");
+    int newVolume = sb->value();
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    int curMin = curInstrument->getMinVolume();
+    int curMax = curInstrument->getMaxVolume();
+    int curVolumeSpan = curMax - curMin;
+    if (newVolume - curVolumeSpan >= 0) {
+        // Shift volumes
+        int volumeShift = newVolume - curMax;
+        for (int i = 0; i < curInstrument->getEnvelopeLength(); ++i) {
+            curInstrument->volumes[i] += volumeShift;
+        }
+    } else {
+        // Invalid value: Set volume to current max
+        sb->setValue(curInstrument->getMaxVolume());
+    }
+    updateInstrumentsTab();
+    update();
 }
 
-void MainWindow::on_spinBoxInstrumentVolume_valueChanged(int arg1)
+void MainWindow::on_spinBoxInstrumentVolume_valueChanged(int newVolume)
 {
-
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    if (std::abs(newVolume - curInstrument->getMaxVolume()) == 1) {
+        on_spinBoxInstrumentVolume_editingFinished();
+    }
 }

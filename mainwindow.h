@@ -49,11 +49,11 @@ private slots:
 
     void on_spinBoxReleaseStart_editingFinished();
 
-    void on_spinBoxReleaseStart_valueChanged(int arg1);
+    void on_spinBoxReleaseStart_valueChanged(int newStart);
 
     void on_spinBoxInstrumentVolume_editingFinished();
 
-    void on_spinBoxInstrumentVolume_valueChanged(int arg1);
+    void on_spinBoxInstrumentVolume_valueChanged(int newVolume);
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
