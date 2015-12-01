@@ -2,6 +2,7 @@
 #include <QPainter>
 #include "mainwindow.h"
 #include <cassert>
+#include <QMouseEvent>
 
 #include <iostream>
 
@@ -138,6 +139,42 @@ void WaveformShaper::paintEvent(QPaintEvent *)
 
     /* Waveform */
     drawWaveform(painter, valuesXPos);
+}
+
+void WaveformShaper::processMouseEvent(int x, int y)
+{
+    x -= legendCellSize;
+    if (x >= 0 && y >= 0) {
+        // Click was inside the graph
+        int iValue = int(x/cellWidth);
+        int newValue = scaleMax - int(y/cellHeight);
+        // Sanity check in case area is some pixels bigger than graph area
+        if (iValue >=0 && iValue < pInstrument->getEnvelopeLength()
+                && newValue >= scaleMin && newValue <= scaleMax) {
+            (*values)[iValue] = newValue;
+            update();
+        }
+    }
+}
+
+
+void WaveformShaper::mousePressEvent(QMouseEvent *event)
+{
+    isMouseDragging = true;
+    processMouseEvent(event->x(), event->y());
+
+}
+
+void WaveformShaper::mouseReleaseEvent(QMouseEvent *)
+{
+    isMouseDragging = false;
+}
+
+void WaveformShaper::mouseMoveEvent(QMouseEvent *event)
+{
+    if (isMouseDragging) {
+        processMouseEvent(event->x(), event->y());
+    }
 }
 
 

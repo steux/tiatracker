@@ -37,6 +37,10 @@ protected:
     void drawAttackDecay(QPainter &painter, const int valuesXPos, const int valuesHeight);
     void drawWaveform(QPainter &painter, const int valuesXPos);
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    void processMouseEvent(int x, int y);
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     // The instrument to edit
@@ -46,6 +50,7 @@ private:
     int scaleMax = 15;
     QList<int> *values = nullptr;
     int cellHeight;
+    bool isMouseDragging = false;
 
     static const int legendScaleSize = 11;
     static const int legendNameSize = 17;
