@@ -75,6 +75,25 @@ void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart)
         releaseStart = newReleaseStart;
 }
 
+int Instrument::getMinVolume()
+{
+    int min = volumes[0];
+    for (int i = 1; i < volumes.size(); ++i) {
+        min = qMin(min, volumes[i]);
+    }
+    return min;
+}
+
+int Instrument::getMaxVolume()
+{
+    int max = volumes[0];
+    for (int i = 1; i < volumes.size(); ++i) {
+        max = qMax(max, volumes[i]);
+    }
+    return max;
+
+}
+
 int Instrument::getSustainStart() const
 {
     return sustainStart;

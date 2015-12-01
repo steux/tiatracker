@@ -110,6 +110,10 @@ void MainWindow::updateInstrumentsTab()
     QSpinBox *spReleaseStart = findChild<QSpinBox *>("spinBoxReleaseStart");
     int releaseStart = curInstrument.getReleaseStart();
     spReleaseStart->setValue(releaseStart + 1);
+    // Peak volume
+    QSpinBox *spPeakVolume = findChild<QSpinBox *>("spinBoxInstrumentVolume");
+    int maxVolume = curInstrument.getMaxVolume();
+    spPeakVolume->setValue(maxVolume);
     // Base waveform
     TiaSound::Distortion curDistortion = curInstrument.baseDistortion;
     int iWaveform = availableWaveforms.indexOf(curDistortion);
@@ -121,6 +125,7 @@ void MainWindow::updateInstrumentsTab()
     wsVolume->updateSize();
     WaveformShaper *wsFrequency = findChild<WaveformShaper *>("frequencyShaper");
     wsFrequency->updateSize();
+
 }
 
 
@@ -234,4 +239,14 @@ void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart)
     if (std::abs(newStart - curInstrument->getReleaseStart()) == 1) {
         on_spinBoxReleaseStart_editingFinished();
     }
+}
+
+void MainWindow::on_spinBoxInstrumentVolume_editingFinished()
+{
+
+}
+
+void MainWindow::on_spinBoxInstrumentVolume_valueChanged(int arg1)
+{
+
 }

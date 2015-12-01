@@ -164,7 +164,7 @@
            <item>
             <widget class="QLabel" name="labelInstrumentEnvelopeLength">
              <property name="text">
-              <string>Envelope length:</string>
+              <string> Envelope length:</string>
              </property>
             </widget>
            </item>
@@ -215,7 +215,7 @@
            <item>
             <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>Release start:</string>
+              <string> Release start:</string>
              </property>
             </widget>
            </item>
@@ -223,6 +223,20 @@
             <widget class="QSpinBox" name="spinBoxReleaseStart">
              <property name="minimum">
               <number>2</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string> Peak volume:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinBoxInstrumentVolume">
+             <property name="maximum">
+              <number>15</number>
              </property>
             </widget>
            </item>
