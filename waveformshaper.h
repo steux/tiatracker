@@ -51,6 +51,7 @@ private:
     QList<int> *values = nullptr;
     int cellHeight;
     bool isMouseDragging = false;
+    int draggingIndex = -1;
 
     static const int legendScaleSize = 11;
     static const int legendNameSize = 17;
