@@ -8,6 +8,7 @@
 
 
 namespace Ui {
+
 class MainWindow;
 }
 
@@ -16,6 +17,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    /* Solarized-inspired colors */
     static const QColor dark;
     static const QColor darkHighlighted;
     static const QColor light;
@@ -32,27 +34,29 @@ public:
     ~MainWindow();
 
     void registerTrack(Track::Track *newTrack);
+
+    /* Initializes the GUI components. Must be called once during init. */
     void initInstrumentsTab();
+
+    /* Fills GUI elements with data from the track. Called upon changes. */
     void updateInstrumentsTab();
+
+    /* Returns the currently selected instrument from the instruments tab */
     int getSelectedInstrument();
 
 private slots:
     void on_buttonInstrumentDelete_clicked();
 
     void on_spinBoxInstrumentEnvelopeLength_editingFinished();
-
     void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
 
     void on_spinBoxSustainStart_editingFinished();
-
     void on_spinBoxSustainStart_valueChanged(int newStart);
 
     void on_spinBoxReleaseStart_editingFinished();
-
     void on_spinBoxReleaseStart_valueChanged(int newStart);
 
     void on_spinBoxInstrumentVolume_editingFinished();
-
     void on_spinBoxInstrumentVolume_valueChanged(int newVolume);
 
 private:

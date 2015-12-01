@@ -7,22 +7,27 @@
 
 namespace Track {
 
-    class Track
-    {
-    public:
-        static const int numInstruments = 7;
+/* Represents a TIATracker track with instruments, percussion, patterns
+ * and meta-data.
+ */
+class Track
+{
+public:
+    static const int numInstruments = 7;
 
-        QString name{"New track"};
+    Track();
 
-        QList<Instrument> instruments{
-            {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
-        };
+    /* Counts all envelope frames over all instruments */
+    int getNumUsedEnvelopeFrames();
 
-        Track();
+    int getNumInstruments();
 
-        int getNumUsedWaveformFrames();
-        int getNumInstruments();
+    QString name{"New track"};
+    QList<Instrument> instruments{
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };
+};
+
 }
 
 #endif // TRACK_H

@@ -9,18 +9,22 @@
 
 namespace TiaSound {
 
-    class PitchGuide
-    {
-    public:
-        QString name;
-        TvStandard tvStandard;
-        QMap<Distortion, InstrumentPitchGuide> instrumentGuides;
+/* A pitch guide for a given TV standard that maps frequencies to nearest
+ * notes and percent values for how off the notes are. The QMap
+ * instrumentGuides holds these mappings per distortion value.
+ */
+class PitchGuide
+{
+public:
+    PitchGuide(QString name, TvStandard standard)
+        : name(name), tvStandard(standard)
+    {}
 
-        PitchGuide(QString name, TvStandard standard) : name(name), tvStandard(standard)
-        {}
+    QString name;
+    TvStandard tvStandard;
+    QMap<Distortion, InstrumentPitchGuide> instrumentGuides;
 
-    protected:
-    };
+};
 
 }
 

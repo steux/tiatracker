@@ -6,7 +6,9 @@
 #include "tiasound/tiasound.h"
 #include "tiasound/instrumentpitchguide.h"
 
-
+/* A graphical representation of a piano keyboard with a pitch guide for
+ * available note info and clickable keys.
+ */
 class PianoKeyboard : public QWidget
 {
     Q_OBJECT
@@ -25,29 +27,31 @@ public:
     static const int keyboardWidth = keyWidth*numWhiteKeys;
     static const int keyboardHeight = keyHeight;
 
-    // Threshold for unacceptable off-tune percentage
-    int offThreshold = 10;
-
     explicit PianoKeyboard(QWidget *parent = 0);
 
-    /* Set current instrument pitch guide
+    /* Inits all isEnabled to false, then goes through list in pitchGuide.
+     * Keys for found notes are activated and frequency, note and off-tune value
+     * are stored. If a note has multiple entries, the one with the least
+     * off-tune value is chosen.
      */
     void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide);
+
+    // Threshold for unacceptable off-tune percentage
+    int offThreshold = 10;
 
 signals:
 
 public slots:
 
-
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
+    // color and pos data for keys of an octave
     struct KeyGfxTrait {
         bool isBlack;
         int posIndex;   // with regards to white or black row
     };
     static const KeyGfxTrait octaveTraits[];
-
 
 private:
     // Key states and pitch info
@@ -67,8 +71,7 @@ private:
     int keyFontHeight;
     int keyInfoRectHeight;
 
-    /* Calc x-pos for a given white or black key (0..numKeys)
-     */
+    /* Calc x-pos for a given white or black key (0..numKeys) */
     int calcWhiteKeyXPos(int key);
     int calcBlackKeyXPos(int key);
 };

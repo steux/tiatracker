@@ -20,7 +20,7 @@ const PianoKeyboard::KeyGfxTrait PianoKeyboard::octaveTraits[] = {
     {false, 6}      // H
 };
 
-
+/*************************************************************************/
 
 PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 {
@@ -33,15 +33,9 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
     setFixedHeight(keyboardHeight+1);
 }
 
+/*************************************************************************/
 
-
-/* Inits all isEnabled to false, then goes through list in pitchGuide.
- * Keys for found notes are activated and frequeny, note and off-tune value
- * are stored. If a note has multiple entries, the one with the least
- * off-tune value is chosen.
- */
-void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide)
-{
+void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide) {
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].isEnabled = false;
     }
@@ -71,12 +65,9 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitch
     }
 }
 
+/*************************************************************************/
 
-
-/* Paint keyboard
- */
-void PianoKeyboard::paintEvent(QPaintEvent *)
-{
+void PianoKeyboard::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
     // White keys
@@ -143,24 +134,16 @@ void PianoKeyboard::paintEvent(QPaintEvent *)
 
 }
 
+/*************************************************************************/
 
-
-/* Calc x-pos for a given white key (0..numKeys)
- */
-int PianoKeyboard::calcWhiteKeyXPos(int key)
-{
+int PianoKeyboard::calcWhiteKeyXPos(int key) {
     int keyInOctave = key%numKeysPerOctave;
     int octave = int(key/numKeysPerOctave);
     int octaveXPos = octave*keyWidth*numWhiteKeysPerOctave;
     return octaveXPos + octaveTraits[keyInOctave].posIndex*keyWidth;
 }
 
-
-
-/* Calc x-pos for a given black key (0..numKeys)
- */
-int PianoKeyboard::calcBlackKeyXPos(int key)
-{
+int PianoKeyboard::calcBlackKeyXPos(int key) {
     int keyInOctave = key%numKeysPerOctave;
     int octave = int(key/numKeysPerOctave);
     int octaveXPos = octave*keyWidth*numWhiteKeysPerOctave;

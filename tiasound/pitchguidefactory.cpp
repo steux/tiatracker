@@ -3,21 +3,21 @@
 
 namespace TiaSound {
 
-    PitchGuideFactory::PitchGuideFactory()
-    {
-        palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
-    }
+PitchGuideFactory::PitchGuideFactory()
+{
+    palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
+}
 
+/*************************************************************************/
 
+PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
+    return palGuide;
+}
 
-    PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
-        return palGuide;
-    }
+/*************************************************************************/
 
-
-
-    PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
-        return ntscGuide;
-    }
+PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
+    return ntscGuide;
+}
 
 }

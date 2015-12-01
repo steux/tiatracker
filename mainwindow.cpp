@@ -32,6 +32,7 @@ const QList<TiaSound::Distortion> MainWindow::availableWaveforms{
     TiaSound::Distortion::ELECTRONIC_HIGH
 };
 
+/*************************************************************************/
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,20 +41,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+/*************************************************************************/
 
-
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::registerTrack(Track::Track *newTrack)
-{
+/*************************************************************************/
+
+void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
 }
 
-void MainWindow::initInstrumentsTab()
-{
+/*************************************************************************/
+
+void MainWindow::initInstrumentsTab() {
     // Instrument names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     cbInstruments->lineEdit()->setMaxLength(maxInstrumentNameLength);
@@ -72,20 +74,15 @@ void MainWindow::initInstrumentsTab()
     QObject::connect(wsVolume, &WaveformShaper::newMaxValue, cbVolume, QSpinBox::setValue);
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Populate the widgets in the instruments tab with real data from the
- * track.
- *************************************************************************/
-void MainWindow::updateInstrumentsTab()
-{
+void MainWindow::updateInstrumentsTab() {
     assert(pTrack != nullptr);
 
     /* Global values */
     // Number of envelope frames used
     QLabel *lWaveformsUsed = findChild<QLabel *>("labelWaveformFramesUsed");
-    int framesUsed = pTrack->getNumUsedWaveformFrames();
+    int framesUsed = pTrack->getNumUsedEnvelopeFrames();
     QString framesUsedString;
     if (framesUsed < 256) {
         framesUsedString = "(" + QString::number(framesUsed) + " of 256 used)";
@@ -133,36 +130,23 @@ void MainWindow::updateInstrumentsTab()
 
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Returns the index of the selected instrument (0..7) in the instruments
- * tab.
- *************************************************************************/
-int MainWindow::getSelectedInstrument()
-{
+int MainWindow::getSelectedInstrument() {
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     return cbInstruments->currentIndex();
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Instruments tab widget events.
- *************************************************************************/
-void MainWindow::on_buttonInstrumentDelete_clicked()
-{
+void MainWindow::on_buttonInstrumentDelete_clicked() {
     // TODO: Delete
     //QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * User changed the length of the envelope
- *************************************************************************/
-void MainWindow::on_spinBoxInstrumentEnvelopeLength_editingFinished()
-{
+void MainWindow::on_spinBoxInstrumentEnvelopeLength_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int newLength = sb->value();
     int iCurInstrument = getSelectedInstrument();
@@ -172,8 +156,7 @@ void MainWindow::on_spinBoxInstrumentEnvelopeLength_editingFinished()
     update();
 }
 
-void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength)
-{
+void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength) {
     int iCurInstrument = getSelectedInstrument();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
     if (std::abs(newLength - curInstrument->getEnvelopeLength()) == 1) {
@@ -181,10 +164,9 @@ void MainWindow::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength)
     }
 }
 
+/*************************************************************************/
 
-
-void MainWindow::on_spinBoxSustainStart_editingFinished()
-{
+void MainWindow::on_spinBoxSustainStart_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxSustainStart");
     int newStart = sb->value() - 1;
     int iCurInstrument = getSelectedInstrument();
@@ -206,10 +188,7 @@ void MainWindow::on_spinBoxSustainStart_editingFinished()
     update();
 }
 
-
-
-void MainWindow::on_spinBoxSustainStart_valueChanged(int newStart)
-{
+void MainWindow::on_spinBoxSustainStart_valueChanged(int newStart) {
     newStart--;
     int iCurInstrument = getSelectedInstrument();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
@@ -218,8 +197,9 @@ void MainWindow::on_spinBoxSustainStart_valueChanged(int newStart)
     }
 }
 
-void MainWindow::on_spinBoxReleaseStart_editingFinished()
-{
+/*************************************************************************/
+
+void MainWindow::on_spinBoxReleaseStart_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxReleaseStart");
     int newStart = sb->value() - 1;
     int iCurInstrument = getSelectedInstrument();
@@ -236,8 +216,7 @@ void MainWindow::on_spinBoxReleaseStart_editingFinished()
     update();
 }
 
-void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart)
-{
+void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart) {
     newStart--;
     int iCurInstrument = getSelectedInstrument();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
@@ -246,8 +225,9 @@ void MainWindow::on_spinBoxReleaseStart_valueChanged(int newStart)
     }
 }
 
-void MainWindow::on_spinBoxInstrumentVolume_editingFinished()
-{
+/*************************************************************************/
+
+void MainWindow::on_spinBoxInstrumentVolume_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentVolume");
     int newVolume = sb->value();
     int iCurInstrument = getSelectedInstrument();
@@ -269,8 +249,7 @@ void MainWindow::on_spinBoxInstrumentVolume_editingFinished()
     update();
 }
 
-void MainWindow::on_spinBoxInstrumentVolume_valueChanged(int newVolume)
-{
+void MainWindow::on_spinBoxInstrumentVolume_valueChanged(int newVolume) {
     int iCurInstrument = getSelectedInstrument();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
     if (std::abs(newVolume - curInstrument->getMaxVolume()) == 1) {

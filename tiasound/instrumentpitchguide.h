@@ -6,36 +6,37 @@
 
 namespace TiaSound {
 
-    /* Pitch guide for one frequency value
-     */
-    struct FrequencyPitchGuide {
-        Note note;
-        int percentOff;
-    };
+/* Pitch guide for a single frequency value */
+struct FrequencyPitchGuide {
+    Note note;
+    int percentOff;
+};
 
 
+/* Frequencies pitch guide for one distortion */
+class InstrumentPitchGuide
+{
+public:
+    /* Needed for instantiation inside libraries */
+    InstrumentPitchGuide() {}
 
-    /* Frequencies pitch guide for one distortion
-     */
-    class InstrumentPitchGuide
-    {
-    public:
-        Distortion distortion;
-        QString name;
+    /* "Normal" constructor */
+    InstrumentPitchGuide(Distortion dist, QString name, QList<FrequencyPitchGuide> freqPitchGuides) :
+        distortion(dist), name(name), freqPitchGuides(freqPitchGuides)
+    {}
 
-        InstrumentPitchGuide() {}
+    /* Getters */
+    int getNumFrequencies();
+    Note getNote(int frequency);
+    int getPercentOff(int frequency);
 
-        InstrumentPitchGuide(Distortion dist, QString name, QList<FrequencyPitchGuide> freqPitchGuides) :
-            distortion(dist), name(name), freqPitchGuides(freqPitchGuides)
-        {}
+    /* Member variables */
+    Distortion distortion;
+    QString name;
 
-        int getNumFrequencies();
-        Note getNote(int frequency);
-        int getPercentOff(int frequency);
-
-    protected:
-        QList<FrequencyPitchGuide> freqPitchGuides;
-    };
+protected:
+    QList<FrequencyPitchGuide> freqPitchGuides;
+};
 
 }
 

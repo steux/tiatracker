@@ -7,9 +7,6 @@
 #include <iostream>
 
 
-/**************************************************************************
- * Constructor
- *************************************************************************/
 WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
 {
     setFixedWidth(calcWidth());
@@ -19,35 +16,24 @@ WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
     nameFontHeight = fontMetrics.height();
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Register the track, for data retrieval.
- *************************************************************************/
-void WaveformShaper::registerInstrument(Track::Instrument *newInstrument)
-{
+void WaveformShaper::registerInstrument(Track::Instrument *newInstrument) {
      pInstrument = newInstrument;
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Set min and max for scale
- *************************************************************************/
-void WaveformShaper::setScale(int min, int max)
-{
+void WaveformShaper::setScale(int min, int max) {
     scaleMin = min;
     scaleMax = max;
     cellHeight = int( (widgetHeight - legendCellSize)/(max - min + 1) );
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Paint event with helper functions
- *************************************************************************/
-void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const int valuesHeight)
-{
+void WaveformShaper::drawLegend(QPainter &painter,
+                                const int valuesXPos, const int valuesHeight) {
     int envelopeLength = pInstrument->getEnvelopeLength();
 
     // Left side
@@ -77,9 +63,8 @@ void WaveformShaper::drawLegend(QPainter &painter, const int valuesXPos, const i
     }
 }
 
-
-void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, const int valuesHeight)
-{
+void WaveformShaper::drawAttackDecay(QPainter &painter,
+                                     const int valuesXPos, const int valuesHeight) {
     assert(pInstrument != nullptr);
 
     int envelopeLength = pInstrument->getEnvelopeLength();
@@ -94,9 +79,7 @@ void WaveformShaper::drawAttackDecay(QPainter &painter, const int valuesXPos, co
     painter.fillRect(valuesXPos + releaseStart*cellWidth, 0, (envelopeLength - releaseStart)*cellWidth, valuesHeight, MainWindow::dark);
 }
 
-
-void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
-{
+void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos) {
     int envelopeLength = pInstrument->getEnvelopeLength();
 
     // Value numbers
@@ -126,9 +109,7 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos)
     }
 }
 
-
-void WaveformShaper::paintEvent(QPaintEvent *)
-{
+void WaveformShaper::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
     const int valuesXPos = legendCellSize;
@@ -141,8 +122,9 @@ void WaveformShaper::paintEvent(QPaintEvent *)
     drawWaveform(painter, valuesXPos);
 }
 
-void WaveformShaper::processMouseEvent(int x, int y)
-{
+/*************************************************************************/
+
+void WaveformShaper::processMouseEvent(int x, int y) {
     x -= legendCellSize;
     if (x >= 0 && y >= 0) {
         // Click was inside the graph
@@ -162,33 +144,28 @@ void WaveformShaper::processMouseEvent(int x, int y)
     }
 }
 
-
-void WaveformShaper::mousePressEvent(QMouseEvent *event)
-{
+void WaveformShaper::mousePressEvent(QMouseEvent *event) {
     isMouseDragging = true;
     processMouseEvent(event->x(), event->y());
 
 }
 
-void WaveformShaper::mouseReleaseEvent(QMouseEvent *)
-{
+void WaveformShaper::mouseReleaseEvent(QMouseEvent *) {
     isMouseDragging = false;
     draggingIndex = -1;
     int newMax = pInstrument->getMaxVolume();
     emit newMaxValue(newMax);
 }
 
-void WaveformShaper::mouseMoveEvent(QMouseEvent *event)
-{
+void WaveformShaper::mouseMoveEvent(QMouseEvent *event) {
     if (isMouseDragging) {
         processMouseEvent(event->x(), event->y());
     }
 }
 
+/*************************************************************************/
 
-
-int WaveformShaper::calcWidth()
-{
+int WaveformShaper::calcWidth() {
     int envelopeLength = 2;
     // During init, no instrument is registered yet
     if (pInstrument != nullptr) {
@@ -201,25 +178,19 @@ int WaveformShaper::calcWidth()
     return width;
 }
 
+/*************************************************************************/
 
-
-void WaveformShaper::updateSize()
-{
+void WaveformShaper::updateSize() {
     setFixedWidth(calcWidth());
 }
 
+/*************************************************************************/
 
-
-/**************************************************************************
- * Getter/setter
- *************************************************************************/
-QList<int>* WaveformShaper::getValues()
-{
+QList<int>* WaveformShaper::getValues() {
     return values;
 }
 
-void WaveformShaper::setValues(QList<int> *newValues)
-{
+void WaveformShaper::setValues(QList<int> *newValues) {
     values = newValues;
     updateSize();
 }

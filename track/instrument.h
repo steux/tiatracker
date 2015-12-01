@@ -8,31 +8,46 @@
 
 namespace Track {
 
-    class Instrument
-    {
-    public:
-        Instrument(QString name) : name(name) {}
+/* A TIATracker instrument, based on a base distortion and ADSR envelopes
+ * for volume and frequency.
+ */
+class Instrument
+{
+public:
+    Instrument(QString name) : name(name) {}
 
-        QString name;
-        TiaSound::Distortion baseDistortion{TiaSound::Distortion::BUZZY};
-        QList<int> volumes{0, 0};
-        QList<int> frequencies{0, 0};
+    bool isEmpty();
 
-        bool isEmpty();
-        int getEnvelopeLength();
-        void setEnvelopeLength(int newSize);
-        void validateSustainReleaseValues();
-        void setSustainAndRelease(int newSustainStart, int newReleaseStart);
-        int getMinVolume();
-        int getMaxVolume();
-        int getSustainStart() const;
-        int getReleaseStart() const;
+    int getEnvelopeLength();
 
-    private:
-        int envelopeLength = 2;
-        int sustainStart = 0;
-        int releaseStart = 1;
-    };
+    void setEnvelopeLength(int newSize);
+
+    /* Checks if release starts after sustain and if not, changes
+     * values accordingly. */
+    void validateSustainReleaseValues();
+
+    void setSustainAndRelease(int newSustainStart, int newReleaseStart);
+
+    /* Get minimum volume over the whole envelope */
+    int getMinVolume();
+
+    /* Get maximum volume over the whole envelope */
+    int getMaxVolume();
+
+    int getSustainStart() const;
+
+    int getReleaseStart() const;
+
+    QString name;
+    TiaSound::Distortion baseDistortion{TiaSound::Distortion::BUZZY};
+    QList<int> volumes{0, 0};
+    QList<int> frequencies{0, 0};
+
+private:
+    int envelopeLength = 2;
+    int sustainStart = 0;
+    int releaseStart = 1;
+};
 
 }
 
