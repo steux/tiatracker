@@ -174,6 +174,8 @@ void WaveformShaper::mouseReleaseEvent(QMouseEvent *)
 {
     isMouseDragging = false;
     draggingIndex = -1;
+    int newMax = pInstrument->getMaxVolume();
+    emit newMaxValue(newMax);
 }
 
 void WaveformShaper::mouseMoveEvent(QMouseEvent *event)

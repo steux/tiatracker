@@ -27,6 +27,8 @@ public:
 
 signals:
 
+    void newMaxValue(int newMax);
+
 public slots:
 
 protected:
