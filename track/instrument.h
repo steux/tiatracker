@@ -28,6 +28,8 @@ public:
 
     void setSustainAndRelease(int newSustainStart, int newReleaseStart);
 
+    void deleteInstrument();
+
     /* Get minimum volume over the whole envelope */
     int getMinVolume();
 

@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <cassert>
+#include <QMessageBox>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -140,8 +141,23 @@ int MainWindow::getSelectedInstrument() {
 /*************************************************************************/
 
 void MainWindow::on_buttonInstrumentDelete_clicked() {
-    // TODO: Delete
-    //QComboBox *cb = findChild<QComboBox *>("comboBoxInstruments");
+    std::cout << "***\n"; std::cout.flush();
+
+    int iCurInstrument = getSelectedInstrument();
+    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    bool doDelete = true;
+    if (!curInstrument->isEmpty()) {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Test", "Quit?", QMessageBox::Yes|QMessageBox::No);
+        if (reply != QMessageBox::Yes) {
+            doDelete = false;
+        }
+    }
+    if (doDelete) {
+        curInstrument->deleteInstrument();
+        updateInstrumentsTab();
+        update();
+    }
 }
 
 /*************************************************************************/

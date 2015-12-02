@@ -67,6 +67,25 @@ void Instrument::setSustainAndRelease(int newSustainStart, int newReleaseStart) 
 
 /*************************************************************************/
 
+void Instrument::deleteInstrument()
+{
+    name = "---";
+    while (volumes.size() > 2) {
+        volumes.removeLast();
+        frequencies.removeLast();
+    }
+    volumes[0] = 0;
+    volumes[1] = 0;
+    frequencies[0] = 0;
+    frequencies[1] = 0;
+    envelopeLength = 2;
+    sustainStart = 0;
+    releaseStart = 1;
+    baseDistortion = TiaSound::Distortion::BUZZY;
+}
+
+/*************************************************************************/
+
 int Instrument::getMinVolume() {
     int min = volumes[0];
     for (int i = 1; i < volumes.size(); ++i) {
