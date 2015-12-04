@@ -5,10 +5,18 @@
 
 namespace Emulation {
 
-class Player
-{
+class Player : public QObject {
+    Q_OBJECT
+
 public:
     Player();
+
+public slots:
+
+signals:
+
+private:
+
 };
 
 }

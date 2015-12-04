@@ -37,25 +37,10 @@ int main(int argc, char *argv[])
 
     w.initConnections();
 
-
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
     pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
-
-    // Volume shaper
-    WaveformShaper *vs = w.findChild<WaveformShaper *>("volumeShaper");
-    vs->registerInstrument(&myTrack.instruments[0]);
-    vs->name = "Volume";
-    vs->setScale(0, 15);
-    vs->setValues(&(myTrack.instruments[0].volumes));
-
-    // Frequency shaper
-    WaveformShaper *fs = w.findChild<WaveformShaper *>("frequencyShaper");
-    fs->registerInstrument(&myTrack.instruments[0]);
-    fs->name = "Frequency";
-    fs->setScale(-8, 7);
-    fs->setValues(&(myTrack.instruments[0].frequencies));
 
     // Shrink window size to minimum and show
     w.resize(0, 0);

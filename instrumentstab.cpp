@@ -49,6 +49,19 @@ void InstrumentsTab::initInstrumentsTab() {
     foreach (TiaSound::Distortion distortion, availableWaveforms) {
         cbWaveforms->addItem(TiaSound::getDistorionName(distortion));
     }
+    // Volume shaper
+    WaveformShaper *vs = findChild<WaveformShaper *>("volumeShaper");
+    vs->registerInstrument(&(pTrack->instruments[0]));
+    vs->name = "Volume";
+    vs->setScale(0, 15);
+    vs->setValues(&(pTrack->instruments[0].volumes));
+
+    // Frequency shaper
+    WaveformShaper *fs = findChild<WaveformShaper *>("frequencyShaper");
+    fs->registerInstrument(&(pTrack->instruments[0]));
+    fs->name = "Frequency";
+    fs->setScale(-8, 7);
+    fs->setValues(&(pTrack->instruments[0].frequencies));
 }
 
 /*************************************************************************/
