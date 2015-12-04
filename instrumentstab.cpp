@@ -108,7 +108,6 @@ void InstrumentsTab::updateInstrumentsTab() {
     wsFrequency->registerInstrument(&curInstrument);
     wsFrequency->setValues(&(curInstrument.frequencies));
     wsFrequency->updateSize();
-
 }
 
 /*************************************************************************/
@@ -268,5 +267,8 @@ void InstrumentsTab::on_comboBoxInstruments_currentIndexChanged(int index) {
 }
 
 void InstrumentsTab::on_comboBoxInstruments_currentTextChanged(const QString &text) {
-    std::cout << "CurrentText: " << text.toStdString() << "\n"; std::cout.flush();
+    Track::Instrument *curInstrument = getSelectedInstrument();
+    curInstrument->name = text;
+    updateInstrumentsTab();
+    update();
 }
