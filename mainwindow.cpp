@@ -68,11 +68,17 @@ void MainWindow::initInstrumentsTab() {
     foreach (TiaSound::Distortion distortion, availableWaveforms) {
         cbWaveforms->addItem(TiaSound::getDistorionName(distortion));
     }
+}
 
+/*************************************************************************/
+
+void MainWindow::initConnections()
+{
     // Connect volume shaper with peak volume SpinBox
-    QSpinBox *cbVolume = findChild<QSpinBox *>("spinBoxInstrumentVolume");
-    WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
-    QObject::connect(wsVolume, &WaveformShaper::newMaxValue, cbVolume, &QSpinBox::setValue);
+//    QSpinBox *cbVolume = findChild<QSpinBox *>("spinBoxInstrumentVolume");
+//    WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
+//    QObject::connect(wsVolume, &WaveformShaper::newMaxValue, cbVolume, &QSpinBox::setValue);
+    QObject::connect(ui->volumeShaper, &WaveformShaper::newMaxValue, ui->spinBoxInstrumentVolume, &QSpinBox::setValue);
 }
 
 /*************************************************************************/
@@ -141,8 +147,6 @@ int MainWindow::getSelectedInstrument() {
 /*************************************************************************/
 
 void MainWindow::on_buttonInstrumentDelete_clicked() {
-    std::cout << "***\n"; std::cout.flush();
-
     int iCurInstrument = getSelectedInstrument();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
     bool doDelete = true;

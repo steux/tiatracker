@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     tiasound/pitchperfectpal.cpp \
     waveformshaper.cpp \
     track/instrument.cpp \
-    track/track.cpp
+    track/track.cpp \
+    instrumentstab.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     tiasound/pitchperfectpal.h \
     waveformshaper.h \
     track/instrument.h \
-    track/track.h
+    track/track.h \
+    instrumentstab.h
 
 FORMS    += mainwindow.ui
 

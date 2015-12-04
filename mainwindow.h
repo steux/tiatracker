@@ -38,6 +38,9 @@ public:
     /* Initializes the GUI components. Must be called once during init. */
     void initInstrumentsTab();
 
+    /* Initializes signal/slot connections */
+    void initConnections();
+
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updateInstrumentsTab();
 

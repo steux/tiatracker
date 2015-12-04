@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     w.registerTrack(&myTrack);
     w.initInstrumentsTab();
+    w.initConnections();
     w.updateInstrumentsTab();
 
     /* Initialize GUI elements */
