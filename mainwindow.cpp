@@ -20,19 +20,6 @@ const QColor MainWindow::red{"#dc322f"};
 const QColor MainWindow::orange{"#cb4b16"};
 const QColor MainWindow::blue{"#268bd2"};
 
-const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
-    TiaSound::Distortion::BUZZY,
-    TiaSound::Distortion::BUZZY_RUMBLE,
-    TiaSound::Distortion::FLANGY_WAVERING,
-    TiaSound::Distortion::PURE_HIGH,
-    TiaSound::Distortion::PURE_BUZZY,
-    TiaSound::Distortion::REEDY_RUMBLE,
-    TiaSound::Distortion::WHITE_NOISE,
-    TiaSound::Distortion::PURE_LOW,
-    TiaSound::Distortion::ELECTRONIC_LOW,
-    TiaSound::Distortion::ELECTRONIC_HIGH
-};
-
 /*************************************************************************/
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -62,7 +49,8 @@ void MainWindow::initConnections()
     QObject::connect(ui->spinBoxReleaseStart, SIGNAL(valueChanged(int)), ui->tabInstruments, SLOT(on_spinBoxReleaseStart_valueChanged(int)));
     QObject::connect(ui->spinBoxInstrumentVolume, &QSpinBox::editingFinished, ui->tabInstruments, &InstrumentsTab::on_spinBoxInstrumentVolume_editingFinished);
     QObject::connect(ui->spinBoxInstrumentVolume, SIGNAL(valueChanged(int)), ui->tabInstruments, SLOT(on_spinBoxInstrumentVolume_valueChanged(int)));
-
+    QObject::connect(ui->comboBoxWaveforms, SIGNAL(currentIndexChanged(int)), ui->tabInstruments, SLOT(on_comboBoxWaveforms_currentIndexChanged(int)));
     QObject::connect(ui->volumeShaper, &WaveformShaper::newMaxValue, ui->spinBoxInstrumentVolume, &QSpinBox::setValue);
 }
+
 

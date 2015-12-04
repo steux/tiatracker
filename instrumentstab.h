@@ -21,7 +21,7 @@ public:
     void updateInstrumentsTab();
 
     /* Returns the currently selected instrument from the instruments tab */
-    int getSelectedInstrument();
+    int getSelectedInstrumentIndex();
 
 signals:
 
@@ -40,6 +40,11 @@ public slots:
 
     void on_spinBoxInstrumentVolume_editingFinished();
     void on_spinBoxInstrumentVolume_valueChanged(int newVolume);
+
+    void on_comboBoxWaveforms_currentIndexChanged(int index);
+
+protected:
+    Track::Instrument * getSelectedInstrument();
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;

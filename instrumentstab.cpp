@@ -7,6 +7,22 @@
 #include "waveformshaper.h"
 #include <QMessageBox>
 
+
+const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
+    TiaSound::Distortion::BUZZY,
+    TiaSound::Distortion::BUZZY_RUMBLE,
+    TiaSound::Distortion::FLANGY_WAVERING,
+    TiaSound::Distortion::PURE_HIGH,
+    TiaSound::Distortion::PURE_BUZZY,
+    TiaSound::Distortion::REEDY_RUMBLE,
+    TiaSound::Distortion::WHITE_NOISE,
+    TiaSound::Distortion::PURE_LOW,
+    TiaSound::Distortion::ELECTRONIC_LOW,
+    TiaSound::Distortion::ELECTRONIC_HIGH
+};
+
+/*************************************************************************/
+
 InstrumentsTab::InstrumentsTab(QWidget *parent) : QWidget(parent)
 {
 
@@ -57,7 +73,7 @@ void InstrumentsTab::updateInstrumentsTab() {
     lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
 
     /* Values specific to the selected intrument */
-    int iCurInstrument = getSelectedInstrument();
+    int iCurInstrument = getSelectedInstrumentIndex();
     QLabel *lInstrumentNumber = findChild<QLabel *>("labelInstrumentNumber");
     lInstrumentNumber->setText("Instrument " + QString::number(iCurInstrument + 1));
     Track::Instrument& curInstrument = pTrack->instruments[iCurInstrument];
@@ -92,16 +108,23 @@ void InstrumentsTab::updateInstrumentsTab() {
 
 /*************************************************************************/
 
-int InstrumentsTab::getSelectedInstrument() {
+int InstrumentsTab::getSelectedInstrumentIndex() {
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
     return cbInstruments->currentIndex();
 }
 
 /*************************************************************************/
 
-void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
-    int iCurInstrument = getSelectedInstrument();
+Track::Instrument * InstrumentsTab::getSelectedInstrument() {
+    int iCurInstrument = getSelectedInstrumentIndex();
     Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    return curInstrument;
+}
+
+/*************************************************************************/
+
+void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
+    Track::Instrument *curInstrument = getSelectedInstrument();
     bool doDelete = true;
     if (!curInstrument->isEmpty()) {
         QMessageBox::StandardButton reply;
@@ -122,16 +145,14 @@ void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
 void InstrumentsTab::on_spinBoxInstrumentEnvelopeLength_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int newLength = sb->value();
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     curInstrument->setEnvelopeLength(newLength);
     updateInstrumentsTab();
     update();
 }
 
 void InstrumentsTab::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength) {
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (std::abs(newLength - curInstrument->getEnvelopeLength()) == 1) {
         on_spinBoxInstrumentEnvelopeLength_editingFinished();
     }
@@ -142,8 +163,7 @@ void InstrumentsTab::on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLeng
 void InstrumentsTab::on_spinBoxSustainStart_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxSustainStart");
     int newStart = sb->value() - 1;
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (newStart < curInstrument->getReleaseStart()) {
         // valid new value
         curInstrument->setSustainAndRelease(newStart, curInstrument->getReleaseStart());
@@ -163,8 +183,7 @@ void InstrumentsTab::on_spinBoxSustainStart_editingFinished() {
 
 void InstrumentsTab::on_spinBoxSustainStart_valueChanged(int newStart) {
     newStart--;
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (std::abs(newStart - curInstrument->getSustainStart()) == 1) {
         on_spinBoxSustainStart_editingFinished();
     }
@@ -175,8 +194,7 @@ void InstrumentsTab::on_spinBoxSustainStart_valueChanged(int newStart) {
 void InstrumentsTab::on_spinBoxReleaseStart_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxReleaseStart");
     int newStart = sb->value() - 1;
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (newStart < curInstrument->getEnvelopeLength()
             && newStart > curInstrument->getSustainStart()) {
         // valid new value
@@ -191,8 +209,7 @@ void InstrumentsTab::on_spinBoxReleaseStart_editingFinished() {
 
 void InstrumentsTab::on_spinBoxReleaseStart_valueChanged(int newStart) {
     newStart--;
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (std::abs(newStart - curInstrument->getReleaseStart()) == 1) {
         on_spinBoxReleaseStart_editingFinished();
     }
@@ -203,8 +220,7 @@ void InstrumentsTab::on_spinBoxReleaseStart_valueChanged(int newStart) {
 void InstrumentsTab::on_spinBoxInstrumentVolume_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentVolume");
     int newVolume = sb->value();
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     int curMin = curInstrument->getMinVolume();
     int curMax = curInstrument->getMaxVolume();
     int curVolumeSpan = curMax - curMin;
@@ -223,9 +239,18 @@ void InstrumentsTab::on_spinBoxInstrumentVolume_editingFinished() {
 }
 
 void InstrumentsTab::on_spinBoxInstrumentVolume_valueChanged(int newVolume) {
-    int iCurInstrument = getSelectedInstrument();
-    Track::Instrument *curInstrument = &(pTrack->instruments[iCurInstrument]);
+    Track::Instrument *curInstrument = getSelectedInstrument();
     if (std::abs(newVolume - curInstrument->getMaxVolume()) == 1) {
         on_spinBoxInstrumentVolume_editingFinished();
     }
+}
+
+/*************************************************************************/
+
+void InstrumentsTab::on_comboBoxWaveforms_currentIndexChanged(int index) {
+    Track::Instrument *curInstrument = getSelectedInstrument();
+    TiaSound::Distortion newDistortion = availableWaveforms[index];
+    curInstrument->baseDistortion = newDistortion;
+    updateInstrumentsTab();
+    update();
 }

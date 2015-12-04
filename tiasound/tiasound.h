@@ -31,17 +31,39 @@ QString getNoteNameWithOctave(Note note);
 /* Distortions
  */
 enum class Distortion : int {
-    BUZZY=1,
-    BUZZY_RUMBLE=2,
-    FLANGY_WAVERING=3,
-    PURE_HIGH=4,
-    PURE_BUZZY=6,
-    REEDY_RUMBLE=7,
-    WHITE_NOISE=8,
-    PURE_LOW=12,
-    ELECTRONIC_LOW=14,
-    ELECTRONIC_HIGH=15
+    SILENT = 0,
+    BUZZY = 1,
+    BUZZY_RUMBLE = 2,
+    FLANGY_WAVERING = 3,
+    PURE_HIGH = 4,
+    PURE_BUZZY = 6,
+    REEDY_RUMBLE = 7,
+    WHITE_NOISE = 8,
+    PURE_LOW = 12,
+    ELECTRONIC_LOW = 14,
+    ELECTRONIC_HIGH = 15
 };
+
+static const QList<Distortion> distortions{
+    Distortion::SILENT,            // 0
+    Distortion::BUZZY,              // 1
+    Distortion::BUZZY_RUMBLE,       // 2
+    Distortion::FLANGY_WAVERING,    // 3
+    Distortion::PURE_HIGH,          // 4
+    Distortion::PURE_HIGH,          // 5
+    Distortion::PURE_BUZZY,         // 6
+    Distortion::REEDY_RUMBLE,       // 7
+    Distortion::WHITE_NOISE,        // 8
+    Distortion::REEDY_RUMBLE,       // 9
+    Distortion::PURE_BUZZY,         // 10
+    Distortion::SILENT,             // 11
+    Distortion::PURE_LOW,           // 12
+    Distortion::PURE_LOW,           // 13
+    Distortion::ELECTRONIC_LOW,     // 14
+    Distortion::ELECTRONIC_HIGH     // 15
+};
+
+
 
 /* Get a distortion name as QString from Distortion index
  */
