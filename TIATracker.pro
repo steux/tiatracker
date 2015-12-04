@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     waveformshaper.cpp \
     track/instrument.cpp \
     track/track.cpp \
-    instrumentstab.cpp
+    instrumentstab.cpp \
+    emulation/Player.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwindow.h \
     waveformshaper.h \
     track/instrument.h \
     track/track.h \
-    instrumentstab.h
+    instrumentstab.h \
+    emulation/player.h
 
 FORMS    += mainwindow.ui
 
