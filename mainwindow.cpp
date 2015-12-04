@@ -72,7 +72,7 @@ void MainWindow::initInstrumentsTab() {
     // Connect volume shaper with peak volume SpinBox
     QSpinBox *cbVolume = findChild<QSpinBox *>("spinBoxInstrumentVolume");
     WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
-    QObject::connect(wsVolume, &WaveformShaper::newMaxValue, cbVolume, QSpinBox::setValue);
+    QObject::connect(wsVolume, &WaveformShaper::newMaxValue, cbVolume, &QSpinBox::setValue);
 }
 
 /*************************************************************************/
