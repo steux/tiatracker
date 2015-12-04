@@ -3,6 +3,15 @@ QMainWindow {
 }
 
 
+QMessageBox {
+    background: #eee8d5;
+    border: 1px solid #002b36;
+}
+QMessageBox QLabel {
+    background: #eee8d5;
+}
+
+
 QTabWidget::pane {
     background: #fdf6e3;
     border: 1px solid #002b36;

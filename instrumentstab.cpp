@@ -131,8 +131,12 @@ void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
     Track::Instrument *curInstrument = getSelectedInstrument();
     bool doDelete = true;
     if (!curInstrument->isEmpty()) {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, "Test", "Quit?", QMessageBox::Yes|QMessageBox::No);
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Delete Instrument",
+                           "Do you really want to delete this instument?",
+                           QMessageBox::Yes | QMessageBox::No, this,
+                           Qt::FramelessWindowHint);
+        int reply = msgBox.exec();
         if (reply != QMessageBox::Yes) {
             doDelete = false;
         }
@@ -261,7 +265,7 @@ void InstrumentsTab::on_comboBoxWaveforms_currentIndexChanged(int index) {
 
 /*************************************************************************/
 
-void InstrumentsTab::on_comboBoxInstruments_currentIndexChanged(int index) {
+void InstrumentsTab::on_comboBoxInstruments_currentIndexChanged(int) {
     updateInstrumentsTab();
     update();
 }
