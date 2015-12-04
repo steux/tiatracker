@@ -9,6 +9,7 @@
 #include "tiasound/pitchperfectpal.h"
 #include "waveformshaper.h"
 #include "track/track.h"
+#include "instrumentstab.h"
 
 #include <iostream>
 
@@ -29,10 +30,13 @@ int main(int argc, char *argv[])
     // GUI
     MainWindow w;
 
-    w.registerTrack(&myTrack);
-    w.initInstrumentsTab();
+    InstrumentsTab *it = w.findChild<InstrumentsTab *>("tabInstruments");
+    it->registerTrack(&myTrack);
+    it->initInstrumentsTab();
+    it->updateInstrumentsTab();
+
     w.initConnections();
-    w.updateInstrumentsTab();
+
 
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
