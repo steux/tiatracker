@@ -16,7 +16,7 @@ public:
 
     explicit WaveformShaper(QWidget *parent);
 
-    /* Register the track with the instruments to modify */
+    /* Register the instrument to modify */
     void registerInstrument(Track::Instrument *newInstrument);
 
     /* Set fixed size for layout according to envelope length */

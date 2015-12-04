@@ -6,6 +6,7 @@
 #include <QSpinBox>
 #include "waveformshaper.h"
 #include <QMessageBox>
+#include <iostream>
 
 
 const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
@@ -98,10 +99,14 @@ void InstrumentsTab::updateInstrumentsTab() {
     assert(iWaveform != -1);
     QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
     cbWaveforms->setCurrentIndex(iWaveform);
-    // WaveformShaper sizes
+    // WaveformShaper sizes and values
     WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
+    wsVolume->registerInstrument(&curInstrument);
+    wsVolume->setValues(&(curInstrument.volumes));
     wsVolume->updateSize();
     WaveformShaper *wsFrequency = findChild<WaveformShaper *>("frequencyShaper");
+    wsFrequency->registerInstrument(&curInstrument);
+    wsFrequency->setValues(&(curInstrument.frequencies));
     wsFrequency->updateSize();
 
 }
@@ -253,4 +258,15 @@ void InstrumentsTab::on_comboBoxWaveforms_currentIndexChanged(int index) {
     curInstrument->baseDistortion = newDistortion;
     updateInstrumentsTab();
     update();
+}
+
+/*************************************************************************/
+
+void InstrumentsTab::on_comboBoxInstruments_currentIndexChanged(int index) {
+    updateInstrumentsTab();
+    update();
+}
+
+void InstrumentsTab::on_comboBoxInstruments_currentTextChanged(const QString &text) {
+    std::cout << "CurrentText: " << text.toStdString() << "\n"; std::cout.flush();
 }
