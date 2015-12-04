@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QString>
 #include <QComboBox>
+#include <QThread>
 
 #include "tiasound/tiasound.h"
 #include "pianokeyboard.h"
@@ -10,6 +11,7 @@
 #include "waveformshaper.h"
 #include "track/track.h"
 #include "instrumentstab.h"
+#include "emulation/player.h"
 
 #include <iostream>
 
@@ -45,6 +47,11 @@ int main(int argc, char *argv[])
     // Shrink window size to minimum and show
     w.resize(0, 0);
     w.show();
+
+    /* Create and initialize player thread */
+
+
+
 
     return a.exec();
 }

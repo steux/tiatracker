@@ -1,10 +1,12 @@
+#include <QThread>
+
 #include "player.h"
 
 namespace Emulation {
 
-Player::Player()
+Player::Player(QObject *parent) : QThread(parent)
 {
-
+    moveToThread(this);
 }
 
 }

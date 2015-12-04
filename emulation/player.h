@@ -2,14 +2,16 @@
 #define PLAYER_H
 
 #include <QObject>
+#include <QThread>
+
 
 namespace Emulation {
 
-class Player : public QObject {
+class Player : public QThread {
     Q_OBJECT
 
 public:
-    Player();
+    explicit Player(QObject *parent = 0);
 
 public slots:
 
