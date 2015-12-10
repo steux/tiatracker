@@ -153,15 +153,32 @@ int PianoKeyboard::calcKeyIndexForWhiteKey(int xPos) {
 void PianoKeyboard::mousePressEvent(QMouseEvent *event)
 {
     int octave = int(event->x()/(keyWidth*numWhiteKeysPerOctave));
+    int keyIndex;
     if (event->y() < blackKeyHeight) {
         // Potential black key
+        // TODO: More intelligent calculation instead of brute force
+        int octaveBaseKey = octave*12;
+        int xPos = event->x();
+        keyIndex = -1;
+        for (int key = 0; key < 12; ++key) {
+            if (octaveTraits[key].isBlack) {
+                int xPosCandidate = calcBlackKeyXPos(octaveBaseKey + key);
+                if (xPos >= xPosCandidate && xPos < xPosCandidate + blackKeyWidth) {
+                    keyIndex = octaveBaseKey + key;
+                }
+            }
+        }
+        if (keyIndex == -1) {
+            // Click is between black keys: White key instead
+            keyIndex = calcKeyIndexForWhiteKey(xPos);
+        }
     } else {
         // White key
-        int keyIndex = calcKeyIndexForWhiteKey(event->x());
-        if (keyInfo[keyIndex].isEnabled) {
-            isValidKeyPressed = true;
-            emit newKeyPressed(keyInfo[keyIndex].frequency);
-        }
+        keyIndex = calcKeyIndexForWhiteKey(event->x());
+    }
+    if (keyInfo[keyIndex].isEnabled) {
+        isValidKeyPressed = true;
+        emit newKeyPressed(keyInfo[keyIndex].frequency);
     }
 }
 
