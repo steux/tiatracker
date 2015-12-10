@@ -52,4 +52,22 @@ void MainWindow::initConnections() {
     QObject::connect(ui->volumeShaper, &WaveformShaper::newMaxValue, ui->spinBoxInstrumentVolume, &QSpinBox::setValue);
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentIndexChanged(int)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentIndexChanged(int)));
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentTextChanged(QString)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentTextChanged(QString)));
+
+    // PianoKeyboard
+    QObject::connect(ui->pianoKeyboard, SIGNAL(newKeyPressed(int)), this, SLOT(newPianoKeyPressed(int)));
+    QObject::connect(ui->pianoKeyboard, SIGNAL(keyReleased()), this, SLOT(pianoKeyReleased()));
+}
+
+/*************************************************************************/
+
+void MainWindow::newPianoKeyPressed(int frequency)
+{
+    std::cout << "New key pressed! Frequency: " << frequency << "\n"; std::cout.flush();
+}
+
+/*************************************************************************/
+
+void MainWindow::pianoKeyReleased()
+{
+    std::cout << "Key released!\n"; std::cout.flush();
 }

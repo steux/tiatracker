@@ -41,6 +41,11 @@ public:
 
 signals:
 
+    /* Gets emitted when a key with a valid frequency is clicked */
+    void newKeyPressed(int frequency);
+    /* Gets emitted when a valid key has been released */
+    void keyReleased();
+
 public slots:
 
 protected:
@@ -53,6 +58,9 @@ protected:
     };
     static const KeyGfxTrait octaveTraits[];
 
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
+
 private:
     // Key states and pitch info
     struct KeyInformation {
@@ -63,6 +71,9 @@ private:
     };
 
     KeyInformation keyInfo[numKeys]{};
+
+    // If a valid key is pressed with the mouse
+    bool isValidKeyPressed = false;
 
     // Key hints
     static const int keyFontSize = 10;

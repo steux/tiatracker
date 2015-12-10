@@ -39,6 +39,10 @@ public:
 
 private slots:
 
+    // Gets signalled if a valid key from the piano is pressed
+    void newPianoKeyPressed(int frequency);
+    // Gets signalled if a valid key from the piano has been released
+    void pianoKeyReleased();
 
 private:
     Ui::MainWindow *ui;
