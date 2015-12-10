@@ -85,6 +85,9 @@ private:
     /* Calc x-pos for a given white or black key (0..numKeys) */
     int calcWhiteKeyXPos(int key);
     int calcBlackKeyXPos(int key);
+
+    /* Calc the key index for a white key for a given x coordinate */
+    int calcKeyIndexForWhiteKey(int xPos);
 };
 
 #endif // PIANOKEYBOARD_H

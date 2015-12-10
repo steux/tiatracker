@@ -138,25 +138,26 @@ void PianoKeyboard::paintEvent(QPaintEvent *) {
 
 /*************************************************************************/
 
-void PianoKeyboard::mousePressEvent(QMouseEvent *event)
-{
+int PianoKeyboard::calcKeyIndexForWhiteKey(int xPos) {
     // Maps index of a white key to overall key index including black keys,
     // which for example can be used with octaveTraits[].
     static const int whiteKeyIndexToKeyIndex[] = {0, 2, 4, 5, 7, 9, 11};
 
+    int octave = int(xPos/(keyWidth*numWhiteKeysPerOctave));
+    int xPosInOctave = xPos%(keyWidth*numWhiteKeysPerOctave);
+    int whiteKeyIndex = int(xPosInOctave/keyWidth);
+    int keyIndex = octave*12 + whiteKeyIndexToKeyIndex[whiteKeyIndex];
+    return keyIndex;
+}
+
+void PianoKeyboard::mousePressEvent(QMouseEvent *event)
+{
     int octave = int(event->x()/(keyWidth*numWhiteKeysPerOctave));
     if (event->y() < blackKeyHeight) {
         // Potential black key
     } else {
         // White key
-        int xPosInOctave = event->x()%(keyWidth*numWhiteKeysPerOctave);
-        int whiteKeyIndex = int(xPosInOctave/keyWidth);
-        int keyIndex = octave*12 + whiteKeyIndexToKeyIndex[whiteKeyIndex];
-        std::cout << "Octave " << octave << "\n";
-        std::cout << "xPosInOctave " << xPosInOctave << "\n";
-        std::cout << "whiteKeyIndex " << whiteKeyIndex << "\n";
-        std::cout << "keyIndex " << keyIndex << "\n";
-        std::cout.flush();
+        int keyIndex = calcKeyIndexForWhiteKey(event->x());
         if (keyInfo[keyIndex].isEnabled) {
             isValidKeyPressed = true;
             emit newKeyPressed(keyInfo[keyIndex].frequency);
