@@ -38,8 +38,10 @@ public:
 
     /* Initializes signal/slot connections */
     void initConnections();
-    /* Connect main window and player */
-    void connectPlayer(Emulation::Player *tiaPlayer);
+
+signals:
+    void playInstrument(Track::Instrument *instrument, int frequency);
+    void stopInstrument();
 
 private slots:
 

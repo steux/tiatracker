@@ -28,13 +28,13 @@ void Player::run() {
 /*************************************************************************/
 
 void Player::playInstrument(Track::Instrument *instrument, int frequency) {
-
+    std::cout << "playInstrument\n"; std::cout.flush();
 }
 
 /*************************************************************************/
 
 void Player::stopInstrument() {
-
+    std::cout << "stopInstrument\n"; std::cout.flush();
 }
 
 /*************************************************************************/

@@ -61,20 +61,14 @@ void MainWindow::initConnections() {
 
 /*************************************************************************/
 
-void MainWindow::connectPlayer(Emulation::Player *tiaPlayer) {
-    //QObject::connect(ui->pianoKeyboard, SIGNAL())
-}
-
-/*************************************************************************/
-
 void MainWindow::newPianoKeyPressed(int frequency)
 {
-    std::cout << "New key pressed! Frequency: " << frequency << "\n"; std::cout.flush();
+    emit playInstrument(nullptr, 0);
 }
 
 /*************************************************************************/
 
 void MainWindow::pianoKeyReleased()
 {
-    std::cout << "Key released!\n"; std::cout.flush();
+    emit stopInstrument();
 }

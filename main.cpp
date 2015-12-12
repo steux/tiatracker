@@ -46,15 +46,13 @@ int main(int argc, char *argv[])
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer;
-    w.connectPlayer(&tiaPlayer);
+    QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
+    QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
     tiaPlayer.run();
 
     // Shrink window size to minimum and show
     w.resize(0, 0);
     w.show();
-
-
-
 
     return a.exec();
 }
