@@ -28,7 +28,7 @@ void Player::run() {
 /*************************************************************************/
 
 void Player::playInstrument(Track::Instrument *instrument, int frequency) {
-    std::cout << "playInstrument\n"; std::cout.flush();
+    std::cout << "playInstrument: " << instrument->name.toStdString() << ", " << frequency << "\n"; std::cout.flush();
 }
 
 /*************************************************************************/

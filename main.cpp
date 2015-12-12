@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 
     // GUI
     MainWindow w;
+    w.registerTrack(&myTrack);
 
     InstrumentsTab *it = w.findChild<InstrumentsTab *>("tabInstruments");
     it->registerTrack(&myTrack);

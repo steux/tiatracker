@@ -39,6 +39,8 @@ public:
     /* Initializes signal/slot connections */
     void initConnections();
 
+    void registerTrack(Track::Track *newTrack);
+
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);
     void stopInstrument();
@@ -52,6 +54,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Track::Track *pTrack;
 };
 
 #endif // MAINWINDOW_H

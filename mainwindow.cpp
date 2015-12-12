@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include "track/instrument.h"
+#include "track/track.h"
 #include <QLineEdit>
 #include <QSpinBox>
 #include <cassert>
@@ -61,14 +62,20 @@ void MainWindow::initConnections() {
 
 /*************************************************************************/
 
-void MainWindow::newPianoKeyPressed(int frequency)
-{
-    emit playInstrument(nullptr, 0);
+void MainWindow::registerTrack(Track::Track *newTrack) {
+    pTrack = newTrack;
 }
 
 /*************************************************************************/
 
-void MainWindow::pianoKeyReleased()
-{
+void MainWindow::newPianoKeyPressed(int frequency) {
+    int instrumentIndex = ui->tabInstruments->getSelectedInstrumentIndex();
+    Track::Instrument *instrument = &(pTrack->instruments[instrumentIndex]);
+    emit playInstrument(instrument, frequency);
+}
+
+/*************************************************************************/
+
+void MainWindow::pianoKeyReleased() {
     emit stopInstrument();
 }
