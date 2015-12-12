@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "track/track.h"
 #include "tiasound/tiasound.h"
+#include "emulation/player.h"
+
 #include <QList>
 
 
@@ -36,7 +38,8 @@ public:
 
     /* Initializes signal/slot connections */
     void initConnections();
-
+    /* Connect main window and player */
+    void connectPlayer(Emulation::Player *tiaPlayer);
 
 private slots:
 

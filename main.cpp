@@ -44,11 +44,14 @@ int main(int argc, char *argv[])
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
     pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
 
+    /* Create and initialize player thread */
+    Emulation::Player tiaPlayer;
+    w.connectPlayer(&tiaPlayer);
+    tiaPlayer.run();
+
     // Shrink window size to minimum and show
     w.resize(0, 0);
     w.show();
-
-    /* Create and initialize player thread */
 
 
 
