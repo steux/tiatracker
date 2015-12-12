@@ -78,7 +78,13 @@ void PianoKeyboard::paintEvent(QPaintEvent *) {
         if (!octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcWhiteKeyXPos(key);
             if (keyInfo[key].isEnabled) {
-                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::light);
+                QColor color;
+                if (isValidKeyPressed && keyPressed == key) {
+                    color = MainWindow::violet;
+                } else {
+                    color = MainWindow::light;
+                }
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, color);
             } else {
                 painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::lightHighlighted);
             }
@@ -100,7 +106,13 @@ void PianoKeyboard::paintEvent(QPaintEvent *) {
         if (octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcBlackKeyXPos(key);
             if (keyInfo[key].isEnabled) {
-                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::dark);
+                QColor color;
+                if (isValidKeyPressed && keyPressed == key) {
+                    color = MainWindow::violet;
+                } else {
+                    color = MainWindow::dark;
+                }
+                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, color);
             } else {
                 painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::darkHighlighted);
             }
@@ -178,7 +190,9 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *event)
     }
     if (keyInfo[keyIndex].isEnabled) {
         isValidKeyPressed = true;
+        keyPressed = keyIndex;
         emit newKeyPressed(keyInfo[keyIndex].frequency);
+        update();
     }
 }
 
@@ -188,7 +202,9 @@ void PianoKeyboard::mouseReleaseEvent(QMouseEvent *)
 {
     if (isValidKeyPressed) {
         isValidKeyPressed = false;
+        keyPressed = -1;
         emit keyReleased();
+        update();
     }
 }
 

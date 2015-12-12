@@ -74,6 +74,8 @@ private:
 
     // If a valid key is pressed with the mouse
     bool isValidKeyPressed = false;
+    // Index of key that is currently pressed
+    int keyPressed = -1;
 
     // Key hints
     static const int keyFontSize = 10;

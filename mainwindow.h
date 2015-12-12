@@ -29,6 +29,7 @@ public:
     static const QColor red;
     static const QColor orange;
     static const QColor blue;
+    static const QColor violet;
 
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
