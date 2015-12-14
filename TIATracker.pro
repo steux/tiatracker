@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     track/instrument.cpp \
     track/track.cpp \
     instrumentstab.cpp \
-    emulation/Player.cpp
+    emulation/Player.cpp \
+    emulation/SoundSDL2.cpp \
+    emulation/TIASnd.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -37,7 +39,10 @@ HEADERS  += mainwindow.h \
     track/instrument.h \
     track/track.h \
     instrumentstab.h \
-    emulation/player.h
+    emulation/player.h \
+    emulation/bspf.h \
+    emulation/SoundSDL2.h \
+    emulation/TIASnd.h
 
 FORMS    += mainwindow.ui
 

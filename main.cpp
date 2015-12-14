@@ -1,3 +1,9 @@
+/* TODO:
+ * - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
+ */
+
+
+
 #include "mainwindow.h"
 #include <QApplication>
 #include <QFile>
