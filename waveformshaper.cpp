@@ -65,8 +65,6 @@ void WaveformShaper::drawLegend(QPainter &painter,
 
 void WaveformShaper::drawAttackDecay(QPainter &painter,
                                      const int valuesXPos, const int valuesHeight) {
-    assert(pInstrument != nullptr);
-
     int envelopeLength = pInstrument->getEnvelopeLength();
     int sustainStart = pInstrument->getSustainStart();
     int releaseStart = pInstrument->getReleaseStart();

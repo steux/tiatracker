@@ -24,6 +24,7 @@ namespace Emulation {
 
 class OSystem;
 
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 
 #include "bspf.h"

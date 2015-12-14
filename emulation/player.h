@@ -7,6 +7,8 @@
 
 #include "track/instrument.h"
 #include "tiasound/tiasound.h"
+#include "emulation/TIASnd.h"
+#include "emulation/SoundSDL2.h"
 
 namespace Emulation {
 
@@ -29,6 +31,9 @@ public slots:
 signals:
 
 private:
+    Emulation::TIASound tiaSound{31113};    // FIXME
+
+
     QTimer *timer = nullptr;
 
 private slots:
