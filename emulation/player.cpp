@@ -9,6 +9,15 @@ namespace Emulation {
 
 Player::Player(QObject *parent) : QThread(parent)
 {
+    tiaSound.channels(2, false);
+
+    sdlSound.open();
+    sdlSound.mute(false);
+    sdlSound.setEnabled(true);
+    sdlSound.setVolume(100);
+    sdlSound.set(AUDC0, 6, 10);
+    sdlSound.set(AUDV0, 15, 15);
+    sdlSound.set(AUDF0, 20, 18);
 }
 
 Player::~Player()
