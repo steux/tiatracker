@@ -48,3 +48,8 @@ RESOURCES += \
 
 DISTFILES += \
     style.qss
+
+win32: LIBS += -L$$PWD/sdl/windows/lib/ -lSDL2
+
+INCLUDEPATH += $$PWD/sdl/windows/include
+DEPENDPATH += $$PWD/sdl/windows/include
