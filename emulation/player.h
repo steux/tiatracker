@@ -32,7 +32,7 @@ signals:
 
 private:
     Emulation::TIASound tiaSound{31113};    // FIXME
-
+    Emulation::SoundSDL2 sdlSound{&tiaSound};
 
     QTimer *timer = nullptr;
 

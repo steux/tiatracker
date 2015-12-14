@@ -9,7 +9,6 @@ namespace Emulation {
 
 Player::Player(QObject *parent) : QThread(parent)
 {
-
 }
 
 Player::~Player()
