@@ -17,18 +17,17 @@
 // $Id: SoundSDL2.hxx 3182 2015-07-10 18:59:03Z stephena $
 //============================================================================
 
-#ifdef SOUND_SUPPORT
-
 #ifndef SOUND_SDL2_HXX
 #define SOUND_SDL2_HXX
+
+namespace Emulation {
 
 class OSystem;
 
 #include <SDL.h>
 
-#include "bspf.hxx"
-#include "TIASnd.hxx"
-#include "Sound.hxx"
+#include "bspf.h"
+#include "TIASnd.h"
 
 /**
   This class implements the sound API for SDL.
@@ -36,14 +35,14 @@ class OSystem;
   @author Stephen Anthony and Bradford W. Mott
   @version $Id: SoundSDL2.hxx 3182 2015-07-10 18:59:03Z stephena $
 */
-class SoundSDL2 : public Sound
+class SoundSDL2
 {
   public:
     /**
       Create a new sound object.  The init method must be invoked before
       using the object.
     */
-    SoundSDL2(OSystem& osystem);
+    SoundSDL2(TIASound *tiasound);
  
     /**
       Destructor
@@ -56,7 +55,7 @@ class SoundSDL2 : public Sound
 
       @param state  True or false, to enable or disable the sound system
     */
-    void setEnabled(bool state) override;
+    void setEnabled(bool);
 
     /**
       The system cycle counter is being adjusting by the specified amount. Any
@@ -64,7 +63,7 @@ class SoundSDL2 : public Sound
 
       @param amount  The amount the cycle counter is being adjusted by
     */
-    void adjustCycleCounter(Int32 amount) override;
+    void adjustCycleCounter(Int32 amount);
 
     /**
       Sets the number of channels (mono or stereo sound).  Note that this
@@ -75,7 +74,7 @@ class SoundSDL2 : public Sound
 
       @param channels  The number of channels
     */
-    void setChannels(uInt32 channels) override;
+    void setChannels(uInt32 channels);
 
     /**
       Sets the display framerate.  Sound generation for NTSC and PAL games
@@ -83,31 +82,31 @@ class SoundSDL2 : public Sound
 
       @param framerate The base framerate depending on NTSC or PAL ROM
     */
-    void setFrameRate(float framerate) override;
+    void setFrameRate(float framerate);
 
     /**
       Initializes the sound device.  This must be called before any
       calls are made to derived methods.
     */
-    void open() override;
+    void open();
 
     /**
       Should be called to close the sound device.  Once called the sound
       device can be started again using the open method.
     */
-    void close() override;
+    void close();
 
     /**
       Set the mute state of the sound object.  While muted no sound is played.
 
       @param state  Mutes sound if true, unmute if false
     */
-    void mute(bool state) override;
+    void mute(bool state);
 
     /**
       Reset the sound device.
     */
-    void reset() override;
+    void reset();
 
     /**
       Sets the sound register to a given value.
@@ -116,7 +115,7 @@ class SoundSDL2 : public Sound
       @param value  The value to save into the register
       @param cycle  The system cycle at which the register is being updated
     */
-    void set(uInt16 addr, uInt8 value, Int32 cycle) override;
+    void set(uInt16 addr, uInt8 value, Int32 cycle);
 
     /**
       Sets the volume of the sound device to the specified level.  The
@@ -125,7 +124,7 @@ class SoundSDL2 : public Sound
 
       @param percent  The new volume percentage level for the sound device
     */
-    void setVolume(Int32 percent) override;
+    void setVolume(Int32 percent);
 
     /**
       Adjusts the volume of the sound device based on the given direction.
@@ -133,31 +132,15 @@ class SoundSDL2 : public Sound
       @param direction  Increase or decrease the current volume by a predefined
                         amount based on the direction (1 = increase, -1 = decrease)
     */
-    void adjustVolume(Int8 direction) override;
+    void adjustVolume(Int8 direction);
 
   public:
-    /**
-      Saves the current state of this device to the given Serializer.
-
-      @param out  The serializer device to save to.
-      @return  The result of the save.  True on success, false on failure.
-    */
-    bool save(Serializer& out) const override;
-
-    /**
-      Loads the current state of this device from the given Serializer.
-
-      @param in  The Serializer device to load from.
-      @return  The result of the load.  True on success, false on failure.
-    */
-    bool load(Serializer& in) override;
-
     /**
       Get a descriptor for this console class (used in error checking).
 
       @return  The name of the object
     */
-    string name() const override { return "TIASound"; }
+    string name() const { return "TIASound"; }
 
   protected:
     /**
@@ -192,6 +175,8 @@ class SoundSDL2 : public Sound
           automatically increase its size.
         */
         RegWriteQueue(uInt32 capacity = 512);
+
+        virtual ~RegWriteQueue();
 
       public:
         /**
@@ -233,8 +218,8 @@ class SoundSDL2 : public Sound
         void grow();
 
       private:
-        unique_ptr<RegWrite[]> myBuffer;
         uInt32 myCapacity;
+        RegWrite *myBuffer;
         uInt32 mySize;
         uInt32 myHead;
         uInt32 myTail;
@@ -249,7 +234,7 @@ class SoundSDL2 : public Sound
 
   private:
     // TIASound emulation object
-    TIASound myTIASound;
+    TIASound *myTIASound;
 
     // Indicates if the sound subsystem is to be initialized
     bool myIsEnabled;
@@ -296,6 +281,6 @@ class SoundSDL2 : public Sound
     SoundSDL2& operator=(SoundSDL2&&) = delete;
 };
 
-#endif
+}
 
-#endif  // SOUND_SUPPORT
+#endif
