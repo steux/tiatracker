@@ -5,6 +5,7 @@
 #include "instrument.h"
 #include <QList>
 #include <QMutex>
+#include "tiasound/tiasound.h"
 
 namespace Track {
 
@@ -33,8 +34,13 @@ public:
         {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };
 
+    TiaSound::TvStandard getTvMode() const;
+    void setTvMode(const TiaSound::TvStandard &value);
+
 private:
     QMutex mutex;
+
+    TiaSound::TvStandard tvMode = TiaSound::TvStandard::PAL;
 };
 
 }

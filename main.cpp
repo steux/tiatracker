@@ -1,9 +1,3 @@
-/* TODO:
- * - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
- */
-
-
-
 #include "mainwindow.h"
 #include <QApplication>
 #include <QFile>
@@ -18,6 +12,7 @@
 #include "track/track.h"
 #include "instrumentstab.h"
 #include "emulation/player.h"
+#include <QThread>
 
 #include <iostream>
 
@@ -52,7 +47,7 @@ int main(int argc, char *argv[])
     pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
 
     /* Create and initialize player thread */
-    Emulation::Player tiaPlayer;
+    Emulation::Player tiaPlayer(&myTrack);
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
     QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
     tiaPlayer.run();

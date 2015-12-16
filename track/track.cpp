@@ -49,4 +49,16 @@ int Track::getNumInstruments() {
     return usedInstruments;
 }
 
+/*************************************************************************/
+
+TiaSound::TvStandard Track::getTvMode() const {
+    return tvMode;
+}
+
+/*************************************************************************/
+
+void Track::setTvMode(const TiaSound::TvStandard &value) {
+    tvMode = value;
+}
+
 }
