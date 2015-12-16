@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QList>
+#include <QMutex>
 #include "tiasound/tiasound.h"
 
 
@@ -16,19 +17,22 @@ class Instrument
 public:
     Instrument(QString name) : name(name) {}
 
-    bool isEmpty();
+    // To make read/write access to envelope length thread-safe, call lock/unlock
+    void lock();
+    void unlock();
 
     int getEnvelopeLength();
-
     void setEnvelopeLength(int newSize);
+
+    // Checks if instrument has its empty starting values
+    bool isEmpty();
+
+    void deleteInstrument();
 
     /* Checks if release starts after sustain and if not, changes
      * values accordingly. */
     void validateSustainReleaseValues();
-
     void setSustainAndRelease(int newSustainStart, int newReleaseStart);
-
-    void deleteInstrument();
 
     /* Get minimum volume over the whole envelope */
     int getMinVolume();
@@ -37,7 +41,6 @@ public:
     int getMaxVolume();
 
     int getSustainStart() const;
-
     int getReleaseStart() const;
 
     QString name;

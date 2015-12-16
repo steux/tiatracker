@@ -4,6 +4,7 @@
 #include <QObject>
 #include "instrument.h"
 #include <QList>
+#include <QMutex>
 
 namespace Track {
 
@@ -17,6 +18,11 @@ public:
 
     Track();
 
+    /* Lock or unlock track for thread-safe operations like modifying
+     * envelope length of an instrument */
+    void lock();
+    void unlock();
+
     /* Counts all envelope frames over all instruments */
     int getNumUsedEnvelopeFrames();
 
@@ -26,6 +32,9 @@ public:
     QList<Instrument> instruments{
         {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };
+
+private:
+    QMutex mutex;
 };
 
 }

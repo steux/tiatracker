@@ -12,7 +12,7 @@ Player::Player(QObject *parent) : QThread(parent)
     tiaSound.channels(2, false);
 
     sdlSound.open();
-    sdlSound.mute(false);
+    sdlSound.mute(true);
     sdlSound.setEnabled(true);
     sdlSound.setVolume(100);
     sdlSound.set(AUDC0, 6, 10);

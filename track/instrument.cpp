@@ -1,5 +1,7 @@
 #include "instrument.h"
 
+#include <QMutex>
+
 #include <stdexcept>
 #include <iostream>
 
@@ -114,6 +116,7 @@ int Instrument::getReleaseStart() const {
     return releaseStart;
 }
 
+/*************************************************************************/
 
 int Instrument::getEnvelopeLength() {
     return envelopeLength;

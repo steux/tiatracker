@@ -155,7 +155,9 @@ void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
         }
     }
     if (doDelete) {
+        pTrack->lock();
         curInstrument->deleteInstrument();
+        pTrack->unlock();
         updateInstrumentsTab();
         update();
     }
@@ -167,7 +169,9 @@ void InstrumentsTab::on_spinBoxInstrumentEnvelopeLength_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int newLength = sb->value();
     Track::Instrument *curInstrument = getSelectedInstrument();
+    pTrack->lock();
     curInstrument->setEnvelopeLength(newLength);
+    pTrack->unlock();
     updateInstrumentsTab();
     update();
 }
