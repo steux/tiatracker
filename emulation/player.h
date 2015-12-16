@@ -31,7 +31,7 @@ public slots:
 signals:
 
 private:
-    Emulation::TIASound tiaSound{31113};    // FIXME
+    Emulation::TIASound tiaSound;
     Emulation::SoundSDL2 sdlSound{&tiaSound};
 
     QTimer *timer = nullptr;

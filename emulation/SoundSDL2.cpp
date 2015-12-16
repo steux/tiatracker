@@ -43,10 +43,10 @@ SoundSDL2::SoundSDL2(TIASound *tiasound)
   // This fixes a bug most prevalent with ATI video cards in Windows,
   // whereby sound stopped working after the first video change
   SDL_AudioSpec desired;
-  desired.freq   = 44100; // FIXME
+  desired.freq   = 44100;
   desired.format = AUDIO_S16SYS;
   desired.channels = 2;
-  desired.samples  = 1470; // FIXME
+  desired.samples  = 1024;
   desired.callback = callback;
   desired.userdata = static_cast<void*>(this);
 
@@ -109,7 +109,7 @@ void SoundSDL2::open()
       myTIASound->channels(myHardwareSpec.channels, myNumChannels == 2);
 
   // Adjust volume to that defined in settings
-  myVolume = 100; // FIXME
+  myVolume = 100;
   setVolume(myVolume);
 
   // And start the SDL sound subsystem ...
