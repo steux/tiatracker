@@ -42,7 +42,8 @@ QString getDistorionName(Distortion dist)
             "Pure Low (12)",         // 12
             "Pure Low (13)",         // 13
             "Electronic Low (14)",   // 14
-            "Electronic High (15)"   // 15
+            "Electronic High (15)",  // 15
+            "Pure Combined (4+12)"   // 15
                                           }};
 
     return distNames[static_cast<int>(dist)];
