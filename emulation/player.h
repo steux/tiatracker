@@ -10,6 +10,8 @@
 #include "tiasound/tiasound.h"
 #include "emulation/TIASnd.h"
 #include "emulation/SoundSDL2.h"
+#include <QElapsedTimer>
+
 
 namespace Emulation {
 

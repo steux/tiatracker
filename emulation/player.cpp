@@ -5,6 +5,7 @@
 #include "track/instrument.h"
 #include "player.h"
 #include <SDL.h>
+#include <QElapsedTimer>
 
 namespace Emulation {
 
@@ -32,7 +33,6 @@ Player::~Player()
 /*************************************************************************/
 
 void Player::run() {
-
     timer = new QTimer(this);
     timer->setTimerType(Qt::PreciseTimer);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
