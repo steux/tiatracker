@@ -7,6 +7,8 @@
 #include "waveformshaper.h"
 #include <QMessageBox>
 #include <iostream>
+#include <QFileDialog>
+#include <QStringList>
 
 
 const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
@@ -161,6 +163,27 @@ void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
         pTrack->unlock();
         updateInstrumentsTab();
         update();
+    }
+}
+
+/*************************************************************************/
+
+void InstrumentsTab::on_buttonInstrumentExport_clicked() {
+    Track::Instrument *curInstrument = getSelectedInstrument();
+    if (curInstrument->isEmpty()) {
+        return;
+    }
+
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter("*.tti");
+    dialog.setDefaultSuffix("tti");
+    dialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
     }
 }
 
