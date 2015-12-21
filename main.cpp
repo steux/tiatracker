@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     /* Initialize GUI elements */
     // PianoKeyboard starting PitchGuide
     PianoKeyboard *pk = w.findChild<PianoKeyboard *>("pianoKeyboard");
-    pk->setInstrumentPitchGuide(TiaSound::perfectPalDist1);
+    pk->setInstrumentPitchGuide(&TiaSound::perfectPalDist16);
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

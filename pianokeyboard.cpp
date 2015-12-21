@@ -37,16 +37,16 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 
 /*************************************************************************/
 
-void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide) {
+void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide) {
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].isEnabled = false;
     }
-    for (int freq = 0; freq < pitchGuide.getNumFrequencies(); ++freq) {
-        TiaSound::Note note = pitchGuide.getNote(freq);
+    for (int freq = 0; freq < pitchGuide->getNumFrequencies(); ++freq) {
+        TiaSound::Note note = pitchGuide->getNote(freq);
         if (note != TiaSound::Note::NotANote) {
             int iNote = static_cast<int>(note);
             if (iNote >= 0 && iNote < numKeys) {
-                int off = pitchGuide.getPercentOff(freq);
+                int off = pitchGuide->getPercentOff(freq);
                 if (keyInfo[iNote].isEnabled) {
                     // Duplicate note: Choose note with smaller off-tune value
                     if (off < keyInfo[iNote].off) {

@@ -2,3 +2,6 @@ TODO:
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
 - NTSC/PAL in Stella: How? In SoundSDL2.cpp is setFrameRate() but does it do anything?
 - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
+- Do proper QThread (don't inherit from QThread) and set priority to highest
+- add "freehand" option to Instruments tab
+- add "0" octave (c0-h0)

@@ -34,7 +34,7 @@ public:
      * are stored. If a note has multiple entries, the one with the least
      * off-tune value is chosen.
      */
-    void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide pitchGuide);
+    void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide);
 
     // Threshold for unacceptable off-tune percentage
     int offThreshold = 10;

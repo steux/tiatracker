@@ -21,7 +21,8 @@ const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
     TiaSound::Distortion::WHITE_NOISE,
     TiaSound::Distortion::PURE_LOW,
     TiaSound::Distortion::ELECTRONIC_LOW,
-    TiaSound::Distortion::ELECTRONIC_HIGH
+    TiaSound::Distortion::ELECTRONIC_HIGH,
+    TiaSound::Distortion::PURE_COMBINED
 };
 
 /*************************************************************************/

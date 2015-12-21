@@ -159,7 +159,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBoxWaveforms"/>
+            <widget class="QComboBox" name="comboBoxWaveforms">
+             <property name="maxVisibleItems">
+              <number>11</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="labelInstrumentEnvelopeLength">
