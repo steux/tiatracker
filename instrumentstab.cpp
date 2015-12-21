@@ -61,6 +61,7 @@ void InstrumentsTab::initInstrumentsTab() {
     fs->registerInstrument(&(pTrack->instruments[0]));
     fs->name = "Frequency";
     fs->setScale(-8, 7);
+    fs->isInverted = true;
     fs->setValues(&(pTrack->instruments[0].frequencies));
 }
 

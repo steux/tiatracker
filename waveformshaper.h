@@ -28,6 +28,8 @@ public:
     void setValues(QList<int> *newValues);
 
     QString name{};
+    // Invert y axis
+    bool isInverted = false;
 
 signals:
 

@@ -54,8 +54,14 @@ void WaveformShaper::drawLegend(QPainter &painter,
     legendFont.setBold(false);
     legendFont.setPixelSize(legendScaleSize);
     painter.setFont(legendFont);
-    painter.drawText(0, 0, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMax));
-    painter.drawText(0, valuesHeight - nameFontHeight, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(scaleMin));
+    int min = scaleMin;
+    int max = scaleMax;
+    if (isInverted) {
+        min = scaleMax;
+        max = scaleMin;
+    }
+    painter.drawText(0, 0, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(max));
+    painter.drawText(0, valuesHeight - nameFontHeight, legendCellSize, nameFontHeight, Qt::AlignCenter, QString::number(min));
     // Frame numbers
     for (int frame = 0; frame < envelopeLength; ++frame) {
         int xPos = legendCellSize + frame*cellWidth;
@@ -91,6 +97,9 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos) {
     for (int i = 0; i < envelopeLength; ++i) {
         int xPos = int(valuesXPos + i*cellWidth + cellWidth/2);
         int deviceValue = scaleMax - (*values)[i];
+        if (isInverted) {
+            deviceValue = scaleMax - scaleMin - deviceValue;
+        }
         int yPos = int(deviceValue*cellHeight + cellHeight/2);
         painter.drawEllipse(xPos - valueCircleRadius, yPos - valueCircleRadius, 2*valueCircleRadius - 1, 2*valueCircleRadius - 1);
     }
@@ -99,9 +108,15 @@ void WaveformShaper::drawWaveform(QPainter &painter, const int valuesXPos) {
     for (int i = 1; i < envelopeLength; ++i) {
         int fromX = int(valuesXPos + (i - 1)*cellWidth + cellWidth/2);
         int deviceValueFrom = scaleMax - (*values)[i - 1];
+        if (isInverted) {
+            deviceValueFrom = scaleMax - scaleMin - deviceValueFrom;
+        }
         int fromY = int(deviceValueFrom*cellHeight + cellHeight/2);
         int toX = int(valuesXPos + i*cellWidth + cellWidth/2);
         int deviceValueTo = scaleMax - (*values)[i];
+        if (isInverted) {
+            deviceValueTo = scaleMax - scaleMin - deviceValueTo;
+        }
         int toY = int(deviceValueTo*cellHeight + cellHeight/2);
         painter.drawLine(fromX, fromY, toX, toY);
     }
@@ -135,6 +150,9 @@ void WaveformShaper::processMouseEvent(int x, int y) {
         // Sanity check in case area is some pixels bigger than graph area
         if (iValue >=0 && iValue < pInstrument->getEnvelopeLength()
                 && newValue >= scaleMin && newValue <= scaleMax) {
+            if (isInverted) {
+                newValue = scaleMin + scaleMax - newValue;
+            }
             (*values)[iValue] = newValue;
             draggingIndex = iValue;
             update();
