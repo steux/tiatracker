@@ -7,6 +7,9 @@
 #include <QSpinBox>
 #include <cassert>
 #include <QMessageBox>
+#include "tiasound/pitchguidefactory.h"
+#include "tiasound/pitchguide.h"
+#include "tiasound/instrumentpitchguide.h"
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -35,6 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+/*************************************************************************/
+
+void MainWindow::initGui() {
+    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[TiaSound::Distortion::PURE_COMBINED]);
+    ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
 }
 
 /*************************************************************************/

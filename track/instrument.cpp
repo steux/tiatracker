@@ -45,6 +45,24 @@ void Instrument::setEnvelopeLength(int newSize) {
 
 /*************************************************************************/
 
+int Instrument::getAudCValue(int frequency) {
+    int result;
+
+    if (baseDistortion != TiaSound::Distortion::PURE_COMBINED) {
+        result = (static_cast<int>(baseDistortion));
+    } else {
+        if (frequency < 32) {
+            result = (static_cast<int>(TiaSound::Distortion::PURE_HIGH));
+        } else {
+            result = (static_cast<int>(TiaSound::Distortion::PURE_LOW));
+        }
+    }
+
+    return result;
+}
+
+/*************************************************************************/
+
 void Instrument::validateSustainReleaseValues() {
     if (releaseStart >= envelopeLength) {
         releaseStart = envelopeLength - 1;

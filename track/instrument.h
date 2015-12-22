@@ -24,6 +24,9 @@ public:
     int getEnvelopeLength();
     void setEnvelopeLength(int newSize);
 
+    // Return AUDC value. Can be different per frequency for PURE COMBINED.
+    int getAudCValue(int frequency);
+
     // Checks if instrument has its empty starting values
     bool isEmpty();
 

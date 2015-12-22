@@ -79,7 +79,7 @@ void Player::updateInstrument() {
         // Go into silence if currentFrame is illegal
         mode = PlayMode::NONE;
     } else {
-        int CValue = (static_cast<int>(currentInstrument->baseDistortion));
+        int CValue = currentInstrument->getAudCValue(currentInstrumentFrequency);
         int FValue = currentInstrumentFrequency + currentInstrument->frequencies[currentInstrumentFrame];
         // Check if envelope has caused an underrun
         if (FValue < 0) {

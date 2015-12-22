@@ -17,8 +17,8 @@ class PitchGuideFactory
 public:
     PitchGuideFactory();
 
-    PitchGuide getPitchPerfectPalGuide();
-    PitchGuide getPitchPerfectNtscGuide();
+    PitchGuide* getPitchPerfectPalGuide();
+    PitchGuide* getPitchPerfectNtscGuide();
 
 private:
     PitchGuide palGuide{"Pitch-perfect PAL", TvStandard::PAL};

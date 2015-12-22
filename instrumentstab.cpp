@@ -301,6 +301,7 @@ void InstrumentsTab::on_comboBoxWaveforms_currentIndexChanged(int index) {
     Track::Instrument *curInstrument = getSelectedInstrument();
     TiaSound::Distortion newDistortion = availableWaveforms[index];
     curInstrument->baseDistortion = newDistortion;
+
     updateInstrumentsTab();
     update();
 }

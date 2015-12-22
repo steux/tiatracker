@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "track/track.h"
 #include "tiasound/tiasound.h"
+#include "tiasound/pitchguide.h"
+#include "tiasound/pitchguidefactory.h"
 #include "emulation/player.h"
 
 #include <QList>
@@ -36,6 +38,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void initGui();
+
     /* Initializes signal/slot connections */
     void initConnections();
 
@@ -53,8 +57,10 @@ private slots:
     void pianoKeyReleased();
 
 private:
-    Ui::MainWindow *ui;
-    Track::Track *pTrack;
+    Ui::MainWindow *ui = nullptr;
+    Track::Track *pTrack = nullptr;
+    TiaSound::PitchGuideFactory pgFactory;
+    TiaSound::PitchGuide *pPitchGuide = pgFactory.getPitchPerfectPalGuide();
 };
 
 #endif // MAINWINDOW_H
