@@ -10,6 +10,8 @@ class InstrumentsTab : public QWidget
 {
     Q_OBJECT
 public:
+    static const int maxInstrumentNameLength = 64;
+
     explicit InstrumentsTab(QWidget *parent = 0);
 
     void registerTrack(Track::Track *newTrack);
@@ -55,7 +57,6 @@ protected:
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;
-    static const int maxInstrumentNameLength = 64;
 
     Track::Track *pTrack = nullptr;
 

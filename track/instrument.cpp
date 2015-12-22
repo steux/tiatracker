@@ -5,7 +5,9 @@
 #include <stdexcept>
 #include <iostream>
 #include <QJsonArray>
+#include <QJsonObject>
 #include "mainwindow.h"
+#include "instrumentstab.h"
 
 
 namespace Track {
@@ -55,7 +57,63 @@ void Instrument::toJson(QJsonObject &json) {
 /*************************************************************************/
 
 bool Instrument::import(const QJsonObject &json) {
-    return false;
+    int version = json["version"].toInt();
+    if (version != 1) {
+        return false;
+    }
+
+    QString newName = json["name"].toString();
+    int newWaveform = json["waveform"].toInt();
+    int newEnvelopeLength = json["envelopeLength"].toInt();
+    int newSustainStart = json["sustainStart"].toInt();
+    int newReleaseStart = json["releaseStart"].toInt();
+    QJsonArray freqArray = json["frequencies"].toArray();
+    QJsonArray volArray = json["volumes"].toArray();
+
+    // Check for data validity
+    if (newName.length() < 1 || newName.length() > InstrumentsTab::maxInstrumentNameLength) {
+        return false;
+    }
+    if (newWaveform < 0 || newWaveform > 16) {
+        return false;
+    }
+    if (newEnvelopeLength < 2 || newEnvelopeLength > 99
+            || newSustainStart < 0 || newSustainStart >= newEnvelopeLength - 1
+            || newReleaseStart <= newSustainStart || newReleaseStart > newEnvelopeLength - 1) {
+        return false;
+    }
+    if (newEnvelopeLength != freqArray.size() || newEnvelopeLength != volArray.size()) {
+        return false;
+    }
+
+    // Copy data. Adjust volumes or frequencies if necessary.
+    frequencies.clear();
+    volumes.clear();
+    for (int frame = 0; frame < newEnvelopeLength; ++frame) {
+        int newVolume = volArray[frame].toInt();
+        if (newVolume < 0) {
+            newVolume = 0;
+        }
+        if (newVolume > 15) {
+            newVolume = 15;
+        }
+        volumes.append(newVolume);
+        int newFrequency = freqArray[frame].toInt();
+        if (newFrequency < -8) {
+            newFrequency = -8;
+        }
+        if (newFrequency > 7) {
+            newFrequency = 7;
+        }
+        frequencies.append(newFrequency);
+    }
+    name = newName;
+    baseDistortion = TiaSound::distortions[newWaveform];
+    envelopeLength = newEnvelopeLength;
+    sustainStart = newSustainStart;
+    releaseStart = newReleaseStart;
+
+    return true;
 }
 
 /*************************************************************************/
