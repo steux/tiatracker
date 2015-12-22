@@ -32,6 +32,7 @@ public:
     bool isEmpty();
 
     void toJson(QJsonObject &json);
+    bool import(const QJsonObject &json);
 
     void deleteInstrument();
 

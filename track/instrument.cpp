@@ -54,6 +54,12 @@ void Instrument::toJson(QJsonObject &json) {
 
 /*************************************************************************/
 
+bool Instrument::import(const QJsonObject &json) {
+    return false;
+}
+
+/*************************************************************************/
+
 void Instrument::setEnvelopeLength(int newSize) {
     if (newSize > volumes.size()) {
         // grow
