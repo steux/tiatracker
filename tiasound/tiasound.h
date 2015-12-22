@@ -40,8 +40,8 @@ enum class Distortion : int {
     REEDY_RUMBLE = 7,
     WHITE_NOISE = 8,
     PURE_LOW = 12,
-    ELECTRONIC_LOW = 14,
-    ELECTRONIC_HIGH = 15,
+    ELECTRONIC_RUMBLE = 14,
+    ELECTRONIC_SQUEAL = 15,
     PURE_COMBINED = 16
 };
 
@@ -60,8 +60,8 @@ static const QList<Distortion> distortions{
     Distortion::SILENT,             // 11
     Distortion::PURE_LOW,           // 12
     Distortion::PURE_LOW,           // 13
-    Distortion::ELECTRONIC_LOW,     // 14
-    Distortion::ELECTRONIC_HIGH,    // 15
+    Distortion::ELECTRONIC_RUMBLE,  // 14
+    Distortion::ELECTRONIC_SQUEAL,  // 15
     Distortion::PURE_COMBINED       // 16
 };
 

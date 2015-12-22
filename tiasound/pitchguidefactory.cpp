@@ -13,8 +13,8 @@ PitchGuideFactory::PitchGuideFactory()
     palGuide.instrumentGuides[Distortion::REEDY_RUMBLE] = perfectPalDist7;
     palGuide.instrumentGuides[Distortion::WHITE_NOISE] = perfectPalDist8;
     palGuide.instrumentGuides[Distortion::PURE_LOW] = perfectPalDist12;
-    palGuide.instrumentGuides[Distortion::ELECTRONIC_LOW] = perfectPalDist14;
-    palGuide.instrumentGuides[Distortion::ELECTRONIC_HIGH] = perfectPalDist15;
+    palGuide.instrumentGuides[Distortion::ELECTRONIC_RUMBLE] = perfectPalDist14;
+    palGuide.instrumentGuides[Distortion::ELECTRONIC_SQUEAL] = perfectPalDist15;
     palGuide.instrumentGuides[Distortion::PURE_COMBINED] = perfectPalDist16;
 }
 

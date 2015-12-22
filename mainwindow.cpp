@@ -75,7 +75,6 @@ void MainWindow::registerTrack(Track::Track *newTrack) {
 
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
     TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
-    std::cout << pIPG->name.toStdString() << "\n"; std::cout.flush();
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
     ui->pianoKeyboard->update();
 }
