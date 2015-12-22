@@ -80,7 +80,8 @@ void Player::updateInstrument() {
         mode = PlayMode::NONE;
     } else {
         int CValue = currentInstrument->getAudCValue(currentInstrumentFrequency);
-        int FValue = currentInstrumentFrequency + currentInstrument->frequencies[currentInstrumentFrame];
+        int realFrequency = currentInstrumentFrequency <= 31 ? currentInstrumentFrequency : currentInstrumentFrequency - 32;
+        int FValue = realFrequency + currentInstrument->frequencies[currentInstrumentFrame];
         // Check if envelope has caused an underrun
         if (FValue < 0) {
             FValue = 256 - FValue;

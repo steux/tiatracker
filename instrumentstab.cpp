@@ -52,6 +52,8 @@ void InstrumentsTab::initInstrumentsTab() {
     foreach (TiaSound::Distortion distortion, availableWaveforms) {
         cbWaveforms->addItem(TiaSound::getDistorionName(distortion));
     }
+    cbWaveforms->setCurrentIndex(10);   // Init to PURE_COMBINED
+
     // Volume shaper
     WaveformShaper *vs = findChild<WaveformShaper *>("volumeShaper");
     vs->registerInstrument(&(pTrack->instruments[0]));
@@ -88,7 +90,13 @@ void InstrumentsTab::updateInstrumentsTab() {
     // Number of instruments used
     QLabel *lInstrumentsUsed = findChild<QLabel *>("labelInstrumentsUsed");
     int instrumentsUsed = pTrack->getNumInstruments();
-    lInstrumentsUsed->setText("(" + QString::number(instrumentsUsed) + " of 7 used)");
+    QString instrumentsUsedString;
+    if (instrumentsUsed <= 7) {
+        instrumentsUsedString = "(" + QString::number(instrumentsUsed) + " of 7 used)";
+    } else {
+        instrumentsUsedString = "<font color=\"#dc322f\">(" + QString::number(instrumentsUsed) + " of 7 used)</>";
+    }
+    lInstrumentsUsed->setText(instrumentsUsedString);
 
     /* Values specific to the selected intrument */
     int iCurInstrument = getSelectedInstrumentIndex();
@@ -116,6 +124,7 @@ void InstrumentsTab::updateInstrumentsTab() {
     assert(iWaveform != -1);
     QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
     cbWaveforms->setCurrentIndex(iWaveform);
+    emit setWaveform(curInstrument.baseDistortion);
     // WaveformShaper sizes and values
     WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
     wsVolume->registerInstrument(&curInstrument);

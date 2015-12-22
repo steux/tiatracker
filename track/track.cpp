@@ -40,10 +40,13 @@ int Track::getNumUsedEnvelopeFrames() {
 /*************************************************************************/
 
 int Track::getNumInstruments() {
-    int usedInstruments = numInstruments;
+    int usedInstruments = 0;
     for (int i = 0; i < numInstruments; ++i) {
-        if (instruments[i].isEmpty()) {
-            usedInstruments--;
+        if (!instruments[i].isEmpty()) {
+            usedInstruments++;
+            if (instruments[i].baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                usedInstruments++;
+            }
         }
     }
     return usedInstruments;

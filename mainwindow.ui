@@ -160,6 +160,9 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxWaveforms">
+             <property name="currentIndex">
+              <number>-1</number>
+             </property>
              <property name="maxVisibleItems">
               <number>11</number>
              </property>

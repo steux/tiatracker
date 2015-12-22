@@ -24,6 +24,7 @@ public:
     int getSelectedInstrumentIndex();
 
 signals:
+    void setWaveform(TiaSound::Distortion dist);
 
 public slots:
 

@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
 
     // GUI
     MainWindow w;
+    w.initConnections();
+
     w.registerTrack(&myTrack);
 
     InstrumentsTab *it = w.findChild<InstrumentsTab *>("tabInstruments");
@@ -39,8 +41,6 @@ int main(int argc, char *argv[])
     it->initInstrumentsTab();
     it->updateInstrumentsTab();
 
-    w.initGui();
-    w.initConnections();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

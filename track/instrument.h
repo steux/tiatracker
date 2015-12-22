@@ -47,7 +47,7 @@ public:
     int getReleaseStart() const;
 
     QString name;
-    TiaSound::Distortion baseDistortion{TiaSound::Distortion::BUZZY};
+    TiaSound::Distortion baseDistortion{TiaSound::Distortion::PURE_COMBINED};
     QList<int> volumes{0, 0};
     QList<int> frequencies{0, 0};
 

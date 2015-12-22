@@ -38,8 +38,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void initGui();
-
     /* Initializes signal/slot connections */
     void initConnections();
 
@@ -50,6 +48,8 @@ signals:
     void stopInstrument();
 
 private slots:
+    // Set a new pitch guide for the piano keyboard
+    void setWaveform(TiaSound::Distortion dist);
 
     // Gets signalled if a valid key from the piano is pressed
     void newPianoKeyPressed(int frequency);

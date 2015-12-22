@@ -42,13 +42,6 @@ MainWindow::~MainWindow() {
 
 /*************************************************************************/
 
-void MainWindow::initGui() {
-    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[TiaSound::Distortion::PURE_COMBINED]);
-    ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
-}
-
-/*************************************************************************/
-
 void MainWindow::initConnections() {
     // InstrumentsTab
     QObject::connect(ui->buttonInstrumentDelete, &QPushButton::clicked, ui->tabInstruments, &InstrumentsTab::on_buttonInstrumentDelete_clicked);
@@ -67,6 +60,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentTextChanged(QString)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentTextChanged(QString)));
 
     // PianoKeyboard
+    QObject::connect(ui->tabInstruments, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));
     QObject::connect(ui->pianoKeyboard, SIGNAL(newKeyPressed(int)), this, SLOT(newPianoKeyPressed(int)));
     QObject::connect(ui->pianoKeyboard, SIGNAL(keyReleased()), this, SLOT(pianoKeyReleased()));
 }
@@ -75,6 +69,15 @@ void MainWindow::initConnections() {
 
 void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
+}
+
+/*************************************************************************/
+
+void MainWindow::setWaveform(TiaSound::Distortion dist) {
+    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
+    std::cout << pIPG->name.toStdString() << "\n"; std::cout.flush();
+    ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
+    ui->pianoKeyboard->update();
 }
 
 /*************************************************************************/

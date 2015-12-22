@@ -19,7 +19,7 @@ bool Instrument::isEmpty() {
             || volumes[0] != 0 || volumes[1] != 0
             || frequencies[0] != 0 || frequencies[1] != 0
             || sustainStart != 0 || releaseStart != 1
-            || baseDistortion != TiaSound::Distortion::BUZZY
+            || baseDistortion != TiaSound::Distortion::PURE_COMBINED
             ) {
         empty = false;
     }
@@ -101,7 +101,7 @@ void Instrument::deleteInstrument()
     envelopeLength = 2;
     sustainStart = 0;
     releaseStart = 1;
-    baseDistortion = TiaSound::Distortion::BUZZY;
+    baseDistortion = TiaSound::Distortion::PURE_COMBINED;
 }
 
 /*************************************************************************/
