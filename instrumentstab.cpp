@@ -218,6 +218,48 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
 
 /*************************************************************************/
 
+void InstrumentsTab::on_buttonInstrumentImport_clicked() {
+    Track::Instrument *curInstrument = getSelectedInstrument();
+
+    // Ask if instrument should really be overwritten
+    bool doImport = true;
+    if (!curInstrument->isEmpty()) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Import Instrument",
+                           "Do you really want to overwrite this instument?",
+                           QMessageBox::Yes | QMessageBox::No, this,
+                           Qt::FramelessWindowHint);
+        int reply = msgBox.exec();
+        if (reply != QMessageBox::Yes) {
+            doImport = false;
+        }
+    }
+    if (!doImport) {
+        return;
+    }
+
+    // Ask for filename
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("*.tti");
+    dialog.setDefaultSuffix("tti");
+    dialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile loadFile(fileName);
+
+}
+
+/*************************************************************************/
+
 void InstrumentsTab::on_spinBoxInstrumentEnvelopeLength_editingFinished() {
     QSpinBox *sb = findChild<QSpinBox *>("spinBoxInstrumentEnvelopeLength");
     int newLength = sb->value();

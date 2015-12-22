@@ -30,6 +30,7 @@ public slots:
 
     void on_buttonInstrumentDelete_clicked();
     void on_buttonInstrumentExport_clicked();
+    void on_buttonInstrumentImport_clicked();
 
     void on_spinBoxInstrumentEnvelopeLength_editingFinished();
     void on_spinBoxInstrumentEnvelopeLength_valueChanged(int newLength);
