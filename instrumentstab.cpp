@@ -9,6 +9,10 @@
 #include <iostream>
 #include <QFileDialog>
 #include <QStringList>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
+#include "mainwindow.h"
 
 
 const QList<TiaSound::Distortion> InstrumentsTab::availableWaveforms{
@@ -195,6 +199,21 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
     }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile saveFile(fileName);
+    // TODO: Check for existing file
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        // TODO: Display warning
+        return;
+    }
+
+    QJsonObject insObject;
+    curInstrument->toJson(insObject);
+    QJsonDocument saveDoc(insObject);
+    saveFile.write(saveDoc.toJson());
 }
 
 /*************************************************************************/

@@ -4,6 +4,8 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <QJsonArray>
+#include "mainwindow.h"
 
 
 namespace Track {
@@ -25,6 +27,29 @@ bool Instrument::isEmpty() {
     }
 
     return empty;
+}
+
+/*************************************************************************/
+
+void Instrument::toJson(QJsonObject &json) {
+    json["version"] = MainWindow::version;
+    json["name"] = name;
+    json["waveform"] = static_cast<int>(baseDistortion);
+    json["envelopeLength"] = envelopeLength;
+    json["sustainStart"] = sustainStart;
+    json["releaseStart"] = releaseStart;
+
+    QJsonArray freqArray;
+    foreach (const int freq, frequencies) {
+        freqArray.append(QJsonValue(freq));
+    }
+    json["frequencies"] = freqArray;
+
+    QJsonArray volArray;
+    foreach (const int vol, volumes) {
+        volArray.append(QJsonValue(vol));
+    }
+    json["volumes"] = volArray;
 }
 
 /*************************************************************************/

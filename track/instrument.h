@@ -5,6 +5,7 @@
 #include <QList>
 #include <QMutex>
 #include "tiasound/tiasound.h"
+#include <QJsonObject>
 
 
 namespace Track {
@@ -29,6 +30,8 @@ public:
 
     // Checks if instrument has its empty starting values
     bool isEmpty();
+
+    void toJson(QJsonObject &json);
 
     void deleteInstrument();
 

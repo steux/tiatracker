@@ -21,6 +21,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    static const int version = 1;
+
     /* Solarized-inspired colors */
     static const QColor dark;
     static const QColor darkHighlighted;
