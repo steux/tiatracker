@@ -184,17 +184,18 @@ void InstrumentsTab::on_buttonInstrumentDelete_clicked() {
 
 void InstrumentsTab::on_buttonInstrumentExport_clicked() {
     Track::Instrument *curInstrument = getSelectedInstrument();
+
     if (curInstrument->isEmpty()) {
         return;
     }
 
+    // Ask for filename
     QFileDialog dialog(this);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilter("*.tti");
     dialog.setDefaultSuffix("tti");
     dialog.setViewMode(QFileDialog::Detail);
-
     QStringList fileNames;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
@@ -204,12 +205,17 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
     }
     QString fileName = fileNames[0];
     QFile saveFile(fileName);
-    // TODO: Check for existing file
+
+    // Export instrument
     if (!saveFile.open(QIODevice::WriteOnly)) {
-        // TODO: Display warning
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
         return;
     }
-
     QJsonObject insObject;
     curInstrument->toJson(insObject);
     QJsonDocument saveDoc(insObject);
