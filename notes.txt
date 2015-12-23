@@ -5,3 +5,4 @@ TODO:
 - Do proper QThread (don't inherit from QThread) and set priority to highest
 - add "freehand" option to Instruments tab
 - add "0" octave (c0-h0)
+- Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
