@@ -196,6 +196,7 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
     dialog.setNameFilter("*.tti");
     dialog.setDefaultSuffix("tti");
     dialog.setViewMode(QFileDialog::Detail);
+    dialog.selectFile(curInstrument->name);
     QStringList fileNames;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
@@ -232,7 +233,7 @@ void InstrumentsTab::on_buttonInstrumentImport_clicked() {
     if (!curInstrument->isEmpty()) {
         QMessageBox msgBox(QMessageBox::NoIcon,
                            "Import Instrument",
-                           "Do you really want to overwrite this instument?",
+                           "Do you really want to overwrite the current instument?",
                            QMessageBox::Yes | QMessageBox::No, this,
                            Qt::FramelessWindowHint);
         int reply = msgBox.exec();
