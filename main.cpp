@@ -11,6 +11,7 @@
 #include "envelopeshaper.h"
 #include "track/track.h"
 #include "instrumentstab.h"
+#include "percussiontab.h"
 #include "emulation/player.h"
 #include <QThread>
 
@@ -40,6 +41,15 @@ int main(int argc, char *argv[])
     it->registerTrack(&myTrack);
     it->initInstrumentsTab();
     it->updateInstrumentsTab();
+
+    PercussionTab *pt = w.findChild<PercussionTab *>("tabPercussion");
+    std::cout << "A\n"; std::cout.flush();
+    pt->registerTrack(&myTrack);
+    std::cout << "A\n"; std::cout.flush();
+    pt->initPercussionTab();
+    std::cout << "A\n"; std::cout.flush();
+    pt->updatePercussionTab();
+    std::cout << "A\n"; std::cout.flush();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

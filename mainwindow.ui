@@ -252,7 +252,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabPercussion">
+      <widget class="PercussionTab" name="tabPercussion">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -585,6 +585,12 @@
    <class>EnvelopeShaper</class>
    <extends>QWidget</extends>
    <header>envelopeshaper.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PercussionTab</class>
+   <extends>QWidget</extends>
+   <header>percussiontab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
