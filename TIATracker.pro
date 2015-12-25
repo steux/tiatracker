@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     emulation/Player.cpp \
     emulation/SoundSDL2.cpp \
     emulation/TIASnd.cpp \
-    envelopeshaper.cpp
+    envelopeshaper.cpp \
+    percussiontab.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -42,7 +43,8 @@ HEADERS  += mainwindow.h \
     emulation/bspf.h \
     emulation/SoundSDL2.h \
     emulation/TIASnd.h \
-    envelopeshaper.h
+    envelopeshaper.h \
+    percussiontab.h
 
 FORMS    += mainwindow.ui
 

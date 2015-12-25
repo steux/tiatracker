@@ -6,3 +6,4 @@ TODO:
 - add "freehand" option to Instruments tab
 - add "0" octave (c0-h0)
 - Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
+- Context menu "insert before/after; delete" for columns in EnvelopeShaper

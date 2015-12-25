@@ -41,7 +41,6 @@ int main(int argc, char *argv[])
     it->initInstrumentsTab();
     it->updateInstrumentsTab();
 
-
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
