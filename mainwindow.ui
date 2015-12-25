@@ -117,7 +117,7 @@
          </spacer>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="WaveformShaper" name="volumeShaper" native="true"/>
+         <widget class="EnvelopeShaper" name="volumeShaper" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer_3">
@@ -133,7 +133,7 @@
          </spacer>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="WaveformShaper" name="frequencyShaper" native="true"/>
+         <widget class="EnvelopeShaper" name="frequencyShaper" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer">
@@ -391,15 +391,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>WaveformShaper</class>
-   <extends>QWidget</extends>
-   <header>waveformshaper.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>InstrumentsTab</class>
    <extends>QWidget</extends>
    <header>instrumentstab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>EnvelopeShaper</class>
+   <extends>QWidget</extends>
+   <header>envelopeshaper.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

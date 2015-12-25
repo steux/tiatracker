@@ -20,13 +20,13 @@ SOURCES += main.cpp\
     tiasound/pitchguide.cpp \
     tiasound/pitchguidefactory.cpp \
     tiasound/pitchperfectpal.cpp \
-    waveformshaper.cpp \
     track/instrument.cpp \
     track/track.cpp \
     instrumentstab.cpp \
     emulation/Player.cpp \
     emulation/SoundSDL2.cpp \
-    emulation/TIASnd.cpp
+    emulation/TIASnd.cpp \
+    envelopeshaper.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -35,14 +35,14 @@ HEADERS  += mainwindow.h \
     tiasound/pitchguide.h \
     tiasound/pitchguidefactory.h \
     tiasound/pitchperfectpal.h \
-    waveformshaper.h \
     track/instrument.h \
     track/track.h \
     instrumentstab.h \
     emulation/player.h \
     emulation/bspf.h \
     emulation/SoundSDL2.h \
-    emulation/TIASnd.h
+    emulation/TIASnd.h \
+    envelopeshaper.h
 
 FORMS    += mainwindow.ui
 

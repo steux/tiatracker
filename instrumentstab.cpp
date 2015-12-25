@@ -4,7 +4,7 @@
 #include <cassert>
 #include <QLabel>
 #include <QSpinBox>
-#include "waveformshaper.h"
+#include "envelopeshaper.h"
 #include <QMessageBox>
 #include <iostream>
 #include <QFileDialog>
@@ -59,14 +59,14 @@ void InstrumentsTab::initInstrumentsTab() {
     cbWaveforms->setCurrentIndex(10);   // Init to PURE_COMBINED
 
     // Volume shaper
-    WaveformShaper *vs = findChild<WaveformShaper *>("volumeShaper");
+    EnvelopeShaper *vs = findChild<EnvelopeShaper *>("volumeShaper");
     vs->registerInstrument(&(pTrack->instruments[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues(&(pTrack->instruments[0].volumes));
 
     // Frequency shaper
-    WaveformShaper *fs = findChild<WaveformShaper *>("frequencyShaper");
+    EnvelopeShaper *fs = findChild<EnvelopeShaper *>("frequencyShaper");
     fs->registerInstrument(&(pTrack->instruments[0]));
     fs->name = "Frequency";
     fs->setScale(-8, 7);
@@ -129,12 +129,12 @@ void InstrumentsTab::updateInstrumentsTab() {
     QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
     cbWaveforms->setCurrentIndex(iWaveform);
     emit setWaveform(curInstrument.baseDistortion);
-    // WaveformShaper sizes and values
-    WaveformShaper *wsVolume = findChild<WaveformShaper *>("volumeShaper");
+    // EnvelopeShaper sizes and values
+    EnvelopeShaper *wsVolume = findChild<EnvelopeShaper *>("volumeShaper");
     wsVolume->registerInstrument(&curInstrument);
     wsVolume->setValues(&(curInstrument.volumes));
     wsVolume->updateSize();
-    WaveformShaper *wsFrequency = findChild<WaveformShaper *>("frequencyShaper");
+    EnvelopeShaper *wsFrequency = findChild<EnvelopeShaper *>("frequencyShaper");
     wsFrequency->registerInstrument(&curInstrument);
     wsFrequency->setValues(&(curInstrument.frequencies));
     wsFrequency->updateSize();
