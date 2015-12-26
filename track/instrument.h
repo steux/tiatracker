@@ -18,10 +18,6 @@ class Instrument
 public:
     Instrument(QString name) : name(name) {}
 
-    // To make read/write access to envelope length thread-safe, call lock/unlock
-    void lock();
-    void unlock();
-
     int getEnvelopeLength();
     void setEnvelopeLength(int newSize);
 

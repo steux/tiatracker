@@ -84,7 +84,7 @@ void PercussionTab::updatePercussionTab() {
 /*************************************************************************/
 
 int PercussionTab::getSelectedPercussionIndex() {
-
+    // TODO
 }
 
 /*************************************************************************/
