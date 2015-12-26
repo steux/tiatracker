@@ -7,3 +7,4 @@ TODO:
 - add "0" octave (c0-h0)
 - Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
 - Context menu "insert before/after; delete" for columns in EnvelopeShaper
+- Do proper OO: Base class Instrument gets inherited by MelodicInstrument and PercussionInstrument. Similarly with EnvelopeShaper, InstrumentShaper and PercussionShaper
