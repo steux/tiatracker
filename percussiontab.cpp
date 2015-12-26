@@ -77,7 +77,46 @@ void PercussionTab::initPercussionTab() {
 
 void PercussionTab::updatePercussionTab() {
     assert(pTrack != nullptr);
+    /* Global values */
+    // Number of envelope frames used
+    QLabel *lFramesUsed = findChild<QLabel *>("labelPercussionFramesUsed");
+    int framesUsed = pTrack->getNumUsedPercussionFrames();
+    QString framesUsedString;
+    if (framesUsed < 256) {
+        framesUsedString = "(" + QString::number(framesUsed) + " of 256 used)";
 
+    } else {
+        framesUsedString = "<font color=\"#dc322f\">(" + QString::number(framesUsed) + " of 256 used)</>";
+    }
+    lFramesUsed->setText(framesUsedString);
+    // Number of percussion used
+    QLabel *lPercussionUsed = findChild<QLabel *>("labelPercussionUsed");
+    int percussionUsed = pTrack->getNumPercussion();
+    QString percussionUsedString = "(" + QString::number(percussionUsed) + " of 15 used)";
+    lPercussionUsed->setText(percussionUsedString);
+
+    /* Values specific to the selected intrument */
+    int iCurPercussion = getSelectedPercussionIndex();
+    QLabel *lPercussionNumber = findChild<QLabel *>("labelPercussionNumber");
+    lPercussionNumber->setText("Percussion " + QString::number(iCurPercussion + 1));
+    Track::Percussion& curPercussion = pTrack->percussion[iCurPercussion];
+    // Envelope length
+    QSpinBox *spPercussionLength = findChild<QSpinBox *>("spinBoxPercussionLength");
+    int envelopeLength = curPercussion.getEnvelopeLength();
+    spPercussionLength->setValue(envelopeLength);
+    // Peak volume
+    QSpinBox *spPeakVolume = findChild<QSpinBox *>("spinBoxPercussionVolume");
+    int maxVolume = curPercussion.getMaxVolume();
+    spPeakVolume->setValue(maxVolume);
+    // PercussionShaper sizes and values
+    PercussionShaper *psVolume = findChild<PercussionShaper *>("percussionVolumeShaper");
+    psVolume->registerPercussion(&curPercussion);
+    psVolume->setValues(&(curPercussion.volumes));
+    psVolume->updateSize();
+    PercussionShaper *wsFrequency = findChild<PercussionShaper *>("percussionFrequencyShaper");
+    wsFrequency->registerPercussion(&curPercussion);
+    wsFrequency->setValues(&(curPercussion.frequencies));
+    wsFrequency->updateSize();
 }
 
 /*************************************************************************/

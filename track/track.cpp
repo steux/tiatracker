@@ -39,6 +39,25 @@ int Track::getNumUsedEnvelopeFrames() {
 
 /*************************************************************************/
 
+int Track::getNumUsedPercussionFrames() {
+    int numFrames = 0;
+    for (int i = 0; i < numPercussion; ++i) {
+        if (!percussion[i].isEmpty()) {
+            int envelopeLength = percussion[i].getEnvelopeLength();
+            numFrames += envelopeLength;
+            // If last ctrl/volume frames are not 0, add one (0 is mandatory)
+            int iLast = envelopeLength - 1;
+            if (percussion[i].volumes[iLast] != 0
+                    || percussion[i].waveforms[iLast] != TiaSound::Distortion::SILENT) {
+                numFrames++;
+            }
+        }
+    }
+    return numFrames;
+}
+
+/*************************************************************************/
+
 int Track::getNumInstruments() {
     int usedInstruments = 0;
     for (int i = 0; i < numInstruments; ++i) {

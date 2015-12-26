@@ -28,6 +28,7 @@ public:
 
     /* Counts all envelope frames over all instruments */
     int getNumUsedEnvelopeFrames();
+    int getNumUsedPercussionFrames();
 
     int getNumInstruments();
     int getNumPercussion();
