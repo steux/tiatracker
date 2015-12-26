@@ -275,6 +275,9 @@
            </item>
            <item>
             <widget class="QComboBox" name="comboBoxPercussion">
+             <property name="editable">
+              <bool>true</bool>
+             </property>
              <property name="minimumContentsLength">
               <number>32</number>
              </property>

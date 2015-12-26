@@ -51,29 +51,42 @@ void PercussionTab::initPercussionTab() {
     QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
     assert (cbPercussion != nullptr);
 
+    std::cout << "B\n"; std::cout.flush();
     cbPercussion->lineEdit()->setMaxLength(maxPercussionNameLength);
+    std::cout << "B\n"; std::cout.flush();
     foreach(Track::Percussion perc, pTrack->percussion) {
+        std::cout << "C\n"; std::cout.flush();
         cbPercussion->addItem(perc.name);
     }
+
+    std::cout << "B\n"; std::cout.flush();
 
     // Volume shaper
     PercussionShaper *vs = findChild<PercussionShaper *>("percussionVolumeShaper");
     assert (vs != nullptr);
+
+    std::cout << "B\n"; std::cout.flush();
 
     vs->registerPercussion(&(pTrack->percussion[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues(&(pTrack->percussion[0].volumes));
 
+    std::cout << "B\n"; std::cout.flush();
+
     // Frequency shaper
     PercussionShaper *fs = findChild<PercussionShaper *>("percussionFrequencyShaper");
     assert (fs != nullptr);
+
+    std::cout << "B\n"; std::cout.flush();
 
     fs->registerPercussion(&(pTrack->percussion[0]));
     fs->name = "Frequency";
     fs->setScale(0, 31);
     fs->isInverted = true;
     fs->setValues(&(pTrack->percussion[0].frequencies));
+
+    std::cout << "B\n"; std::cout.flush();
 }
 
 /*************************************************************************/
