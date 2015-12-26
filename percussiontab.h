@@ -29,7 +29,10 @@ signals:
 
 public slots:
 
+    void on_buttonPercussionDelete_clicked();
+
 protected:
+    Track::Percussion * getSelectedPercussion();
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;

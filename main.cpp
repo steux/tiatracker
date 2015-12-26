@@ -43,13 +43,9 @@ int main(int argc, char *argv[])
     it->updateInstrumentsTab();
 
     PercussionTab *pt = w.findChild<PercussionTab *>("tabPercussion");
-    std::cout << "A\n"; std::cout.flush();
     pt->registerTrack(&myTrack);
-    std::cout << "A\n"; std::cout.flush();
     pt->initPercussionTab();
-    std::cout << "A\n"; std::cout.flush();
     pt->updatePercussionTab();
-    std::cout << "A\n"; std::cout.flush();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

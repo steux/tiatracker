@@ -278,6 +278,9 @@
              <property name="editable">
               <bool>true</bool>
              </property>
+             <property name="maxVisibleItems">
+              <number>15</number>
+             </property>
              <property name="minimumContentsLength">
               <number>32</number>
              </property>
@@ -340,7 +343,7 @@
           </property>
          </spacer>
         </item>
-        <item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="PercussionShaper" name="percussionVolumeShaper" native="true"/>
         </item>
         <item>
@@ -356,7 +359,7 @@
           </property>
          </spacer>
         </item>
-        <item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="PercussionShaper" name="percussionFrequencyShaper" native="true"/>
         </item>
         <item>
@@ -372,7 +375,7 @@
           </property>
          </spacer>
         </item>
-        <item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="QWidget" name="percussionWaveformSetter" native="true"/>
         </item>
         <item alignment="Qt::AlignHCenter">

@@ -50,43 +50,27 @@ void PercussionTab::initPercussionTab() {
     // Percussion names
     QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
     assert (cbPercussion != nullptr);
-
-    std::cout << "B\n"; std::cout.flush();
     cbPercussion->lineEdit()->setMaxLength(maxPercussionNameLength);
-    std::cout << "B\n"; std::cout.flush();
     foreach(Track::Percussion perc, pTrack->percussion) {
-        std::cout << "C\n"; std::cout.flush();
         cbPercussion->addItem(perc.name);
     }
-
-    std::cout << "B\n"; std::cout.flush();
 
     // Volume shaper
     PercussionShaper *vs = findChild<PercussionShaper *>("percussionVolumeShaper");
     assert (vs != nullptr);
-
-    std::cout << "B\n"; std::cout.flush();
-
     vs->registerPercussion(&(pTrack->percussion[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues(&(pTrack->percussion[0].volumes));
 
-    std::cout << "B\n"; std::cout.flush();
-
     // Frequency shaper
     PercussionShaper *fs = findChild<PercussionShaper *>("percussionFrequencyShaper");
     assert (fs != nullptr);
-
-    std::cout << "B\n"; std::cout.flush();
-
     fs->registerPercussion(&(pTrack->percussion[0]));
     fs->name = "Frequency";
     fs->setScale(0, 31);
     fs->isInverted = true;
     fs->setValues(&(pTrack->percussion[0].frequencies));
-
-    std::cout << "B\n"; std::cout.flush();
 }
 
 /*************************************************************************/
@@ -99,7 +83,41 @@ void PercussionTab::updatePercussionTab() {
 /*************************************************************************/
 
 int PercussionTab::getSelectedPercussionIndex() {
-    // TODO
+    QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
+    return cbPercussion->currentIndex();
+}
+
+/*************************************************************************/
+
+Track::Percussion *PercussionTab::getSelectedPercussion() {
+    int iCurPercussion = getSelectedPercussionIndex();
+    Track::Percussion *curPercussion = &(pTrack->percussion[iCurPercussion]);
+    return curPercussion;
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_buttonPercussionDelete_clicked() {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    bool doDelete = true;
+    if (!curPercussion->isEmpty()) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Delete Percussion",
+                           "Do you really want to delete this percussion?",
+                           QMessageBox::Yes | QMessageBox::No, this,
+                           Qt::FramelessWindowHint);
+        int reply = msgBox.exec();
+        if (reply != QMessageBox::Yes) {
+            doDelete = false;
+        }
+    }
+    if (doDelete) {
+        pTrack->lock();
+        curPercussion->deletePercussion();
+        pTrack->unlock();
+        updatePercussionTab();
+        update();
+    }
 }
 
 /*************************************************************************/
