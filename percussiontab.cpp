@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "mainwindow.h"
+#include "track/percussion.h"
 
 
 const QList<TiaSound::Distortion> PercussionTab::availableWaveforms{
@@ -50,28 +51,28 @@ void PercussionTab::initPercussionTab() {
     assert (cbPercussion != nullptr);
 
     cbPercussion->lineEdit()->setMaxLength(maxPercussionNameLength);
-//    foreach(Track::Instrument ins, pTrack->instruments) {
-//        cbInstruments->addItem(ins.name);
-//    }
+    foreach(Track::Percussion perc, pTrack->percussion) {
+        cbPercussion->addItem(perc.name);
+    }
 
     // Volume shaper
     EnvelopeShaper *vs = findChild<EnvelopeShaper *>("percussionVolumeShaper");
     assert (vs != nullptr);
 
-    vs->registerInstrument(&(pTrack->instruments[0]));
+    vs->registerInstrument(&(pTrack->percussion[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
-    vs->setValues(&(pTrack->instruments[0].volumes));
+    vs->setValues(&(pTrack->percussion[0].volumes));
 
     // Frequency shaper
     EnvelopeShaper *fs = findChild<EnvelopeShaper *>("percussionFrequencyShaper");
     assert (fs != nullptr);
 
-    fs->registerInstrument(&(pTrack->instruments[0]));
+    fs->registerInstrument(&(pTrack->percussion[0]));
     fs->name = "Frequency";
     fs->setScale(0, 31);
     fs->isInverted = true;
-    fs->setValues(&(pTrack->instruments[0].frequencies));
+    fs->setValues(&(pTrack->percussion[0].frequencies));
 }
 
 /*************************************************************************/

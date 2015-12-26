@@ -54,6 +54,19 @@ int Track::getNumInstruments() {
 
 /*************************************************************************/
 
+int Track::getNumPercussion()
+{
+    int usedPercussion = 0;
+    for (int i = 0; i < numPercussion; ++i) {
+        if (!percussion[i].isEmpty()) {
+            usedPercussion++;
+        }
+    }
+    return usedPercussion;
+}
+
+/*************************************************************************/
+
 TiaSound::TvStandard Track::getTvMode() const {
     return tvMode;
 }

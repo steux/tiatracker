@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "instrument.h"
+#include "percussion.h"
 #include <QList>
 #include <QMutex>
 #include "tiasound/tiasound.h"
@@ -16,6 +17,7 @@ class Track
 {
 public:
     static const int numInstruments = 7;
+    static const int numPercussion = 15;
 
     Track();
 
@@ -28,14 +30,20 @@ public:
     int getNumUsedEnvelopeFrames();
 
     int getNumInstruments();
+    int getNumPercussion();
+
+    TiaSound::TvStandard getTvMode() const;
+    void setTvMode(const TiaSound::TvStandard &value);
 
     QString name{"New track"};
     QList<Instrument> instruments{
         {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };
+    QList<Percussion> percussion{
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"},
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
+    };
 
-    TiaSound::TvStandard getTvMode() const;
-    void setTvMode(const TiaSound::TvStandard &value);
 
 private:
     QMutex mutex;
