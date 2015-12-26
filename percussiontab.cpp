@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include "envelopeshaper.h"
+#include "percussionshaper.h"
 #include <QMessageBox>
 #include <iostream>
 #include <QFileDialog>
@@ -56,19 +57,19 @@ void PercussionTab::initPercussionTab() {
     }
 
     // Volume shaper
-    EnvelopeShaper *vs = findChild<EnvelopeShaper *>("percussionVolumeShaper");
+    PercussionShaper *vs = findChild<PercussionShaper *>("percussionVolumeShaper");
     assert (vs != nullptr);
 
-    vs->registerInstrument(&(pTrack->percussion[0]));
+    vs->registerPercussion(&(pTrack->percussion[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
     vs->setValues(&(pTrack->percussion[0].volumes));
 
     // Frequency shaper
-    EnvelopeShaper *fs = findChild<EnvelopeShaper *>("percussionFrequencyShaper");
+    PercussionShaper *fs = findChild<PercussionShaper *>("percussionFrequencyShaper");
     assert (fs != nullptr);
 
-    fs->registerInstrument(&(pTrack->percussion[0]));
+    fs->registerPercussion(&(pTrack->percussion[0]));
     fs->name = "Frequency";
     fs->setScale(0, 31);
     fs->isInverted = true;

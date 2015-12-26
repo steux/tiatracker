@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     emulation/TIASnd.cpp \
     envelopeshaper.cpp \
     percussiontab.cpp \
-    track/percussion.cpp
+    track/percussion.cpp \
+    percussionshaper.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     emulation/TIASnd.h \
     envelopeshaper.h \
     percussiontab.h \
-    track/percussion.h
+    track/percussion.h \
+    percussionshaper.h
 
 FORMS    += mainwindow.ui
 
