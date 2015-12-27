@@ -112,3 +112,19 @@ QSpinBox::down-button {
     border: 1px;
     image: url(:/graphics/spin_down.png);
 }
+
+
+QCheckBox {
+    spacing: 4px;
+    margin: 4px 2px 2px 8px;
+}
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+}
+QCheckBox::indicator:unchecked {
+    image: url(:/graphics/checkbox_unchecked.png);
+}
+QCheckBox::indicator:checked {
+    image: url(:/graphics/checkbox_checked.png);
+}

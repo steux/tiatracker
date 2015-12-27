@@ -1,8 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>style.qss</file>
-	<file>graphics/arrow_down.png</file>
-	<file>graphics/spin_up.png</file>
-	<file>graphics/spin_down.png</file>
+        <file>graphics/arrow_down.png</file>
+        <file>graphics/spin_up.png</file>
+        <file>graphics/spin_down.png</file>
+        <file>graphics/checkbox_checked.png</file>
+        <file>graphics/checkbox_unchecked.png</file>
     </qresource>
 </RCC>
