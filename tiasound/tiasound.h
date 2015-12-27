@@ -71,6 +71,10 @@ static const QList<Distortion> distortions{
  */
 QString getDistorionName(Distortion dist);
 
+/* Get corresponding int from Distortion
+ */
+int getDistortionInt(Distortion dist);
+
 
 
 /* TV Standards

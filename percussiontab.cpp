@@ -6,6 +6,7 @@
 #include <QSpinBox>
 #include "envelopeshaper.h"
 #include "percussionshaper.h"
+#include "waveformshaper.h"
 #include <QMessageBox>
 #include <iostream>
 #include <QFileDialog>
@@ -71,6 +72,12 @@ void PercussionTab::initPercussionTab() {
     fs->setScale(0, 31);
     fs->isInverted = true;
     fs->setValues(&(pTrack->percussion[0].frequencies));
+
+    // Waveform shaper
+    WaveformShaper *ws = findChild<WaveformShaper *>("percussionWaveformShaper");
+    assert (ws != nullptr);
+    ws->registerPercussion(&(pTrack->percussion[0]));
+    ws->setValues(&(pTrack->percussion[0].waveforms));
 }
 
 /*************************************************************************/
@@ -113,10 +120,14 @@ void PercussionTab::updatePercussionTab() {
     psVolume->registerPercussion(&curPercussion);
     psVolume->setValues(&(curPercussion.volumes));
     psVolume->updateSize();
-    PercussionShaper *wsFrequency = findChild<PercussionShaper *>("percussionFrequencyShaper");
-    wsFrequency->registerPercussion(&curPercussion);
-    wsFrequency->setValues(&(curPercussion.frequencies));
-    wsFrequency->updateSize();
+    PercussionShaper *psFrequency = findChild<PercussionShaper *>("percussionFrequencyShaper");
+    psFrequency->registerPercussion(&curPercussion);
+    psFrequency->setValues(&(curPercussion.frequencies));
+    psFrequency->updateSize();
+    WaveformShaper *wsWaveforms = findChild<WaveformShaper *>("percussionWaveformShaper");
+    wsWaveforms->registerPercussion(&curPercussion);
+    wsWaveforms->setValues(&(curPercussion.waveforms));
+    wsWaveforms->updateSize();
 }
 
 /*************************************************************************/

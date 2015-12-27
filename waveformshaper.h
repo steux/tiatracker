@@ -19,8 +19,8 @@ public:
     /* Set fixed size for layout according to envelope length */
     void updateSize();
 
-    QList<int> *getValues();
-    void setValues(QList<int> *newValues);
+    QList<TiaSound::Distortion> *getValues();
+    void setValues(QList<TiaSound::Distortion> *newValues);
 
 signals:
 
@@ -38,12 +38,13 @@ private:
     // The percussion to edit
     Track::Percussion *pPercussion = nullptr;
 
-    QList<int> *values = nullptr;
-    int cellHeight;
+    QList<TiaSound::Distortion> *values = nullptr;
 
     static const int valueFontSize = 11;
+    static const int valueAreaMargin = 2;
     QFont valueFont{"Helvetica"};
     int valueFontHeight;
+    int valueAreaHeight;
 };
 
 #endif // WAVEFORMSHAPER_H

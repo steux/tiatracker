@@ -379,14 +379,14 @@
          </spacer>
         </item>
         <item alignment="Qt::AlignHCenter">
-         <widget class="QWidget" name="percussionWaveformSetter" native="true"/>
-        </item>
-        <item alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="label_5">
           <property name="text">
            <string>Waveforms</string>
           </property>
          </widget>
+        </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="WaveformShaper" name="percussionWaveformShaper" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer_5">
@@ -606,6 +606,12 @@
    <class>PercussionShaper</class>
    <extends>QWidget</extends>
    <header>percussionshaper.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>WaveformShaper</class>
+   <extends>QWidget</extends>
+   <header>waveformshaper.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

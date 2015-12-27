@@ -49,4 +49,10 @@ QString getDistorionName(Distortion dist)
     return distNames[static_cast<int>(dist)];
 }
 
+/*************************************************************************/
+
+int getDistortionInt(Distortion dist) {
+    return static_cast<int>(dist);
+}
+
 }
