@@ -37,6 +37,9 @@ public slots:
     void on_spinBoxPercussionVolume_editingFinished();
     void on_spinBoxPercussionVolume_valueChanged(int newVolume);
 
+    void on_comboBoxPercussion_currentIndexChanged(int);
+    void on_comboBoxPercussion_currentTextChanged(const QString &text);
+
 protected:
     Track::Percussion * getSelectedPercussion();
 

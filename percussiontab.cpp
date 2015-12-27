@@ -215,3 +215,19 @@ void PercussionTab::on_spinBoxPercussionVolume_valueChanged(int newVolume) {
 
 /*************************************************************************/
 
+void PercussionTab::on_comboBoxPercussion_currentIndexChanged(int) {
+    updatePercussionTab();
+    update();
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_comboBoxPercussion_currentTextChanged(const QString &text) {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    curPercussion->name = text;
+    updatePercussionTab();
+    update();
+}
+
+/*************************************************************************/
+

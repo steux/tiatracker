@@ -281,6 +281,9 @@
              <property name="maxVisibleItems">
               <number>15</number>
              </property>
+             <property name="insertPolicy">
+              <enum>QComboBox::InsertAtCurrent</enum>
+             </property>
              <property name="minimumContentsLength">
               <number>32</number>
              </property>
