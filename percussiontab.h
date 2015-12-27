@@ -31,6 +31,12 @@ public slots:
 
     void on_buttonPercussionDelete_clicked();
 
+    void on_spinBoxPercussionLength_editingFinished();
+    void on_spinBoxPercussionLength_valueChanged(int newLength);
+
+    void on_spinBoxPercussionVolume_editingFinished();
+    void on_spinBoxPercussionVolume_valueChanged(int newVolume);
+
 protected:
     Track::Percussion * getSelectedPercussion();
 

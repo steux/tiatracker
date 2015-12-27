@@ -161,3 +161,57 @@ void PercussionTab::on_buttonPercussionDelete_clicked() {
 
 /*************************************************************************/
 
+void PercussionTab::on_spinBoxPercussionLength_editingFinished() {
+    QSpinBox *sb = findChild<QSpinBox *>("spinBoxPercussionLength");
+    int newLength = sb->value();
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    pTrack->lock();
+    curPercussion->setEnvelopeLength(newLength);
+    pTrack->unlock();
+    updatePercussionTab();
+    update();
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_spinBoxPercussionLength_valueChanged(int newLength) {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    if (std::abs(newLength - curPercussion->getEnvelopeLength()) == 1) {
+        on_spinBoxPercussionLength_editingFinished();
+    }
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_spinBoxPercussionVolume_editingFinished() {
+    QSpinBox *sb = findChild<QSpinBox *>("spinBoxPercussionVolume");
+    int newVolume = sb->value();
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    int curMin = curPercussion->getMinVolume();
+    int curMax = curPercussion->getMaxVolume();
+    int curVolumeSpan = curMax - curMin;
+    if (newVolume - curVolumeSpan >= 0) {
+        // Shift volumes
+        int volumeShift = newVolume - curMax;
+        for (int i = 0; i < curPercussion->getEnvelopeLength(); ++i) {
+            curPercussion->volumes[i] += volumeShift;
+        }
+    } else {
+        // Invalid value: Set volume to current max
+        sb->setValue(curPercussion->getMaxVolume());
+    }
+    updatePercussionTab();
+    update();
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_spinBoxPercussionVolume_valueChanged(int newVolume) {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    if (std::abs(newVolume - curPercussion->getMaxVolume()) == 1) {
+        on_spinBoxPercussionVolume_editingFinished();
+    }
+}
+
+/*************************************************************************/
+
