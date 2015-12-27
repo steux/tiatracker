@@ -24,7 +24,7 @@ QString getNoteNameWithOctave(Note note)
 
 /*************************************************************************/
 
-QString getDistorionName(Distortion dist)
+QString getDistortionName(Distortion dist)
 {
     static const QList<QString> distNames{{
             "Silent (0)",            // 0

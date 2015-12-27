@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QList>
+#include <QMenu>
 #include "track/track.h"
 #include "tiasound/tiasound.h"
 
@@ -25,12 +26,15 @@ public:
 signals:
 
 public slots:
+    void setWaveform(QAction *action);
 
 protected:
     static const int legendCellSize = 20;
     static const int cellWidth = 16;
 
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+
+    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
     int calcWidth();
@@ -45,6 +49,8 @@ private:
     QFont valueFont{"Helvetica"};
     int valueFontHeight;
     int valueAreaHeight;
+
+    QMenu contextMenu{this};
 };
 
 #endif // WAVEFORMSHAPER_H

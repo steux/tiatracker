@@ -69,7 +69,7 @@ static const QList<Distortion> distortions{
 
 /* Get a distortion name as QString from Distortion index
  */
-QString getDistorionName(Distortion dist);
+QString getDistortionName(Distortion dist);
 
 /* Get corresponding int from Distortion
  */

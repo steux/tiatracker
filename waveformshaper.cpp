@@ -1,8 +1,11 @@
 #include "waveformshaper.h"
 #include <QPainter>
 #include "mainwindow.h"
+#include "percussiontab.h"
 #include <cassert>
 #include <QMouseEvent>
+#include "tiasound/tiasound.h"
+
 
 WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
 {
@@ -12,6 +15,12 @@ WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
     valueAreaHeight = valueFontHeight + 2*valueAreaMargin;
     setFixedWidth(calcWidth());
     setFixedHeight(valueAreaHeight + legendCellSize);
+
+    // Create context menu
+    foreach (TiaSound::Distortion dist, PercussionTab::availableWaveforms) {
+        contextMenu.addAction(TiaSound::getDistortionName(dist));
+    }
+    QObject::connect(&contextMenu, SIGNAL(triggered(QAction*)), this, SLOT(setWaveform(QAction*)));
 }
 
 /*************************************************************************/
@@ -36,6 +45,21 @@ QList<TiaSound::Distortion> *WaveformShaper::getValues() {
 void WaveformShaper::setValues(QList<TiaSound::Distortion> *newValues) {
     values = newValues;
     updateSize();
+}
+
+/*************************************************************************/
+
+void WaveformShaper::setWaveform(QAction *action) {
+    // Get distortion of selected waveform
+    TiaSound::Distortion newDist;
+    foreach (TiaSound::Distortion dist, PercussionTab::availableWaveforms) {
+        if (TiaSound::getDistortionName(dist) == action->text()) {
+            newDist = dist;
+            break;
+        }
+    }
+
+    std::cout << "Set to " << TiaSound::getDistortionInt(newDist) << "\n"; std::cout.flush();
 }
 
 /*************************************************************************/
@@ -66,6 +90,12 @@ void WaveformShaper::paintEvent(QPaintEvent *) {
         painter.drawText(legendCellSize + iValue*cellWidth, valueAreaMargin, cellWidth, valueFontHeight, Qt::AlignCenter, QString::number(intValue));
     }
 
+}
+
+/*************************************************************************/
+
+void WaveformShaper::contextMenuEvent(QContextMenuEvent *event) {
+    contextMenu.exec(event->globalPos());
 }
 
 /*************************************************************************/

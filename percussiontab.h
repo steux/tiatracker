@@ -10,6 +10,8 @@ class PercussionTab : public QWidget
 {
     Q_OBJECT
 public:
+    static const QList<TiaSound::Distortion> availableWaveforms;
+
     static const int maxPercussionNameLength = 64;
 
     explicit PercussionTab(QWidget *parent = 0);
@@ -46,8 +48,6 @@ protected:
     Track::Percussion * getSelectedPercussion();
 
 private:
-    static const QList<TiaSound::Distortion> availableWaveforms;
-
     Track::Track *pTrack = nullptr;
 
 };

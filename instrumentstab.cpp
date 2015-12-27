@@ -54,7 +54,7 @@ void InstrumentsTab::initInstrumentsTab() {
     // Instrument waveforms
     QComboBox *cbWaveforms = findChild<QComboBox *>("comboBoxWaveforms");
     foreach (TiaSound::Distortion distortion, availableWaveforms) {
-        cbWaveforms->addItem(TiaSound::getDistorionName(distortion));
+        cbWaveforms->addItem(TiaSound::getDistortionName(distortion));
     }
     cbWaveforms->setCurrentIndex(10);   // Init to PURE_COMBINED
 
