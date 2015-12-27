@@ -16,6 +16,7 @@
 #include <QJsonArray>
 #include "mainwindow.h"
 #include "track/percussion.h"
+#include <QCheckBox>
 
 
 const QList<TiaSound::Distortion> PercussionTab::availableWaveforms{
@@ -102,7 +103,7 @@ void PercussionTab::updatePercussionTab() {
     QString percussionUsedString = "(" + QString::number(percussionUsed) + " of 15 used)";
     lPercussionUsed->setText(percussionUsedString);
 
-    /* Values specific to the selected intrument */
+    /* Values specific to the selected percussion */
     int iCurPercussion = getSelectedPercussionIndex();
     QLabel *lPercussionNumber = findChild<QLabel *>("labelPercussionNumber");
     lPercussionNumber->setText("Percussion " + QString::number(iCurPercussion + 1));
@@ -115,6 +116,9 @@ void PercussionTab::updatePercussionTab() {
     QSpinBox *spPeakVolume = findChild<QSpinBox *>("spinBoxPercussionVolume");
     int maxVolume = curPercussion.getMaxVolume();
     spPeakVolume->setValue(maxVolume);
+    // Overlay
+    QCheckBox *cpOverlay = findChild<QCheckBox *>("checkBoxOverlay");
+    cpOverlay->setChecked(curPercussion.overlay);
     // PercussionShaper sizes and values
     PercussionShaper *psVolume = findChild<PercussionShaper *>("percussionVolumeShaper");
     psVolume->registerPercussion(&curPercussion);
@@ -190,6 +194,15 @@ void PercussionTab::on_spinBoxPercussionLength_valueChanged(int newLength) {
     if (std::abs(newLength - curPercussion->getEnvelopeLength()) == 1) {
         on_spinBoxPercussionLength_editingFinished();
     }
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_checkBoxOverlay_stateChanged(int) {
+    QCheckBox *cpOverlay = findChild<QCheckBox *>("checkBoxOverlay");
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    curPercussion->overlay = cpOverlay->isChecked();
+
 }
 
 /*************************************************************************/

@@ -34,6 +34,8 @@ public slots:
     void on_spinBoxPercussionLength_editingFinished();
     void on_spinBoxPercussionLength_valueChanged(int newLength);
 
+    void on_checkBoxOverlay_stateChanged(int);
+
     void on_spinBoxPercussionVolume_editingFinished();
     void on_spinBoxPercussionVolume_valueChanged(int newVolume);
 

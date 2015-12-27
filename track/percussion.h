@@ -36,6 +36,7 @@ public:
     QList<int> volumes{0};
     QList<int> frequencies{0};
     QList<TiaSound::Distortion> waveforms{TiaSound::Distortion::WHITE_NOISE};
+    bool overlay = false;
 
 private:
     int envelopeLength = 1;

@@ -14,6 +14,7 @@ bool Percussion::isEmpty() {
             || volumes[0] != 0
             || frequencies[0] != 0
             || waveforms[0] != TiaSound::Distortion::WHITE_NOISE
+            || overlay
             ) {
         empty = false;
     }
@@ -70,6 +71,7 @@ void Percussion::deletePercussion() {
     frequencies[0] = 0;
     waveforms[0] = TiaSound::Distortion::WHITE_NOISE;
     envelopeLength = 1;
+    overlay = false;
 }
 
 /*************************************************************************/
