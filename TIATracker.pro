@@ -29,7 +29,8 @@ SOURCES += main.cpp\
     envelopeshaper.cpp \
     percussiontab.cpp \
     track/percussion.cpp \
-    percussionshaper.cpp
+    percussionshaper.cpp \
+    waveformshaper.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -48,7 +49,8 @@ HEADERS  += mainwindow.h \
     envelopeshaper.h \
     percussiontab.h \
     track/percussion.h \
-    percussionshaper.h
+    percussionshaper.h \
+    waveformshaper.h
 
 FORMS    += mainwindow.ui
 
