@@ -379,14 +379,22 @@
          </spacer>
         </item>
         <item alignment="Qt::AlignHCenter">
+         <widget class="WaveformShaper" name="percussionWaveformShaper" native="true"/>
+        </item>
+        <item alignment="Qt::AlignHCenter">
          <widget class="QLabel" name="label_5">
+          <property name="font">
+           <font>
+            <family>Arial</family>
+            <pointsize>11</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+           </font>
+          </property>
           <property name="text">
            <string>Waveforms</string>
           </property>
          </widget>
-        </item>
-        <item alignment="Qt::AlignHCenter">
-         <widget class="WaveformShaper" name="percussionWaveformShaper" native="true"/>
         </item>
         <item>
          <spacer name="verticalSpacer_5">
