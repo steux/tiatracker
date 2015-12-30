@@ -142,8 +142,15 @@ void PercussionShaper::processMouseEvent(int x, int y) {
             if (isInverted) {
                 newValue = scaleMin + scaleMax - newValue;
             }
+            bool isNew = false;
+            if ((*values)[iValue] != newValue) {
+                isNew = true;
+            }
             (*values)[iValue] = newValue;
             draggingIndex = iValue;
+            if (isNew) {
+                emit newPercussionValue(iValue);
+            }
             update();
         }
     }
@@ -160,6 +167,7 @@ void PercussionShaper::mouseReleaseEvent(QMouseEvent *) {
     draggingIndex = -1;
     int newMax = pPercussion->getMaxVolume();
     emit newMaxValue(newMax);
+    emit silence();
 }
 
 void PercussionShaper::mouseMoveEvent(QMouseEvent *event) {

@@ -29,10 +29,16 @@ public:
     void setFrameRate(float rate);
 
 public slots:
+    // Stop everything next frame
+    void silence();
+
     /* Start to play a note with a given instrument */
     void playInstrument(Track::Instrument *instrument, int frequency);
     /* Stop playing a note, i.e. send instrument into release */
     void stopInstrument();
+
+    /* Start waveform */
+    void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
 signals:
 
@@ -45,7 +51,7 @@ private:
 
     // Play mode we are in
     enum class PlayMode {
-        NONE, INSTRUMENT, PERCUSSION
+        NONE, INSTRUMENT, PERCUSSION, WAVEFORM
     };
     PlayMode mode = PlayMode::NONE;
 
@@ -57,6 +63,9 @@ private:
     /* Helper methods for timerFired() */
     void updateSilence();
     void updateInstrument();
+
+    /* Set values for channel 0 */
+    void setChannel0(int distortion, int frequency, int volume);
 
 private slots:
     void timerFired();

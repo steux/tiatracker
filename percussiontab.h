@@ -5,6 +5,8 @@
 #include <QWidget>
 #include "track/track.h"
 #include "track/instrument.h"
+#include "emulation/player.h"
+
 
 class PercussionTab : public QWidget
 {
@@ -24,10 +26,14 @@ public:
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updatePercussionTab();
 
+    /* Connects the tab with the Player */
+    void connectPlayer(Emulation::Player *player);
+
     /* Returns the currently selected percussion from the percussions tab */
     int getSelectedPercussionIndex();
 
 signals:
+    void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
 public slots:
 
@@ -43,6 +49,8 @@ public slots:
 
     void on_comboBoxPercussion_currentIndexChanged(int);
     void on_comboBoxPercussion_currentTextChanged(const QString &text);
+
+    void newPercussionValue(int iFrame);
 
 protected:
     Track::Percussion * getSelectedPercussion();

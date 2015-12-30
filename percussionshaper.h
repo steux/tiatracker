@@ -33,7 +33,10 @@ public:
     bool isInverted = false;
 
 signals:
-
+    /* Gets emitted when a new value is set while dragging the mouse */
+    void newPercussionValue(int iFrame);
+    /* Gets emitted when the mouse is released, to stop waveform play */
+    void silence();
     /* Gets emitted when the mouse is released */
     void newMaxValue(int newMax);
 

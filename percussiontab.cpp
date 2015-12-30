@@ -51,7 +51,6 @@ void PercussionTab::registerTrack(Track::Track *newTrack) {
 void PercussionTab::initPercussionTab() {
     // Percussion names
     QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
-    assert (cbPercussion != nullptr);
     cbPercussion->lineEdit()->setMaxLength(maxPercussionNameLength);
     foreach(Track::Percussion perc, pTrack->percussion) {
         cbPercussion->addItem(perc.name);
@@ -59,7 +58,6 @@ void PercussionTab::initPercussionTab() {
 
     // Volume shaper
     PercussionShaper *vs = findChild<PercussionShaper *>("percussionVolumeShaper");
-    assert (vs != nullptr);
     vs->registerPercussion(&(pTrack->percussion[0]));
     vs->name = "Volume";
     vs->setScale(0, 15);
@@ -67,7 +65,6 @@ void PercussionTab::initPercussionTab() {
 
     // Frequency shaper
     PercussionShaper *fs = findChild<PercussionShaper *>("percussionFrequencyShaper");
-    assert (fs != nullptr);
     fs->registerPercussion(&(pTrack->percussion[0]));
     fs->name = "Frequency";
     fs->setScale(0, 31);
@@ -76,7 +73,6 @@ void PercussionTab::initPercussionTab() {
 
     // Waveform shaper
     WaveformShaper *ws = findChild<WaveformShaper *>("percussionWaveformShaper");
-    assert (ws != nullptr);
     ws->registerPercussion(&(pTrack->percussion[0]));
     ws->setValues(&(pTrack->percussion[0].waveforms));
 }
@@ -84,7 +80,6 @@ void PercussionTab::initPercussionTab() {
 /*************************************************************************/
 
 void PercussionTab::updatePercussionTab() {
-    assert(pTrack != nullptr);
     /* Global values */
     // Number of envelope frames used
     QLabel *lFramesUsed = findChild<QLabel *>("labelPercussionFramesUsed");
@@ -132,6 +127,15 @@ void PercussionTab::updatePercussionTab() {
     wsWaveforms->registerPercussion(&curPercussion);
     wsWaveforms->setValues(&(curPercussion.waveforms));
     wsWaveforms->updateSize();
+}
+
+/*************************************************************************/
+
+void PercussionTab::connectPlayer(Emulation::Player *player) {
+    PercussionShaper *psVolume = findChild<PercussionShaper *>("percussionVolumeShaper");
+    QObject::connect(psVolume, SIGNAL(silence()), player, SLOT(silence()));
+    PercussionShaper *psFrequency = findChild<PercussionShaper *>("percussionFrequencyShaper");
+    QObject::connect(psFrequency, SIGNAL(silence()), player, SLOT(silence()));
 }
 
 /*************************************************************************/
@@ -251,6 +255,16 @@ void PercussionTab::on_comboBoxPercussion_currentTextChanged(const QString &text
     curPercussion->name = text;
     updatePercussionTab();
     update();
+}
+
+/*************************************************************************/
+
+void PercussionTab::newPercussionValue(int iFrame) {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+    TiaSound::Distortion waveform = curPercussion->waveforms[iFrame];
+    int frequency = curPercussion->frequencies[iFrame];
+    int volume = curPercussion->volumes[iFrame];
+    emit playWaveform(waveform, frequency, volume);
 }
 
 /*************************************************************************/

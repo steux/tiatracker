@@ -51,6 +51,8 @@ int main(int argc, char *argv[])
     Emulation::Player tiaPlayer(&myTrack);
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
     QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
+    QObject::connect(pt, SIGNAL(playWaveform(TiaSound::Distortion,int,int)), &tiaPlayer, SLOT(playWaveform(TiaSound::Distortion,int,int)));
+    pt->connectPlayer(&tiaPlayer);
     tiaPlayer.run();
 
     // Shrink window size to minimum and show

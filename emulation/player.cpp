@@ -50,6 +50,12 @@ void Player::setFrameRate(float rate) {
 
 /*************************************************************************/
 
+void Player::silence() {
+    mode = PlayMode::NONE;
+}
+
+/*************************************************************************/
+
 void Player::playInstrument(Track::Instrument *instrument, int frequency) {
     currentInstrument = instrument;
     currentInstrumentFrequency = frequency;
@@ -65,11 +71,27 @@ void Player::stopInstrument() {
 
 /*************************************************************************/
 
-void Player::updateSilence() {
-    sdlSound.set(AUDC0, 0, 10);
-    sdlSound.set(AUDV0, 0, 15);
-    sdlSound.set(AUDF0, 0, 18);
+void Player::setChannel0(int distortion, int frequency, int volume) {
+    sdlSound.set(AUDC0, distortion, 10);
+    sdlSound.set(AUDV0, volume, 15);
+    sdlSound.set(AUDF0, frequency, 18);
 }
+
+/*************************************************************************/
+
+void Player::playWaveform(TiaSound::Distortion waveform, int frequency, int volume) {
+    int distortion = TiaSound::getDistortionInt(waveform);
+    setChannel0(distortion, frequency, volume);
+    mode = PlayMode::WAVEFORM;
+}
+
+/*************************************************************************/
+
+void Player::updateSilence() {
+    setChannel0(0, 0, 0);
+}
+
+/*************************************************************************/
 
 void Player::updateInstrument() {
     /* Play current frame */
@@ -87,9 +109,7 @@ void Player::updateInstrument() {
             FValue = 256 - FValue;
         }
         int VValue = currentInstrument->volumes[currentInstrumentFrame];
-        sdlSound.set(AUDC0, CValue, 10);
-        sdlSound.set(AUDV0, VValue, 15);
-        sdlSound.set(AUDF0, FValue, 18);
+        setChannel0(CValue, FValue, VValue);
 
         /* Advance frame */
         currentInstrumentFrame++;
@@ -105,10 +125,14 @@ void Player::updateInstrument() {
     pTrack->unlock();
 }
 
+/*************************************************************************/
+
 void Player::timerFired() {
     switch (mode) {
     case PlayMode::INSTRUMENT:
         updateInstrument();
+        break;
+    case PlayMode::WAVEFORM:
         break;
     default:
         updateSilence();
