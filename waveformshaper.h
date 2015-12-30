@@ -35,6 +35,7 @@ protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
 
     void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
     int calcWidth();
@@ -51,6 +52,8 @@ private:
     int valueAreaHeight;
 
     QMenu contextMenu{this};
+    int waveformColumn;
+    TiaSound::Distortion distortionPen = TiaSound::Distortion::ELECTRONIC_RUMBLE;
 };
 
 #endif // WAVEFORMSHAPER_H

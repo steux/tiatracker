@@ -50,16 +50,16 @@ void WaveformShaper::setValues(QList<TiaSound::Distortion> *newValues) {
 /*************************************************************************/
 
 void WaveformShaper::setWaveform(QAction *action) {
-    // Get distortion of selected waveform
-    TiaSound::Distortion newDist;
+    // Get distortion of selected waveform and set pen to it
     foreach (TiaSound::Distortion dist, PercussionTab::availableWaveforms) {
         if (TiaSound::getDistortionName(dist) == action->text()) {
-            newDist = dist;
+            distortionPen = dist;
             break;
         }
     }
-
-    std::cout << "Set to " << TiaSound::getDistortionInt(newDist) << "\n"; std::cout.flush();
+    // Set distortion column
+    (*values)[waveformColumn] = distortionPen;
+    update();
 }
 
 /*************************************************************************/
@@ -95,7 +95,20 @@ void WaveformShaper::paintEvent(QPaintEvent *) {
 /*************************************************************************/
 
 void WaveformShaper::contextMenuEvent(QContextMenuEvent *event) {
-    contextMenu.exec(event->globalPos());
+    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+        waveformColumn = (event->x() - legendCellSize)/cellWidth;
+        contextMenu.exec(event->globalPos());
+    }
+}
+
+/*************************************************************************/
+
+void WaveformShaper::mousePressEvent(QMouseEvent *event) {
+    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+       int column = (event->x() - legendCellSize)/cellWidth;
+       (*values)[column] = distortionPen;
+       update();
+    }
 }
 
 /*************************************************************************/
