@@ -108,3 +108,16 @@ void MainWindow::newPianoKeyPressed(int frequency) {
 void MainWindow::pianoKeyReleased() {
     emit stopInstrument();
 }
+
+/*************************************************************************/
+
+void MainWindow::on_tabWidget_currentChanged(int index) {
+    switch (index) {
+    case iTabInstruments:
+        ui->pianoKeyboard->setUsePitchGuide(true);
+        break;
+    case iTabPercussion:
+        ui->pianoKeyboard->setUsePitchGuide(false);
+        break;
+    }
+}

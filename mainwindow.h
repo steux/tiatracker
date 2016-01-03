@@ -58,7 +58,16 @@ private slots:
     // Gets signalled if a valid key from the piano has been released
     void pianoKeyReleased();
 
+    void on_tabWidget_currentChanged(int index);
+
 private:
+    /* Tab index values */
+    static const int iTabTrack = 0;
+    static const int iTabInstruments = 1;
+    static const int iTabPercussion = 2;
+    static const int iTabInfo = 3;
+    static const int iTabOptions = 4;
+
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuideFactory pgFactory;

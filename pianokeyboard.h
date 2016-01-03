@@ -39,6 +39,8 @@ public:
     // Threshold for unacceptable off-tune percentage
     int offThreshold = 10;
 
+    void setUsePitchGuide(bool value);
+
 signals:
 
     /* Gets emitted when a key with a valid frequency is clicked */
@@ -62,6 +64,8 @@ protected:
     void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
 
 private:
+    bool usePitchGuide = false;
+
     // Key states and pitch info
     struct KeyInformation {
         int frequency;
