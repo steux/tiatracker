@@ -97,6 +97,11 @@ void PercussionTab::updatePercussionTab() {
     int percussionUsed = pTrack->getNumPercussion();
     QString percussionUsedString = "(" + QString::number(percussionUsed) + " of 15 used)";
     lPercussionUsed->setText(percussionUsedString);
+    // Names
+    QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
+    for (int perc = 0; perc < pTrack->getNumPercussion(); ++perc) {
+        cbPercussion->setItemText(perc, pTrack->percussion[perc].name);
+    }
 
     /* Values specific to the selected percussion */
     int iCurPercussion = getSelectedPercussionIndex();

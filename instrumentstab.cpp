@@ -101,6 +101,11 @@ void InstrumentsTab::updateInstrumentsTab() {
         instrumentsUsedString = "<font color=\"#dc322f\">(" + QString::number(instrumentsUsed) + " of 7 used)</>";
     }
     lInstrumentsUsed->setText(instrumentsUsedString);
+    // Names
+    QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
+    for (int ins = 0; ins < pTrack->getNumInstruments(); ++ins) {
+        cbInstruments->setItemText(ins, pTrack->instruments[ins].name);
+    }
 
     /* Values specific to the selected intrument */
     int iCurInstrument = getSelectedInstrumentIndex();
