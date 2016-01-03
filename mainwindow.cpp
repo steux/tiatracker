@@ -124,7 +124,6 @@ void MainWindow::pianoKeyReleased() {
         emit stopInstrument();
         break;
     case iTabPercussion:
-        emit stopPercussion();
         break;
     default:
         break;
