@@ -147,6 +147,116 @@ int PercussionTab::getSelectedPercussionIndex() {
 
 /*************************************************************************/
 
+void PercussionTab::on_buttonPercussionExport_clicked() {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+
+    if (curPercussion->isEmpty()) {
+        return;
+    }
+
+    // Ask for filename
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter("*.ttp");
+    dialog.setDefaultSuffix("ttp");
+    dialog.setViewMode(QFileDialog::Detail);
+    dialog.selectFile(curPercussion->name);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile saveFile(fileName);
+
+    // Export Percussion
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonObject insObject;
+    curPercussion->toJson(insObject);
+    QJsonDocument saveDoc(insObject);
+    saveFile.write(saveDoc.toJson());
+
+}
+
+/*************************************************************************/
+
+void PercussionTab::on_buttonPercussionImport_clicked() {
+    Track::Percussion *curPercussion = getSelectedPercussion();
+
+    // Ask if Percussion should really be overwritten
+    bool doImport = true;
+    if (!curPercussion->isEmpty()) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Import Percussion",
+                           "Do you really want to overwrite the current percussion?",
+                           QMessageBox::Yes | QMessageBox::No, this,
+                           Qt::FramelessWindowHint);
+        int reply = msgBox.exec();
+        if (reply != QMessageBox::Yes) {
+            doImport = false;
+        }
+    }
+    if (!doImport) {
+        return;
+    }
+
+    // Ask for filename
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("*.ttp");
+    dialog.setDefaultSuffix("ttp");
+    dialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile loadFile(fileName);
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
+
+    // Parse in data
+    if (!curPercussion->import(loadDoc.object())) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to parse percussion!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    // Update display
+    updatePercussionTab();
+    update();
+
+}
+
+/*************************************************************************/
+
 Track::Percussion *PercussionTab::getSelectedPercussion() {
     int iCurPercussion = getSelectedPercussionIndex();
     Track::Percussion *curPercussion = &(pTrack->percussion[iCurPercussion]);

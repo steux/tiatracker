@@ -36,7 +36,8 @@ signals:
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
 public slots:
-
+    void on_buttonPercussionExport_clicked();
+    void on_buttonPercussionImport_clicked();
     void on_buttonPercussionDelete_clicked();
 
     void on_spinBoxPercussionLength_editingFinished();
