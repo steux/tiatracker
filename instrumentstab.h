@@ -24,6 +24,7 @@ public:
 
     /* Returns the currently selected instrument from the instruments tab */
     int getSelectedInstrumentIndex();
+    Track::Instrument * getSelectedInstrument();
 
 signals:
     void setWaveform(TiaSound::Distortion dist);
@@ -52,7 +53,6 @@ public slots:
     void on_comboBoxInstruments_currentTextChanged(const QString &text);
 
 protected:
-    Track::Instrument * getSelectedInstrument();
 
 private:
     static const QList<TiaSound::Distortion> availableWaveforms;

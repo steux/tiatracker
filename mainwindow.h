@@ -48,6 +48,8 @@ public:
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);
     void stopInstrument();
+    void playPercussion(Track::Percussion *percussion);
+    void stopPercussion();
 
 private slots:
     // Set a new pitch guide for the piano keyboard

@@ -101,13 +101,16 @@ void MainWindow::newPianoKeyPressed(int frequency) {
     switch (ui->tabWidget->currentIndex()) {
     case iTabInstruments:
     {
-        int instrumentIndex = ui->tabInstruments->getSelectedInstrumentIndex();
-        Track::Instrument *instrument = &(pTrack->instruments[instrumentIndex]);
+        Track::Instrument *instrument = ui->tabInstruments->getSelectedInstrument();
         emit playInstrument(instrument, frequency);
         break;
     }
     case iTabPercussion:
+    {
+        Track::Percussion *percussion = ui->tabPercussion->getSelectedPercussion();
+        emit playPercussion(percussion);
         break;
+    }
     default:
         break;
     }
@@ -121,6 +124,7 @@ void MainWindow::pianoKeyReleased() {
         emit stopInstrument();
         break;
     case iTabPercussion:
+        emit stopPercussion();
         break;
     default:
         break;

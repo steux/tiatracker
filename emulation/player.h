@@ -37,6 +37,10 @@ public slots:
     /* Stop playing a note, i.e. send instrument into release */
     void stopInstrument();
 
+    /* Start and stop playing a percussion */
+    void playPercussion(Track::Percussion *percussion);
+    void stopPercussion();
+
     /* Start waveform */
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
@@ -60,9 +64,14 @@ private:
     int currentInstrumentFrequency;
     int currentInstrumentFrame;
 
+    /* Current values for percussion play */
+    Track::Percussion *currentPercussion;
+    int currentPercussionFrame;
+
     /* Helper methods for timerFired() */
     void updateSilence();
     void updateInstrument();
+    void updatePercussion();
 
     /* Set values for channel 0 */
     void setChannel0(int distortion, int frequency, int volume);

@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
     QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
     QObject::connect(pt, SIGNAL(playWaveform(TiaSound::Distortion,int,int)), &tiaPlayer, SLOT(playWaveform(TiaSound::Distortion,int,int)));
+    QObject::connect(&w, SIGNAL(playPercussion(Track::Percussion*)), &tiaPlayer, SLOT(playPercussion(Track::Percussion*)));
+    QObject::connect(&w, SIGNAL(stopPercussion()), &tiaPlayer, SLOT(stopPercussion()));
     pt->connectPlayer(&tiaPlayer);
     tiaPlayer.run();
 

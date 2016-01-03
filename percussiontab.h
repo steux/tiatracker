@@ -31,6 +31,7 @@ public:
 
     /* Returns the currently selected percussion from the percussions tab */
     int getSelectedPercussionIndex();
+    Track::Percussion * getSelectedPercussion();
 
 signals:
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
@@ -54,7 +55,6 @@ public slots:
     void newPercussionValue(int iFrame);
 
 protected:
-    Track::Percussion * getSelectedPercussion();
 
 private:
     Track::Track *pTrack = nullptr;
