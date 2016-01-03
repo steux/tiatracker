@@ -98,15 +98,33 @@ void MainWindow::setWaveform(TiaSound::Distortion dist) {
 /*************************************************************************/
 
 void MainWindow::newPianoKeyPressed(int frequency) {
-    int instrumentIndex = ui->tabInstruments->getSelectedInstrumentIndex();
-    Track::Instrument *instrument = &(pTrack->instruments[instrumentIndex]);
-    emit playInstrument(instrument, frequency);
+    switch (ui->tabWidget->currentIndex()) {
+    case iTabInstruments:
+    {
+        int instrumentIndex = ui->tabInstruments->getSelectedInstrumentIndex();
+        Track::Instrument *instrument = &(pTrack->instruments[instrumentIndex]);
+        emit playInstrument(instrument, frequency);
+        break;
+    }
+    case iTabPercussion:
+        break;
+    default:
+        break;
+    }
 }
 
 /*************************************************************************/
 
 void MainWindow::pianoKeyReleased() {
-    emit stopInstrument();
+    switch (ui->tabWidget->currentIndex()) {
+    case iTabInstruments:
+        emit stopInstrument();
+        break;
+    case iTabPercussion:
+        break;
+    default:
+        break;
+    }
 }
 
 /*************************************************************************/

@@ -197,10 +197,17 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *event)
         // White key
         keyIndex = calcKeyIndexForWhiteKey(event->x());
     }
-    if (keyInfo[keyIndex].isEnabled) {
+    if (usePitchGuide) {
+        if (keyInfo[keyIndex].isEnabled) {
+            isValidKeyPressed = true;
+            keyPressed = keyIndex;
+            emit newKeyPressed(keyInfo[keyIndex].frequency);
+            update();
+        }
+    } else {
         isValidKeyPressed = true;
         keyPressed = keyIndex;
-        emit newKeyPressed(keyInfo[keyIndex].frequency);
+        emit newKeyPressed(-1);
         update();
     }
 }
