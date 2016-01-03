@@ -161,9 +161,10 @@ void EnvelopeShaper::processMouseEvent(int x, int y) {
 }
 
 void EnvelopeShaper::mousePressEvent(QMouseEvent *event) {
-    isMouseDragging = true;
-    processMouseEvent(event->x(), event->y());
-
+    if (event->button() == Qt::LeftButton) {
+        isMouseDragging = true;
+        processMouseEvent(event->x(), event->y());
+    }
 }
 
 void EnvelopeShaper::mouseReleaseEvent(QMouseEvent *) {
@@ -176,6 +177,17 @@ void EnvelopeShaper::mouseReleaseEvent(QMouseEvent *) {
 void EnvelopeShaper::mouseMoveEvent(QMouseEvent *event) {
     if (isMouseDragging) {
         processMouseEvent(event->x(), event->y());
+    }
+}
+
+/*************************************************************************/
+
+void EnvelopeShaper::contextMenuEvent(QContextMenuEvent *event) {
+    int valueAreaHeight = widgetHeight - legendCellSize;
+    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+        int frame = (event->x() - legendCellSize)/cellWidth;
+        emit envelopeContextEvent(frame);
+        contextMenu->exec(event->globalPos());
     }
 }
 

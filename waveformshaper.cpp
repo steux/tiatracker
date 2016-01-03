@@ -104,10 +104,12 @@ void WaveformShaper::contextMenuEvent(QContextMenuEvent *event) {
 /*************************************************************************/
 
 void WaveformShaper::mousePressEvent(QMouseEvent *event) {
-    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
-       int column = (event->x() - legendCellSize)/cellWidth;
-       (*values)[column] = distortionPen;
-       update();
+    if (event->button() == Qt::LeftButton) {
+        if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+           int column = (event->x() - legendCellSize)/cellWidth;
+           (*values)[column] = distortionPen;
+           update();
+        }
     }
 }
 

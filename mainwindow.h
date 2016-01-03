@@ -9,6 +9,7 @@
 #include "emulation/player.h"
 
 #include <QList>
+#include <QMenu>
 
 
 namespace Ui {
@@ -74,6 +75,8 @@ private:
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuideFactory pgFactory;
     TiaSound::PitchGuide *pPitchGuide = pgFactory.getPitchPerfectPalGuide();
+
+    QMenu waveformContextMenu{this};
 };
 
 #endif // MAINWINDOW_H

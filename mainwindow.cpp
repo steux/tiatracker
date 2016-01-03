@@ -10,6 +10,7 @@
 #include "tiasound/pitchguidefactory.h"
 #include "tiasound/pitchguide.h"
 #include "tiasound/instrumentpitchguide.h"
+#include <QMenu>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -32,6 +33,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Context menu for envelope widgets
+    waveformContextMenu.addAction("Insert frame before");
+    waveformContextMenu.addAction("Insert frame after");
+    waveformContextMenu.addAction("Delete frame");
+    ui->volumeShaper->contextMenu = &waveformContextMenu;
+    ui->frequencyShaper->contextMenu = &waveformContextMenu;
 }
 
 /*************************************************************************/
@@ -59,6 +67,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->volumeShaper, &EnvelopeShaper::newMaxValue, ui->spinBoxInstrumentVolume, &QSpinBox::setValue);
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentIndexChanged(int)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentIndexChanged(int)));
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentTextChanged(QString)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentTextChanged(QString)));
+    QObject::connect(ui->volumeShaper, SIGNAL(envelopeContextEvent(int)), ui->tabInstruments, SLOT(waveformContextEvent(int)));
+    QObject::connect(ui->frequencyShaper, SIGNAL(envelopeContextEvent(int)), ui->tabInstruments, SLOT(waveformContextEvent(int)));
 
     // PercussionTab
     QObject::connect(ui->buttonPercussionDelete, &QPushButton::clicked, ui->tabPercussion, &PercussionTab::on_buttonPercussionDelete_clicked);
