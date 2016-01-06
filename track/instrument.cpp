@@ -292,7 +292,27 @@ void Instrument::insertFrameAfter(int frame) {
 /*************************************************************************/
 
 void Instrument::deleteFrame(int frame) {
+    if (envelopeLength == 2) {
+        return;
+    }
+    envelopeLength--;
 
+    // Correct sustain and release
+    if (frame < sustainStart) {
+        // in AD
+        sustainStart--;
+        releaseStart--;
+    } else if (frame < releaseStart) {
+        // in Sustain
+        releaseStart--;
+    }
+    if (releaseStart == sustainStart) {
+        sustainStart--;
+    }
+
+    // Delete frames
+    volumes.removeAt(frame);
+    frequencies.removeAt(frame);
 }
 
 /*************************************************************************/
