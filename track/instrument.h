@@ -59,6 +59,9 @@ public:
     QList<int> frequencies{0, 0};
 
 private:
+    /* Helper function for insert before/after */
+    void correctSustainReleaseForInsert(int frame);
+
     int envelopeLength = 2;
     int sustainStart = 0;
     int releaseStart = 1;
