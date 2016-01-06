@@ -34,10 +34,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Context menu for envelope widgets
-    waveformContextMenu.addAction("Insert frame before");
-    waveformContextMenu.addAction("Insert frame after");
-    waveformContextMenu.addAction("Delete frame");
+    // Context menu for envelope widgets    
+    waveformContextMenu.addAction(&actionInsertBefore);
+    waveformContextMenu.addAction(&actionInsertAfter);
+    waveformContextMenu.addAction(&actionDelete);
     ui->volumeShaper->contextMenu = &waveformContextMenu;
     ui->frequencyShaper->contextMenu = &waveformContextMenu;
 }
@@ -51,6 +51,11 @@ MainWindow::~MainWindow() {
 /*************************************************************************/
 
 void MainWindow::initConnections() {
+    // Shaper context menu
+    QObject::connect(&actionInsertBefore, SIGNAL(triggered(bool)), this, SLOT(insertFrameBefore(bool)));
+    QObject::connect(&actionInsertAfter, SIGNAL(triggered(bool)), this, SLOT(insertFrameAfter(bool)));
+    QObject::connect(&actionDelete, SIGNAL(triggered(bool)), this, SLOT(deleteFrame(bool)));
+
     // InstrumentsTab
     QObject::connect(ui->buttonInstrumentDelete, &QPushButton::clicked, ui->tabInstruments, &InstrumentsTab::on_buttonInstrumentDelete_clicked);
     QObject::connect(ui->buttonInstrumentExport, &QPushButton::clicked, ui->tabInstruments, &InstrumentsTab::on_buttonInstrumentExport_clicked);
@@ -67,8 +72,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->volumeShaper, &EnvelopeShaper::newMaxValue, ui->spinBoxInstrumentVolume, &QSpinBox::setValue);
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentIndexChanged(int)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentIndexChanged(int)));
     QObject::connect(ui->comboBoxInstruments, SIGNAL(currentTextChanged(QString)), ui->tabInstruments, SLOT(on_comboBoxInstruments_currentTextChanged(QString)));
-    QObject::connect(ui->volumeShaper, SIGNAL(envelopeContextEvent(int)), ui->tabInstruments, SLOT(waveformContextEvent(int)));
-    QObject::connect(ui->frequencyShaper, SIGNAL(envelopeContextEvent(int)), ui->tabInstruments, SLOT(waveformContextEvent(int)));
+    QObject::connect(ui->volumeShaper, SIGNAL(envelopeContextEvent(int)), this, SLOT(waveformContextEvent(int)));
+    QObject::connect(ui->frequencyShaper, SIGNAL(envelopeContextEvent(int)), this, SLOT(waveformContextEvent(int)));
 
     // PercussionTab
     QObject::connect(ui->buttonPercussionDelete, &QPushButton::clicked, ui->tabPercussion, &PercussionTab::on_buttonPercussionDelete_clicked);
@@ -151,4 +156,28 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
         ui->pianoKeyboard->setUsePitchGuide(false);
         break;
     }
+}
+
+/*************************************************************************/
+
+void MainWindow::waveformContextEvent(int frame) {
+    waveformContextFrame = frame;
+}
+
+/*************************************************************************/
+
+void MainWindow::insertFrameBefore(bool) {
+    std::cout << "Insert before " << waveformContextFrame << "\n"; std::cout.flush();
+}
+
+/*************************************************************************/
+
+void MainWindow::insertFrameAfter(bool) {
+
+}
+
+/*************************************************************************/
+
+void MainWindow::deleteFrame(bool) {
+
 }

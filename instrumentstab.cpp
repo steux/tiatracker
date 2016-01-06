@@ -426,7 +426,3 @@ void InstrumentsTab::on_comboBoxInstruments_currentTextChanged(const QString &te
 }
 
 /*************************************************************************/
-
-void InstrumentsTab::waveformContextEvent(int frame) {
-    std::cout << "Event at frame " << frame << "\n"; std::cout.flush();
-}

@@ -63,6 +63,13 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
 
+    // Signals for insert/delete context menu events for shapers
+    void waveformContextEvent(int frame);
+    void insertFrameBefore(bool);
+    void insertFrameAfter(bool);
+    void deleteFrame(bool);
+
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
@@ -77,6 +84,10 @@ private:
     TiaSound::PitchGuide *pPitchGuide = pgFactory.getPitchPerfectPalGuide();
 
     QMenu waveformContextMenu{this};
+    QAction actionInsertBefore{"Insert frame before", this};
+    QAction actionInsertAfter{"Insert frame after", this};
+    QAction actionDelete{"Delete frame", this};
+    int waveformContextFrame;
 };
 
 #endif // MAINWINDOW_H

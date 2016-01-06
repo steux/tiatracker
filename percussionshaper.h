@@ -12,7 +12,8 @@ class PercussionShaper : public QWidget
 {
     Q_OBJECT
 public:
-    // Frequency has 32 cells, +20 for legendCellSize
+    // Frequency has 32 cells, +20 for legendCellSize.
+    // More would be too high for some notebook displays
     static const int widgetHeight = 180;
 
     explicit PercussionShaper(QWidget *parent);

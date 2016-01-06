@@ -52,8 +52,6 @@ public slots:
     void on_comboBoxInstruments_currentIndexChanged(int);
     void on_comboBoxInstruments_currentTextChanged(const QString &text);
 
-    void waveformContextEvent(int frame);
-
 protected:
 
 private:
