@@ -215,6 +215,43 @@ int Instrument::getMaxVolume() {
 
 /*************************************************************************/
 
+void Instrument::insertFrameBefore(int frame) {
+    if (envelopeLength == maxEnvelopeLength) {
+        return;
+    }
+    envelopeLength++;
+
+    // Correct sustain and release ranges
+    if (frame < sustainStart) {
+        // in AD
+        sustainStart++;
+        releaseStart++;
+    } else if (frame < releaseStart) {
+        // in Sustain
+        releaseStart++;
+    }
+
+    // Interpolate volume
+    int volBefore = 0;
+    if (frame != 0) {
+        volBefore = volumes[frame - 1];
+    }
+    int volAfter = volumes[frame];
+    int newVol = int((volAfter + volBefore)/2 + 0.5);
+    volumes.insert(frame, newVol);
+
+    // Interpolate frequency
+    int freqBefore = 0;
+    if (frame != 0) {
+        freqBefore = frequencies[frame - 1];
+    }
+    int freqAfter = frequencies[frame];
+    int newFreq = int((freqAfter + freqBefore)/2 + 0.5);
+    frequencies.insert(frame, newFreq);
+}
+
+/*************************************************************************/
+
 int Instrument::getSustainStart() const {
     return sustainStart;
 }

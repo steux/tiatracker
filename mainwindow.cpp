@@ -167,7 +167,19 @@ void MainWindow::waveformContextEvent(int frame) {
 /*************************************************************************/
 
 void MainWindow::insertFrameBefore(bool) {
-    std::cout << "Insert before " << waveformContextFrame << "\n"; std::cout.flush();
+    switch (ui->tabWidget->currentIndex()) {
+    case iTabInstruments: {
+        Track::Instrument *ins = ui->tabInstruments->getSelectedInstrument();
+        ins->insertFrameBefore(waveformContextFrame);
+        ui->tabInstruments->updateInstrumentsTab();
+        ui->tabInstruments->update();
+        break;
+    }
+    case iTabPercussion:
+        break;
+    default:
+        break;
+    }
 }
 
 /*************************************************************************/
