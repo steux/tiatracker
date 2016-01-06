@@ -47,6 +47,8 @@ public:
 
     /* Insert a new frame before the specified */
     void insertFrameBefore(int frame);
+    void insertFrameAfter(int frame);
+    void deleteFrame(int frame);
 
     int getSustainStart() const;
     int getReleaseStart() const;

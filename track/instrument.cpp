@@ -237,7 +237,7 @@ void Instrument::insertFrameBefore(int frame) {
         volBefore = volumes[frame - 1];
     }
     int volAfter = volumes[frame];
-    int newVol = int((volAfter + volBefore)/2 + 0.5);
+    int newVol = int((volAfter + volBefore)/2);
     volumes.insert(frame, newVol);
 
     // Interpolate frequency
@@ -246,8 +246,53 @@ void Instrument::insertFrameBefore(int frame) {
         freqBefore = frequencies[frame - 1];
     }
     int freqAfter = frequencies[frame];
-    int newFreq = int((freqAfter + freqBefore)/2 + 0.5);
+    int newFreq = int((freqAfter + freqBefore)/2);
     frequencies.insert(frame, newFreq);
+}
+
+/*************************************************************************/
+
+void Instrument::insertFrameAfter(int frame) {
+    if (envelopeLength == maxEnvelopeLength) {
+        return;
+    }
+    envelopeLength++;
+
+    // Correct sustain and release ranges
+    if (frame < sustainStart) {
+        // in AD
+        sustainStart++;
+        releaseStart++;
+    } else if (frame < releaseStart) {
+        // in Sustain
+        releaseStart++;
+    }
+
+    // Interpolate volume
+    int volBefore = volumes[frame];
+    int volAfter = 0;
+    // -1 b/c we increased length already
+    if (frame + 1 != envelopeLength - 1) {
+        volAfter = volumes[frame + 1];
+    }
+    int newVol = int((volAfter + volBefore)/2);
+    volumes.insert(frame + 1, newVol);
+
+    // Interpolate frequency
+    int freqBefore = frequencies[frame];
+    int freqAfter = 0;
+    // -1 b/c we increased length already
+    if (frame + 1 != envelopeLength - 1) {
+        freqAfter = frequencies[frame + 1];
+    }
+    int newFreq = int((freqAfter + freqBefore)/2);
+    frequencies.insert(frame + 1, newFreq);
+}
+
+/*************************************************************************/
+
+void Instrument::deleteFrame(int frame) {
+
 }
 
 /*************************************************************************/

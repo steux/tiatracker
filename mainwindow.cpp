@@ -185,11 +185,35 @@ void MainWindow::insertFrameBefore(bool) {
 /*************************************************************************/
 
 void MainWindow::insertFrameAfter(bool) {
-
+    switch (ui->tabWidget->currentIndex()) {
+    case iTabInstruments: {
+        Track::Instrument *ins = ui->tabInstruments->getSelectedInstrument();
+        ins->insertFrameAfter(waveformContextFrame);
+        ui->tabInstruments->updateInstrumentsTab();
+        ui->tabInstruments->update();
+        break;
+    }
+    case iTabPercussion:
+        break;
+    default:
+        break;
+    }
 }
 
 /*************************************************************************/
 
 void MainWindow::deleteFrame(bool) {
-
+    switch (ui->tabWidget->currentIndex()) {
+    case iTabInstruments: {
+        Track::Instrument *ins = ui->tabInstruments->getSelectedInstrument();
+        ins->deleteFrame(waveformContextFrame);
+        ui->tabInstruments->updateInstrumentsTab();
+        ui->tabInstruments->update();
+        break;
+    }
+    case iTabPercussion:
+        break;
+    default:
+        break;
+    }
 }
