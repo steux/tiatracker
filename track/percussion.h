@@ -13,6 +13,8 @@ namespace Track {
 class Percussion
 {
 public:
+    static const int maxEnvelopeLength = 99;
+
     Percussion(QString name) : name(name) {}
 
     int getEnvelopeLength();
@@ -31,6 +33,11 @@ public:
 
     /* Get maximum volume over the whole envelope */
     int getMaxVolume();
+
+    /* Insert a new frame before the specified */
+    void insertFrameBefore(int frame);
+    void insertFrameAfter(int frame);
+    void deleteFrame(int frame);
 
     QString name;
     QList<int> volumes{0};

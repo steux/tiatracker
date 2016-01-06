@@ -40,6 +40,8 @@ MainWindow::MainWindow(QWidget *parent) :
     waveformContextMenu.addAction(&actionDelete);
     ui->volumeShaper->contextMenu = &waveformContextMenu;
     ui->frequencyShaper->contextMenu = &waveformContextMenu;
+    ui->percussionVolumeShaper->contextMenu = &waveformContextMenu;
+    ui->percussionFrequencyShaper->contextMenu = &waveformContextMenu;
 }
 
 /*************************************************************************/
@@ -89,6 +91,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->comboBoxPercussion, SIGNAL(currentTextChanged(QString)), ui->tabPercussion, SLOT(on_comboBoxPercussion_currentTextChanged(QString)));
     QObject::connect(ui->percussionVolumeShaper, SIGNAL(newPercussionValue(int)), ui->tabPercussion, SLOT(newPercussionValue(int)));
     QObject::connect(ui->percussionFrequencyShaper, SIGNAL(newPercussionValue(int)), ui->tabPercussion, SLOT(newPercussionValue(int)));
+    QObject::connect(ui->percussionVolumeShaper, SIGNAL(envelopeContextEvent(int)), this, SLOT(waveformContextEvent(int)));
+    QObject::connect(ui->percussionFrequencyShaper, SIGNAL(envelopeContextEvent(int)), this, SLOT(waveformContextEvent(int)));
 
     // PianoKeyboard
     QObject::connect(ui->tabInstruments, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));
@@ -175,8 +179,13 @@ void MainWindow::insertFrameBefore(bool) {
         ui->tabInstruments->update();
         break;
     }
-    case iTabPercussion:
+    case iTabPercussion: {
+        Track::Percussion *perc = ui->tabPercussion->getSelectedPercussion();
+        perc->insertFrameBefore(waveformContextFrame);
+        ui->tabPercussion->updatePercussionTab();
+        ui->tabPercussion->update();
         break;
+    }
     default:
         break;
     }
@@ -193,8 +202,13 @@ void MainWindow::insertFrameAfter(bool) {
         ui->tabInstruments->update();
         break;
     }
-    case iTabPercussion:
+    case iTabPercussion: {
+        Track::Percussion *perc = ui->tabPercussion->getSelectedPercussion();
+        perc->insertFrameAfter(waveformContextFrame);
+        ui->tabPercussion->updatePercussionTab();
+        ui->tabPercussion->update();
         break;
+    }
     default:
         break;
     }
@@ -211,8 +225,13 @@ void MainWindow::deleteFrame(bool) {
         ui->tabInstruments->update();
         break;
     }
-    case iTabPercussion:
+    case iTabPercussion: {
+        Track::Percussion *perc = ui->tabPercussion->getSelectedPercussion();
+        perc->deleteFrame(waveformContextFrame);
+        ui->tabPercussion->updatePercussionTab();
+        ui->tabPercussion->update();
         break;
+    }
     default:
         break;
     }

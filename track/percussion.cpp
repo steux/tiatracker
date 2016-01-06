@@ -179,4 +179,71 @@ int Percussion::getMaxVolume() {
 
 }
 
+/*************************************************************************/
+
+void Percussion::insertFrameBefore(int frame) {
+    if (envelopeLength == maxEnvelopeLength) {
+        return;
+    }
+    envelopeLength++;
+
+    // Interpolate
+    int volBefore = 0;
+    int freqBefore = frequencies[frame];
+    if (frame != 0) {
+        volBefore = volumes[frame - 1];
+        freqBefore = frequencies[frame - 1];
+    }
+    int volAfter = volumes[frame];
+    int newVol = int((volAfter + volBefore)/2);
+    int freqAfter = frequencies[frame];
+    int freqNew = int((freqAfter + freqBefore)/2);
+    TiaSound::Distortion distNew = waveforms[frame];
+
+    volumes.insert(frame, newVol);
+    frequencies.insert(frame, freqNew);
+    waveforms.insert(frame, distNew);
+}
+
+/*************************************************************************/
+
+void Percussion::insertFrameAfter(int frame) {
+    if (envelopeLength == maxEnvelopeLength) {
+        return;
+    }
+    envelopeLength++;
+
+    // Interpolate
+    int volBefore = volumes[frame];
+    int freqBefore = frequencies[frame];
+    int volAfter = 0;
+    int freqAfter = frequencies[frame];
+    // -1 b/c we increased length already
+    if (frame + 1 != envelopeLength - 1) {
+        volAfter = volumes[frame + 1];
+        freqAfter = frequencies[frame + 1];
+    }
+    int newVol = int((volAfter + volBefore)/2);
+    int newFreq = int((freqAfter + freqBefore)/2);
+    TiaSound::Distortion distNew = waveforms[frame];
+
+    volumes.insert(frame + 1, newVol);
+    frequencies.insert(frame + 1, newFreq);
+    waveforms.insert(frame, distNew);
+}
+
+/*************************************************************************/
+
+void Percussion::deleteFrame(int frame) {
+    if (envelopeLength == 1) {
+        return;
+    }
+    envelopeLength--;
+
+    // Delete frames
+    volumes.removeAt(frame);
+    frequencies.removeAt(frame);
+    waveforms.removeAt(frame);
+}
+
 }

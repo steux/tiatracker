@@ -179,6 +179,17 @@ void PercussionShaper::mouseMoveEvent(QMouseEvent *event) {
 
 /*************************************************************************/
 
+void PercussionShaper::contextMenuEvent(QContextMenuEvent *event) {
+    int valueAreaHeight = widgetHeight - legendCellSize;
+    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+        int frame = (event->x() - legendCellSize)/cellWidth;
+        emit envelopeContextEvent(frame);
+        contextMenu->exec(event->globalPos());
+    }
+}
+
+/*************************************************************************/
+
 int PercussionShaper::calcWidth() {
     int envelopeLength = 1;
     // During init, no instrument is registered yet

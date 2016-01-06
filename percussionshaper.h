@@ -5,6 +5,8 @@
 #include <QString>
 #include <QList>
 #include "track/track.h"
+#include <QMenu>
+
 
 /* GUI element for displaying and manipulating percussion frames.
  */
@@ -33,6 +35,8 @@ public:
     // Invert y axis
     bool isInverted = false;
 
+    QMenu *contextMenu = nullptr;
+
 signals:
     /* Gets emitted when a new value is set while dragging the mouse */
     void newPercussionValue(int iFrame);
@@ -40,6 +44,9 @@ signals:
     void silence();
     /* Gets emitted when the mouse is released */
     void newMaxValue(int newMax);
+
+    /* Gets emitted when a context menu is opened at a valid frame */
+    void envelopeContextEvent(int frame);
 
 public slots:
 
@@ -55,6 +62,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
+    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
     int calcWidth();
