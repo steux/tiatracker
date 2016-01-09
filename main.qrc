@@ -6,5 +6,10 @@
         <file>graphics/spin_down.png</file>
         <file>graphics/checkbox_checked.png</file>
         <file>graphics/checkbox_unchecked.png</file>
+        <file>graphics/play.png</file>
+        <file>graphics/stop.png</file>
+        <file>graphics/next.png</file>
+        <file>graphics/last.png</file>
+        <file>graphics/restart.png</file>
     </qresource>
 </RCC>
