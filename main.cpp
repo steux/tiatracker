@@ -12,6 +12,7 @@
 #include "track/track.h"
 #include "instrumentstab.h"
 #include "percussiontab.h"
+#include "tracktab.h"
 #include "emulation/player.h"
 #include <QThread>
 
@@ -46,6 +47,11 @@ int main(int argc, char *argv[])
     pt->registerTrack(&myTrack);
     pt->initPercussionTab();
     pt->updatePercussionTab();
+
+    TrackTab *tt = w.findChild<TrackTab *>("tabTrack");
+    tt->registerTrack(&myTrack);
+    tt->initTrackTab();
+//    tt->updateTrackTab();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

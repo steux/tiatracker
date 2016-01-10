@@ -20,7 +20,7 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tabTrack">
+      <widget class="TrackTab" name="tabTrack">
        <attribute name="title">
         <string>Track</string>
        </attribute>
@@ -168,6 +168,54 @@
               </item>
              </layout>
             </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignHCenter">
+         <widget class="QWidget" name="widget_14" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <widget class="QCheckBox" name="checkBox">
+             <property name="text">
+              <string>Mute channel 0</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>   </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkBox_2">
+             <property name="text">
+              <string>Mute channel 1</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget_10" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <item alignment="Qt::AlignRight|Qt::AlignVCenter">
+            <widget class="QWidget" name="widget_11" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <item>
+               <widget class="QWidget" name="trackInstrumentSelector" native="true"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_13" native="true"/>
+           </item>
+           <item>
+            <widget class="QWidget" name="widget_12" native="true"/>
            </item>
           </layout>
          </widget>
@@ -822,6 +870,12 @@
    <class>WaveformShaper</class>
    <extends>QWidget</extends>
    <header>waveformshaper.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TrackTab</class>
+   <extends>QWidget</extends>
+   <header>tracktab.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
