@@ -27,6 +27,12 @@
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
          <widget class="QWidget" name="widget_4" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item alignment="Qt::AlignRight">
             <widget class="QWidget" name="widget_8" native="true">
@@ -174,6 +180,12 @@
         </item>
         <item alignment="Qt::AlignHCenter">
          <widget class="QWidget" name="widget_14" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_11">
            <item>
             <widget class="QCheckBox" name="checkBox">
@@ -185,7 +197,7 @@
            <item>
             <widget class="QLabel" name="label_11">
              <property name="text">
-              <string>   </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -201,12 +213,25 @@
         </item>
         <item>
          <widget class="QWidget" name="widget_10" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item alignment="Qt::AlignRight|Qt::AlignVCenter">
             <widget class="QWidget" name="widget_11" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_12">
-              <item>
-               <widget class="QWidget" name="trackInstrumentSelector" native="true"/>
+              <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+               <widget class="InstrumentSelector" name="trackInstrumentSelector" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -222,6 +247,12 @@
         </item>
         <item>
          <widget class="QWidget" name="widget_5" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <spacer name="horizontalSpacer_7">
@@ -876,6 +907,12 @@
    <class>TrackTab</class>
    <extends>QWidget</extends>
    <header>tracktab.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>InstrumentSelector</class>
+   <extends>QWidget</extends>
+   <header>instrumentselector.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

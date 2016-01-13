@@ -94,12 +94,12 @@ void PercussionTab::updatePercussionTab() {
     lFramesUsed->setText(framesUsedString);
     // Number of percussion used
     QLabel *lPercussionUsed = findChild<QLabel *>("labelPercussionUsed");
-    int percussionUsed = pTrack->getNumPercussion();
+    int percussionUsed = pTrack->getNumUsedPercussion();
     QString percussionUsedString = "(" + QString::number(percussionUsed) + " of 15 used)";
     lPercussionUsed->setText(percussionUsedString);
     // Names
     QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
-    for (int perc = 0; perc < pTrack->getNumPercussion(); ++perc) {
+    for (int perc = 0; perc < pTrack->getNumUsedPercussion(); ++perc) {
         cbPercussion->setItemText(perc, pTrack->percussion[perc].name);
     }
 

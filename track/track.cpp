@@ -58,7 +58,7 @@ int Track::getNumUsedPercussionFrames() {
 
 /*************************************************************************/
 
-int Track::getNumInstruments() {
+int Track::getNumUsedInstruments() {
     int usedInstruments = 0;
     for (int i = 0; i < numInstruments; ++i) {
         if (!instruments[i].isEmpty()) {
@@ -73,7 +73,7 @@ int Track::getNumInstruments() {
 
 /*************************************************************************/
 
-int Track::getNumPercussion()
+int Track::getNumUsedPercussion()
 {
     int usedPercussion = 0;
     for (int i = 0; i < numPercussion; ++i) {

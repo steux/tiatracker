@@ -30,8 +30,8 @@ public:
     int getNumUsedEnvelopeFrames();
     int getNumUsedPercussionFrames();
 
-    int getNumInstruments();
-    int getNumPercussion();
+    int getNumUsedInstruments();
+    int getNumUsedPercussion();
 
     TiaSound::TvStandard getTvMode() const;
     void setTvMode(const TiaSound::TvStandard &value);

@@ -93,7 +93,7 @@ void InstrumentsTab::updateInstrumentsTab() {
     lWaveformsUsed->setText(framesUsedString);
     // Number of instruments used
     QLabel *lInstrumentsUsed = findChild<QLabel *>("labelInstrumentsUsed");
-    int instrumentsUsed = pTrack->getNumInstruments();
+    int instrumentsUsed = pTrack->getNumUsedInstruments();
     QString instrumentsUsedString;
     if (instrumentsUsed <= 7) {
         instrumentsUsedString = "(" + QString::number(instrumentsUsed) + " of 7 used)";
@@ -103,7 +103,7 @@ void InstrumentsTab::updateInstrumentsTab() {
     lInstrumentsUsed->setText(instrumentsUsedString);
     // Names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
-    for (int ins = 0; ins < pTrack->getNumInstruments(); ++ins) {
+    for (int ins = 0; ins < pTrack->getNumUsedInstruments(); ++ins) {
         cbInstruments->setItemText(ins, pTrack->instruments[ins].name);
     }
 
