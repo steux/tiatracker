@@ -27,19 +27,24 @@ protected:
 private:
     static const int horizontalMargin = 10;
     static const int verticalMargin = 10;
-    static const int buttonHorizontalMargin = 10;
+    static const int buttonHorizontalMargin = 6;
     static const int buttonVerticalMargin = 1;
     static const int insPercMargin = 8;
     static const int fontSize = 12;
-    static const int minSize = 100;
+    static const int minWidth = 120;
+
 
     Track::Track *pTrack = nullptr;
+
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
     QFont font{"Helvetica"};
     int widgetHeight;
     int fontHeight;
+    int buttonWidth;
     int buttonHeight;
 
+    int selected = 0;
 };
 
 #endif // INSTRUMENTSELECTOR_H

@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include <QPainter>
 #include <iostream>
+#include <QMouseEvent>
 
 
 InstrumentSelector::InstrumentSelector(QWidget *parent) : QWidget(parent)
@@ -27,19 +28,18 @@ void InstrumentSelector::registerTrack(Track::Track *newTrack) {
 /*************************************************************************/
 
 QSize InstrumentSelector::sizeHint() const {
-    return QSize(minSize, widgetHeight);
+    return QSize(minWidth, widgetHeight);
 }
 
 /*************************************************************************/
 
 void InstrumentSelector::paintEvent(QPaintEvent *) {
     QPainter painter(this);
-    int buttonWidth = width() - 2*horizontalMargin - 2*buttonHorizontalMargin;
+    buttonWidth = width() - 2*horizontalMargin - 2*buttonHorizontalMargin;
 
     painter.fillRect(0, 0, width(), height(), MainWindow::contentDark);
     // Buttons
     painter.setFont(font);
-    painter.setPen(MainWindow::contentDark);
     for (int i = 0; i < Track::Track::numInstruments + Track::Track::numPercussion; ++i) {
         int yPos = verticalMargin + i*buttonHeight + buttonVerticalMargin;
         QString insName;
@@ -51,14 +51,40 @@ void InstrumentSelector::paintEvent(QPaintEvent *) {
             // Instrument
             insName = QString::number(i + 1) + ": " + pTrack->instruments[i].name;
         }
-        painter.fillRect(horizontalMargin, yPos, width() - 2*horizontalMargin, fontHeight, MainWindow::light);
+        QColor colBack, colText;
+        if (i == selected) {
+            colBack = MainWindow::contentLighter;
+            colText = MainWindow::light;
+        } else {
+            colBack = MainWindow::light;
+            colText = MainWindow::contentLighter;
+        }
+        painter.fillRect(horizontalMargin, yPos, width() - 2*horizontalMargin, fontHeight, colBack);
+        painter.setPen(colText);
         painter.drawText(horizontalMargin + buttonHorizontalMargin,
                          yPos + buttonVerticalMargin,
                          buttonWidth,
                          fontHeight,
-                         Qt::AlignHCenter,
+                         Qt::AlignLeft,
                          insName
                          );
     }
+}
+
+/*************************************************************************/
+
+void InstrumentSelector::mousePressEvent(QMouseEvent *event) {
+    if (event->x() < horizontalMargin || event->x() > width() - horizontalMargin
+            || event->y() < verticalMargin || event->y() > widgetHeight - verticalMargin) {
+        return;
+    }
+
+    int buttonY = event->y() - verticalMargin;
+    if (buttonY > buttonHeight*Track::Track::numInstruments) {
+        buttonY -= insPercMargin;
+    }
+
+    selected = buttonY/buttonHeight;
+    update();
 }
 
