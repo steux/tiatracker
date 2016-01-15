@@ -3,14 +3,19 @@
 
 #include <QList>
 #include "pattern.h"
+#include "sequenceentry.h"
 
+
+namespace Track {
 
 class Sequence
 {
 public:
     Sequence();
 
-    QList<Pattern> patterns{};
+    QList<SequenceEntry> sequence{};
 };
+
+}
 
 #endif // SEQUENCE_H

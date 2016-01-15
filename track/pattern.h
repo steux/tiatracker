@@ -5,18 +5,20 @@
 #include <QList>
 #include "note.h"
 
+namespace Track {
 
 class Pattern
 {
 public:
     Pattern();
 
-    QString name;
+    Pattern(QString name) : name(name) {}
 
-    // Target of a following goto, or -1 of no goto
-    int gotoTarget = -1;
+    QString name;
 
     QList<Note> notes;
 };
+
+}
 
 #endif // PATTERN_H

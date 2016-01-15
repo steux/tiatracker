@@ -7,6 +7,9 @@
 #include <QList>
 #include <QMutex>
 #include "tiasound/tiasound.h"
+#include "pattern.h"
+#include "sequence.h"
+
 
 namespace Track {
 
@@ -45,6 +48,8 @@ public:
         {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };
 
+    QList<Pattern> patterns{};
+    QList<Sequence> channelSequences{{}, {}};
 
 private:
     QMutex mutex;
