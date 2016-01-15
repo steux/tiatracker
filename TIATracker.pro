@@ -32,7 +32,10 @@ SOURCES += main.cpp\
     percussionshaper.cpp \
     waveformshaper.cpp \
     tracktab.cpp \
-    instrumentselector.cpp
+    instrumentselector.cpp \
+    track/note.cpp \
+    track/pattern.cpp \
+    track/sequence.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -54,7 +57,10 @@ HEADERS  += mainwindow.h \
     percussionshaper.h \
     waveformshaper.h \
     tracktab.h \
-    instrumentselector.h
+    instrumentselector.h \
+    track/note.h \
+    track/pattern.h \
+    track/sequence.h
 
 FORMS    += mainwindow.ui
 
