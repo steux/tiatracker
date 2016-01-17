@@ -31,7 +31,7 @@ private:
     static const int buttonVerticalMargin = 1;
     static const int insPercMargin = 8;
     static const int fontSize = 12;
-    static const int minWidth = 120;
+    static const int minWidth = 176;
 
 
     Track::Track *pTrack = nullptr;
