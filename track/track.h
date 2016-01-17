@@ -36,6 +36,9 @@ public:
     int getNumUsedInstruments();
     int getNumUsedPercussion();
 
+    /* Sets "firstNoteNumber" values of all sequence entries */
+    void updateFirstNoteNumbers();
+
     TiaSound::TvStandard getTvMode() const;
     void setTvMode(const TiaSound::TvStandard &value);
 

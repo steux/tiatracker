@@ -36,7 +36,9 @@ SOURCES += main.cpp\
     track/note.cpp \
     track/pattern.cpp \
     track/sequence.cpp \
-    track/sequenceentry.cpp
+    track/sequenceentry.cpp \
+    patterneditor.cpp \
+    timeline.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -62,7 +64,10 @@ HEADERS  += mainwindow.h \
     track/note.h \
     track/pattern.h \
     track/sequence.h \
-    track/sequenceentry.h
+    track/sequenceentry.h \
+    patterneditor.h \
+    timeline.h
+
 
 FORMS    += mainwindow.ui
 

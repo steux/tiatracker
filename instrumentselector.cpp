@@ -37,7 +37,7 @@ void InstrumentSelector::paintEvent(QPaintEvent *) {
     QPainter painter(this);
     buttonWidth = width() - 2*horizontalMargin - 2*buttonHorizontalMargin;
 
-    painter.fillRect(0, 0, width(), height(), MainWindow::contentDark);
+    painter.fillRect(0, 0, width(), height(), MainWindow::dark);
     // Buttons
     painter.setFont(font);
     for (int i = 0; i < Track::Track::numInstruments + Track::Track::numPercussion; ++i) {
@@ -52,12 +52,12 @@ void InstrumentSelector::paintEvent(QPaintEvent *) {
             insName = QString::number(i + 1) + ": " + pTrack->instruments[i].name;
         }
         QColor colBack, colText;
-        if (i == selected) {
+        if (i != selected) {
             colBack = MainWindow::contentLighter;
             colText = MainWindow::light;
         } else {
             colBack = MainWindow::light;
-            colText = MainWindow::contentLighter;
+            colText = MainWindow::contentDarker;
         }
         painter.fillRect(horizontalMargin, yPos, width() - 2*horizontalMargin, fontHeight, colBack);
         painter.setPen(colText);

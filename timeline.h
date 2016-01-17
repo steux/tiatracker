@@ -13,13 +13,22 @@ public:
 
     void registerTrack(Track::Track *newTrack);
 
+    QSize sizeHint() const;
+
 signals:
 
 public slots:
 
+protected:
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+
 private:
-    static const int channelWidth = 50;
+    static const int channelWidth = 80;
     static const int channelMargin = 8;
+    static const int channelGap = 8;
+    static const int minHeight = 400;
+
+    int widgetWidth;
 
     Track::Track *pTrack = nullptr;
 };

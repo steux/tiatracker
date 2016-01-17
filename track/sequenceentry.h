@@ -12,6 +12,9 @@ public:
 
     int patternIndex;
     int gotoTarget = -1;
+
+    // The note number from the track of the first note of this pattern
+    int firstNoteNumber;
 };
 
 }

@@ -1,5 +1,8 @@
 #include "track.h"
 #include <QString>
+#include "sequenceentry.h"
+#include <iostream>
+
 
 namespace Track {
 
@@ -82,6 +85,19 @@ int Track::getNumUsedPercussion()
         }
     }
     return usedPercussion;
+}
+
+/*************************************************************************/
+
+void Track::updateFirstNoteNumbers() {
+    for (int channel = 0; channel < 2; ++channel) {
+        int noteNumber = 0;
+        for (int entry = 0; entry < channelSequences[channel].sequence.size(); ++entry) {
+            channelSequences[channel].sequence[entry].firstNoteNumber = noteNumber;
+            int iPattern = channelSequences[channel].sequence[entry].patternIndex;
+            noteNumber += patterns[iPattern].notes.size();
+        }
+    }
 }
 
 /*************************************************************************/

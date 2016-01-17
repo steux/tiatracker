@@ -21,6 +21,12 @@
        <number>0</number>
       </property>
       <widget class="TrackTab" name="tabTrack">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <attribute name="title">
         <string>Track</string>
        </attribute>
@@ -189,8 +195,14 @@
           <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item alignment="Qt::AlignRight|Qt::AlignVCenter">
             <widget class="QWidget" name="widget_11" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <layout class="QHBoxLayout" name="horizontalLayout_12">
-              <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+              <item alignment="Qt::AlignHCenter">
                <widget class="InstrumentSelector" name="trackInstrumentSelector" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -206,8 +218,27 @@
            <item>
             <widget class="QWidget" name="widget_13" native="true"/>
            </item>
-           <item>
-            <widget class="QWidget" name="widget_12" native="true"/>
+           <item alignment="Qt::AlignLeft">
+            <widget class="QWidget" name="widget_12" native="true">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="Timeline" name="trackTimeline" native="true">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -880,6 +911,12 @@
    <class>InstrumentSelector</class>
    <extends>QWidget</extends>
    <header>instrumentselector.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Timeline</class>
+   <extends>QWidget</extends>
+   <header>timeline.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
