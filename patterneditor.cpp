@@ -2,6 +2,10 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include "mainwindow.h"
+#include "track/pattern.h"
+#include "track/sequence.h"
+#include "track/sequenceentry.h"
+#include "track/note.h"
 
 
 PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
@@ -59,6 +63,14 @@ void PatternEditor::paintEvent(QPaintEvent *) {
         numRows--;
     }
     int topMargin = (height() - numRows*noteFontHeight)/2;
-    //for (int row = )
+    int curPatternIndex = -1;
+    Pattern *curPattern = nullptr;
+    for (int row = editPos - numRows/2; row <= editPos + numRows/2; ++row) {
+        if (row < 0) {
+            break;
+        }
+        // TODO
+
+    }
 }
 
