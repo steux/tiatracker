@@ -5,6 +5,7 @@
 #include <iostream>
 #include "instrumentselector.h"
 #include "timeline.h"
+#include "patterneditor.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -27,6 +28,8 @@ void TrackTab::initTrackTab() {
     insSel->registerTrack(pTrack);
     Timeline *timeline = findChild<Timeline *>("trackTimeline");
     timeline->registerTrack(pTrack);
+    PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
+    editor->registerTrack(pTrack);
 }
 
 /*************************************************************************/

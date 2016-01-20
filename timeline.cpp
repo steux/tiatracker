@@ -10,16 +10,14 @@
 
 Timeline::Timeline(QWidget *parent) : QWidget(parent)
 {
-    setFixedWidth(2*channelWidth + channelMargin);
+    widgetWidth = 2*channelMargin + 2*channelWidth + channelGap;
+    setFixedWidth(widgetWidth);
 }
 
 /*************************************************************************/
 
 void Timeline::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
-
-    widgetWidth = 2*channelMargin + 2*channelWidth + channelGap;
-    setFixedWidth(widgetWidth);
 }
 
 /*************************************************************************/

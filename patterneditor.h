@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "track/track.h"
+#include <QFontDatabase>
 
 
 class PatternEditor : public QWidget
@@ -14,20 +15,32 @@ public:
 
     void registerTrack(Track::Track *newTrack);
 
+    QSize sizeHint() const;
+
 signals:
 
 public slots:
 
+protected:
+    void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+
 private:
-    static const int trackFontSize = 12;
+    static const int noteFontSize = 12;
     static const int legendFontSize = 12;
 
-    int trackFontHeight;
-    int trackAreaWidth;
+    static const int noteMargin = 4;
+    static const int patternNameWidth = 100;
+    static const int patternNameMargin = 4;
+    static const int minHeight = 400;
 
+    int noteFontHeight;
+    int noteAreaWidth;
+    int timeAreaWidth;
+    int widgetWidth;
+
+    QFont noteFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
     QFont legendFont{"Helvetica"};
     int legendFontHeight;
-    int patternNameWidth;
     int timelineWidth;
 
     Track::Track *pTrack;
