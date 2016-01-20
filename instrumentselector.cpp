@@ -17,6 +17,7 @@ InstrumentSelector::InstrumentSelector(QWidget *parent) : QWidget(parent)
             + buttonHeight*Track::Track::numPercussion
             + insPercMargin;
     setFixedHeight(widgetHeight);
+    setFixedWidth(minWidth);
 }
 
 /*************************************************************************/

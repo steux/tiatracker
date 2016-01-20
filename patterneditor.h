@@ -29,7 +29,7 @@ private:
     static const int legendFontSize = 12;
 
     static const int noteMargin = 4;
-    static const int patternNameWidth = 100;
+    static const int patternNameWidth = 120;
     static const int patternNameMargin = 4;
     static const int minHeight = 400;
 

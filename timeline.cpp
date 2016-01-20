@@ -57,7 +57,7 @@ void Timeline::paintEvent(QPaintEvent *) {
             } else {
                 col = MainWindow::contentLight;
             }
-            painter.fillRect(xPos, patternTop, channelWidth, patternHeight, col);
+            painter.fillRect(xPos, patternTop, channelWidth, patternHeight + 1, col);
         }
         xPos += channelWidth + channelGap;
     }

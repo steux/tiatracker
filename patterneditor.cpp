@@ -48,6 +48,17 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, 0, noteAreaWidth, height(), MainWindow::dark);
     // Time area
     painter.fillRect(patternNameWidth + noteAreaWidth, 0, timeAreaWidth, height(), MainWindow::lightHighlighted);
+    // Current highlights
+    int highlightY = height()/2 - noteFontHeight/2;
+    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
+    painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
 
+    // Draw rows
+    int numRows = height()/noteFontHeight;
+    if (numRows%2 == 0) {
+        numRows--;
+    }
+    int topMargin = (height() - numRows*noteFontHeight)/2;
+    //for (int row = )
 }
 
