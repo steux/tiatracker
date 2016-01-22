@@ -41,6 +41,40 @@ QSize PatternEditor::sizeHint() const {
 
 /*************************************************************************/
 
+void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows) {
+    // Calc first note/pattern
+    int firstNoteIndex = max(0, editPos - numRows/2);
+    int curEntryIndex = 0;
+    Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+    Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);
+    while (firstNoteIndex > curEntry->firstNoteNumber + curPattern->notes.size()) {
+        curEntryIndex++;
+        Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+        Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);
+    }
+    int curPatternNoteIndex = editPos - curEntry->firstNoteNumber;
+
+    // Draw rows
+    painter->setFont(noteFont);
+    painter->setPen(MainWindow::blue);
+    for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
+        int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
+        painter->drawText(xPos, yPos, noteAreaWidth, noteFontHeight, Qt::AlignCenter, QString::number(curPatternNoteIndex));
+        // Advance note
+        curPatternNoteIndex++;
+        if (curPatternNoteIndex == curPattern->notes.size()) {
+            curEntryIndex++;
+            if (curEntryIndex == pTrack->channelSequences[channel].sequence.size()) {
+                // End of track reached; stop drawing
+                break;
+            }
+            curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+            curPattern = &(pTrack->patterns[curEntry->patternIndex]);
+            curPatternNoteIndex = 0;
+        }
+    }
+}
+
 void PatternEditor::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
@@ -57,20 +91,16 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
     painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
 
-    // Draw rows
+    // Calc number of visible rows
     int numRows = height()/noteFontHeight;
     if (numRows%2 == 0) {
         numRows--;
     }
     int topMargin = (height() - numRows*noteFontHeight)/2;
-    int curPatternIndex = -1;
-    Pattern *curPattern = nullptr;
-    for (int row = editPos - numRows/2; row <= editPos + numRows/2; ++row) {
-        if (row < 0) {
-            break;
-        }
-        // TODO
 
-    }
+    // Paint channels
+    paintChannel(&painter, 0, patternNameWidth, topMargin, numRows);
+    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth, topMargin, numRows);
+
 }
 
