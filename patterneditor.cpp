@@ -52,14 +52,38 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
         Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);
     }
-    int curPatternNoteIndex = editPos - curEntry->firstNoteNumber;
+    int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
 
     // Draw rows
     painter->setFont(noteFont);
     painter->setPen(MainWindow::blue);
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
-        painter->drawText(xPos, yPos, noteAreaWidth, noteFontHeight, Qt::AlignCenter, QString::number(curPatternNoteIndex));
+        QString rowText = QString::number(curPatternNoteIndex);
+        if (curPatternNoteIndex < 10) {
+            rowText.prepend("  ");
+        } else if (curPatternNoteIndex < 100) {
+            rowText.prepend(" ");
+        }
+        switch (curPattern->notes[curPatternNoteIndex].type) {
+        case Track::Note::instrumentType::Hold:
+            rowText.append(": ||| ");
+            break;
+        case Track::Note::instrumentType::Pause:
+            rowText.append(": --- ");
+            break;
+        case Track::Note::instrumentType::Percussion:
+            rowText.append(": Pxx ");
+            break;
+        case Track::Note::instrumentType::Instrument:
+            rowText.append(": I x ");
+            break;
+        default:
+            rowText.append(": ??? ");
+            break;
+        }
+
+        painter->drawText(xPos, yPos, noteAreaWidth, noteFontHeight, Qt::AlignLeft, rowText);
         // Advance note
         curPatternNoteIndex++;
         if (curPatternNoteIndex == curPattern->notes.size()) {
