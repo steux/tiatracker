@@ -28,7 +28,7 @@ private:
     static const int noteFontSize = 12;
     static const int legendFontSize = 12;
 
-    static const int noteMargin = 4;
+    static const int noteMargin = 6;
     static const int patternNameWidth = 120;
     static const int patternNameMargin = 4;
     static const int minHeight = 400;
@@ -48,7 +48,7 @@ private:
     Track::Track *pTrack;
 
     // Current editor note focus, i.e. middle-of-screen highlight
-    int editPos = 0;
+    int editPos = 16;
 };
 
 #endif // PATTERNEDITOR_H

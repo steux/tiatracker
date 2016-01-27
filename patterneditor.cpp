@@ -16,7 +16,7 @@ PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
     timeAreaWidth = legendFontMetrics.width("99:99");
 
     noteFont.setPixelSize(noteFontSize);
-    QFontMetrics noteFontMetrics(legendFont);
+    QFontMetrics noteFontMetrics(noteFont);
     noteFontHeight = noteFontMetrics.height();
     noteAreaWidth = noteFontMetrics.width("000: P15 C#4 31")
             + 2*noteMargin;
@@ -67,17 +67,28 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         }
         switch (curPattern->notes[curPatternNoteIndex].type) {
         case Track::Note::instrumentType::Hold:
-            rowText.append(": ||| ");
+            rowText.append(":  |   |");
             break;
         case Track::Note::instrumentType::Pause:
             rowText.append(": --- ");
             break;
-        case Track::Note::instrumentType::Percussion:
-            rowText.append(": Pxx ");
+        case Track::Note::instrumentType::Percussion: {
+            int percNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+            if (percNum < 10) {
+                rowText.append(": P ");
+            } else {
+                rowText.append(": P");
+            }
+            rowText.append(QString::number(percNum));
             break;
-        case Track::Note::instrumentType::Instrument:
-            rowText.append(": I x ");
+        }
+        case Track::Note::instrumentType::Instrument: {
+            int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+            rowText.append(": I ");
+            rowText.append(QString::number(insNum));
+            rowText.append(" C#4 19");
             break;
+        }
         default:
             rowText.append(": ??? ");
             break;
@@ -123,8 +134,8 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     int topMargin = (height() - numRows*noteFontHeight)/2;
 
     // Paint channels
-    paintChannel(&painter, 0, patternNameWidth, topMargin, numRows);
-    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth, topMargin, numRows);
+    paintChannel(&painter, 0, patternNameWidth + noteMargin, topMargin, numRows);
+    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth + noteMargin, topMargin, numRows);
 
 }
 
