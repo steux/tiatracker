@@ -33,7 +33,7 @@ private:
     static const int patternNameMargin = 4;
     static const int minHeight = 400;
 
-    void paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows);
+    void paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos);
 
     int noteFontHeight;
     int noteAreaWidth;
@@ -48,7 +48,7 @@ private:
     Track::Track *pTrack;
 
     // Current editor note focus, i.e. middle-of-screen highlight
-    int editPos = 16;
+    int editPos = 0;
 };
 
 #endif // PATTERNEDITOR_H

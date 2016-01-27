@@ -41,7 +41,7 @@ QSize PatternEditor::sizeHint() const {
 
 /*************************************************************************/
 
-void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows) {
+void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos) {
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
     int curEntryIndex = 0;
@@ -55,8 +55,6 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
 
     // Draw rows
-    painter->setFont(noteFont);
-    painter->setPen(MainWindow::blue);
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
         QString rowText = QString::number(curPatternNoteIndex);
@@ -94,7 +92,23 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             break;
         }
 
-        painter->drawText(xPos, yPos, noteAreaWidth, noteFontHeight, Qt::AlignLeft, rowText);
+        painter->setFont(noteFont);
+        painter->setPen(MainWindow::blue);
+        painter->drawText(xPos, yPos, noteAreaWidth - 2*noteMargin, noteFontHeight, Qt::AlignLeft, rowText);
+        // Draw pattern name and pattern separator?
+        if (curPatternNoteIndex == 0) {
+            painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, 1, MainWindow::contentDarker);
+            painter->setFont(legendFont);
+            painter->setPen(MainWindow::contentDarker);
+            int alignment;
+            if (channel == 0) {
+                alignment = Qt::AlignRight;
+            } else {
+                alignment = Qt::AlignLeft;
+            }
+            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, curPattern->name);
+        }
+
         // Advance note
         curPatternNoteIndex++;
         if (curPatternNoteIndex == curPattern->notes.size()) {
@@ -134,8 +148,8 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     int topMargin = (height() - numRows*noteFontHeight)/2;
 
     // Paint channels
-    paintChannel(&painter, 0, patternNameWidth + noteMargin, topMargin, numRows);
-    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth + noteMargin, topMargin, numRows);
+    paintChannel(&painter, 0, patternNameWidth + noteMargin, topMargin, numRows, patternNameMargin);
+    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth + noteMargin, topMargin, numRows, width() - patternNameWidth + patternNameMargin);
 
 }
 
