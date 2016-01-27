@@ -45,12 +45,12 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
     int curEntryIndex = 0;
-    Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+    Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[0]);
     Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);
-    while (firstNoteIndex > curEntry->firstNoteNumber + curPattern->notes.size()) {
+    while (firstNoteIndex >= curEntry->firstNoteNumber + curPattern->notes.size()) {
         curEntryIndex++;
-        Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
-        Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);
+        curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+        curPattern = &(pTrack->patterns[curEntry->patternIndex]);
     }
     int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
 

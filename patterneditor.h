@@ -48,7 +48,7 @@ private:
     Track::Track *pTrack;
 
     // Current editor note focus, i.e. middle-of-screen highlight
-    int editPos = 12;
+    int editPos = 0;
 };
 
 #endif // PATTERNEDITOR_H
