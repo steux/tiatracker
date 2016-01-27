@@ -22,7 +22,7 @@ PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
     noteFont.setPixelSize(noteFontSize);
     QFontMetrics noteFontMetrics(noteFont);
     noteFontHeight = noteFontMetrics.height();
-    noteAreaWidth = noteFontMetrics.width("000: P15 C#4 31")
+    noteAreaWidth = noteFontMetrics.width("000: C#4 I7 31")
             + 2*noteMargin;
 
     widgetWidth = 2*patternNameWidth
@@ -68,6 +68,11 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     // Draw rows
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
+        // First row in beat?
+        if (row%rowsPerBeat == 0 && (channel != 0 || row != editPos)) {
+            painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
+        }
+        // Construct row string
         QString rowText = QString::number(curPatternNoteIndex);
         if (curPatternNoteIndex < 10) {
             rowText.prepend("  ");
@@ -76,35 +81,38 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         }
         switch (curPattern->notes[curPatternNoteIndex].type) {
         case Track::Note::instrumentType::Hold:
-            rowText.append(":  |   |");
+            rowText.append(":    |");
             break;
         case Track::Note::instrumentType::Pause:
-            rowText.append(": --- ");
+            rowText.append(":   ---");
             break;
         case Track::Note::instrumentType::Percussion: {
             int percNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
             if (percNum < 10) {
-                rowText.append(": P ");
+                rowText.append(":   P ");
             } else {
-                rowText.append(": P");
+                rowText.append(":   P");
             }
             rowText.append(QString::number(percNum));
             break;
         }
         case Track::Note::instrumentType::Instrument: {
             int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
-            rowText.append(": I ");
-            rowText.append(QString::number(insNum));
+            // Pitch
+            int frequency = curPattern->notes[curPatternNoteIndex].value;
             TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
             TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
-            int frequency = curPattern->notes[curPatternNoteIndex].value;
             TiaSound::Note note = pIPG->getNote(frequency);
             if (note == TiaSound::Note::NotANote) {
-                rowText.append(" ???");
+                rowText.append(": ???");
             } else {
-                rowText.append(" ");
+                rowText.append(": ");
                 rowText.append(TiaSound::getNoteNameWithOctaveFixedWidth(note));
             }
+            // Instrument number
+            rowText.append(" I");
+            rowText.append(QString::number(insNum));
+            // Frequency
             if (frequency < 10) {
                 rowText.append("  ");
             } else {
@@ -174,8 +182,8 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(patternNameWidth + noteAreaWidth, 0, timeAreaWidth, height(), MainWindow::lightHighlighted);
     // Current highlights
     int highlightY = height()/2 - noteFontHeight/2;
-    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
-    painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
+    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::lightHighlighted);
+    //painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
 
     // Calc number of visible rows
     int numRows = height()/noteFontHeight;
