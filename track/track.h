@@ -36,6 +36,8 @@ public:
     int getNumUsedInstruments();
     int getNumUsedPercussion();
 
+    int getNumRows();
+
     /* Sets "firstNoteNumber" values of all sequence entries */
     void updateFirstNoteNumbers();
 

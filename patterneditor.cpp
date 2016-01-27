@@ -10,6 +10,7 @@
 #include "tiasound/pitchguide.h"
 #include "tiasound/instrumentpitchguide.h"
 #include "tiasound/tiasound.h"
+#include <QWheelEvent>
 
 
 PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
@@ -73,7 +74,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
         }
         // Construct row string
-        QString rowText = QString::number(curPatternNoteIndex);
+        QString rowText = QString::number(curPatternNoteIndex + 1);
         if (curPatternNoteIndex < 10) {
             rowText.prepend("  ");
         } else if (curPatternNoteIndex < 100) {
@@ -182,7 +183,7 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(patternNameWidth + noteAreaWidth, 0, timeAreaWidth, height(), MainWindow::lightHighlighted);
     // Current highlights
     int highlightY = height()/2 - noteFontHeight/2;
-    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::lightHighlighted);
+    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::light);
     //painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
 
     // Calc number of visible rows
@@ -198,3 +199,15 @@ void PatternEditor::paintEvent(QPaintEvent *) {
 
 }
 
+/*************************************************************************/
+
+void PatternEditor::wheelEvent(QWheelEvent *event) {
+    editPos -= event->delta()/100;
+    if (editPos < 0) {
+        editPos = 0;
+    }
+    if (editPos >= pTrack->getNumRows()) {
+        editPos = pTrack->getNumRows() - 1;
+    }
+    update();
+}

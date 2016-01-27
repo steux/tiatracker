@@ -25,6 +25,7 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *) Q_DECL_OVERRIDE;
 
 private:
     static const int noteFontSize = 12;
