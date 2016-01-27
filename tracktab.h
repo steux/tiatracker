@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QWidget>
 #include "track/track.h"
+#include "tiasound/pitchguidefactory.h"
+#include "tiasound/pitchguide.h"
+#include "tiasound/instrumentpitchguide.h"
 
 class TrackTab : public QWidget
 {
@@ -12,6 +15,7 @@ public:
     explicit TrackTab(QWidget *parent = 0);
 
     void registerTrack(Track::Track *newTrack);
+    void registerPitchGuide(TiaSound::PitchGuide *newGuide);
 
     /* Initializes the GUI components. Must be called once during init. */
     void initTrackTab();
@@ -25,6 +29,7 @@ public slots:
 
 private:
     Track::Track *pTrack = nullptr;
+    TiaSound::PitchGuide *pPitchGuide;
 
 };
 

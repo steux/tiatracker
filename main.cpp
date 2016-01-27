@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
 
     TrackTab *tt = w.findChild<TrackTab *>("tabTrack");
     tt->registerTrack(&myTrack);
+    tt->registerPitchGuide(w.getPitchGuide());
     tt->initTrackTab();
 //    tt->updateTrackTab();
 

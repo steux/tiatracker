@@ -46,6 +46,9 @@ public:
 
     void registerTrack(Track::Track *newTrack);
 
+    /* Get current pitch guide */
+    TiaSound::PitchGuide *getPitchGuide();
+
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);
     void stopInstrument();

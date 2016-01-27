@@ -6,6 +6,10 @@
 #include "track/sequence.h"
 #include "track/sequenceentry.h"
 #include "track/note.h"
+#include "tiasound/pitchguidefactory.h"
+#include "tiasound/pitchguide.h"
+#include "tiasound/instrumentpitchguide.h"
+#include "tiasound/tiasound.h"
 
 
 PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
@@ -13,7 +17,7 @@ PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
     legendFont.setPixelSize(legendFontSize);
     QFontMetrics legendFontMetrics(legendFont);
     legendFontHeight = legendFontMetrics.height();
-    timeAreaWidth = legendFontMetrics.width("99:99");
+    timeAreaWidth = legendFontMetrics.width("000:00");
 
     noteFont.setPixelSize(noteFontSize);
     QFontMetrics noteFontMetrics(noteFont);
@@ -31,6 +35,12 @@ PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
 
 void PatternEditor::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
+}
+
+/*************************************************************************/
+
+void PatternEditor::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
+    pPitchGuide = newGuide;
 }
 
 /*************************************************************************/
@@ -53,6 +63,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         curPattern = &(pTrack->patterns[curEntry->patternIndex]);
     }
     int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
+    int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
 
     // Draw rows
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
@@ -84,7 +95,22 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
             rowText.append(": I ");
             rowText.append(QString::number(insNum));
-            rowText.append(" C#4 19");
+            TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
+            TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
+            int frequency = curPattern->notes[curPatternNoteIndex].value;
+            TiaSound::Note note = pIPG->getNote(frequency);
+            if (note == TiaSound::Note::NotANote) {
+                rowText.append(" ???");
+            } else {
+                rowText.append(" ");
+                rowText.append(TiaSound::getNoteNameWithOctaveFixedWidth(note));
+            }
+            if (frequency < 10) {
+                rowText.append("  ");
+            } else {
+                rowText.append(" ");
+            }
+            rowText.append(QString::number(frequency));
             break;
         }
         default:
@@ -100,13 +126,24 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, 1, MainWindow::contentDarker);
             painter->setFont(legendFont);
             painter->setPen(MainWindow::contentDarker);
-            int alignment;
-            if (channel == 0) {
-                alignment = Qt::AlignRight;
-            } else {
-                alignment = Qt::AlignLeft;
-            }
+            int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
             painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, curPattern->name);
+        }
+        // Draw timestamp?
+        long numTick = row*pTrack->speed;
+        if (channel == 0 && numTick%ticksPerSecond < pTrack->speed) {
+            int minute = numTick/(ticksPerSecond*60);
+            int second = numTick/ticksPerSecond;
+            QString timestampText = QString::number(minute);
+            if (second < 10) {
+                timestampText.append(":0");
+            } else {
+                timestampText.append(":");
+            }
+            timestampText.append(QString::number(second));
+            painter->setFont(legendFont);
+            painter->setPen(MainWindow::contentDarker);
+            painter->drawText(patternNameWidth + noteAreaWidth, yPos, timeAreaWidth, legendFontHeight, Qt::AlignHCenter, timestampText);
         }
 
         // Advance note

@@ -25,7 +25,9 @@ enum class Note : int {
 QString getNoteName(Note note);
 /* Get a note name as QString from note index, with octave number */
 QString getNoteNameWithOctave(Note note);
-
+/* Get a note name as QString from note index, with octave number,
+ * a fixed 3 letters long */
+QString getNoteNameWithOctaveFixedWidth(Note note);
 
 
 /* Distortions

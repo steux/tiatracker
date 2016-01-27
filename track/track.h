@@ -53,7 +53,7 @@ public:
 
     QList<Pattern> patterns{};
     QList<Sequence> channelSequences{{}, {}};
-
+    int speed = 5;
 private:
     QMutex mutex;
 

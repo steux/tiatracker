@@ -21,6 +21,12 @@ void TrackTab::registerTrack(Track::Track *newTrack) {
 
 /*************************************************************************/
 
+void TrackTab::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
+    pPitchGuide = newGuide;
+}
+
+/*************************************************************************/
+
 void TrackTab::initTrackTab() {
     pTrack->updateFirstNoteNumbers();
 
@@ -30,6 +36,8 @@ void TrackTab::initTrackTab() {
     timeline->registerTrack(pTrack);
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
+    editor->registerPitchGuide(pPitchGuide);
+
 }
 
 /*************************************************************************/

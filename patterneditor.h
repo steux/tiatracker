@@ -5,6 +5,7 @@
 #include <QWidget>
 #include "track/track.h"
 #include <QFontDatabase>
+#include "tiasound/pitchguide.h"
 
 
 class PatternEditor : public QWidget
@@ -14,6 +15,7 @@ public:
     explicit PatternEditor(QWidget *parent = 0);
 
     void registerTrack(Track::Track *newTrack);
+    void registerPitchGuide(TiaSound::PitchGuide *newGuide);
 
     QSize sizeHint() const;
 
@@ -46,9 +48,10 @@ private:
     int timelineWidth;
 
     Track::Track *pTrack;
+    TiaSound::PitchGuide *pPitchGuide;
 
     // Current editor note focus, i.e. middle-of-screen highlight
-    int editPos = 0;
+    int editPos = 12;
 };
 
 #endif // PATTERNEDITOR_H

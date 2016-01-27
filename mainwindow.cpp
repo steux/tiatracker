@@ -108,6 +108,12 @@ void MainWindow::registerTrack(Track::Track *newTrack) {
 
 /*************************************************************************/
 
+TiaSound::PitchGuide *MainWindow::getPitchGuide() {
+    return pPitchGuide;
+}
+
+/*************************************************************************/
+
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
     TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);

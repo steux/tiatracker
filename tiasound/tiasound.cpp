@@ -24,6 +24,19 @@ QString getNoteNameWithOctave(Note note)
 
 /*************************************************************************/
 
+QString getNoteNameWithOctaveFixedWidth(Note note)
+{
+    static const QList<QString> noteNames{{"C %1", "C#%1", "D %1", "D#%1", "E %1", "F %1", "F#%1", "G %1", "G#%1", "A %1", "A#%1", "H %1"}};
+
+    int noteIndexInOctave = (static_cast<int>(note))%12;
+    // +1 because first note is C_1, not C_0
+    int octave = int((static_cast<int>(note))/12) + 1;
+
+    return noteNames[noteIndexInOctave].arg(octave);
+}
+
+/*************************************************************************/
+
 QString getDistortionName(Distortion dist)
 {
     static const QList<QString> distNames{{
