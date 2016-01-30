@@ -18,6 +18,7 @@ public:
 signals:
 
 public slots:
+    void editPosChanged(int newPos);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -29,6 +30,7 @@ private:
     static const int minHeight = 400;
 
     int widgetWidth;
+    int editPos = 0;
 
     Track::Track *pTrack = nullptr;
 };

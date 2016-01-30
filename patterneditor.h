@@ -17,9 +17,13 @@ public:
     void registerTrack(Track::Track *newTrack);
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
 
+    void setEditPos(int newPos);
+    int getEditPos();
+
     QSize sizeHint() const;
 
 signals:
+    void editPosChanged(int newPos);
 
 public slots:
 
@@ -52,7 +56,7 @@ private:
     TiaSound::PitchGuide *pPitchGuide;
 
     // Current editor note focus, i.e. middle-of-screen highlight
-    int editPos = 12;
+    int editPos = 0;
     // Number of rows per beat
     int rowsPerBeat = 4;
 };

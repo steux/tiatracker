@@ -28,6 +28,13 @@ QSize Timeline::sizeHint() const {
 
 /*************************************************************************/
 
+void Timeline::editPosChanged(int newPos) {
+    editPos = newPos;
+    update();
+}
+
+/*************************************************************************/
+
 void Timeline::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
@@ -43,6 +50,7 @@ void Timeline::paintEvent(QPaintEvent *) {
     int maxLength = max(channelLength0, channelLength1);
     double rowHeight = (height() - 2*channelMargin)/double(maxLength);
 
+    // Paint patterns
     painter.fillRect(0, 0, width(), height(), MainWindow::dark);
     int xPos = channelMargin;
     for (int channel = 0; channel < 2; ++channel) {
@@ -62,5 +70,7 @@ void Timeline::paintEvent(QPaintEvent *) {
         xPos += channelWidth + channelGap;
     }
 
+    // Draw edit position
+    painter.fillRect(0, channelMargin + editPos*rowHeight + rowHeight/2, width(), 2, MainWindow::blue);
 }
 

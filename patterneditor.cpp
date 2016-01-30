@@ -46,6 +46,26 @@ void PatternEditor::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
 
 /*************************************************************************/
 
+void PatternEditor::setEditPos(int newPos) {
+    editPos = newPos;
+    if (editPos < 0) {
+        editPos = 0;
+    }
+    if (editPos >= pTrack->getNumRows()) {
+        editPos = pTrack->getNumRows() - 1;
+    }
+    emit editPosChanged(editPos);
+    update();
+}
+
+/*************************************************************************/
+
+int PatternEditor::getEditPos() {
+    return editPos;
+}
+
+/*************************************************************************/
+
 QSize PatternEditor::sizeHint() const {
     return QSize(widgetWidth, minHeight);
 }
@@ -202,12 +222,6 @@ void PatternEditor::paintEvent(QPaintEvent *) {
 /*************************************************************************/
 
 void PatternEditor::wheelEvent(QWheelEvent *event) {
-    editPos -= event->delta()/100;
-    if (editPos < 0) {
-        editPos = 0;
-    }
-    if (editPos >= pTrack->getNumRows()) {
-        editPos = pTrack->getNumRows() - 1;
-    }
-    update();
+    int newPos = editPos - event->delta()/100;
+    setEditPos(newPos);
 }
