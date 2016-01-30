@@ -231,6 +231,13 @@
               <property name="bottomMargin">
                <number>0</number>
               </property>
+              <item>
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>Follow</string>
+                </property>
+               </widget>
+              </item>
               <item alignment="Qt::AlignRight">
                <widget class="QCheckBox" name="checkBoxLoopPattern">
                 <property name="text">
