@@ -17,7 +17,6 @@ public:
     void registerTrack(Track::Track *newTrack);
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
 
-    void setEditPos(int newPos);
     int getEditPos();
 
     QSize sizeHint() const;
@@ -26,6 +25,7 @@ signals:
     void editPosChanged(int newPos);
 
 public slots:
+    void setEditPos(int newPos);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;

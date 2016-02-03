@@ -95,7 +95,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         }
         // Construct row string
         QString rowText = QString::number(curPatternNoteIndex + 1);
-        if (curPatternNoteIndex < 10) {
+        if (curPatternNoteIndex + 1 < 10) {
             rowText.prepend("  ");
         } else if (curPatternNoteIndex < 100) {
             rowText.prepend(" ");

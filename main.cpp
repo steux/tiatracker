@@ -40,13 +40,13 @@ int main(int argc, char *argv[])
     // Ins 0: lead, 1: base drum, 2: hi drum
     Track::Pattern patDrums("Drum loop");
     patDrums.notes = QList<Track::Note>{
+        {Track::Note::instrumentType::Percussion, 0, 0},
+        {Track::Note::instrumentType::Hold, 0, 0},
         {Track::Note::instrumentType::Percussion, 1, 0},
         {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Percussion, 2, 0},
         {Track::Note::instrumentType::Hold, 0, 0},
         {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Percussion, 2, 0},
+        {Track::Note::instrumentType::Percussion, 1, 0},
         {Track::Note::instrumentType::Hold, 0, 0}
     };
     Track::Pattern patMelody1("Melody 1");

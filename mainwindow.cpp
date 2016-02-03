@@ -101,6 +101,7 @@ void MainWindow::initConnections() {
 
     // Pattern editor
     QObject::connect(ui->trackEditor, SIGNAL(editPosChanged(int)), ui->trackTimeline, SLOT(editPosChanged(int)));
+    QObject::connect(ui->trackTimeline, SIGNAL(changeEditPos(int)), ui->trackEditor, SLOT(setEditPos(int)));
 }
 
 /*************************************************************************/

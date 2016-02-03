@@ -6,6 +6,7 @@
 #include "track/sequence.h"
 #include "track/sequenceentry.h"
 #include <QColor>
+#include <QMouseEvent>
 
 
 Timeline::Timeline(QWidget *parent) : QWidget(parent)
@@ -35,10 +36,8 @@ void Timeline::editPosChanged(int newPos) {
 
 /*************************************************************************/
 
-void Timeline::paintEvent(QPaintEvent *) {
-    QPainter painter(this);
-
-    // Calc row height in pixels
+double Timeline::calcRowHeight()
+{
     int lastEntry0 = pTrack->channelSequences[0].sequence.size() - 1;
     int lastPattern0 = pTrack->channelSequences[0].sequence[lastEntry0].patternIndex;
     int channelLength0 = pTrack->channelSequences[0].sequence[lastEntry0].firstNoteNumber
@@ -49,6 +48,16 @@ void Timeline::paintEvent(QPaintEvent *) {
             + pTrack->patterns[lastPattern1].notes.size();
     int maxLength = max(channelLength0, channelLength1);
     double rowHeight = (height() - 2*channelMargin)/double(maxLength);
+
+    return rowHeight;
+}
+
+/*************************************************************************/
+
+void Timeline::paintEvent(QPaintEvent *) {
+    QPainter painter(this);
+
+    double rowHeight = calcRowHeight();
 
     // Paint patterns
     painter.fillRect(0, 0, width(), height(), MainWindow::dark);
@@ -74,3 +83,18 @@ void Timeline::paintEvent(QPaintEvent *) {
     painter.fillRect(0, channelMargin + editPos*rowHeight + rowHeight/2, width(), 2, MainWindow::blue);
 }
 
+/*************************************************************************/
+
+void Timeline::mousePressEvent(QMouseEvent *event) {
+    if (event->y() >= channelMargin && event->y() < height() - channelMargin) {
+        double rowHeight = calcRowHeight();
+        int newEditPos = int((event->y() - channelMargin)/rowHeight + 0.5);
+        emit changeEditPos(newEditPos);
+    }
+}
+
+/*************************************************************************/
+
+void Timeline::mouseMoveEvent(QMouseEvent *event) {
+    mousePressEvent(event);
+}
