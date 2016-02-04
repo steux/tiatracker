@@ -105,7 +105,6 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             rowText.append(":    |");
             break;
         case Track::Note::instrumentType::Slide: {
-            int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
             int frequency = curPattern->notes[curPatternNoteIndex].value;
             rowText.append(":   ");
             rowText.append("  SL");

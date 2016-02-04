@@ -102,6 +102,8 @@ void MainWindow::initConnections() {
     // Pattern editor
     QObject::connect(ui->trackEditor, SIGNAL(editPosChanged(int)), ui->trackTimeline, SLOT(editPosChanged(int)));
     QObject::connect(ui->trackTimeline, SIGNAL(changeEditPos(int)), ui->trackEditor, SLOT(setEditPos(int)));
+    QObject::connect(ui->trackInstrumentSelector, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));
+    QObject::connect(ui->trackInstrumentSelector, SIGNAL(setUsePitchGuide(bool)), ui->pianoKeyboard, SLOT(setUsePitchGuide(bool)));
 }
 
 /*************************************************************************/
@@ -121,6 +123,7 @@ TiaSound::PitchGuide *MainWindow::getPitchGuide() {
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
     TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
+    ui->pianoKeyboard->setUsePitchGuide(true);
     ui->pianoKeyboard->update();
 }
 

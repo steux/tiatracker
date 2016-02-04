@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QFont>
 #include "track/track.h"
+#include "pianokeyboard.h"
 
 
 class InstrumentSelector : public QWidget
@@ -14,10 +15,13 @@ public:
     explicit InstrumentSelector(QWidget *parent = 0);
 
     void registerTrack(Track::Track *newTrack);
+    void registerPianoKeyboard(PianoKeyboard *pNewKeyboard);
 
     QSize sizeHint() const;
 
 signals:
+    void setWaveform(TiaSound::Distortion dist);
+    void setUsePitchGuide(bool use);
 
 public slots:
 
@@ -35,6 +39,7 @@ private:
 
 
     Track::Track *pTrack = nullptr;
+    PianoKeyboard *pKeyboard = nullptr;
 
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 

@@ -28,6 +28,12 @@ void InstrumentSelector::registerTrack(Track::Track *newTrack) {
 
 /*************************************************************************/
 
+void InstrumentSelector::registerPianoKeyboard(PianoKeyboard *pNewKeyboard) {
+    pKeyboard = pNewKeyboard;
+}
+
+/*************************************************************************/
+
 QSize InstrumentSelector::sizeHint() const {
     return QSize(minWidth, widgetHeight);
 }
@@ -86,6 +92,14 @@ void InstrumentSelector::mousePressEvent(QMouseEvent *event) {
     }
 
     selected = buttonY/buttonHeight;
+    if (selected < 7) {
+        // Instrument
+        TiaSound::Distortion dist = pTrack->instruments[selected].baseDistortion;
+        emit setWaveform(dist);
+    } else {
+        // Percussion
+        emit setUsePitchGuide(false);
+    }
     update();
 }
 

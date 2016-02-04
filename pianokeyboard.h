@@ -39,8 +39,6 @@ public:
     // Threshold for unacceptable off-tune percentage
     int offThreshold = 10;
 
-    void setUsePitchGuide(bool value);
-
 signals:
 
     /* Gets emitted when a key with a valid frequency is clicked */
@@ -49,6 +47,7 @@ signals:
     void keyReleased();
 
 public slots:
+    void setUsePitchGuide(bool value);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
