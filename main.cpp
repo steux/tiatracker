@@ -60,13 +60,13 @@ int main(int argc, char *argv[])
         {Track::Note::instrumentType::Hold, 0, 0},
         {Track::Note::instrumentType::Hold, 0, 0},
         {Track::Note::instrumentType::Instrument, 0, 24},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
+        {Track::Note::instrumentType::Slide, 0, -1},
+        {Track::Note::instrumentType::Slide, 0, -2},
+        {Track::Note::instrumentType::Slide, 0, -3},
         {Track::Note::instrumentType::Instrument, 0, 31},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0}
+        {Track::Note::instrumentType::Slide, 0, 1},
+        {Track::Note::instrumentType::Slide, 0, 2},
+        {Track::Note::instrumentType::Slide, 0, 3}
     };
     Track::Pattern patMelody2("Melody 2");
     patMelody2.notes = QList<Track::Note>{

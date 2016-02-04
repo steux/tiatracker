@@ -104,6 +104,20 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         case Track::Note::instrumentType::Hold:
             rowText.append(":    |");
             break;
+        case Track::Note::instrumentType::Slide: {
+            int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+            int frequency = curPattern->notes[curPatternNoteIndex].value;
+            rowText.append(":   ");
+            rowText.append("  SL");
+            // Frequency change
+            if (frequency < 0) {
+                rowText.append(" ");
+            } else {
+                rowText.append(" +");
+            }
+            rowText.append(QString::number(frequency));
+            break;
+        }
         case Track::Note::instrumentType::Pause:
             rowText.append(":   ---");
             break;
@@ -156,7 +170,10 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             painter->setFont(legendFont);
             painter->setPen(MainWindow::contentDarker);
             int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
-            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, curPattern->name);
+            QString patternName = QString::number(curEntryIndex + 1);
+            patternName.append(": ");
+            patternName.append(curPattern->name);
+            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
         }
         // Draw timestamp?
         long numTick = row*pTrack->speed;
