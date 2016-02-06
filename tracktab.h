@@ -26,9 +26,14 @@ public:
 signals:
 
 public slots:
+    void setEvenSpeed(int value);
+    void setOddSpeed(int value);
 
 private:
+    /* Just updates the number of patterns and track length stats */
     void updateTrackStats();
+    /* Updates the pattern editor area */
+    void updatePatternEditor();
 
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;

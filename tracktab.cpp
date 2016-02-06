@@ -49,6 +49,22 @@ void TrackTab::updateTrackTab() {
 
 /*************************************************************************/
 
+void TrackTab::setEvenSpeed(int value) {
+    pTrack->evenSpeed = value;
+    updateTrackStats();
+    updatePatternEditor();
+}
+
+/*************************************************************************/
+
+void TrackTab::setOddSpeed(int value) {
+    pTrack->oddSpeed = value;
+    updateTrackStats();
+    updatePatternEditor();
+}
+
+/*************************************************************************/
+
 void TrackTab::updateTrackStats() {
     // Patterns
     QLabel *statsLabel = findChild<QLabel *>("labelPatternsUsed");
@@ -62,7 +78,6 @@ void TrackTab::updateTrackStats() {
     long numOddTicks = int((numRows + 1)/2)*pTrack->oddSpeed;
     long numEvenTicks = int(numRows/2)*pTrack->evenSpeed;
     long numTicks = numOddTicks + numEvenTicks;
-    std::cout << "numTicks: " << numTicks << "\n"; std::cout.flush();
     int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
     int minutes = numTicks/(ticksPerSecond*60);
     int seconds = (numTicks%(ticksPerSecond*60))/ticksPerSecond;
@@ -75,5 +90,12 @@ void TrackTab::updateTrackStats() {
     timeText.append(QString::number(seconds));
     QLabel *timeLabel = findChild<QLabel *>("labelTotalLength");
     timeLabel->setText("Total length: " + timeText);
+}
+
+/*************************************************************************/
+
+void TrackTab::updatePatternEditor() {
+    PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
+    editor->update();
 }
 
