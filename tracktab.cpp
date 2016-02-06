@@ -58,7 +58,22 @@ void TrackTab::updateTrackStats() {
                         + QString::number(distinct) + " distinct)");
 
     // Time
-    int numRowsHalf = pTrack->getNumRows()/2;
-    // FIXME
+    int numRows = pTrack->getNumRows();
+    long numOddTicks = int((numRows + 1)/2)*pTrack->oddSpeed;
+    long numEvenTicks = int(numRows/2)*pTrack->evenSpeed;
+    long numTicks = numOddTicks + numEvenTicks;
+    std::cout << "numTicks: " << numTicks << "\n"; std::cout.flush();
+    int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
+    int minutes = numTicks/(ticksPerSecond*60);
+    int seconds = (numTicks%(ticksPerSecond*60))/ticksPerSecond;
+    QString timeText = QString::number(minutes);
+    if (seconds < 10) {
+        timeText.append(":0");
+    } else {
+        timeText.append(":");
+    }
+    timeText.append(QString::number(seconds));
+    QLabel *timeLabel = findChild<QLabel *>("labelTotalLength");
+    timeLabel->setText("Total length: " + timeText);
 }
 

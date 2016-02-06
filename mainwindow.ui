@@ -381,7 +381,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_10">
+            <widget class="QLabel" name="labelTotalLength">
              <property name="text">
               <string>Length: 12m 32s</string>
              </property>

@@ -188,7 +188,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
         if (channel == 0 && numTick%ticksPerSecond < curTicks) {
             int minute = numTick/(ticksPerSecond*60);
-            int second = numTick/ticksPerSecond;
+            int second = (numTick%(ticksPerSecond*60))/ticksPerSecond;
             QString timestampText = QString::number(minute);
             if (second < 10) {
                 timestampText.append(":0");
