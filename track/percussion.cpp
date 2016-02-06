@@ -59,21 +59,21 @@ void Percussion::toJson(QJsonObject &json) {
     json["overlay"] = overlay;
 
     QJsonArray freqArray;
-    foreach (const int freq, frequencies) {
-        freqArray.append(QJsonValue(freq));
+    for (int iFreq = 0; iFreq < envelopeLength; ++iFreq) {
+        freqArray.append(QJsonValue(frequencies[iFreq]));
     }
     json["frequencies"] = freqArray;
 
     QJsonArray volArray;
-    foreach (const int vol, volumes) {
-        volArray.append(QJsonValue(vol));
+    for (int iVol = 0; iVol < envelopeLength; ++iVol) {
+        volArray.append(QJsonValue(volumes[iVol]));
     }
     json["volumes"] = volArray;
 
     QJsonArray waveformArray;
-    foreach (const TiaSound::Distortion waveform, waveforms) {
-        int iWaveform = TiaSound::getDistortionInt(waveform);
-        waveformArray.append(QJsonValue(iWaveform));
+    for (int iWave = 0; iWave < envelopeLength; ++iWave) {
+        int waveformValue = TiaSound::getDistortionInt(waveforms[iWave]);
+        waveformArray.append(QJsonValue(waveformValue));
     }
     json["waveforms"] = waveformArray;
 

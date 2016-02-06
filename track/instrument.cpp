@@ -42,14 +42,14 @@ void Instrument::toJson(QJsonObject &json) {
     json["releaseStart"] = releaseStart;
 
     QJsonArray freqArray;
-    foreach (const int freq, frequencies) {
-        freqArray.append(QJsonValue(freq));
+    for (int iFreq = 0; iFreq < envelopeLength; ++iFreq) {
+        freqArray.append(QJsonValue(frequencies[iFreq]));
     }
     json["frequencies"] = freqArray;
 
     QJsonArray volArray;
-    foreach (const int vol, volumes) {
-        volArray.append(QJsonValue(vol));
+    for (int iVol = 0; iVol < envelopeLength; ++iVol) {
+        volArray.append(QJsonValue(volumes[iVol]));
     }
     json["volumes"] = volArray;
 }
