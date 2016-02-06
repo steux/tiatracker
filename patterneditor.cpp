@@ -181,6 +181,15 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             patternName.append(curPattern->name);
             painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
         }
+        // Draw goto?
+        if (curPatternNoteIndex == curPattern->notes.size() - 1
+                && curEntry->gotoTarget != -1) {
+            int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
+            painter->setFont(legendFont);
+            painter->setPen(MainWindow::blue);
+            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment,
+                              "GOTO " + QString::number(curEntry->gotoTarget + 1));
+        }
         // Draw timestamp?
         long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
         long numEvenTicks = int(row/2)*pTrack->evenSpeed;
