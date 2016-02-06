@@ -60,6 +60,13 @@ void PatternEditor::setEditPos(int newPos) {
 
 /*************************************************************************/
 
+void PatternEditor::setRowsPerBeat(int value) {
+    rowsPerBeat = value;
+    update();
+}
+
+/*************************************************************************/
+
 int PatternEditor::getEditPos() {
     return editPos;
 }

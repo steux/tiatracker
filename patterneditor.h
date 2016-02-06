@@ -26,6 +26,7 @@ signals:
 
 public slots:
     void setEditPos(int newPos);
+    void setRowsPerBeat(int value);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
