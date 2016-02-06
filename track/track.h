@@ -55,7 +55,9 @@ public:
 
     QList<Pattern> patterns{};
     QList<Sequence> channelSequences{{}, {}};
-    int speed = 5;
+    int evenSpeed = 5;
+    int oddSpeed = 5;
+
 private:
     QMutex mutex;
 

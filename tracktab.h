@@ -28,6 +28,8 @@ signals:
 public slots:
 
 private:
+    void updateTrackStats();
+
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
 

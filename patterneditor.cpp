@@ -182,8 +182,11 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
         }
         // Draw timestamp?
-        long numTick = row*pTrack->speed;
-        if (channel == 0 && numTick%ticksPerSecond < pTrack->speed) {
+        long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
+        long numEvenTicks = int(row/2)*pTrack->evenSpeed;
+        long numTick = numOddTicks + numEvenTicks;
+        int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
+        if (channel == 0 && numTick%ticksPerSecond < curTicks) {
             int minute = numTick/(ticksPerSecond*60);
             int second = numTick/ticksPerSecond;
             QString timestampText = QString::number(minute);

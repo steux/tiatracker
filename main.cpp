@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
     tt->registerTrack(&myTrack);
     tt->registerPitchGuide(w.getPitchGuide());
     tt->initTrackTab();
-//    tt->updateTrackTab();
+    tt->updateTrackTab();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);
