@@ -87,6 +87,13 @@ private:
     static const int iTabInfo = 3;
     static const int iTabOptions = 4;
 
+    void saveTrackByName(const QString &fileName);
+    void loadTrackByName(const QString &fileName);
+
+    void setTrackName(QString name);
+
+    void updateAllTabs();
+
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuideFactory pgFactory;

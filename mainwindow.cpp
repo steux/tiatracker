@@ -117,7 +117,7 @@ void MainWindow::initConnections() {
 
 void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
-    setWindowTitle("TIATracker v0.1 - " + pTrack->name);
+    setTrackName(pTrack->name);
 }
 
 /*************************************************************************/
@@ -261,7 +261,85 @@ void MainWindow::deleteFrame(bool) {
 /*************************************************************************/
 
 void MainWindow::on_actionSave_triggered() {
-    // TODO
+    if (pTrack->name == "new track.ttt") {
+        on_actionSave_as_triggered();
+    } else {
+        saveTrackByName(pTrack->name);
+    }
+}
+
+/*************************************************************************/
+
+void MainWindow::saveTrackByName(const QString &fileName) {
+    QFile saveFile(fileName);
+    // Export track
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonObject trackObject;
+    pTrack->toJson(trackObject);
+    QJsonDocument saveDoc(trackObject);
+    saveFile.write(saveDoc.toJson());
+    saveFile.close();
+    setTrackName(fileName);
+}
+
+/*************************************************************************/
+
+void MainWindow::loadTrackByName(const QString &fileName) {
+    QFile loadFile(fileName);
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
+
+    // Parse in data
+    if (!pTrack->fromJson(loadDoc.object())) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to parse track!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    setTrackName(fileName);
+    updateAllTabs();
+}
+
+/*************************************************************************/
+
+void MainWindow::setTrackName(QString name) {
+    pTrack->name = name;
+    setWindowTitle("TIATracker v0.1 - " + pTrack->name);
+}
+
+/*************************************************************************/
+
+void MainWindow::updateAllTabs() {
+    TrackTab *trackTab = findChild<TrackTab *>("tabTrack");
+    trackTab->updateTrackTab();
+    trackTab->update();
+
+    InstrumentsTab *insTab = findChild<InstrumentsTab *>("tabInstruments");
+    insTab->updateInstrumentsTab();
+    insTab->update();
+
+    PercussionTab *percTab = findChild<PercussionTab *>("tabPercussion");
+    percTab->updatePercussionTab();
+    percTab->update();
 }
 
 /*************************************************************************/
@@ -282,23 +360,7 @@ void MainWindow::on_actionSave_as_triggered() {
         return;
     }
     QString fileName = fileNames[0];
-    QFile saveFile(fileName);
-
-    // Export track
-    if (!saveFile.open(QIODevice::WriteOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
-        return;
-    }
-    QJsonObject trackObject;
-    pTrack->toJson(trackObject);
-    QJsonDocument saveDoc(trackObject);
-    saveFile.write(saveDoc.toJson());
-    saveFile.close();
+    saveTrackByName(fileName);
 }
 
 /*************************************************************************/
@@ -335,31 +397,5 @@ void MainWindow::on_actionOpen_triggered() {
         return;
     }
     QString fileName = fileNames[0];
-    QFile loadFile(fileName);
-    if (!loadFile.open(QIODevice::ReadOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
-        return;
-    }
-    QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
-
-    // Parse in data
-    if (!pTrack->fromJson(loadDoc.object())) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to parse track!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
-        return;
-    }
-
-    // Update display
-    TrackTab *tab = findChild<TrackTab *>("tabTrack");
-    tab->updateTrackTab();
-    tab->update();
+    loadTrackByName(fileName);
 }
