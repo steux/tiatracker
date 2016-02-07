@@ -7,6 +7,7 @@
 #include "timeline.h"
 #include "patterneditor.h"
 #include <QLabel>
+#include <QSpinBox>
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -44,6 +45,15 @@ void TrackTab::initTrackTab() {
 /*************************************************************************/
 
 void TrackTab::updateTrackTab() {
+    // Set GUI elements
+    QSpinBox *spEven = findChild<QSpinBox *>("spinBoxEvenTempo");
+    spEven->setValue(pTrack->evenSpeed);
+    QSpinBox *spOdd = findChild<QSpinBox *>("spinBoxOddTempo");
+    spOdd->setValue(pTrack->oddSpeed);
+    QSpinBox *spRowsPerBeat = findChild<QSpinBox *>("spinBoxRowsPerBeat");
+    spRowsPerBeat->setValue(pTrack->rowsPerBeat);
+
+    // Update individual sub-widgets
     updateTrackStats();
 }
 
