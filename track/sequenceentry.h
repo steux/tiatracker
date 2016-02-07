@@ -1,6 +1,9 @@
 #ifndef SEQUENCEENTRY_H
 #define SEQUENCEENTRY_H
 
+#include <QJsonObject>
+
+
 namespace Track {
 
 class SequenceEntry
@@ -9,6 +12,8 @@ public:
     SequenceEntry();
     SequenceEntry(int patternIndex, int gotoTarget = -1) :
         patternIndex(patternIndex), gotoTarget(gotoTarget) {}
+
+    void toJson(QJsonObject &json);
 
     int patternIndex;
     int gotoTarget = -1;

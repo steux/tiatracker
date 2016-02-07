@@ -155,7 +155,14 @@ void Track::toJson(QJsonObject &json) {
     }
     json["patterns"] = pattArray;
 
-    // Sequence
+    // Sequences
+    QJsonArray chanArray;
+    for (int i = 0; i < 2; ++i) {
+        QJsonObject chanJson;
+        channelSequences[i].toJson(chanJson);
+        chanArray.append(chanJson);
+    }
+    json["channels"] = chanArray;
 }
 
 /*************************************************************************/
