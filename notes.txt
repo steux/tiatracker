@@ -6,15 +6,20 @@ TODO:
 - Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
 - Pattern names tooltip in timeline
 - Row coloring according to pitch guide and type (hold, slide etc.)
-- lock track for load
+- lock track for load, or better: stop player
 - lock ins/perc for import
 - switch json format to binary, at least for track?
 - Recover gracefully after trying to load corrupted track
+- keyboard shortcuts
+- option for "B" instead of "H"
+- Pitch Perfect NTSC
 
 
 FEATURES:
 - add "freehand" option to Instruments tab
 - add "0" octave (c0-h0)
+- Save import/export/load/save dirs in property file
+- Undo/Redo
 
 
 CODING STYLE:
