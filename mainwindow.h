@@ -77,6 +77,8 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_actionOpen_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

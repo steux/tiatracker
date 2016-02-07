@@ -17,6 +17,7 @@ public:
         : type(type), instrumentNumber(instrumentNumber), value(value) {}
 
     void toJson(QJsonObject &json);
+    bool fromJson(const QJsonObject &json);
 
     instrumentType type;
     // 0-6 for instrument, 0-14 for percussion

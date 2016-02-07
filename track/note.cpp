@@ -24,5 +24,22 @@ void Note::toJson(QJsonObject &json) {
     json["value"] = value;
 }
 
+/*************************************************************************/
+
+bool Note::fromJson(const QJsonObject &json) {
+    int typeInt = json["type"].toInt();
+    if (typeInt < 0 || typeInt >= insTypes.size()) {
+        return false;
+    }
+    type = insTypes[typeInt];
+    instrumentNumber = json["number"].toInt();
+    // FIXME: Magic number
+    if (instrumentNumber < 0 || instrumentNumber > 22) {
+        return false;
+    }
+    value = json["value"].toInt();
+    return true;
+}
+
 }
 

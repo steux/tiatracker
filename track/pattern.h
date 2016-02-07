@@ -16,6 +16,7 @@ public:
     Pattern(QString name) : name(name) {}
 
     void toJson(QJsonObject &json);
+    bool fromJson(const QJsonObject &json);
 
     QString name;
     QList<Note> notes;

@@ -261,7 +261,7 @@ void MainWindow::deleteFrame(bool) {
 /*************************************************************************/
 
 void MainWindow::on_actionSave_triggered() {
-
+    // TODO
 }
 
 /*************************************************************************/
@@ -299,4 +299,67 @@ void MainWindow::on_actionSave_as_triggered() {
     QJsonDocument saveDoc(trackObject);
     saveFile.write(saveDoc.toJson());
     saveFile.close();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionOpen_triggered() {
+    // Ask if current track should really be discarded
+    bool doOpen = true;
+    QMessageBox msgBox(QMessageBox::NoIcon,
+                       "Open track",
+                       "Do you really want to discard the current track?",
+                       QMessageBox::Yes | QMessageBox::No, this,
+                       Qt::FramelessWindowHint);
+    int reply = msgBox.exec();
+    if (reply != QMessageBox::Yes) {
+        doOpen = false;
+    }
+    if (!doOpen) {
+        return;
+    }
+
+    // Ask for filename
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.setNameFilter("*.ttt");
+    dialog.setDefaultSuffix("ttt");
+    dialog.setViewMode(QFileDialog::Detail);
+
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile loadFile(fileName);
+    if (!loadFile.open(QIODevice::ReadOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
+
+    // Parse in data
+    if (!pTrack->fromJson(loadDoc.object())) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to parse track!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+
+    // Update display
+    TrackTab *tab = findChild<TrackTab *>("tabTrack");
+    tab->updateTrackTab();
+    tab->update();
 }

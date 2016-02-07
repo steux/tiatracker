@@ -14,6 +14,7 @@ public:
         patternIndex(patternIndex), gotoTarget(gotoTarget) {}
 
     void toJson(QJsonObject &json);
+    bool fromJson(const QJsonObject &json);
 
     int patternIndex;
     int gotoTarget = -1;

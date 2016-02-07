@@ -21,4 +21,23 @@ void Sequence::toJson(QJsonObject &json) {
     json["sequence"] = seqArray;
 }
 
+/*************************************************************************/
+
+bool Sequence::fromJson(const QJsonObject &json) {
+    QJsonArray seqArray = json["sequence"].toArray();
+    sequence.clear();
+    for (int i = 0; i < seqArray.size(); ++i) {
+        SequenceEntry se;
+        if (!se.fromJson(seqArray[i].toObject())) {
+            return false;
+        }
+        if (se.gotoTarget < -1 || se.gotoTarget >= seqArray.size()
+                || se.patternIndex < 0) {
+            return false;
+        }
+        sequence.append(se);
+    }
+    return true;
+}
+
 }

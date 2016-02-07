@@ -9,6 +9,7 @@ TODO:
 - lock track for load
 - lock ins/perc for import
 - switch json format to binary, at least for track?
+- Recover gracefully after trying to load corrupted track
 
 
 FEATURES:

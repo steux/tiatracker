@@ -168,7 +168,10 @@ void Track::toJson(QJsonObject &json) {
 /*************************************************************************/
 
 bool Track::fromJson(const QJsonObject &json) {
+    // TODO
 
+    updateFirstNoteNumbers();
+    return true;
 }
 
 /*************************************************************************/

@@ -15,6 +15,7 @@ public:
     Sequence();
 
     void toJson(QJsonObject &json);
+    bool fromJson(const QJsonObject &json);
 
     QList<SequenceEntry> sequence{};
 };
