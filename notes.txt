@@ -8,6 +8,7 @@ TODO:
 - Row coloring according to pitch guide and type (hold, slide etc.)
 - lock track for load
 - lock ins/perc for import
+- switch json format to binary, at least for track?
 
 
 FEATURES:

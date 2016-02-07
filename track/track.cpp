@@ -147,6 +147,13 @@ void Track::toJson(QJsonObject &json) {
     json["percussion"] = percArray;
 
     // Patterns
+    QJsonArray pattArray;
+    for (int i = 0; i < patterns.size(); ++i) {
+        QJsonObject pattJson;
+        patterns[i].toJson(pattJson);
+        pattArray.append(pattJson);
+    }
+    json["patterns"] = pattArray;
 
     // Sequence
 }

@@ -4,6 +4,7 @@
 #include <QString>
 #include <QList>
 #include "note.h"
+#include <QJsonObject>
 
 namespace Track {
 
@@ -14,8 +15,9 @@ public:
 
     Pattern(QString name) : name(name) {}
 
-    QString name;
+    void toJson(QJsonObject &json);
 
+    QString name;
     QList<Note> notes;
 };
 
