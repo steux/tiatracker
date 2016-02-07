@@ -168,7 +168,73 @@ void Track::toJson(QJsonObject &json) {
 /*************************************************************************/
 
 bool Track::fromJson(const QJsonObject &json) {
-    // TODO
+    int version = json["version"].toInt();
+    if (version > MainWindow::version) {
+        return false;
+    }
+    if (json["tvmode"] == "pal") {
+        tvMode = TiaSound::TvStandard::PAL;
+    } else if (json["tvmode"] == "ntsc") {
+        tvMode = TiaSound::TvStandard::NTSC;
+    } else {
+        return false;
+    }
+    evenSpeed = json["evenspeed"].toInt();
+    oddSpeed = json["oddspeed"].toInt();
+    rowsPerBeat = json["rowsperbeat"].toInt();
+
+    // Instruments
+    QJsonArray insArray = json["instruments"].toArray();
+    if (insArray.size() != numInstruments) {
+        return false;
+    }
+    instruments.clear();
+    for (int i = 0; i < numInstruments; ++i) {
+        Instrument newIns{""};
+        if (!newIns.import(insArray[i].toObject())) {
+            return false;
+        }
+        instruments.append(newIns);
+    }
+
+    // Percussion
+    QJsonArray percArray = json["percussion"].toArray();
+    if (percArray.size() != numPercussion) {
+        return false;
+    }
+    percussion.clear();
+    for (int i = 0; i < numPercussion; ++i) {
+        Percussion newPerc{""};
+        if (!newPerc.import(percArray[i].toObject())) {
+            return false;
+        }
+        percussion.append(newPerc);
+    }
+
+    // Patterns
+    QJsonArray pattArray = json["patterns"].toArray();
+    patterns.clear();
+    for (int i = 0; i < pattArray.size(); ++i) {
+        Pattern newPatt;
+        if (!newPatt.fromJson(pattArray[i].toObject())) {
+            return false;
+        }
+        patterns.append(newPatt);
+    }
+
+    // Sequences
+    QJsonArray chanArray = json["channels"].toArray();
+    if (chanArray.size() != 2) {
+        return false;
+    }
+    channelSequences.clear();
+    for (int i = 0; i < 2; ++i) {
+        Sequence newSeq;
+        if (!newSeq.fromJson(chanArray[i].toObject())) {
+            return false;
+        }
+        channelSequences.append(newSeq);
+    }
 
     updateFirstNoteNumbers();
     return true;

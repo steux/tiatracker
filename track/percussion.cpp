@@ -83,7 +83,7 @@ void Percussion::toJson(QJsonObject &json) {
 
 bool Percussion::import(const QJsonObject &json) {
     int version = json["version"].toInt();
-    if (version != 1) {
+    if (version > MainWindow::version) {
         return false;
     }
 
