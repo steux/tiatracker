@@ -98,7 +98,7 @@ bool Percussion::import(const QJsonObject &json) {
     if (newName.length() < 1 || newName.length() > PercussionTab::maxPercussionNameLength) {
         return false;
     }
-    if (newEnvelopeLength < 2 || newEnvelopeLength > 99) {
+    if (newEnvelopeLength < 1 || newEnvelopeLength > 99) {
         return false;
     }
     if (newEnvelopeLength != freqArray.size() || newEnvelopeLength != volArray.size()
