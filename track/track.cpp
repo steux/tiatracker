@@ -3,6 +3,7 @@
 #include "sequenceentry.h"
 #include <iostream>
 #include "mainwindow.h"
+#include <QJsonArray>
 
 
 namespace Track {
@@ -116,8 +117,8 @@ void Track::updateFirstNoteNumbers() {
 /*************************************************************************/
 
 void Track::toJson(QJsonObject &json) {
+    // General data
     json["version"] = MainWindow::version;
-    json["name"] = name;
     if (tvMode == TiaSound::TvStandard::PAL) {
         json["tvmode"] = "pal";
     } else {
@@ -125,9 +126,29 @@ void Track::toJson(QJsonObject &json) {
     }
     json["evenspeed"] = evenSpeed;
     json["oddspeed"] = oddSpeed;
-    // TODO: rows per beat
+    json["rowsperbeat"] = rowsPerBeat;
 
+    // Instruments
+    QJsonArray insArray;
+    for (int i = 0; i < numInstruments; ++i) {
+        QJsonObject insJson;
+        instruments[i].toJson(insJson);
+        insArray.append(insJson);
+    }
+    json["instruments"] = insArray;
 
+    // Percussion
+    QJsonArray percArray;
+    for (int i = 0; i < numPercussion; ++i) {
+        QJsonObject percJson;
+        percussion[i].toJson(percJson);
+        percArray.append(percJson);
+    }
+    json["percussion"] = percArray;
+
+    // Patterns
+
+    // Sequence
 }
 
 /*************************************************************************/

@@ -1,5 +1,4 @@
 TODO:
-- make rows per beat a value of track, and export/import it
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
 - NTSC/PAL in Stella: How? In SoundSDL2.cpp is setFrameRate() but does it do anything?
