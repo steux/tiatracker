@@ -61,6 +61,7 @@ public:
     QList<Sequence> channelSequences{{}, {}};
     int evenSpeed = 5;
     int oddSpeed = 5;
+    int rowsPerBeat = 4;
 
 private:
     QMutex mutex;

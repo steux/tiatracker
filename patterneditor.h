@@ -58,8 +58,6 @@ private:
 
     // Current editor note focus, i.e. middle-of-screen highlight
     int editPos = 0;
-    // Number of rows per beat
-    int rowsPerBeat = 4;
 };
 
 #endif // PATTERNEDITOR_H

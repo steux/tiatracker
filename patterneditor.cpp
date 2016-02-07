@@ -61,7 +61,7 @@ void PatternEditor::setEditPos(int newPos) {
 /*************************************************************************/
 
 void PatternEditor::setRowsPerBeat(int value) {
-    rowsPerBeat = value;
+    pTrack->rowsPerBeat = value;
     update();
 }
 
@@ -97,7 +97,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
         // First row in beat?
-        if (row%rowsPerBeat == 0 && (channel != 0 || row != editPos)) {
+        if (row%(pTrack->rowsPerBeat) == 0 && (channel != 0 || row != editPos)) {
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
         }
         // Construct row string
