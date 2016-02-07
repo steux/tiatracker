@@ -11,6 +11,8 @@
 #include "tiasound/pitchguide.h"
 #include "tiasound/instrumentpitchguide.h"
 #include <QMenu>
+#include <QFileDialog>
+#include <QJsonDocument>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -115,6 +117,7 @@ void MainWindow::initConnections() {
 
 void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
+    setWindowTitle("TIATracker v0.1 - " + pTrack->name);
 }
 
 /*************************************************************************/
@@ -253,4 +256,47 @@ void MainWindow::deleteFrame(bool) {
     default:
         break;
     }
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionSave_triggered() {
+
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionSave_as_triggered() {
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter("*.ttt");
+    dialog.setDefaultSuffix("ttt");
+    dialog.setViewMode(QFileDialog::Detail);
+    dialog.selectFile(pTrack->name);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+    QFile saveFile(fileName);
+
+    // Export track
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Unable to open file!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    QJsonObject trackObject;
+    pTrack->toJson(trackObject);
+    QJsonDocument saveDoc(trackObject);
+    saveFile.write(saveDoc.toJson());
+    saveFile.close();
 }

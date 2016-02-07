@@ -77,7 +77,8 @@ RESOURCES += \
     main.qrc
 
 DISTFILES += \
-    style.qss
+    style.qss \
+    notes.txt
 
 win32: LIBS += -L$$PWD/sdl/windows/lib/ -lSDL2
 

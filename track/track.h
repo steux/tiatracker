@@ -9,6 +9,7 @@
 #include "tiasound/tiasound.h"
 #include "pattern.h"
 #include "sequence.h"
+#include <QJsonObject>
 
 
 namespace Track {
@@ -41,10 +42,13 @@ public:
     /* Sets "firstNoteNumber" values of all sequence entries */
     void updateFirstNoteNumbers();
 
+    void toJson(QJsonObject &json);
+    bool fromJson(const QJsonObject &json);
+
     TiaSound::TvStandard getTvMode() const;
     void setTvMode(const TiaSound::TvStandard &value);
 
-    QString name{"New track"};
+    QString name{"new track.ttt"};
     QList<Instrument> instruments{
         {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
     };

@@ -2,6 +2,7 @@
 #include <QString>
 #include "sequenceentry.h"
 #include <iostream>
+#include "mainwindow.h"
 
 
 namespace Track {
@@ -110,6 +111,29 @@ void Track::updateFirstNoteNumbers() {
             noteNumber += patterns[iPattern].notes.size();
         }
     }
+}
+
+/*************************************************************************/
+
+void Track::toJson(QJsonObject &json) {
+    json["version"] = MainWindow::version;
+    json["name"] = name;
+    if (tvMode == TiaSound::TvStandard::PAL) {
+        json["tvmode"] = "pal";
+    } else {
+        json["tvmode"] = "ntsc";
+    }
+    json["evenspeed"] = evenSpeed;
+    json["oddspeed"] = oddSpeed;
+    // TODO: rows per beat
+
+
+}
+
+/*************************************************************************/
+
+bool Track::fromJson(const QJsonObject &json) {
+
 }
 
 /*************************************************************************/

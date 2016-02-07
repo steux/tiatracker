@@ -1,11 +1,22 @@
 TODO:
+- make rows per beat a value of track, and export/import it
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
 - NTSC/PAL in Stella: How? In SoundSDL2.cpp is setFrameRate() but does it do anything?
 - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
-- Do proper QThread (don't inherit from QThread) and set priority to highest
+- Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
+- Pattern names tooltip in timeline
+- Row coloring according to pitch guide and type (hold, slide etc.)
+- lock track for load
+- lock ins/perc for import
+
+
+FEATURES:
 - add "freehand" option to Instruments tab
 - add "0" octave (c0-h0)
-- Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
-- Context menu "insert before/after; delete" for columns in EnvelopeShaper
+
+
+CODING STYLE:
+- Do proper QThread (don't inherit from QThread) and set priority to highest
 - Do proper OO: Base class Instrument gets inherited by MelodicInstrument and PercussionInstrument. Similarly with EnvelopeShaper, InstrumentShaper and PercussionShaper
+- Make mutex in track private and encapsulate

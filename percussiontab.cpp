@@ -191,7 +191,7 @@ void PercussionTab::on_buttonPercussionExport_clicked() {
     curPercussion->toJson(insObject);
     QJsonDocument saveDoc(insObject);
     saveFile.write(saveDoc.toJson());
-
+    saveFile.close();
 }
 
 /*************************************************************************/

@@ -73,6 +73,10 @@ private slots:
     void deleteFrame(bool);
 
 
+    void on_actionSave_triggered();
+
+    void on_actionSave_as_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

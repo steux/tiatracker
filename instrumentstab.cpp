@@ -226,6 +226,7 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
     curInstrument->toJson(insObject);
     QJsonDocument saveDoc(insObject);
     saveFile.write(saveDoc.toJson());
+    saveFile.close();
 }
 
 /*************************************************************************/
