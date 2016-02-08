@@ -62,6 +62,8 @@ public:
     int evenSpeed = 5;
     int oddSpeed = 5;
     int rowsPerBeat = 4;
+    int startPatterns[2]{};
+    int playPos[2]{};
 
 private:
     QMutex mutex;

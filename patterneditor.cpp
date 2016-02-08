@@ -188,6 +188,12 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
             QString patternName = QString::number(curEntryIndex + 1);
             patternName.append(": ");
             patternName.append(curPattern->name);
+            if (curEntryIndex == pTrack->startPatterns[channel]) {
+                painter->setPen(MainWindow::green);
+
+            } else {
+                painter->setPen(MainWindow::blue);
+            }
             painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
         }
         // Draw goto?

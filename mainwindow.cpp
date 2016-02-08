@@ -27,6 +27,7 @@ const QColor MainWindow::red{"#dc322f"};
 const QColor MainWindow::orange{"#cb4b16"};
 const QColor MainWindow::blue{"#268bd2"};
 const QColor MainWindow::violet{"#6c71c4"};
+const QColor MainWindow::green{"#859900"};
 
 /*************************************************************************/
 
