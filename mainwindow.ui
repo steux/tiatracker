@@ -381,6 +381,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="labelStartPatterns">
+             <property name="text">
+              <string>Start patterns: 0/1</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="labelTotalLength">
              <property name="text">
               <string>Length: 12m 32s</string>

@@ -83,6 +83,11 @@ void TrackTab::updateTrackStats() {
     statsLabel->setText("Patterns used: " + QString::number(sequenceLength) + " of 255 ("
                         + QString::number(distinct) + " distinct)");
 
+    // Start patterns
+    QLabel *startLabel = findChild<QLabel *>("labelStartPatterns");
+    startLabel->setText("Start patterns: " + QString::number(pTrack->startPatterns[0] + 1)
+                        + "/" + QString::number(pTrack->startPatterns[1] + 1));
+
     // Time
     int numRows = pTrack->getNumRows();
     long numOddTicks = int((numRows + 1)/2)*pTrack->oddSpeed;
@@ -93,11 +98,11 @@ void TrackTab::updateTrackStats() {
     int seconds = (numTicks%(ticksPerSecond*60))/ticksPerSecond;
     QString timeText = QString::number(minutes);
     if (seconds < 10) {
-        timeText.append(":0");
+        timeText.append("m 0");
     } else {
-        timeText.append(":");
+        timeText.append("m ");
     }
-    timeText.append(QString::number(seconds));
+    timeText.append(QString::number(seconds) + "s");
     QLabel *timeLabel = findChild<QLabel *>("labelTotalLength");
     timeLabel->setText("Total length: " + timeText);
 }
