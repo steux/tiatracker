@@ -93,11 +93,11 @@ int Track::getNumUsedPercussion()
 
 int Track::getNumRows() {
     int lastPattern0 = channelSequences[0].sequence.last().patternIndex;
-    int size0 = channelSequences[0].sequence.last().firstNoteNumber +
-            patterns[lastPattern0].notes.size();
+    int size0 = channelSequences[0].sequence.last().firstNoteNumber
+            + patterns[lastPattern0].notes.size();
     int lastPattern1 = channelSequences[1].sequence.last().patternIndex;
-    int size1 = channelSequences[1].sequence.last().firstNoteNumber +
-            patterns[lastPattern1].notes.size();
+    int size1 = channelSequences[1].sequence.last().firstNoteNumber
+            + patterns[lastPattern1].notes.size();
     return std::max(size0, size1);
 }
 

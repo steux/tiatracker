@@ -82,6 +82,15 @@ QSize PatternEditor::sizeHint() const {
 void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos) {
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
+    // Don't do anything if we are behind the last note
+    int lastPattern = pTrack->channelSequences[channel].sequence.last().patternIndex;
+    int channelSize = pTrack->channelSequences[channel].sequence.last().firstNoteNumber
+            + pTrack->patterns[lastPattern].notes.size();
+    if (firstNoteIndex >= channelSize) {
+        return;
+    }
+
+    // Get pointers to first note to paint
     int curEntryIndex = 0;
     Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[0]);
     Track::Pattern *curPattern = &(pTrack->patterns[curEntry->patternIndex]);

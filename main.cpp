@@ -93,21 +93,21 @@ int main(int argc, char *argv[])
     myTrack.patterns.append(patMelody2);
 
     Track::SequenceEntry intro0{0};
-    Track::SequenceEntry intro1{0};
+    Track::SequenceEntry intro1{0, 0};
     myTrack.channelSequences[0].sequence.append(intro0);
     myTrack.channelSequences[1].sequence.append(intro1);
     Track::SequenceEntry melody1_0{1};
     Track::SequenceEntry melody1_10{0};
     Track::SequenceEntry melody1_11{0};
     myTrack.channelSequences[0].sequence.append(melody1_0);
-    myTrack.channelSequences[1].sequence.append(melody1_10);
-    myTrack.channelSequences[1].sequence.append(melody1_11);
+//    myTrack.channelSequences[1].sequence.append(melody1_10);
+//    myTrack.channelSequences[1].sequence.append(melody1_11);
     Track::SequenceEntry melody2_0{2, 1};
     Track::SequenceEntry melody2_10{0};
     Track::SequenceEntry melody2_11{0, 1};
     myTrack.channelSequences[0].sequence.append(melody2_0);
-    myTrack.channelSequences[1].sequence.append(melody2_10);
-    myTrack.channelSequences[1].sequence.append(melody2_11);
+//    myTrack.channelSequences[1].sequence.append(melody2_10);
+//    myTrack.channelSequences[1].sequence.append(melody2_11);
 
     // GUI
     MainWindow w;
