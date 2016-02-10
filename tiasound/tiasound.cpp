@@ -3,7 +3,7 @@
 namespace TiaSound {
 
 QString getNoteName(Note note) {
-    static const QList<QString> noteNames{{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"}};
+    static const QList<QString> noteNames{{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"}};
 
     int noteIndexInOctave = (static_cast<int>(note))%12;
     return noteNames[noteIndexInOctave];
@@ -13,7 +13,7 @@ QString getNoteName(Note note) {
 
 QString getNoteNameWithOctave(Note note)
 {
-    static const QList<QString> noteNames{{"C%1", "C#%1", "D%1", "D#%1", "E%1", "F%1", "F#%1", "G%1", "G#%1", "A%1", "A#%1", "H%1"}};
+    static const QList<QString> noteNames{{"C%1", "C#%1", "D%1", "D#%1", "E%1", "F%1", "F#%1", "G%1", "G#%1", "A%1", "A#%1", "B%1"}};
 
     int noteIndexInOctave = (static_cast<int>(note))%12;
     // +1 because first note is C_1, not C_0
@@ -26,7 +26,7 @@ QString getNoteNameWithOctave(Note note)
 
 QString getNoteNameWithOctaveFixedWidth(Note note)
 {
-    static const QList<QString> noteNames{{"C-%1", "C#%1", "D-%1", "D#%1", "E-%1", "F-%1", "F#%1", "G-%1", "G#%1", "A-%1", "A#%1", "H-%1"}};
+    static const QList<QString> noteNames{{"C-%1", "C#%1", "D-%1", "D#%1", "E-%1", "F-%1", "F#%1", "G-%1", "G#%1", "A-%1", "A#%1", "B-%1"}};
 
     int noteIndexInOctave = (static_cast<int>(note))%12;
     // +1 because first note is C_1, not C_0
