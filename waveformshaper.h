@@ -36,6 +36,7 @@ protected:
 
     void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void wheelEvent(QWheelEvent *) Q_DECL_OVERRIDE;
 
 private:
     int calcWidth();

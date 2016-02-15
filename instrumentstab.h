@@ -55,9 +55,9 @@ public slots:
 protected:
 
 private:
-    static const QList<TiaSound::Distortion> availableWaveforms;
-
     Track::Track *pTrack = nullptr;
+
+    static const QList<TiaSound::Distortion> availableWaveforms;
 
 };
 

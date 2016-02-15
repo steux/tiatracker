@@ -5,6 +5,8 @@
 #include <cassert>
 #include <QMouseEvent>
 #include "tiasound/tiasound.h"
+#include <QWheelEvent>
+#include "instrumentstab.h"
 
 
 WaveformShaper::WaveformShaper(QWidget *parent) : QWidget(parent)
@@ -110,6 +112,23 @@ void WaveformShaper::mousePressEvent(QMouseEvent *event) {
            (*values)[column] = distortionPen;
            update();
         }
+    }
+}
+
+/*************************************************************************/
+
+void WaveformShaper::wheelEvent(QWheelEvent *event) {
+    if (event->x() >= legendCellSize && event->y() < valueAreaHeight) {
+        int column = (event->x() - legendCellSize)/cellWidth;
+        int delta = event->delta()/100;
+        // Get index of current waveform
+        TiaSound::Distortion oldDist = (*values)[column];
+        int oldIndex = PercussionTab::availableWaveforms.indexOf(oldDist);
+        int newIndex = oldIndex + delta;
+        newIndex = std::max(newIndex, 0);
+        newIndex = std::min(newIndex, PercussionTab::availableWaveforms.size() - 1);
+        (*values)[column] = PercussionTab::availableWaveforms[newIndex];
+        update();
     }
 }
 
