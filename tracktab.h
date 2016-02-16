@@ -7,6 +7,9 @@
 #include "tiasound/pitchguidefactory.h"
 #include "tiasound/pitchguide.h"
 #include "tiasound/instrumentpitchguide.h"
+#include <QMenu>
+#include <QAction>
+
 
 class TrackTab : public QWidget
 {
@@ -37,6 +40,26 @@ private:
 
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
+
+    QMenu patternContextMenu{this};
+    QAction actionInsertPatternBefore{"Insert pattern before...", this};
+    QAction actionInsertPatternAfter{"Insert pattern after...", this};
+    QAction actionMovePatternUp{"Move pattern up", this};
+    QAction actionMovePatternDown{"Move pattern down", this};
+    QAction actionRemovePattern{"Remove pattern", this};
+    QAction actionRenamePattern{"Rename pattern...", this};
+    QAction actionSetGoto{"Set goto...", this};
+    QAction actionRemoveGoto{"Remove goto", this};
+    QAction actionSetStartPattern{"Start track here", this};
+
+    QMenu channelContextMenu{this};
+    QAction actionPause{"Set to PAUSE", this};
+    QAction actionHold{"Set to HOLD", this};
+    QAction actionSlide{"Set to SLIDE...", this};
+    QAction actionSetFrequency{"Change frequency...", this};
+    QAction actionInsertRowBefore{"Insert row before", this};
+    QAction actionInsertRowAfter{"Insert row after", this};
+    QAction actionDeleteRow{"Delete row", this};
 
 };
 

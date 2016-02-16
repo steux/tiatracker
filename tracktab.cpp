@@ -12,7 +12,23 @@
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
 {
+    patternContextMenu.addAction(&actionInsertPatternBefore);
+    patternContextMenu.addAction(&actionInsertPatternAfter);
+    patternContextMenu.addAction(&actionMovePatternUp);
+    patternContextMenu.addAction(&actionMovePatternDown);
+    patternContextMenu.addAction(&actionRemovePattern);
+    patternContextMenu.addAction(&actionRenamePattern);
+    patternContextMenu.addAction(&actionSetGoto);
+    patternContextMenu.addAction(&actionRemoveGoto);
+    patternContextMenu.addAction(&actionSetStartPattern);
 
+    channelContextMenu.addAction(&actionPause);
+    channelContextMenu.addAction(&actionHold);
+    channelContextMenu.addAction(&actionSlide);
+    channelContextMenu.addAction(&actionSetFrequency);
+    channelContextMenu.addAction(&actionInsertRowBefore);
+    channelContextMenu.addAction(&actionInsertRowAfter);
+    channelContextMenu.addAction(&actionDeleteRow);
 }
 
 /*************************************************************************/
@@ -39,7 +55,8 @@ void TrackTab::initTrackTab() {
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
-
+    editor->registerPatternMenu(&patternContextMenu);
+    editor->registerChannelMenu(&channelContextMenu);
 }
 
 /*************************************************************************/

@@ -6,6 +6,7 @@
 #include "track/track.h"
 #include <QFontDatabase>
 #include "tiasound/pitchguide.h"
+#include <QMenu>
 
 
 class PatternEditor : public QWidget
@@ -16,6 +17,8 @@ public:
 
     void registerTrack(Track::Track *newTrack);
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
+    void registerPatternMenu(QMenu *newPatternMenu);
+    void registerChannelMenu(QMenu *newChannelMenu);
 
     int getEditPos();
 
@@ -31,6 +34,8 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
     static const int noteFontSize = 12;
@@ -59,6 +64,8 @@ private:
 
     Track::Track *pTrack;
     TiaSound::PitchGuide *pPitchGuide;
+    QMenu *pPatternMenu = nullptr;
+    QMenu *pChannelMenu = nullptr;
 
     int selectedChannel = 1;
     // Current editor note focus, i.e. middle-of-screen highlight

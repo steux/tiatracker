@@ -46,6 +46,18 @@ void PatternEditor::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
 
 /*************************************************************************/
 
+void PatternEditor::registerPatternMenu(QMenu *newPatternMenu) {
+    pPatternMenu = newPatternMenu;
+}
+
+/*************************************************************************/
+
+void PatternEditor::registerChannelMenu(QMenu *newChannelMenu) {
+    pChannelMenu = newChannelMenu;
+}
+
+/*************************************************************************/
+
 void PatternEditor::setEditPos(int newPos) {
     editPos = newPos;
     if (editPos < 0) {
@@ -282,4 +294,26 @@ void PatternEditor::paintEvent(QPaintEvent *) {
 void PatternEditor::wheelEvent(QWheelEvent *event) {
     int newPos = editPos - event->delta()/100;
     setEditPos(newPos);
+}
+
+/*************************************************************************/
+
+void PatternEditor::mousePressEvent(QMouseEvent *event) {
+    // TODO
+}
+
+/*************************************************************************/
+
+void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
+    if (event->x() < patternNameWidth) {
+        pPatternMenu->exec(event->globalPos());
+    } else if (event->x() >= patternNameWidth && event->x() < patternNameWidth + noteAreaWidth) {
+        pChannelMenu->exec(event->globalPos());
+    } else if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth
+               && event->x() < patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth) {
+        pChannelMenu->exec(event->globalPos());
+    } else if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth
+               && event->x() < patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth + patternNameWidth){
+        pPatternMenu->exec(event->globalPos());
+    }
 }
