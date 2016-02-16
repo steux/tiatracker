@@ -79,6 +79,131 @@ QSize PatternEditor::sizeHint() const {
 
 /*************************************************************************/
 
+QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern) {
+    QString rowText = QString::number(curPatternNoteIndex + 1);
+    if (curPatternNoteIndex + 1 < 10) {
+        rowText.prepend("  ");
+    } else if (curPatternNoteIndex < 100) {
+        rowText.prepend(" ");
+    }
+    switch (curPattern->notes[curPatternNoteIndex].type) {
+    case Track::Note::instrumentType::Hold:
+        rowText.append(":    |");
+        break;
+    case Track::Note::instrumentType::Slide: {
+        int frequency = curPattern->notes[curPatternNoteIndex].value;
+        rowText.append(":   ");
+        rowText.append("  SL");
+        // Frequency change
+        if (frequency < 0) {
+            rowText.append(" ");
+        } else {
+            rowText.append(" +");
+        }
+        rowText.append(QString::number(frequency));
+        break;
+    }
+    case Track::Note::instrumentType::Pause:
+        rowText.append(":   ---");
+        break;
+    case Track::Note::instrumentType::Percussion: {
+        int percNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+        if (percNum < 10) {
+            rowText.append(":   P ");
+        } else {
+            rowText.append(":   P");
+        }
+        rowText.append(QString::number(percNum));
+        break;
+    }
+    case Track::Note::instrumentType::Instrument: {
+        int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+        // Pitch
+        int frequency = curPattern->notes[curPatternNoteIndex].value;
+        TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
+        TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
+        TiaSound::Note note = pIPG->getNote(frequency);
+        if (note == TiaSound::Note::NotANote) {
+            rowText.append(": ???");
+        } else {
+            rowText.append(": ");
+            rowText.append(TiaSound::getNoteNameWithOctaveFixedWidth(note));
+        }
+        // Instrument number
+        rowText.append(" I");
+        rowText.append(QString::number(insNum));
+        // Frequency
+        if (frequency < 10) {
+            rowText.append("  ");
+        } else {
+            rowText.append(" ");
+        }
+        rowText.append(QString::number(frequency));
+        break;
+    }
+    default:
+        rowText.append(": ??? ");
+        break;
+    }
+
+    return rowText;
+}
+
+void PatternEditor::drawPatternNameAndSeparator(int yPos, int nameXPos, int curPatternNoteIndex, int channel, int xPos, int curEntryIndex, QPainter *painter, Track::Pattern *curPattern)
+{
+    if (curPatternNoteIndex == 0) {
+        painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, 1, MainWindow::contentDarker);
+        painter->setFont(legendFont);
+        painter->setPen(MainWindow::contentDarker);
+        int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
+        QString patternName = QString::number(curEntryIndex + 1);
+        patternName.append(": ");
+        patternName.append(curPattern->name);
+        if (curEntryIndex == pTrack->startPatterns[channel]) {
+            painter->setPen(MainWindow::green);
+
+        } else {
+            painter->setPen(MainWindow::blue);
+        }
+        painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
+    }
+}
+
+void PatternEditor::drawGoto(int channel, int yPos, Track::Pattern *curPattern, Track::SequenceEntry *curEntry, QPainter *painter, int nameXPos, int curPatternNoteIndex)
+{
+    if (curPatternNoteIndex == curPattern->notes.size() - 1
+            && curEntry->gotoTarget != -1) {
+        int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
+        painter->setFont(legendFont);
+        painter->setPen(MainWindow::blue);
+        painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment,
+                          "GOTO " + QString::number(curEntry->gotoTarget + 1));
+    }
+}
+
+void PatternEditor::drawTimestamp(int row, QPainter *painter, int yPos, int channel)
+{
+    int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
+    long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
+    long numEvenTicks = int(row/2)*pTrack->evenSpeed;
+    long numTick = numOddTicks + numEvenTicks;
+    int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
+    if (channel == 0 && numTick%ticksPerSecond < curTicks) {
+        int minute = numTick/(ticksPerSecond*60);
+        int second = (numTick%(ticksPerSecond*60))/ticksPerSecond;
+        QString timestampText = QString::number(minute);
+        if (second < 10) {
+            timestampText.append(":0");
+        } else {
+            timestampText.append(":");
+        }
+        timestampText.append(QString::number(second));
+        painter->setFont(legendFont);
+        painter->setPen(MainWindow::contentDarker);
+        painter->drawText(patternNameWidth + noteAreaWidth, yPos, timeAreaWidth, legendFontHeight, Qt::AlignHCenter, timestampText);
+    }
+}
+
 void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos) {
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
@@ -87,7 +212,6 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     if (firstNoteIndex >= channelSize) {
         return;
     }
-
     // Get pointers to first note to paint
     int curEntryIndex = 0;
     Track::SequenceEntry *curEntry = &(pTrack->channelSequences[channel].sequence[0]);
@@ -98,8 +222,6 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         curPattern = &(pTrack->patterns[curEntry->patternIndex]);
     }
     int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
-    int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
-
     // Draw rows
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
@@ -107,121 +229,14 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         if (row%(pTrack->rowsPerBeat) == 0 && (channel != selectedChannel || row != editPos)) {
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
         }
-        // Construct row string
-        QString rowText = QString::number(curPatternNoteIndex + 1);
-        if (curPatternNoteIndex + 1 < 10) {
-            rowText.prepend("  ");
-        } else if (curPatternNoteIndex < 100) {
-            rowText.prepend(" ");
-        }
-        switch (curPattern->notes[curPatternNoteIndex].type) {
-        case Track::Note::instrumentType::Hold:
-            rowText.append(":    |");
-            break;
-        case Track::Note::instrumentType::Slide: {
-            int frequency = curPattern->notes[curPatternNoteIndex].value;
-            rowText.append(":   ");
-            rowText.append("  SL");
-            // Frequency change
-            if (frequency < 0) {
-                rowText.append(" ");
-            } else {
-                rowText.append(" +");
-            }
-            rowText.append(QString::number(frequency));
-            break;
-        }
-        case Track::Note::instrumentType::Pause:
-            rowText.append(":   ---");
-            break;
-        case Track::Note::instrumentType::Percussion: {
-            int percNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
-            if (percNum < 10) {
-                rowText.append(":   P ");
-            } else {
-                rowText.append(":   P");
-            }
-            rowText.append(QString::number(percNum));
-            break;
-        }
-        case Track::Note::instrumentType::Instrument: {
-            int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
-            // Pitch
-            int frequency = curPattern->notes[curPatternNoteIndex].value;
-            TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
-            TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
-            TiaSound::Note note = pIPG->getNote(frequency);
-            if (note == TiaSound::Note::NotANote) {
-                rowText.append(": ???");
-            } else {
-                rowText.append(": ");
-                rowText.append(TiaSound::getNoteNameWithOctaveFixedWidth(note));
-            }
-            // Instrument number
-            rowText.append(" I");
-            rowText.append(QString::number(insNum));
-            // Frequency
-            if (frequency < 10) {
-                rowText.append("  ");
-            } else {
-                rowText.append(" ");
-            }
-            rowText.append(QString::number(frequency));
-            break;
-        }
-        default:
-            rowText.append(": ??? ");
-            break;
-        }
-
+        QString rowText = constructRowString(curPatternNoteIndex, curPattern);
         painter->setFont(noteFont);
         painter->setPen(MainWindow::blue);
         painter->drawText(xPos, yPos, noteAreaWidth - 2*noteMargin, noteFontHeight, Qt::AlignLeft, rowText);
-        // Draw pattern name and pattern separator?
-        if (curPatternNoteIndex == 0) {
-            painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, 1, MainWindow::contentDarker);
-            painter->setFont(legendFont);
-            painter->setPen(MainWindow::contentDarker);
-            int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
-            QString patternName = QString::number(curEntryIndex + 1);
-            patternName.append(": ");
-            patternName.append(curPattern->name);
-            if (curEntryIndex == pTrack->startPatterns[channel]) {
-                painter->setPen(MainWindow::green);
 
-            } else {
-                painter->setPen(MainWindow::blue);
-            }
-            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment, patternName);
-        }
-        // Draw goto?
-        if (curPatternNoteIndex == curPattern->notes.size() - 1
-                && curEntry->gotoTarget != -1) {
-            int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
-            painter->setFont(legendFont);
-            painter->setPen(MainWindow::blue);
-            painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment,
-                              "GOTO " + QString::number(curEntry->gotoTarget + 1));
-        }
-        // Draw timestamp?
-        long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
-        long numEvenTicks = int(row/2)*pTrack->evenSpeed;
-        long numTick = numOddTicks + numEvenTicks;
-        int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
-        if (channel == 0 && numTick%ticksPerSecond < curTicks) {
-            int minute = numTick/(ticksPerSecond*60);
-            int second = (numTick%(ticksPerSecond*60))/ticksPerSecond;
-            QString timestampText = QString::number(minute);
-            if (second < 10) {
-                timestampText.append(":0");
-            } else {
-                timestampText.append(":");
-            }
-            timestampText.append(QString::number(second));
-            painter->setFont(legendFont);
-            painter->setPen(MainWindow::contentDarker);
-            painter->drawText(patternNameWidth + noteAreaWidth, yPos, timeAreaWidth, legendFontHeight, Qt::AlignHCenter, timestampText);
-        }
+        drawPatternNameAndSeparator(yPos, nameXPos, curPatternNoteIndex, channel, xPos, curEntryIndex, painter, curPattern);
+        drawGoto(channel, yPos, curPattern, curEntry, painter, nameXPos, curPatternNoteIndex);
+        drawTimestamp(row, painter, yPos, channel);
 
         // Advance note
         if (!pTrack->getNextNote(channel, &curEntryIndex, &curPatternNoteIndex)) {
