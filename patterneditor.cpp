@@ -216,7 +216,7 @@ void PatternEditor::drawTimestamp(int row, QPainter *painter, int yPos, int chan
     }
 }
 
-void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos) {
+void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int nameXPos) {
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
     // Don't do anything if we are behind the last note
@@ -236,7 +236,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     int curPatternNoteIndex = firstNoteIndex - curEntry->firstNoteNumber;
     // Draw rows
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
-        int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
+        int yPos = topMargin + noteFontHeight*(row - (editPos - numRows/2));
         // First row in beat?
         if (row%(pTrack->rowsPerBeat) == 0 && (channel != selectedChannel || row != editPos)) {
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
@@ -277,15 +277,15 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(highlightX, highlightY, noteAreaWidth, noteFontHeight, MainWindow::light);
 
     // Calc number of visible rows
-    int numRows = height()/noteFontHeight;
+    numRows = height()/noteFontHeight;
     if (numRows%2 == 0) {
         numRows--;
     }
-    int topMargin = (height() - numRows*noteFontHeight)/2;
+    topMargin = (height() - numRows*noteFontHeight)/2;
 
     // Paint channels
-    paintChannel(&painter, 0, patternNameWidth + noteMargin, topMargin, numRows, patternNameMargin);
-    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth + noteMargin, topMargin, numRows, width() - patternNameWidth + patternNameMargin);
+    paintChannel(&painter, 0, patternNameWidth + noteMargin, patternNameMargin);
+    paintChannel(&painter, 1, patternNameWidth + noteAreaWidth + timeAreaWidth + noteMargin, width() - patternNameWidth + patternNameMargin);
 
 }
 
@@ -304,16 +304,40 @@ void PatternEditor::mousePressEvent(QMouseEvent *event) {
 
 /*************************************************************************/
 
+
 void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
+    // Do nothing if we are outside a valid row
+    if (event->y() < topMargin || event->y() > topMargin + numRows*noteFontHeight) {
+        return;
+    }
+    int row = (event->y() - topMargin)/noteFontHeight;
+    int noteIndex = editPos - (numRows/2 - row);
+    int channel;
+    if (event->x() < patternNameWidth + noteAreaWidth) {
+        channel = 0;
+    }
+    if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth) {
+        channel = 1;
+    }
+    int channelSize = pTrack->getChannelNumRows(channel);
+    if (noteIndex < 0 || noteIndex >= channelSize) {
+        return;
+    }
+
+    // Determine correct context menu to display
     if (event->x() < patternNameWidth) {
+        emit patternContextEvent(channel, noteIndex);
         pPatternMenu->exec(event->globalPos());
     } else if (event->x() >= patternNameWidth && event->x() < patternNameWidth + noteAreaWidth) {
+        emit channelContextEvent(channel, noteIndex);
         pChannelMenu->exec(event->globalPos());
     } else if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth
                && event->x() < patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth) {
+        emit channelContextEvent(channel, noteIndex);
         pChannelMenu->exec(event->globalPos());
     } else if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth
                && event->x() < patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth + patternNameWidth){
+        emit patternContextEvent(channel, noteIndex);
         pPatternMenu->exec(event->globalPos());
     }
 }

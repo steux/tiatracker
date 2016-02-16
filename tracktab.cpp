@@ -92,6 +92,20 @@ void TrackTab::setOddSpeed(int value) {
 
 /*************************************************************************/
 
+void TrackTab::patternContextEvent(int channel, int noteIndex) {
+    contextEventChannel = channel;
+    contextEventNoteIndex = noteIndex;
+}
+
+/*************************************************************************/
+
+void TrackTab::channelContextEvent(int channel, int noteIndex) {
+    contextEventChannel = channel;
+    contextEventNoteIndex = noteIndex;
+}
+
+/*************************************************************************/
+
 void TrackTab::updateTrackStats() {
     // Patterns
     QLabel *statsLabel = findChild<QLabel *>("labelPatternsUsed");

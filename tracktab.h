@@ -31,6 +31,8 @@ signals:
 public slots:
     void setEvenSpeed(int value);
     void setOddSpeed(int value);
+    void patternContextEvent(int channel, int noteIndex);
+    void channelContextEvent(int channel, int noteIndex);
 
 private:
     /* Just updates the number of patterns and track length stats */
@@ -60,6 +62,9 @@ private:
     QAction actionInsertRowBefore{"Insert row before", this};
     QAction actionInsertRowAfter{"Insert row after", this};
     QAction actionDeleteRow{"Delete row", this};
+
+    int contextEventChannel;
+    int contextEventNoteIndex;
 
 };
 

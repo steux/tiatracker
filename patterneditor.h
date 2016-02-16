@@ -26,6 +26,8 @@ public:
 
 signals:
     void editPosChanged(int newPos);
+    void patternContextEvent(int channel, int row);
+    void channelContextEvent(int channel, int row);
 
 public slots:
     void setEditPos(int newPos);
@@ -50,7 +52,12 @@ private:
     void drawPatternNameAndSeparator(int yPos, int nameXPos, int curPatternNoteIndex, int channel, int xPos, int curEntryIndex, QPainter *painter, Track::Pattern *curPattern);
     void drawGoto(int channel, int yPos, Track::Pattern *curPattern, Track::SequenceEntry *curEntry, QPainter *painter, int nameXPos, int curPatternNoteIndex);
     void drawTimestamp(int row, QPainter *painter, int yPos, int channel);
-    void paintChannel(QPainter *painter, int channel, int xPos, int yOffset, int numRows, int nameXPos);
+    void paintChannel(QPainter *painter, int channel, int xPos, int nameXPos);
+
+    int calcChannelRowPos(int yPos);
+
+    int numRows;    // number of visible rows
+    int topMargin;  // margin before first row is displayed
 
     int noteFontHeight;
     int noteAreaWidth;
