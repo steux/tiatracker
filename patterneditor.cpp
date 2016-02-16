@@ -51,8 +51,8 @@ void PatternEditor::setEditPos(int newPos) {
     if (editPos < 0) {
         editPos = 0;
     }
-    if (editPos >= pTrack->getNumRows()) {
-        editPos = pTrack->getNumRows() - 1;
+    if (editPos >= pTrack->getTrackNumRows()) {
+        editPos = pTrack->getTrackNumRows() - 1;
     }
     emit editPosChanged(editPos);
     update();
@@ -83,9 +83,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     // Calc first note/pattern
     int firstNoteIndex = max(0, editPos - numRows/2);
     // Don't do anything if we are behind the last note
-    int lastPattern = pTrack->channelSequences[channel].sequence.last().patternIndex;
-    int channelSize = pTrack->channelSequences[channel].sequence.last().firstNoteNumber
-            + pTrack->patterns[lastPattern].notes.size();
+    int channelSize = pTrack->getChannelNumRows(channel);
     if (firstNoteIndex >= channelSize) {
         return;
     }
@@ -106,7 +104,7 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
     for (int row = firstNoteIndex; row <= editPos + numRows/2; ++row) {
         int yPos = yOffset + noteFontHeight*(row - (editPos - numRows/2));
         // First row in beat?
-        if (row%(pTrack->rowsPerBeat) == 0 && (channel != 0 || row != editPos)) {
+        if (row%(pTrack->rowsPerBeat) == 0 && (channel != selectedChannel || row != editPos)) {
             painter->fillRect(xPos - noteMargin, yPos, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
         }
         // Construct row string
@@ -226,17 +224,12 @@ void PatternEditor::paintChannel(QPainter *painter, int channel, int xPos, int y
         }
 
         // Advance note
-        curPatternNoteIndex++;
-        if (curPatternNoteIndex == curPattern->notes.size()) {
-            curEntryIndex++;
-            if (curEntryIndex == pTrack->channelSequences[channel].sequence.size()) {
-                // End of track reached; stop drawing
-                break;
-            }
-            curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
-            curPattern = &(pTrack->patterns[curEntry->patternIndex]);
-            curPatternNoteIndex = 0;
+        if (!pTrack->getNextNote(channel, &curEntryIndex, &curPatternNoteIndex)) {
+            // End of track reached: Stop drawing
+            break;
         }
+        curEntry = &(pTrack->channelSequences[channel].sequence[curEntryIndex]);
+        curPattern = &(pTrack->patterns[curEntry->patternIndex]);
     }
 }
 
@@ -253,8 +246,8 @@ void PatternEditor::paintEvent(QPaintEvent *) {
     painter.fillRect(patternNameWidth + noteAreaWidth, 0, timeAreaWidth, height(), MainWindow::lightHighlighted);
     // Current highlights
     int highlightY = height()/2 - noteFontHeight/2;
-    painter.fillRect(patternNameWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::light);
-    //painter.fillRect(patternNameWidth + noteAreaWidth + timeAreaWidth, highlightY, noteAreaWidth, noteFontHeight, MainWindow::darkHighlighted);
+    int highlightX = patternNameWidth + selectedChannel*(noteAreaWidth + timeAreaWidth);
+    painter.fillRect(highlightX, highlightY, noteAreaWidth, noteFontHeight, MainWindow::light);
 
     // Calc number of visible rows
     int numRows = height()/noteFontHeight;

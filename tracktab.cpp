@@ -89,7 +89,7 @@ void TrackTab::updateTrackStats() {
                         + "/" + QString::number(pTrack->startPatterns[1] + 1));
 
     // Time
-    int numRows = pTrack->getNumRows();
+    int numRows = pTrack->getTrackNumRows();
     long numOddTicks = int((numRows + 1)/2)*pTrack->oddSpeed;
     long numEvenTicks = int(numRows/2)*pTrack->evenSpeed;
     long numTicks = numOddTicks + numEvenTicks;

@@ -37,10 +37,19 @@ public:
     int getNumUsedInstruments();
     int getNumUsedPercussion();
 
-    int getNumRows();
+    /* Get number of rows of one channel */
+    int getChannelNumRows(int channel);
+
+    /* Get max number of rows of both channels */
+    int getTrackNumRows();
 
     /* Sets "firstNoteNumber" values of all sequence entries */
     void updateFirstNoteNumbers();
+
+    /* Get index of next note (and entry, if new pattern is reached)
+     * for a specific channel.
+     * Returns false if there is no next note. */
+    bool getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex);
 
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);

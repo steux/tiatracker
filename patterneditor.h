@@ -56,6 +56,7 @@ private:
     Track::Track *pTrack;
     TiaSound::PitchGuide *pPitchGuide;
 
+    int selectedChannel = 1;
     // Current editor note focus, i.e. middle-of-screen highlight
     int editPos = 0;
 };

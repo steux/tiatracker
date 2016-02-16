@@ -90,14 +90,16 @@ int Track::getNumUsedPercussion()
 
 /*************************************************************************/
 
-int Track::getNumRows() {
-    int lastPattern0 = channelSequences[0].sequence.last().patternIndex;
-    int size0 = channelSequences[0].sequence.last().firstNoteNumber
-            + patterns[lastPattern0].notes.size();
-    int lastPattern1 = channelSequences[1].sequence.last().patternIndex;
-    int size1 = channelSequences[1].sequence.last().firstNoteNumber
-            + patterns[lastPattern1].notes.size();
-    return std::max(size0, size1);
+int Track::getChannelNumRows(int channel) {
+    int lastPattern = channelSequences[channel].sequence.last().patternIndex;
+    return channelSequences[channel].sequence.last().firstNoteNumber
+            + patterns[lastPattern].notes.size();
+}
+
+/*************************************************************************/
+
+int Track::getTrackNumRows() {
+    return std::max(getChannelNumRows(0), getChannelNumRows(1));
 }
 
 /*************************************************************************/
@@ -111,6 +113,23 @@ void Track::updateFirstNoteNumbers() {
             noteNumber += patterns[iPattern].notes.size();
         }
     }
+}
+
+/*************************************************************************/
+
+bool Track::getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
+    SequenceEntry *curEntry = &(channelSequences[channel].sequence[*pEntryIndex]);
+    Pattern *curPattern = &(patterns[curEntry->patternIndex]);
+    (*pPatternNoteIndex)++;
+    if (*pPatternNoteIndex == curPattern->notes.size()) {
+        *(pEntryIndex) = *(pEntryIndex) + 1;
+        if (*pEntryIndex == channelSequences[channel].sequence.size()) {
+            // End of track reached: There is no next note
+            return false;
+        }
+        *(pPatternNoteIndex) = 0;
+    }
+    return true;
 }
 
 /*************************************************************************/
