@@ -29,6 +29,8 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     channelContextMenu.addAction(&actionInsertRowBefore);
     channelContextMenu.addAction(&actionInsertRowAfter);
     channelContextMenu.addAction(&actionDeleteRow);
+    actionMuteChannel.setCheckable(true);
+    channelContextMenu.addAction(&actionMuteChannel);
 }
 
 /*************************************************************************/
@@ -88,13 +90,6 @@ void TrackTab::setOddSpeed(int value) {
     pTrack->oddSpeed = value;
     updateTrackStats();
     updatePatternEditor();
-}
-
-/*************************************************************************/
-
-void TrackTab::patternContextEvent(int channel, int noteIndex) {
-    contextEventChannel = channel;
-    contextEventNoteIndex = noteIndex;
 }
 
 /*************************************************************************/

@@ -26,7 +26,6 @@ public:
 
 signals:
     void editPosChanged(int newPos);
-    void patternContextEvent(int channel, int row);
     void channelContextEvent(int channel, int row);
 
 public slots:

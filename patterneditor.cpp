@@ -326,7 +326,7 @@ void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
 
     // Determine correct context menu to display
     if (event->x() < patternNameWidth) {
-        emit patternContextEvent(channel, noteIndex);
+        emit channelContextEvent(channel, noteIndex);
         pPatternMenu->exec(event->globalPos());
     } else if (event->x() >= patternNameWidth && event->x() < patternNameWidth + noteAreaWidth) {
         emit channelContextEvent(channel, noteIndex);
@@ -337,7 +337,7 @@ void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
         pChannelMenu->exec(event->globalPos());
     } else if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth
                && event->x() < patternNameWidth + noteAreaWidth + timeAreaWidth + noteAreaWidth + patternNameWidth){
-        emit patternContextEvent(channel, noteIndex);
+        emit channelContextEvent(channel, noteIndex);
         pPatternMenu->exec(event->globalPos());
     }
 }
