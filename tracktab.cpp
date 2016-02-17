@@ -8,6 +8,7 @@
 #include "patterneditor.h"
 #include <QLabel>
 #include <QSpinBox>
+#include "setslidedialog.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -60,6 +61,7 @@ void TrackTab::initTrackTab() {
 
     // Context menus
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
+    QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -108,6 +110,13 @@ void TrackTab::channelContextEvent(int channel, int noteIndex) {
 void TrackTab::setStartPattern(bool) {
     pTrack->startPatterns[contextEventChannel] = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     update();
+}
+
+/*************************************************************************/
+
+void TrackTab::setSlideValue(bool) {
+    SetSlideDialog dialog{this};
+    dialog.exec();
 }
 
 /*************************************************************************/
