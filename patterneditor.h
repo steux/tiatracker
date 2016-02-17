@@ -53,6 +53,12 @@ private:
     void drawTimestamp(int row, QPainter *painter, int yPos, int channel);
     void paintChannel(QPainter *painter, int channel, int xPos, int nameXPos);
 
+    /* If x and y are in a valid row with regards to the channel clicked,
+     * the channel number, row and note index get written to the parameters
+     * and true is returned.
+     */
+    bool clickedInValidRow(int x, int y, int *channel, int *noteIndex);
+
     int calcChannelRowPos(int yPos);
 
     int numRows;    // number of visible rows

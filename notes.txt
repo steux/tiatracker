@@ -23,7 +23,6 @@ FEATURES:
 
 
 CODING STYLE:
-- in patterneditor and tabtrack: merge signals/slots patternContextEvent and channelContextEvent (redundant!)
 - Do proper QThread (don't inherit from QThread) and set priority to highest
 - Do proper OO: Base class Instrument gets inherited by MelodicInstrument and PercussionInstrument. Similarly with EnvelopeShaper, InstrumentShaper and PercussionShaper
 - Make mutex in track private and encapsulate

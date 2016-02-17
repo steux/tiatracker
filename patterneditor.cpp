@@ -298,29 +298,50 @@ void PatternEditor::wheelEvent(QWheelEvent *event) {
 
 /*************************************************************************/
 
+bool PatternEditor::clickedInValidRow(int x, int y, int *channel, int *noteIndex) {
+    // Do nothing if we are outside a valid row
+    if (y < topMargin || y > topMargin + numRows*noteFontHeight) {
+        return false;
+    }
+    int row = (y - topMargin)/noteFontHeight;
+    *noteIndex = editPos - (numRows/2 - row);
+    if (x < patternNameWidth + noteAreaWidth) {
+        *channel = 0;
+    }
+    if (x >= patternNameWidth + noteAreaWidth + timeAreaWidth) {
+        *channel = 1;
+    }
+    int channelSize = pTrack->getChannelNumRows(*channel);
+    if (*noteIndex < 0 || *noteIndex >= channelSize) {
+        return false;
+    }
+    return true;
+}
+
+
+/*************************************************************************/
+
 void PatternEditor::mousePressEvent(QMouseEvent *event) {
-    // TODO
+    if (event->button() != Qt::LeftButton) {
+        return;
+    }
+    int channel;
+    int noteIndex;
+    if (!clickedInValidRow(event->x(), event->y(), &channel, &noteIndex)) {
+        return;
+    }
+    selectedChannel = channel;
+    editPos = noteIndex;
+    update();
 }
 
 /*************************************************************************/
 
 
 void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
-    // Do nothing if we are outside a valid row
-    if (event->y() < topMargin || event->y() > topMargin + numRows*noteFontHeight) {
-        return;
-    }
-    int row = (event->y() - topMargin)/noteFontHeight;
-    int noteIndex = editPos - (numRows/2 - row);
     int channel;
-    if (event->x() < patternNameWidth + noteAreaWidth) {
-        channel = 0;
-    }
-    if (event->x() >= patternNameWidth + noteAreaWidth + timeAreaWidth) {
-        channel = 1;
-    }
-    int channelSize = pTrack->getChannelNumRows(channel);
-    if (noteIndex < 0 || noteIndex >= channelSize) {
+    int noteIndex;
+    if (!clickedInValidRow(event->x(), event->y(), &channel, &noteIndex)) {
         return;
     }
 
