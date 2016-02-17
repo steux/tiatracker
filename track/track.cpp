@@ -117,6 +117,20 @@ void Track::updateFirstNoteNumbers() {
 
 /*************************************************************************/
 
+int Track::getSequenceEntryIndex(int channel, int row) {
+    int entryIndex = 0;
+    SequenceEntry *curEntry = &(channelSequences[channel].sequence[0]);
+    Pattern *curPattern = &(patterns[curEntry->patternIndex]);
+    while (row >= curEntry->firstNoteNumber + curPattern->notes.size()) {
+        entryIndex++;
+        curEntry = &(channelSequences[channel].sequence[entryIndex]);
+        curPattern = &(patterns[curEntry->patternIndex]);
+    }
+    return entryIndex;
+}
+
+/*************************************************************************/
+
 bool Track::getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
     SequenceEntry *curEntry = &(channelSequences[channel].sequence[*pEntryIndex]);
     Pattern *curPattern = &(patterns[curEntry->patternIndex]);

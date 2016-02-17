@@ -57,6 +57,10 @@ void TrackTab::initTrackTab() {
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
+
+    // Context menus
+    QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
+
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
 }
@@ -97,6 +101,13 @@ void TrackTab::setOddSpeed(int value) {
 void TrackTab::channelContextEvent(int channel, int noteIndex) {
     contextEventChannel = channel;
     contextEventNoteIndex = noteIndex;
+}
+
+/*************************************************************************/
+
+void TrackTab::setStartPattern(bool) {
+    pTrack->startPatterns[contextEventChannel] = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    update();
 }
 
 /*************************************************************************/

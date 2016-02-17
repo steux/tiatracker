@@ -33,6 +33,9 @@ public slots:
     void setOddSpeed(int value);
     void channelContextEvent(int channel, int noteIndex);
 
+    // Pattern context menu
+    void setStartPattern(bool);
+
 private:
     /* Just updates the number of patterns and track length stats */
     void updateTrackStats();
