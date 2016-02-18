@@ -15,6 +15,9 @@ public:
     explicit SetSlideDialog(QWidget *parent = 0);
     ~SetSlideDialog();
 
+    int getSlideValue();
+
+
 private:
     Ui::SetSlideDialog *ui;
 };

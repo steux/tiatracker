@@ -115,8 +115,11 @@ void TrackTab::setStartPattern(bool) {
 /*************************************************************************/
 
 void TrackTab::setSlideValue(bool) {
-    SetSlideDialog dialog{this};
-    dialog.exec();
+    SetSlideDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        std::cout << "New slide: " << dialog.getSlideValue() << "\n"; std::cout.flush();
+        // TODO: Set slide
+    }
 }
 
 /*************************************************************************/

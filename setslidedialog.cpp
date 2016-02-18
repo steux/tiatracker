@@ -6,9 +6,16 @@ SetSlideDialog::SetSlideDialog(QWidget *parent) :
     ui(new Ui::SetSlideDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
 }
 
 SetSlideDialog::~SetSlideDialog()
 {
     delete ui;
+}
+
+/*************************************************************************/
+
+int SetSlideDialog::getSlideValue() {
+    return ui->spinBoxSetSlideValue->value();
 }
