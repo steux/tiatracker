@@ -148,6 +148,48 @@ bool Track::getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
 
 /*************************************************************************/
 
+bool Track::checkSlideValidity(int channel, int row) {
+    // Skip slides and holds immediately before
+    int prevRow = row;
+    Note *n;
+    do {
+        prevRow = skipInstrumentType(channel, prevRow, Note::instrumentType::Slide, -1);
+        if (prevRow == -1) {
+            return false;
+        }
+        n = getNote(channel, prevRow);
+    } while(n->type == Note::instrumentType::Hold);
+
+    if (n->type != Note::instrumentType::Instrument) {
+        return false;
+    }
+    return true;
+}
+
+/*************************************************************************/
+
+int Track::skipInstrumentType(int channel, int row, Note::instrumentType type, int direction) {
+    int channelRows = getChannelNumRows(channel);
+    do {
+        row += direction;
+        if (row == -1 || row == channelRows) {
+            return -1;
+        }
+    } while (getNote(channel, row)->type == type);
+    return row;
+}
+
+/*************************************************************************/
+
+Note *Track::getNote(int channel, int row) {
+    int entryIndex = getSequenceEntryIndex(channel, row);
+    int patternIndex = channelSequences[channel].sequence[entryIndex].patternIndex;
+    int noteIndex = row - channelSequences[channel].sequence[entryIndex].firstNoteNumber;
+    return &(patterns[patternIndex].notes[noteIndex]);
+}
+
+/*************************************************************************/
+
 void Track::toJson(QJsonObject &json) {
     // General data
     json["version"] = MainWindow::version;

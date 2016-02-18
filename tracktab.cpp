@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include "setslidedialog.h"
+#include <QMessageBox>
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -115,6 +116,16 @@ void TrackTab::setStartPattern(bool) {
 /*************************************************************************/
 
 void TrackTab::setSlideValue(bool) {
+    if (!pTrack->checkSlideValidity(contextEventChannel, contextEventNoteIndex)) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "A SLIDE can only follow a melodic instrument or another slide!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+
     SetSlideDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
         std::cout << "New slide: " << dialog.getSlideValue() << "\n"; std::cout.flush();

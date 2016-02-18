@@ -55,6 +55,12 @@ public:
      * Returns false if there is no next note. */
     bool getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex);
 
+    bool checkSlideValidity(int channel, int row);
+
+    int skipInstrumentType(int channel, int row, Note::instrumentType type, int direction);
+
+    Note *getNote(int channel, int row);
+
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);
 
