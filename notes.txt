@@ -17,6 +17,7 @@ TODO:
 - option for "B" instead of "H"
 - Pitch Perfect NTSC
 - Option: "Show invalid note warnings on/off"
+- Set Goto dialog: Either a dropdown list of all sequence entries, or a label showing the target name for a given value
 
 
 FEATURES:

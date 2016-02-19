@@ -13,6 +13,7 @@
 #include "setfrequencydialog.h"
 #include "instrumentstab.h"
 #include "renamepatterndialog.h"
+#include "setgotodialog.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -66,6 +67,7 @@ void TrackTab::initTrackTab() {
     // Pattern context menu
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
     QObject::connect(&actionRenamePattern, SIGNAL(triggered(bool)), this, SLOT(renamePattern(bool)));
+    QObject::connect(&actionSetGoto, SIGNAL(triggered(bool)), this, SLOT(setGoto(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -133,6 +135,22 @@ void TrackTab::renamePattern(bool) {
         pTrack->patterns[patternIndex].name = dialog.getPatternName();
         update();
     }
+}
+
+/*************************************************************************/
+
+void TrackTab::setGoto(bool) {
+    int maxValue = pTrack->channelSequences[contextEventChannel].sequence.size();
+    SetGotoDialog dialog(this);
+    dialog.setMaxValue(maxValue);
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    Track::SequenceEntry *entry = &(pTrack->channelSequences[contextEventChannel].sequence[entryIndex]);
+    dialog.setGotoValue(std::max(1, entry->gotoTarget + 1));
+    if (dialog.exec() == QDialog::Accepted) {
+        entry->gotoTarget = dialog.getGotoValue() - 1;
+        update();
+    }
+
 }
 
 /*************************************************************************/

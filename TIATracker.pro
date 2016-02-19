@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     timeline.cpp \
     setslidedialog.cpp \
     setfrequencydialog.cpp \
-    renamepatterndialog.cpp
+    renamepatterndialog.cpp \
+    setgotodialog.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -72,13 +73,15 @@ HEADERS  += mainwindow.h \
     timeline.h \
     setslidedialog.h \
     setfrequencydialog.h \
-    renamepatterndialog.h
+    renamepatterndialog.h \
+    setgotodialog.h
 
 
 FORMS    += mainwindow.ui \
     setslidedialog.ui \
     setfrequencydialog.ui \
-    renamepatterndialog.ui
+    renamepatterndialog.ui \
+    setgotodialog.ui
 
 CONFIG += c++11
 
