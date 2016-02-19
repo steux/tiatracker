@@ -19,3 +19,10 @@ SetSlideDialog::~SetSlideDialog()
 int SetSlideDialog::getSlideValue() {
     return ui->spinBoxSetSlideValue->value();
 }
+
+/*************************************************************************/
+
+void SetSlideDialog::setSlideValue(int value) {
+    ui->spinBoxSetSlideValue->setValue(value);
+}
+

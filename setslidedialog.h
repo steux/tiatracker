@@ -16,6 +16,7 @@ public:
     ~SetSlideDialog();
 
     int getSlideValue();
+    void setSlideValue(int value);
 
 
 private:

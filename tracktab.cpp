@@ -127,9 +127,15 @@ void TrackTab::setSlideValue(bool) {
     }
 
     SetSlideDialog dialog(this);
+    // If selected row already contains a SLIDE, pre-set dialog to that value
+    Track::Note *selectedNote = pTrack->getNote(contextEventChannel, contextEventNoteIndex);
+    if (selectedNote->type == Track::Note::instrumentType::Slide) {
+        dialog.setSlideValue(selectedNote->value);
+    }
     if (dialog.exec() == QDialog::Accepted) {
-        std::cout << "New slide: " << dialog.getSlideValue() << "\n"; std::cout.flush();
-        // TODO: Set slide
+        selectedNote->type = Track::Note::instrumentType::Slide;
+        selectedNote->value = dialog.getSlideValue();
+        updatePatternEditor();
     }
 }
 
