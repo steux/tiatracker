@@ -63,8 +63,8 @@ void PatternEditor::setEditPos(int newPos) {
     if (editPos < 0) {
         editPos = 0;
     }
-    if (editPos >= pTrack->getTrackNumRows()) {
-        editPos = pTrack->getTrackNumRows() - 1;
+    if (editPos >= pTrack->getChannelNumRows(selectedChannel)) {
+        editPos = pTrack->getChannelNumRows(selectedChannel) - 1;
     }
     emit editPosChanged(editPos);
     update();
