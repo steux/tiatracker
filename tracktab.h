@@ -38,6 +38,8 @@ public slots:
     void renamePattern(bool);
     void setGoto(bool);
     void removeGoto(bool);
+    void movePatternUp(bool);
+    void movePatternDown(bool);
 
     // Channel context menu
     void setSlideValue(bool);
