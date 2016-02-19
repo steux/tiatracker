@@ -68,6 +68,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
     QObject::connect(&actionRenamePattern, SIGNAL(triggered(bool)), this, SLOT(renamePattern(bool)));
     QObject::connect(&actionSetGoto, SIGNAL(triggered(bool)), this, SLOT(setGoto(bool)));
+    QObject::connect(&actionRemoveGoto, SIGNAL(triggered(bool)), this, SLOT(removeGoto(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -151,6 +152,15 @@ void TrackTab::setGoto(bool) {
         update();
     }
 
+}
+
+/*************************************************************************/
+
+void TrackTab::removeGoto(bool) {
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    Track::SequenceEntry *entry = &(pTrack->channelSequences[contextEventChannel].sequence[entryIndex]);
+    entry->gotoTarget = -1;
+    update();
 }
 
 /*************************************************************************/
