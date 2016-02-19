@@ -67,6 +67,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
     QObject::connect(&actionSetFrequency, SIGNAL(triggered(bool)), this, SLOT(setFrequency(bool)));
     QObject::connect(&actionHold, SIGNAL(triggered(bool)), this, SLOT(setHold(bool)));
+    QObject::connect(&actionPause, SIGNAL(triggered(bool)), this, SLOT(setPause(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -172,6 +173,57 @@ void TrackTab::setFrequency(bool) {
 void TrackTab::setHold(bool) {
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Hold;
     update();
+}
+
+/*************************************************************************/
+
+void TrackTab::setPause(bool) {
+    // Check if pause is valid here
+    bool isValid = true;
+    Track::Note *prevNote;
+    int prevRow = contextEventNoteIndex - 1;
+    if (prevRow == -1) {
+        isValid = false;
+    } else {
+        prevNote = pTrack->getNote(contextEventChannel, prevRow);
+    }
+    while (isValid
+           && (prevNote->type == Track::Note::instrumentType::Hold
+               || prevNote->type == Track::Note::instrumentType::Slide)) {
+        prevRow = pTrack->skipInstrumentType(contextEventChannel, prevRow, prevNote->type, -1);
+        if (prevRow == -1) {
+            isValid = false;
+        } else {
+            prevNote = pTrack->getNote(contextEventChannel, prevRow);
+        }
+    }
+    if (isValid
+            && (prevNote->type == Track::Note::instrumentType::Pause
+                || prevNote->type == Track::Note::instrumentType::Percussion)) {
+        isValid = false;
+    }
+    if (!isValid) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "A PAUSE can only follow a melodic instrument, melodic instrument HOLD, or SLIDE!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    // Is valid: set pause
+    pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Pause;
+
+    // Check for and correct next potential orphaned PAUSE
+    // (orphaned SLIDES or orphaned PAUSEs thereafter have to be corrected manually)
+    int nextRow = contextEventNoteIndex + 1;
+    if (nextRow != pTrack->getChannelNumRows(contextEventChannel)
+            && pTrack->getNote(contextEventChannel, nextRow)->type == Track::Note::instrumentType::Pause) {
+        pTrack->getNote(contextEventChannel, nextRow)->type = Track::Note::instrumentType::Hold;
+    }
+
+    update();
+
 }
 
 /*************************************************************************/

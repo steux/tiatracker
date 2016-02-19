@@ -40,6 +40,7 @@ public slots:
     void setSlideValue(bool);
     void setFrequency(bool);
     void setHold(bool);
+    void setPause(bool);
 
 
 private:
