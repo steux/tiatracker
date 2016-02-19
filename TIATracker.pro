@@ -40,7 +40,8 @@ SOURCES += main.cpp\
     patterneditor.cpp \
     timeline.cpp \
     setslidedialog.cpp \
-    setfrequencydialog.cpp
+    setfrequencydialog.cpp \
+    renamepatterndialog.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -70,12 +71,14 @@ HEADERS  += mainwindow.h \
     patterneditor.h \
     timeline.h \
     setslidedialog.h \
-    setfrequencydialog.h
+    setfrequencydialog.h \
+    renamepatterndialog.h
 
 
 FORMS    += mainwindow.ui \
     setslidedialog.ui \
-    setfrequencydialog.ui
+    setfrequencydialog.ui \
+    renamepatterndialog.ui
 
 CONFIG += c++11
 

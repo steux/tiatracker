@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include "setfrequencydialog.h"
 #include "instrumentstab.h"
+#include "renamepatterndialog.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -62,8 +63,11 @@ void TrackTab::initTrackTab() {
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
 
-    // Context menus
+    // Pattern context menu
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
+    QObject::connect(&actionRenamePattern, SIGNAL(triggered(bool)), this, SLOT(renamePattern(bool)));
+
+    // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
     QObject::connect(&actionSetFrequency, SIGNAL(triggered(bool)), this, SLOT(setFrequency(bool)));
     QObject::connect(&actionHold, SIGNAL(triggered(bool)), this, SLOT(setHold(bool)));
@@ -116,6 +120,19 @@ void TrackTab::channelContextEvent(int channel, int noteIndex) {
 void TrackTab::setStartPattern(bool) {
     pTrack->startPatterns[contextEventChannel] = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     update();
+}
+
+/*************************************************************************/
+
+void TrackTab::renamePattern(bool) {
+    RenamePatternDialog dialog(this);
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
+    dialog.setPatternName(pTrack->patterns[patternIndex].name);
+    if (dialog.exec() == QDialog::Accepted) {
+        pTrack->patterns[patternIndex].name = dialog.getPatternName();
+        update();
+    }
 }
 
 /*************************************************************************/
