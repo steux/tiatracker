@@ -129,7 +129,7 @@ QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Patter
         break;
     }
     case Track::Note::instrumentType::Instrument: {
-        int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber + 1;
+        int insNum = curPattern->notes[curPatternNoteIndex].instrumentNumber;
         // Pitch
         int frequency = curPattern->notes[curPatternNoteIndex].value;
         TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
@@ -143,7 +143,7 @@ QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Patter
         }
         // Instrument number
         rowText.append(" I");
-        rowText.append(QString::number(insNum));
+        rowText.append(QString::number(insNum + 1));
         // Frequency
         if (frequency < 10) {
             rowText.append("  ");
@@ -331,8 +331,7 @@ void PatternEditor::mousePressEvent(QMouseEvent *event) {
         return;
     }
     selectedChannel = channel;
-    editPos = noteIndex;
-    update();
+    setEditPos(noteIndex);
 }
 
 /*************************************************************************/

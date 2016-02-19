@@ -10,6 +10,8 @@
 #include <QSpinBox>
 #include "setslidedialog.h"
 #include <QMessageBox>
+#include "setfrequencydialog.h"
+#include "instrumentstab.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -63,6 +65,7 @@ void TrackTab::initTrackTab() {
     // Context menus
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
+    QObject::connect(&actionSetFrequency, SIGNAL(triggered(bool)), this, SLOT(setFrequency(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -135,6 +138,30 @@ void TrackTab::setSlideValue(bool) {
     if (dialog.exec() == QDialog::Accepted) {
         selectedNote->type = Track::Note::instrumentType::Slide;
         selectedNote->value = dialog.getSlideValue();
+        updatePatternEditor();
+    }
+}
+
+/*************************************************************************/
+
+void TrackTab::setFrequency(bool) {
+    Track::Note *selectedNote = pTrack->getNote(contextEventChannel, contextEventNoteIndex);
+    if (selectedNote->type != Track::Note::instrumentType::Instrument) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Error",
+                           "Only a melodic instrument can have a frequency value!",
+                           QMessageBox::Ok, this,
+                           Qt::FramelessWindowHint);
+        msgBox.exec();
+        return;
+    }
+    SetFrequencyDialog dialog(this);
+    dialog.setFrequencyValue(selectedNote->value);
+    Track::Instrument *ins = &(pTrack->instruments[selectedNote->instrumentNumber]);
+    int maxFreq = ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 63 : 31;
+    dialog.setMaxFrequencyValue(maxFreq);
+    if (dialog.exec() == QDialog::Accepted) {
+        selectedNote->value = dialog.getFrequencyValue();
         updatePatternEditor();
     }
 }

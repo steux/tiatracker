@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     track/sequenceentry.cpp \
     patterneditor.cpp \
     timeline.cpp \
-    setslidedialog.cpp
+    setslidedialog.cpp \
+    setfrequencydialog.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -68,11 +69,13 @@ HEADERS  += mainwindow.h \
     track/sequenceentry.h \
     patterneditor.h \
     timeline.h \
-    setslidedialog.h
+    setslidedialog.h \
+    setfrequencydialog.h
 
 
 FORMS    += mainwindow.ui \
-    setslidedialog.ui
+    setslidedialog.ui \
+    setfrequencydialog.ui
 
 CONFIG += c++11
 
