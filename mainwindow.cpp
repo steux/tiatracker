@@ -130,6 +130,18 @@ TiaSound::PitchGuide *MainWindow::getPitchGuide() {
 
 /*************************************************************************/
 
+void MainWindow::displayMessage(const QString &message) {
+
+    QMessageBox msgBox(QMessageBox::NoIcon,
+                       "ERROR",
+                       message,
+                       QMessageBox::Ok, QApplication::activeWindow(),
+                       Qt::FramelessWindowHint);
+    msgBox.exec();
+}
+
+/*************************************************************************/
+
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
     TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
@@ -276,12 +288,7 @@ void MainWindow::saveTrackByName(const QString &fileName) {
     QFile saveFile(fileName);
     // Export track
     if (!saveFile.open(QIODevice::WriteOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        displayMessage("Unable to open file!");
         return;
     }
     QJsonObject trackObject;
@@ -297,24 +304,14 @@ void MainWindow::saveTrackByName(const QString &fileName) {
 void MainWindow::loadTrackByName(const QString &fileName) {
     QFile loadFile(fileName);
     if (!loadFile.open(QIODevice::ReadOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        displayMessage("Unable to open file!");
         return;
     }
     QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
 
     // Parse in data
     if (!pTrack->fromJson(loadDoc.object())) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to parse track!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        displayMessage("Unable to parse track!");
         return;
     }
     setTrackName(fileName);

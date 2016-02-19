@@ -214,12 +214,7 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
 
     // Export instrument
     if (!saveFile.open(QIODevice::WriteOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("Unable to open file!");
         return;
     }
     QJsonObject insObject;
@@ -269,24 +264,14 @@ void InstrumentsTab::on_buttonInstrumentImport_clicked() {
     QString fileName = fileNames[0];
     QFile loadFile(fileName);
     if (!loadFile.open(QIODevice::ReadOnly)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to open file!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("Unable to open file!");
         return;
     }
     QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
 
     // Parse in data
     if (!curInstrument->import(loadDoc.object())) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Unable to parse instrument!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("Unable to parse instrument!");
         return;
     }
     // Update display

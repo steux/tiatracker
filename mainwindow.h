@@ -10,6 +10,7 @@
 
 #include <QList>
 #include <QMenu>
+#include <QMessageBox>
 
 
 namespace Ui {
@@ -49,6 +50,9 @@ public:
 
     /* Get current pitch guide */
     TiaSound::PitchGuide *getPitchGuide();
+
+    /* Displays a message in an "OK" messagebox */
+    static void displayMessage(const QString &message);
 
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);

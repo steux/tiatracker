@@ -14,6 +14,7 @@
 #include "instrumentstab.h"
 #include "renamepatterndialog.h"
 #include "setgotodialog.h"
+#include "mainwindow.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -191,12 +192,7 @@ void TrackTab::movePatternDown(bool) {
 
 void TrackTab::setSlideValue(bool) {
     if (!pTrack->checkSlideValidity(contextEventChannel, contextEventNoteIndex)) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "A SLIDE can only follow a melodic instrument or another slide!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("A SLIDE can only follow a melodic instrument or another slide!");
         return;
     }
 
@@ -218,12 +214,7 @@ void TrackTab::setSlideValue(bool) {
 void TrackTab::setFrequency(bool) {
     Track::Note *selectedNote = pTrack->getNote(contextEventChannel, contextEventNoteIndex);
     if (selectedNote->type != Track::Note::instrumentType::Instrument) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "Only a melodic instrument can have a frequency value!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("Only a melodic instrument can have a frequency value!");
         return;
     }
     SetFrequencyDialog dialog(this);
@@ -272,12 +263,7 @@ void TrackTab::setPause(bool) {
         isValid = false;
     }
     if (!isValid) {
-        QMessageBox msgBox(QMessageBox::NoIcon,
-                           "Error",
-                           "A PAUSE can only follow a melodic instrument, melodic instrument HOLD, or SLIDE!",
-                           QMessageBox::Ok, this,
-                           Qt::FramelessWindowHint);
-        msgBox.exec();
+        MainWindow::displayMessage("A PAUSE can only follow a melodic instrument, melodic instrument HOLD, or SLIDE!");
         return;
     }
     // Is valid: set pause

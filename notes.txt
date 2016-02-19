@@ -1,5 +1,4 @@
 TODO:
-- Do main msgbox error method
 - On instrument base waveform change from PURE_COMBINED to something else: What happens
   with notes with freq>31? Display red and don't play/break? +Warn?
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
@@ -14,10 +13,10 @@ TODO:
 - switch json format to binary, at least for track?
 - Recover gracefully after trying to load corrupted track
 - keyboard shortcuts
-- option for "B" instead of "H"
 - Pitch Perfect NTSC
 - Option: "Show invalid note warnings on/off"
 - Set Goto dialog: Either a dropdown list of all sequence entries, or a label showing the target name for a given value
+- Move pattern up/down context menu in timeline?
 
 
 FEATURES:
