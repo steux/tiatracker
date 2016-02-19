@@ -39,6 +39,8 @@ public slots:
     // Channel context menu
     void setSlideValue(bool);
     void setFrequency(bool);
+    void setHold(bool);
+
 
 private:
     /* Just updates the number of patterns and track length stats */

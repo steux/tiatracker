@@ -66,6 +66,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
     QObject::connect(&actionSetFrequency, SIGNAL(triggered(bool)), this, SLOT(setFrequency(bool)));
+    QObject::connect(&actionHold, SIGNAL(triggered(bool)), this, SLOT(setHold(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -164,6 +165,13 @@ void TrackTab::setFrequency(bool) {
         selectedNote->value = dialog.getFrequencyValue();
         updatePatternEditor();
     }
+}
+
+/*************************************************************************/
+
+void TrackTab::setHold(bool) {
+    pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Hold;
+    update();
 }
 
 /*************************************************************************/

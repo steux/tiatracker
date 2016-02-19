@@ -15,6 +15,7 @@ TODO:
 - keyboard shortcuts
 - option for "B" instead of "H"
 - Pitch Perfect NTSC
+- Option: "Show invalid note warnings on/off"
 
 
 FEATURES:

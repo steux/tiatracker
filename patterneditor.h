@@ -79,7 +79,7 @@ private:
     QMenu *pPatternMenu = nullptr;
     QMenu *pChannelMenu = nullptr;
 
-    int selectedChannel = 1;
+    int selectedChannel = 0;
     // Current editor note focus, i.e. middle-of-screen highlight
     int editPos = 0;
 };
