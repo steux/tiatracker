@@ -50,6 +50,10 @@ public:
      * a given (valid) row is in. */
     int getSequenceEntryIndex(int channel, int row);
 
+    int getPatternIndex(int channel, int row);
+
+    int getNoteIndexInPattern(int channel, int row);
+
     /* Get index of next note (and entry, if new pattern is reached)
      * for a specific channel.
      * Returns false if there is no next note. */

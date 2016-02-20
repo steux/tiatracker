@@ -46,6 +46,7 @@ public slots:
     void setFrequency(bool);
     void setHold(bool);
     void setPause(bool);
+    void deleteRow(bool);
 
 
 private:

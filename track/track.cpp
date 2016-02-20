@@ -131,6 +131,20 @@ int Track::getSequenceEntryIndex(int channel, int row) {
 
 /*************************************************************************/
 
+int Track::getPatternIndex(int channel, int row) {
+    int entryIndex = getSequenceEntryIndex(channel, row);
+    return channelSequences[channel].sequence[entryIndex].patternIndex;
+}
+
+/*************************************************************************/
+
+int Track::getNoteIndexInPattern(int channel, int row) {
+    int entryIndex = getSequenceEntryIndex(channel, row);
+    return row - channelSequences[channel].sequence[entryIndex].firstNoteNumber;
+}
+
+/*************************************************************************/
+
 bool Track::getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
     SequenceEntry *curEntry = &(channelSequences[channel].sequence[*pEntryIndex]);
     Pattern *curPattern = &(patterns[curEntry->patternIndex]);
