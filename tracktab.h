@@ -47,6 +47,8 @@ public slots:
     void setHold(bool);
     void setPause(bool);
     void deleteRow(bool);
+    void insertRowBefore(bool);
+    void insertRowAfter(bool);
 
 
 private:

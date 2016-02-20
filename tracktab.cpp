@@ -79,6 +79,8 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionHold, SIGNAL(triggered(bool)), this, SLOT(setHold(bool)));
     QObject::connect(&actionPause, SIGNAL(triggered(bool)), this, SLOT(setPause(bool)));
     QObject::connect(&actionDeleteRow, SIGNAL(triggered(bool)), this, SLOT(deleteRow(bool)));
+    QObject::connect(&actionInsertRowBefore, SIGNAL(triggered(bool)), this, SLOT(insertRowBefore(bool)));
+    QObject::connect(&actionInsertRowAfter, SIGNAL(triggered(bool)), this, SLOT(insertRowAfter(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -258,6 +260,42 @@ void TrackTab::deleteRow(bool) {
 
     int noteInPattern = pTrack->getNoteIndexInPattern(contextEventChannel, contextEventNoteIndex);
     pattern->notes.removeAt(noteInPattern);
+    pTrack->updateFirstNoteNumbers();
+    pTrack->validatePattern(patternIndex);
+    update();
+}
+
+/*************************************************************************/
+
+void TrackTab::insertRowBefore(bool) {
+    int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
+    Track::Pattern *pattern = &(pTrack->patterns[patternIndex]);
+    if (pattern->notes.size() == Track::Pattern::maxSize) {
+        MainWindow::displayMessage("Pattern is already at maximum size!");
+        return;
+    }
+
+    int noteInPattern = pTrack->getNoteIndexInPattern(contextEventChannel, contextEventNoteIndex);
+    Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
+    pattern->notes.insert(noteInPattern, newNote);
+    pTrack->updateFirstNoteNumbers();
+    pTrack->validatePattern(patternIndex);
+    update();
+}
+
+/*************************************************************************/
+
+void TrackTab::insertRowAfter(bool) {
+    int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
+    Track::Pattern *pattern = &(pTrack->patterns[patternIndex]);
+    if (pattern->notes.size() == Track::Pattern::maxSize) {
+        MainWindow::displayMessage("Pattern is already at maximum size!");
+        return;
+    }
+
+    int noteInPattern = pTrack->getNoteIndexInPattern(contextEventChannel, contextEventNoteIndex);
+    Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
+    pattern->notes.insert(noteInPattern + 1, newNote);
     pTrack->updateFirstNoteNumbers();
     pTrack->validatePattern(patternIndex);
     update();
