@@ -238,45 +238,10 @@ void TrackTab::setHold(bool) {
 /*************************************************************************/
 
 void TrackTab::setPause(bool) {
-    // Check if pause is valid here
-    bool isValid = true;
-    Track::Note *prevNote;
-    int prevRow = contextEventNoteIndex - 1;
-    if (prevRow == -1) {
-        isValid = false;
-    } else {
-        prevNote = pTrack->getNote(contextEventChannel, prevRow);
-    }
-    while (isValid
-           && (prevNote->type == Track::Note::instrumentType::Hold
-               || prevNote->type == Track::Note::instrumentType::Slide)) {
-        prevRow = pTrack->skipInstrumentType(contextEventChannel, prevRow, prevNote->type, -1);
-        if (prevRow == -1) {
-            isValid = false;
-        } else {
-            prevNote = pTrack->getNote(contextEventChannel, prevRow);
-        }
-    }
-    if (isValid
-            && (prevNote->type == Track::Note::instrumentType::Pause
-                || prevNote->type == Track::Note::instrumentType::Percussion)) {
-        isValid = false;
-    }
-    if (!isValid) {
-        MainWindow::displayMessage("A PAUSE can only follow a melodic instrument, melodic instrument HOLD, or SLIDE!");
-        return;
-    }
-    // Is valid: set pause
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Pause;
-
-    // Check for and correct next potential orphaned PAUSE
-    // (orphaned SLIDES or orphaned PAUSEs thereafter have to be corrected manually)
-    int nextRow = contextEventNoteIndex + 1;
-    if (nextRow != pTrack->getChannelNumRows(contextEventChannel)
-            && pTrack->getNote(contextEventChannel, nextRow)->type == Track::Note::instrumentType::Pause) {
-        pTrack->getNote(contextEventChannel, nextRow)->type = Track::Note::instrumentType::Hold;
-    }
-
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
+    pTrack->validatePattern(patternIndex);
     update();
 
 }
