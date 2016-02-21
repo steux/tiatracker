@@ -266,6 +266,11 @@ void TrackTab::removePattern(bool) {
         }
     }
     // Validate gotos
+    for (int i = 0; i < pTrack->channelSequences[contextEventChannel].sequence.size(); ++i) {
+        if (pTrack->channelSequences[contextEventChannel].sequence[i].gotoTarget >= entryIndex) {
+            pTrack->channelSequences[contextEventChannel].sequence[i].gotoTarget--;
+        }
+    }
 
     update();
 }
@@ -431,7 +436,7 @@ int TrackTab::choosePatternToInsert() {
         // Check for "create new pattern"
         if (result == pTrack->patterns.size()) {
             CreatePatternDialog newDialog(this);
-            newDialog.prepare(pTrack, 32);
+            newDialog.prepare(pTrack, 32, contextEventChannel, contextEventNoteIndex);
             if (newDialog.exec() == QDialog::Accepted) {
                 QString newName = newDialog.getName();
                 int newLength = newDialog.getLength();
