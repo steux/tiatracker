@@ -75,6 +75,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionMovePatternUp, SIGNAL(triggered(bool)), this, SLOT(movePatternUp(bool)));
     QObject::connect(&actionMovePatternDown, SIGNAL(triggered(bool)), this, SLOT(movePatternDown(bool)));
     QObject::connect(&actionInsertPatternBefore, SIGNAL(triggered(bool)), this, SLOT(insertPatternBefore(bool)));
+    QObject::connect(&actionInsertPatternAfter, SIGNAL(triggered(bool)), this, SLOT(insertPatternAfter(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -204,6 +205,20 @@ void TrackTab::insertPatternBefore(bool) {
     int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     Track::SequenceEntry newEntry(patternIndex);
     pTrack->channelSequences[contextEventChannel].sequence.insert(entryIndex, newEntry);
+    pTrack->updateFirstNoteNumbers();
+    update();
+}
+
+/*************************************************************************/
+
+void TrackTab::insertPatternAfter(bool) {
+    int patternIndex = choosePatternToInsert();
+    if (patternIndex == -1) {
+        return;
+    }
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    Track::SequenceEntry newEntry(patternIndex);
+    pTrack->channelSequences[contextEventChannel].sequence.insert(entryIndex + 1, newEntry);
     pTrack->updateFirstNoteNumbers();
     update();
 }

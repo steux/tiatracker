@@ -41,6 +41,7 @@ public slots:
     void movePatternUp(bool);
     void movePatternDown(bool);
     void insertPatternBefore(bool);
+    void insertPatternAfter(bool);
 
     // Channel context menu
     void setSlideValue(bool);
