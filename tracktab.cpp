@@ -76,6 +76,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionMovePatternDown, SIGNAL(triggered(bool)), this, SLOT(movePatternDown(bool)));
     QObject::connect(&actionInsertPatternBefore, SIGNAL(triggered(bool)), this, SLOT(insertPatternBefore(bool)));
     QObject::connect(&actionInsertPatternAfter, SIGNAL(triggered(bool)), this, SLOT(insertPatternAfter(bool)));
+    QObject::connect(&actionRemovePattern, SIGNAL(triggered(bool)), this, SLOT(removePattern(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -220,6 +221,52 @@ void TrackTab::insertPatternAfter(bool) {
     Track::SequenceEntry newEntry(patternIndex);
     pTrack->channelSequences[contextEventChannel].sequence.insert(entryIndex + 1, newEntry);
     pTrack->updateFirstNoteNumbers();
+    update();
+}
+
+/*************************************************************************/
+
+void TrackTab::removePattern(bool) {
+    if (pTrack->channelSequences[contextEventChannel].sequence.size() == 1) {
+        MainWindow::displayMessage("A channel must contain at least one pattern!");
+        return;
+    }
+
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
+    pTrack->channelSequences[contextEventChannel].sequence.removeAt(entryIndex);
+    pTrack->updateFirstNoteNumbers();
+    // Check if pattern is no longer used anywhere
+    bool wasLast = true;
+    for (int channel = 0; channel < 2 && wasLast; ++channel) {
+        for (int i = 0; i < pTrack->channelSequences[channel].sequence.size(); ++i) {
+            if (pTrack->channelSequences[channel].sequence[i].patternIndex == patternIndex) {
+                wasLast = false;
+                break;
+            }
+        }
+    }
+    if (wasLast) {
+        QMessageBox msgBox(QMessageBox::NoIcon,
+                           "Delete Pattern?",
+                           "This pattern is no longer used in the track. Do you want to delete it?",
+                           QMessageBox::Yes | QMessageBox::No, this,
+                           Qt::FramelessWindowHint);
+        if (msgBox.exec() == QMessageBox::Yes) {
+            // Correct SequenceEntries
+            for (int channel = 0; channel < 2; ++channel) {
+                for (int i = 0; i < pTrack->channelSequences[channel].sequence.size(); ++i) {
+                    if (pTrack->channelSequences[channel].sequence[i].patternIndex > patternIndex) {
+                        pTrack->channelSequences[channel].sequence[i].patternIndex--;
+                    }
+                }
+            }
+            pTrack->patterns.removeAt(patternIndex);
+            pTrack->updateFirstNoteNumbers();
+        }
+    }
+    // Validate gotos
+
     update();
 }
 

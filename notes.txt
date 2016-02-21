@@ -17,6 +17,8 @@ TODO:
 - Option: "Show invalid note warnings on/off"
 - Set Goto dialog: Either a dropdown list of all sequence entries, or a label showing the target name for a given value
 - Move pattern up/down context menu in timeline?
+- Should paintEvents (timeline, patternEditor) obey the Track mutex?
+  updateFirstNoteNumbers might otherwise be not fast enough in some cases?
 
 
 FEATURES:
