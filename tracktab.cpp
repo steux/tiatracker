@@ -16,6 +16,7 @@
 #include "setgotodialog.h"
 #include "mainwindow.h"
 #include "insertpatterndialog.h"
+#include "createpatterndialog.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -200,7 +201,11 @@ void TrackTab::insertPatternBefore(bool) {
     if (patternIndex == -1) {
         return;
     }
-
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    Track::SequenceEntry newEntry(patternIndex);
+    pTrack->channelSequences[contextEventChannel].sequence.insert(entryIndex, newEntry);
+    pTrack->updateFirstNoteNumbers();
+    update();
 }
 
 /*************************************************************************/
@@ -360,7 +365,26 @@ int TrackTab::choosePatternToInsert() {
     InsertPatternDialog dialog(this);
     dialog.prepare(pTrack);
     if (dialog.exec() == QDialog::Accepted) {
-        std::cout << "Selected: " << dialog.getSelectedPattern() << "\n"; std::cout.flush();
+        int result = dialog.getSelectedPattern();
+        // Check for "create new pattern"
+        if (result == pTrack->patterns.size()) {
+            CreatePatternDialog newDialog(this);
+            newDialog.prepare(pTrack, 32);
+            if (newDialog.exec() == QDialog::Accepted) {
+                QString newName = newDialog.getName();
+                int newLength = newDialog.getLength();
+                Track::Pattern newPattern(newName);
+                for (int i = 0; i < newLength; ++i) {
+                    //Track::Note *newNote = new Track::Note(Track::Note::instrumentType::Hold, 0, 0);
+                    Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
+                    newPattern.notes.append(newNote);
+                }
+                pTrack->patterns.append(newPattern);
+            } else {
+                return -1;
+            }
+        }
+        return result;
     } else {
         return -1;
     }
