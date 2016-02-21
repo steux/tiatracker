@@ -15,6 +15,7 @@
 #include "renamepatterndialog.h"
 #include "setgotodialog.h"
 #include "mainwindow.h"
+#include "insertpatterndialog.h"
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -72,6 +73,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionRemoveGoto, SIGNAL(triggered(bool)), this, SLOT(removeGoto(bool)));
     QObject::connect(&actionMovePatternUp, SIGNAL(triggered(bool)), this, SLOT(movePatternUp(bool)));
     QObject::connect(&actionMovePatternDown, SIGNAL(triggered(bool)), this, SLOT(movePatternDown(bool)));
+    QObject::connect(&actionInsertPatternBefore, SIGNAL(triggered(bool)), this, SLOT(insertPatternBefore(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -189,6 +191,16 @@ void TrackTab::movePatternDown(bool) {
         pTrack->updateFirstNoteNumbers();
         update();
     }
+}
+
+/*************************************************************************/
+
+void TrackTab::insertPatternBefore(bool) {
+    int patternIndex = choosePatternToInsert();
+    if (patternIndex == -1) {
+        return;
+    }
+
 }
 
 /*************************************************************************/
@@ -342,3 +354,14 @@ void TrackTab::updatePatternEditor() {
     editor->update();
 }
 
+/*************************************************************************/
+
+int TrackTab::choosePatternToInsert() {
+    InsertPatternDialog dialog(this);
+    dialog.prepare(pTrack);
+    if (dialog.exec() == QDialog::Accepted) {
+        std::cout << "Selected: " << dialog.getSelectedPattern() << "\n"; std::cout.flush();
+    } else {
+        return -1;
+    }
+}

@@ -40,6 +40,7 @@ public slots:
     void removeGoto(bool);
     void movePatternUp(bool);
     void movePatternDown(bool);
+    void insertPatternBefore(bool);
 
     // Channel context menu
     void setSlideValue(bool);
@@ -56,6 +57,11 @@ private:
     void updateTrackStats();
     /* Updates the pattern editor area */
     void updatePatternEditor();
+
+    /* Lets the user select a pattern to insert. Returns index of
+     * Pattern, or patterns.size() if create new was pressed,
+     * or -1 if cancel was pressed. */
+    int choosePatternToInsert();
 
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
