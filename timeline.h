@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QWidget>
 #include "track/track.h"
+#include <QMenu>
+
 
 class Timeline : public QWidget
 {
@@ -12,11 +14,13 @@ public:
     explicit Timeline(QWidget *parent = 0);
 
     void registerTrack(Track::Track *newTrack);
+    void registerPatternMenu(QMenu *newPatternMenu);
 
     QSize sizeHint() const;
 
 signals:
     void changeEditPos(int newPos);
+    void channelContextEvent(int channel, int row);
 
 public slots:
     void editPosChanged(int newPos);
@@ -26,6 +30,7 @@ protected:
 
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
     void mouseMoveEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
 
 private:
     static const int channelWidth = 80;
@@ -40,6 +45,7 @@ private:
     int editPos = 0;
 
     Track::Track *pTrack = nullptr;
+    QMenu *pPatternMenu = nullptr;
 
 };
 

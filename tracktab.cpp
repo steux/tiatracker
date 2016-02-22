@@ -89,6 +89,7 @@ void TrackTab::initTrackTab() {
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
+    timeline->registerPatternMenu(&patternContextMenu);
 }
 
 /*************************************************************************/

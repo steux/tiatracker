@@ -23,6 +23,12 @@ void Timeline::registerTrack(Track::Track *newTrack) {
 
 /*************************************************************************/
 
+void Timeline::registerPatternMenu(QMenu *newPatternMenu) {
+    pPatternMenu = newPatternMenu;
+}
+
+/*************************************************************************/
+
 QSize Timeline::sizeHint() const {
     return QSize(widgetWidth, minHeight);
 }
@@ -97,4 +103,18 @@ void Timeline::mousePressEvent(QMouseEvent *event) {
 
 void Timeline::mouseMoveEvent(QMouseEvent *event) {
     mousePressEvent(event);
+}
+
+/*************************************************************************/
+
+void Timeline::contextMenuEvent(QContextMenuEvent *event) {
+    if (event->y() >= channelMargin && event->y() < height() - channelMargin) {
+        double rowHeight = calcRowHeight();
+        int row = int((event->y() - channelMargin)/rowHeight + 0.5);
+        int channel = event->x() < channelMargin + channelWidth ? 0 : 1;
+        if (row < pTrack->getChannelNumRows(channel)) {
+            emit channelContextEvent(channel, row);
+            pPatternMenu->exec(event->globalPos());
+        }
+    }
 }
