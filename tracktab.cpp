@@ -443,7 +443,7 @@ int TrackTab::choosePatternToInsert(bool doBefore) {
                 newRow += pTrack->patterns[patternIndex].notes.size();
             }
             CreatePatternDialog newDialog(this);
-            newDialog.prepare(pTrack, 32, contextEventChannel, newRow);
+            newDialog.prepare(pTrack, lastNewPatternLength, contextEventChannel, newRow);
             if (newDialog.exec() == QDialog::Accepted) {
                 QString newName = newDialog.getName();
                 int newLength = newDialog.getLength();
@@ -453,6 +453,7 @@ int TrackTab::choosePatternToInsert(bool doBefore) {
                     newPattern.notes.append(newNote);
                 }
                 pTrack->patterns.append(newPattern);
+                lastNewPatternLength = newLength;
             } else {
                 return -1;
             }

@@ -92,6 +92,8 @@ private:
     int contextEventChannel;
     int contextEventNoteIndex;
 
+    // Last value the user selected for length of new pattern
+    int lastNewPatternLength = 32;
 };
 
 #endif // TRACKTAB_H
