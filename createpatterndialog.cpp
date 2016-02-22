@@ -45,5 +45,16 @@ int CreatePatternDialog::getLength() {
 /*************************************************************************/
 
 void CreatePatternDialog::on_pushButtonAlign_clicked() {
-    // TODO
+    if (row >= pTrack->getChannelNumRows(1 - channel)) {
+        return;
+    }
+    int otherEntryIndex = pTrack->getSequenceEntryIndex(1 - channel, row);
+    int otherPatternIndex = pTrack->channelSequences[1 - channel].sequence[otherEntryIndex].patternIndex;
+    int otherPatternSize = pTrack->patterns[otherPatternIndex].notes.size();
+    int otherPatternFirstNote = pTrack->channelSequences[1 - channel].sequence[otherEntryIndex].firstNoteNumber;
+    int newSize = otherPatternFirstNote + otherPatternSize - row;
+    if (newSize < Track::Pattern::minSize) {
+        newSize = Track::Pattern::minSize;
+    }
+    ui->spinBoxNewPatternLength->setValue(newSize);
 }

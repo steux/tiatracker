@@ -199,7 +199,7 @@ void TrackTab::movePatternDown(bool) {
 /*************************************************************************/
 
 void TrackTab::insertPatternBefore(bool) {
-    int patternIndex = choosePatternToInsert();
+    int patternIndex = choosePatternToInsert(true);
     if (patternIndex == -1) {
         return;
     }
@@ -213,7 +213,7 @@ void TrackTab::insertPatternBefore(bool) {
 /*************************************************************************/
 
 void TrackTab::insertPatternAfter(bool) {
-    int patternIndex = choosePatternToInsert();
+    int patternIndex = choosePatternToInsert(false);
     if (patternIndex == -1) {
         return;
     }
@@ -428,21 +428,27 @@ void TrackTab::updatePatternEditor() {
 
 /*************************************************************************/
 
-int TrackTab::choosePatternToInsert() {
+int TrackTab::choosePatternToInsert(bool doBefore) {
     InsertPatternDialog dialog(this);
     dialog.prepare(pTrack);
     if (dialog.exec() == QDialog::Accepted) {
         int result = dialog.getSelectedPattern();
         // Check for "create new pattern"
         if (result == pTrack->patterns.size()) {
+            // Calc index of first note of new pattern, for "align" button
+            int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+            int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
+            int newRow = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].firstNoteNumber;
+            if (!doBefore) {
+                newRow += pTrack->patterns[patternIndex].notes.size();
+            }
             CreatePatternDialog newDialog(this);
-            newDialog.prepare(pTrack, 32, contextEventChannel, contextEventNoteIndex);
+            newDialog.prepare(pTrack, 32, contextEventChannel, newRow);
             if (newDialog.exec() == QDialog::Accepted) {
                 QString newName = newDialog.getName();
                 int newLength = newDialog.getLength();
                 Track::Pattern newPattern(newName);
                 for (int i = 0; i < newLength; ++i) {
-                    //Track::Note *newNote = new Track::Note(Track::Note::instrumentType::Hold, 0, 0);
                     Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
                     newPattern.notes.append(newNote);
                 }

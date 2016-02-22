@@ -63,7 +63,7 @@ private:
     /* Lets the user select a pattern to insert. Returns index of
      * Pattern, or patterns.size() if create new was pressed,
      * or -1 if cancel was pressed. */
-    int choosePatternToInsert();
+    int choosePatternToInsert(bool doBefore);
 
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
