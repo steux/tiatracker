@@ -43,6 +43,7 @@ public slots:
     void insertPatternBefore(bool);
     void insertPatternAfter(bool);
     void removePattern(bool);
+    void duplicatePattern(bool);
 
     // Channel context menu
     void setSlideValue(bool);
@@ -71,6 +72,7 @@ private:
     QMenu patternContextMenu{this};
     QAction actionInsertPatternBefore{"Insert pattern before...", this};
     QAction actionInsertPatternAfter{"Insert pattern after...", this};
+    QAction actionDuplicatePattern{"Duplicate pattern...", this};
     QAction actionMovePatternUp{"Move pattern up", this};
     QAction actionMovePatternDown{"Move pattern down", this};
     QAction actionRemovePattern{"Remove pattern", this};

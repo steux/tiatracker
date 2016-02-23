@@ -25,8 +25,10 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     patternContextMenu.addAction(&actionInsertPatternAfter);
     patternContextMenu.addAction(&actionMovePatternUp);
     patternContextMenu.addAction(&actionMovePatternDown);
+    patternContextMenu.addAction(&actionDuplicatePattern);
     patternContextMenu.addAction(&actionRemovePattern);
     patternContextMenu.addAction(&actionRenamePattern);
+    patternContextMenu.addSeparator();
     patternContextMenu.addAction(&actionSetGoto);
     patternContextMenu.addAction(&actionRemoveGoto);
     patternContextMenu.addAction(&actionSetStartPattern);
@@ -35,9 +37,11 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     channelContextMenu.addAction(&actionHold);
     channelContextMenu.addAction(&actionSlide);
     channelContextMenu.addAction(&actionSetFrequency);
+    channelContextMenu.addSeparator();
     channelContextMenu.addAction(&actionInsertRowBefore);
     channelContextMenu.addAction(&actionInsertRowAfter);
     channelContextMenu.addAction(&actionDeleteRow);
+    channelContextMenu.addSeparator();
     actionMuteChannel.setCheckable(true);
     channelContextMenu.addAction(&actionMuteChannel);
 }
@@ -77,6 +81,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionInsertPatternBefore, SIGNAL(triggered(bool)), this, SLOT(insertPatternBefore(bool)));
     QObject::connect(&actionInsertPatternAfter, SIGNAL(triggered(bool)), this, SLOT(insertPatternAfter(bool)));
     QObject::connect(&actionRemovePattern, SIGNAL(triggered(bool)), this, SLOT(removePattern(bool)));
+    QObject::connect(&actionDuplicatePattern, SIGNAL(triggered(bool)), this, SLOT(duplicatePattern(bool)));
 
     // Channel context menu
     QObject::connect(&actionSlide, SIGNAL(triggered(bool)), this, SLOT(setSlideValue(bool)));
@@ -274,6 +279,20 @@ void TrackTab::removePattern(bool) {
     }
 
     update();
+}
+
+/*************************************************************************/
+
+void TrackTab::duplicatePattern(bool) {
+    RenamePatternDialog dialog(this);
+    int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
+    dialog.setPatternName(pTrack->patterns[patternIndex].name);
+    if (dialog.exec() == QDialog::Accepted) {
+        pTrack->patterns.append(pTrack->patterns[patternIndex]);
+        pTrack->patterns.last().name = dialog.getPatternName();
+        update();
+    }
 }
 
 /*************************************************************************/
