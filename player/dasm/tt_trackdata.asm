@@ -165,7 +165,7 @@ tt_Pattern0:
         dc.b 0
 
 tt_Pattern1:
-        dc.b TT_PERC_BASSDRUM, TT_INS_HOLD, TT_PERC_BASSDRUM, TT_INS_HOLD, TT_PERC_BASSDRUM, TT_PERC_CLAP, TT_PERC_BASSDRUM, TT_PERC_CLAP
+        dc.b TT_INS_HOLD
         dc.b 0
         
 tt_Pattern2:
@@ -211,7 +211,7 @@ TT_C0_LOOP      = *-tt_SequenceTable
 TT_C1_INTRO     = *-tt_SequenceTable
 
 TT_C1_LOOP      = *-tt_SequenceTable
-        dc.b 0, 0
+        dc.b 1, 1
         ; Now loop
         dc.b $80+TT_C1_LOOP
 

@@ -120,7 +120,7 @@ void Player::updateInstrument() {
         int FValue = realFrequency + currentInstrument->frequencies[currentInstrumentFrame];
         // Check if envelope has caused an underrun
         if (FValue < 0) {
-            FValue = 256 - FValue;
+            FValue = 256 + FValue;
         }
         int VValue = currentInstrument->volumes[currentInstrumentFrame];
         setChannel0(CValue, FValue, VValue);
