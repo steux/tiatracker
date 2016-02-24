@@ -43,6 +43,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    /* Loads the key shortcuts for later use */
+    static void loadKeymap();
+
     /* Initializes signal/slot connections */
     void initConnections();
 
@@ -53,6 +56,8 @@ public:
 
     /* Displays a message in an "OK" messagebox */
     static void displayMessage(const QString &message);
+
+    static QJsonObject keymap;
 
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);

@@ -13,6 +13,7 @@
 #include <QMenu>
 #include <QFileDialog>
 #include <QJsonDocument>
+#include <QJsonObject>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -51,6 +52,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
     delete ui;
+}
+
+/*************************************************************************/
+
+QJsonObject MainWindow::keymap;
+
+void MainWindow::loadKeymap() {
+    QFile keymapFile("keymap.cfg");
+    if (!keymapFile.open(QIODevice::ReadOnly)) {
+        std::cout << "Unable to open keyboard shortcuts file keymap.cfg!\n";
+    } else {
+        QJsonDocument keymapDoc(QJsonDocument::fromJson(keymapFile.readAll()));
+        keymap = keymapDoc.object();
+        keymapFile.close();
+    }
 }
 
 /*************************************************************************/

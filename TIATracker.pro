@@ -96,7 +96,8 @@ RESOURCES += \
 
 DISTFILES += \
     style.qss \
-    notes.txt
+    notes.txt \
+    data/keymap.cfg
 
 win32: LIBS += -L$$PWD/sdl/windows/lib/ -lSDL2
 

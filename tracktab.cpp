@@ -25,6 +25,7 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     patternContextMenu.addAction(&actionInsertPatternAfter);
     patternContextMenu.addAction(&actionMovePatternUp);
     patternContextMenu.addAction(&actionMovePatternDown);
+    addShortcut(&actionDuplicatePattern, "PatternDuplicate");
     patternContextMenu.addAction(&actionDuplicatePattern);
     patternContextMenu.addAction(&actionRemovePattern);
     patternContextMenu.addAction(&actionRenamePattern);
@@ -33,7 +34,9 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     patternContextMenu.addAction(&actionRemoveGoto);
     patternContextMenu.addAction(&actionSetStartPattern);
 
+    addShortcut(&actionPause, "NotePause");
     channelContextMenu.addAction(&actionPause);
+    addShortcut(&actionHold, "NoteHold");
     channelContextMenu.addAction(&actionHold);
     channelContextMenu.addAction(&actionSlide);
     channelContextMenu.addAction(&actionSetFrequency);
@@ -481,5 +484,15 @@ int TrackTab::choosePatternToInsert(bool doBefore) {
         return result;
     } else {
         return -1;
+    }
+}
+
+/*************************************************************************/
+
+void TrackTab::addShortcut(QAction *action, QString actionName) {
+    if (MainWindow::keymap.contains(actionName) ) {
+        QString shortcut = MainWindow::keymap[actionName].toString();
+        action->setShortcut(QKeySequence(shortcut));
+        addAction(action);
     }
 }

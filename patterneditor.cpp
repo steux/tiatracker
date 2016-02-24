@@ -67,6 +67,7 @@ void PatternEditor::setEditPos(int newPos) {
         editPos = pTrack->getChannelNumRows(selectedChannel) - 1;
     }
     emit editPosChanged(editPos);
+    emit channelContextEvent(selectedChannel, editPos);
     update();
 }
 

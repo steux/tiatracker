@@ -66,6 +66,8 @@ private:
      * or -1 if cancel was pressed. */
     int choosePatternToInsert(bool doBefore);
 
+    void addShortcut(QAction *action, QString actionName);
+
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
 
