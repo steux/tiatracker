@@ -19,6 +19,8 @@
 #include "track/pattern.h"
 #include "track/sequence.h"
 #include "track/sequenceentry.h"
+#include <QFile>
+#include <QJsonObject>
 
 #include <iostream>
 
@@ -108,6 +110,15 @@ int main(int argc, char *argv[])
     myTrack.channelSequences[0].sequence.append(melody2_0);
 //    myTrack.channelSequences[1].sequence.append(melody2_10);
 //    myTrack.channelSequences[1].sequence.append(melody2_11);
+
+    // Load keyboard shortcuts
+    QFile keymapFile("keymap.cfg");
+    if (!keymapFile.open(QIODevice::ReadOnly)) {
+        std::cout << "Unable to open keyboard shortcuts file keymap.cfg!\n";
+    } else {
+        std::cout << "OK\n";
+        keymapFile.close();
+    }
 
     // GUI
     MainWindow w;
