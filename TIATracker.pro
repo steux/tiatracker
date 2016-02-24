@@ -102,3 +102,10 @@ win32: LIBS += -L$$PWD/sdl/windows/lib/ -lSDL2
 
 INCLUDEPATH += $$PWD/sdl/windows/include
 DEPENDPATH += $$PWD/sdl/windows/include
+
+# Copy files to output directory
+install_it.path = $$OUT_PWD
+install_it.files = $$PWD/data/*
+
+INSTALLS += \
+    install_it
