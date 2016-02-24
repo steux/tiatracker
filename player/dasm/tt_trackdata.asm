@@ -24,7 +24,7 @@ TT_INS_LEAD     = 2<<5
 
 ; Instrument master CTRL values
 tt_InsCtrlTable:
-        dc.b 4, 4
+        dc.b 1, 1
 
 ; Instrument Attack/Decay start indexes into ADSR tables.
 tt_InsADIndexes:
@@ -32,13 +32,13 @@ tt_InsADIndexes:
 
 ; Instrument Sustain start indexes into ADSR tables
 tt_InsSustainIndexes:
-        dc.b 2, 14
+        dc.b 2, 18
 
 ; Instrument Release start indexes into ADSR tables
 ; Caution: Values are stored with an implicit -1 modifier! To get the
 ; real index, add 1.
 tt_InsReleaseIndexes:
-        dc.b 5, 19
+        dc.b 5, 22
 
 ; AUDVx and AUDFx ADSR envelope values.
 ; Each byte encodes the frequency and volume:
@@ -55,9 +55,9 @@ tt_InsFreqVolTable:
         dc.b $11, $22, $33, $44, $55, $00, $66, $77, $88, $00
         
         ; Lead #1
-        ;   |   Attack & Decay  | Sustain                | -- | Release                     | End |
-        ;      0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16
-        dc.b $3a, $3a, $3a, $3a, $8a, $8a, $8a, $8a, $8a, $00, $da, $da, $da, $da, $da, $da, $00
+        ;   |   Attack & Decay                      | Sustain           | -- | Release           | End |
+        ;      0    1    2    3    4    5    6    7    8    9   10   11   12   13   14   15   16   17
+        dc.b $81, $71, $62, $53, $84, $75, $66, $57, $88, $78, $68, $58, $aa, $86, $74, $62, $50, $00
         
 
 ; =====================================================================
@@ -159,10 +159,9 @@ TT_INS_PAUSE    = 16
 TT_FIRST_PERC   = 17
 
 tt_Pattern0:
-        dc.b TT_INS_LEAD|21, 9, 9, 9
-        dc.b TT_INS_PAUSE, TT_INS_HOLD, TT_INS_HOLD, TT_INS_HOLD
-        dc.b TT_INS_LEAD|21, TT_INS_LEAD|22, TT_INS_LEAD|23, TT_INS_LEAD|24
-        dc.b TT_INS_PAUSE, TT_INS_HOLD, TT_INS_HOLD, TT_INS_HOLD
+        dc.b TT_INS_LEAD|1, TT_INS_HOLD, TT_INS_HOLD, TT_INS_PAUSE
+        dc.b TT_INS_LEAD|3, TT_INS_HOLD, TT_INS_HOLD, TT_INS_PAUSE
+        dc.b TT_INS_LEAD|5, TT_INS_HOLD, TT_INS_HOLD, TT_INS_PAUSE
         dc.b 0
 
 tt_Pattern1:
@@ -203,7 +202,7 @@ tt_SequenceTable:
 TT_C0_INTRO     = *-tt_SequenceTable
 
 TT_C0_LOOP      = *-tt_SequenceTable
-        dc.b 2, 1
+        dc.b 0, 0
         ; Now loop
         dc.b $80+TT_C0_LOOP
         
@@ -212,7 +211,7 @@ TT_C0_LOOP      = *-tt_SequenceTable
 TT_C1_INTRO     = *-tt_SequenceTable
 
 TT_C1_LOOP      = *-tt_SequenceTable
-        dc.b 2, 1
+        dc.b 0, 0
         ; Now loop
         dc.b $80+TT_C1_LOOP
 

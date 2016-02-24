@@ -2,13 +2,13 @@
 ; Flags
 ; =====================================================================
 
-TT_SPEED                = 10    ; duration (number of TV frames) of a note
-TT_ODD_SPEED            = 10    ; duration of odd frames (needs TT_USE_FUNKTEMPO)
+TT_SPEED                = 20    ; duration (number of TV frames) of a note
+TT_ODD_SPEED            = 20    ; duration of odd frames (needs TT_USE_FUNKTEMPO)
 
 TT_USE_OVERLAY          = 1     ; 1: Overlay percussion, +40 bytes
 TT_USE_SLIDE            = 1     ; 1: Melodic instrument slide, +11 bytes
 TT_USE_GOTO             = 1     ; 1: Goto pattern, +8 bytes
-TT_USE_FUNKTEMPO        = 1     ; 1: Odd/even rows have different SPEED values, +7 bytes
+TT_USE_FUNKTEMPO        = 0     ; 1: Odd/even rows have different SPEED values, +7 bytes
 ; If the very first notes played on each channel are not PAUSE, HOLD or
 ; SLIDE, i.e. if they start with an instrument or percussion, then set
 ; this flag to 0 to save 2 bytes
