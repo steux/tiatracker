@@ -29,6 +29,12 @@ signals:
     void channelContextEvent(int channel, int row);
 
 public slots:
+    // Global actions
+    void moveUp(bool);
+    void moveDown(bool);
+    void moveLeft(bool);
+    void moveRight(bool);
+
     void setEditPos(int newPos);
     void setRowsPerBeat(int value);
 

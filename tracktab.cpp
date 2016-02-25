@@ -21,6 +21,13 @@
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
 {
+    // Global
+    addShortcut(&actionMoveUp, "CursorUp");
+    addShortcut(&actionMoveDown, "CursorDown");
+    addShortcut(&actionLeftChannel, "CursorLeftChannel");
+    addShortcut(&actionRightChannel, "CursorRightChannel");
+
+    // Pattern
     patternContextMenu.addAction(&actionInsertPatternBefore);
     patternContextMenu.addAction(&actionInsertPatternAfter);
     patternContextMenu.addAction(&actionMovePatternUp);
@@ -33,7 +40,7 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     patternContextMenu.addAction(&actionSetGoto);
     patternContextMenu.addAction(&actionRemoveGoto);
     patternContextMenu.addAction(&actionSetStartPattern);
-
+    // Channel
     addShortcut(&actionPause, "NotePause");
     channelContextMenu.addAction(&actionPause);
     addShortcut(&actionHold, "NoteHold");
@@ -73,6 +80,12 @@ void TrackTab::initTrackTab() {
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
+
+    // Gloabl actions
+    QObject::connect(&actionMoveUp, SIGNAL(triggered(bool)), editor, SLOT(moveUp(bool)));
+    QObject::connect(&actionMoveDown, SIGNAL(triggered(bool)), editor, SLOT(moveDown(bool)));
+    QObject::connect(&actionLeftChannel, SIGNAL(triggered(bool)), editor, SLOT(moveLeft(bool)));
+    QObject::connect(&actionRightChannel, SIGNAL(triggered(bool)), editor, SLOT(moveRight(bool)));
 
     // Pattern context menu
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));

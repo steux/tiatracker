@@ -92,6 +92,32 @@ QSize PatternEditor::sizeHint() const {
 
 /*************************************************************************/
 
+void PatternEditor::moveUp(bool) {
+    setEditPos(editPos - 1);
+}
+
+/*************************************************************************/
+
+void PatternEditor::moveDown(bool) {
+    setEditPos(editPos + 1);
+}
+
+/*************************************************************************/
+
+void PatternEditor::moveLeft(bool) {
+    selectedChannel = 0;
+    setEditPos(editPos);
+}
+
+/*************************************************************************/
+
+void PatternEditor::moveRight(bool) {
+    selectedChannel = 1;
+    setEditPos(editPos);
+}
+
+/*************************************************************************/
+
 QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern) {
     QString rowText = QString::number(curPatternNoteIndex + 1);
     if (curPatternNoteIndex + 1 < 10) {

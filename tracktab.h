@@ -71,6 +71,13 @@ private:
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
 
+    // Global actions
+    QAction actionMoveUp{this};
+    QAction actionMoveDown{this};
+    QAction actionLeftChannel{this};
+    QAction actionRightChannel{this};
+
+    // Pattern actions
     QMenu patternContextMenu{this};
     QAction actionInsertPatternBefore{"Insert pattern before...", this};
     QAction actionInsertPatternAfter{"Insert pattern after...", this};
@@ -83,6 +90,7 @@ private:
     QAction actionRemoveGoto{"Remove goto", this};
     QAction actionSetStartPattern{"Start track here", this};
 
+    // Channel actions
     QMenu channelContextMenu{this};
     QAction actionPause{"Set to PAUSE", this};
     QAction actionHold{"Set to HOLD", this};
