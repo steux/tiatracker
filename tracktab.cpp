@@ -33,16 +33,23 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     addShortcut(&actionPreviousPattern, "CursorPreviousPattern");
 
     // Pattern
+    addShortcut(&actionInsertPatternBefore, "PatternInsert");
     patternContextMenu.addAction(&actionInsertPatternBefore);
     patternContextMenu.addAction(&actionInsertPatternAfter);
+    addShortcut(&actionMovePatternUp, "PatternMoveUp");
     patternContextMenu.addAction(&actionMovePatternUp);
+    addShortcut(&actionMovePatternDown, "PatternMoveDown");
     patternContextMenu.addAction(&actionMovePatternDown);
     addShortcut(&actionDuplicatePattern, "PatternDuplicate");
     patternContextMenu.addAction(&actionDuplicatePattern);
+    addShortcut(&actionRemovePattern, "PatternRemove");
     patternContextMenu.addAction(&actionRemovePattern);
+    addShortcut(&actionRenamePattern, "PatternRename");
     patternContextMenu.addAction(&actionRenamePattern);
     patternContextMenu.addSeparator();
+    addShortcut(&actionSetGoto, "PatternSetGoto");
     patternContextMenu.addAction(&actionSetGoto);
+    addShortcut(&actionRemoveGoto, "PatternRemoveGoto");
     patternContextMenu.addAction(&actionRemoveGoto);
     patternContextMenu.addAction(&actionSetStartPattern);
     // Channel
@@ -50,14 +57,19 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     channelContextMenu.addAction(&actionPause);
     addShortcut(&actionHold, "NoteHold");
     channelContextMenu.addAction(&actionHold);
+    addShortcut(&actionSlide, "NoteSlide");
     channelContextMenu.addAction(&actionSlide);
+    addShortcut(&actionSetFrequency, "NoteFrequency");
     channelContextMenu.addAction(&actionSetFrequency);
     channelContextMenu.addSeparator();
+    addShortcut(&actionInsertRowBefore, "RowInsert");
     channelContextMenu.addAction(&actionInsertRowBefore);
     channelContextMenu.addAction(&actionInsertRowAfter);
+    addShortcut(&actionDeleteRow, "RowDelete");
     channelContextMenu.addAction(&actionDeleteRow);
     channelContextMenu.addSeparator();
     actionMuteChannel.setCheckable(true);
+    addShortcut(&actionMuteChannel, "ChannelToggleMute");
     channelContextMenu.addAction(&actionMuteChannel);
 }
 
