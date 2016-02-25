@@ -92,6 +92,7 @@ void TrackTab::initTrackTab() {
 
     InstrumentSelector *insSel = findChild<InstrumentSelector *>("trackInstrumentSelector");
     insSel->registerTrack(pTrack);
+    insSel->initSelector();
     Timeline *timeline = findChild<Timeline *>("trackTimeline");
     timeline->registerTrack(pTrack);
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");

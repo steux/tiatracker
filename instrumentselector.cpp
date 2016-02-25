@@ -4,6 +4,8 @@
 #include <QPainter>
 #include <iostream>
 #include <QMouseEvent>
+#include <QList>
+#include <QKeySequence>
 
 
 InstrumentSelector::InstrumentSelector(QWidget *parent) : QWidget(parent)
@@ -20,6 +22,41 @@ InstrumentSelector::InstrumentSelector(QWidget *parent) : QWidget(parent)
     setFixedWidth(minWidth);
 }
 
+InstrumentSelector::~InstrumentSelector()
+{
+    for (int i = 0; i < shortcutActions.size(); ++i) {
+        delete shortcutActions[i];
+    }
+}
+
+/*************************************************************************/
+
+void InstrumentSelector::initSelector() {
+    // Create instrument and percussion shortcut actions
+    for (int i = 0; i < Track::Track::numInstruments; ++i) {
+        QString actionName = "Instrument" + QString::number(i + 1);
+        QString shortcut = MainWindow::keymap[actionName].toString();
+        std::cout << "Adding " << i << ": " << shortcut.toStdString() << "\n";
+        QAction *action = new QAction(this);
+        action->setShortcut(QKeySequence(shortcut));
+        QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(keyShortcut(bool)));
+        action->setData(QVariant(i));
+        addAction(action);
+        shortcutActions.append(action);
+    }
+    for (int i = 0; i < 10; ++i) {
+        QString actionName = "Percussion" + QString::number(i + 1);
+        QString shortcut = MainWindow::keymap[actionName].toString();
+        std::cout << "Adding " << i << ": " << shortcut.toStdString() << "\n";
+        QAction *action = new QAction(this);
+        action->setShortcut(QKeySequence(shortcut));
+        QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(keyShortcut(bool)));
+        action->setData(QVariant(Track::Track::numInstruments + i));
+        addAction(action);
+        shortcutActions.append(action);
+    }
+}
+
 /*************************************************************************/
 
 void InstrumentSelector::registerTrack(Track::Track *newTrack) {
@@ -34,8 +71,21 @@ void InstrumentSelector::registerPianoKeyboard(PianoKeyboard *pNewKeyboard) {
 
 /*************************************************************************/
 
+int InstrumentSelector::getSelectedInstrument() {
+    return selected;
+}
+
+/*************************************************************************/
+
 QSize InstrumentSelector::sizeHint() const {
     return QSize(minWidth, widgetHeight);
+}
+
+/*************************************************************************/
+
+void InstrumentSelector::keyShortcut(bool) {
+    QAction *action = qobject_cast<QAction *>(sender());
+    std::cout << "Triggered: " << action->data().toInt() << "\n"; std::cout.flush();
 }
 
 /*************************************************************************/

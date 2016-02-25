@@ -80,6 +80,12 @@ void PatternEditor::setRowsPerBeat(int value) {
 
 /*************************************************************************/
 
+void PatternEditor::setRowToInstrument(int frequency) {
+    std::cout << "Set row to freq " << frequency << "\n"; std::cout.flush();
+}
+
+/*************************************************************************/
+
 int PatternEditor::getEditPos() {
     return editPos;
 }

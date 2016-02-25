@@ -13,9 +13,14 @@ class InstrumentSelector : public QWidget
     Q_OBJECT
 public:
     explicit InstrumentSelector(QWidget *parent = 0);
+    ~InstrumentSelector();
+
+    void initSelector();
 
     void registerTrack(Track::Track *newTrack);
     void registerPianoKeyboard(PianoKeyboard *pNewKeyboard);
+
+    int getSelectedInstrument();
 
     QSize sizeHint() const;
 
@@ -24,6 +29,7 @@ signals:
     void setUsePitchGuide(bool use);
 
 public slots:
+    void keyShortcut(bool);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -50,6 +56,8 @@ private:
     int buttonHeight;
 
     int selected = 0;
+
+    QList<QAction *> shortcutActions{};
 };
 
 #endif // INSTRUMENTSELECTOR_H

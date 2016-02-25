@@ -64,6 +64,8 @@ signals:
     void stopInstrument();
     void playPercussion(Track::Percussion *percussion);
     void stopPercussion();
+    void setRowToInstrument(int frequency);
+
 
 private slots:
     // Set a new pitch guide for the piano keyboard

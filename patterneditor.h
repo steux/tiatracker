@@ -43,6 +43,8 @@ public slots:
     void setEditPos(int newPos);
     void setRowsPerBeat(int value);
 
+    void setRowToInstrument(int frequency);
+
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *) Q_DECL_OVERRIDE;

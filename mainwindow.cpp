@@ -126,6 +126,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->spinBoxRowsPerBeat, SIGNAL(valueChanged(int)), ui->trackEditor, SLOT(setRowsPerBeat(int)));
     QObject::connect(ui->spinBoxEvenTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setEvenSpeed(int)));
     QObject::connect(ui->spinBoxOddTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setOddSpeed(int)));
+    QObject::connect(this, SIGNAL(setRowToInstrument(int)), ui->trackEditor, SLOT(setRowToInstrument(int)));
 
     // PianoKeyboard
     QObject::connect(ui->tabInstruments, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));
@@ -181,6 +182,11 @@ void MainWindow::setWaveform(TiaSound::Distortion dist) {
 
 void MainWindow::newPianoKeyPressed(int frequency) {
     switch (ui->tabWidget->currentIndex()) {
+    case iTabTrack:
+    {
+        emit setRowToInstrument(frequency);
+        break;
+    }
     case iTabInstruments:
     {
         Track::Instrument *instrument = ui->tabInstruments->getSelectedInstrument();
