@@ -137,6 +137,28 @@ void PatternEditor::gotoLastRow(bool) {
 
 /*************************************************************************/
 
+void PatternEditor::gotoNextPattern(bool) {
+    int newEntryIndex = pTrack->getSequenceEntryIndex(selectedChannel, editPos) + 1;
+    if (newEntryIndex == pTrack->channelSequences[selectedChannel].sequence.size()) {
+        newEntryIndex--;
+    }
+    int newPos = pTrack->channelSequences[selectedChannel].sequence[newEntryIndex].firstNoteNumber;
+    setEditPos(newPos);
+}
+
+/*************************************************************************/
+
+void PatternEditor::gotoPreviousPattern(bool) {
+    int newEntryIndex = pTrack->getSequenceEntryIndex(selectedChannel, editPos) - 1;
+    if (newEntryIndex < 0) {
+        newEntryIndex = 0;
+    }
+    int newPos = pTrack->channelSequences[selectedChannel].sequence[newEntryIndex].firstNoteNumber;
+    setEditPos(newPos);
+}
+
+/*************************************************************************/
+
 QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern) {
     QString rowText = QString::number(curPatternNoteIndex + 1);
     if (curPatternNoteIndex + 1 < 10) {

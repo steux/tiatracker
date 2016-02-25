@@ -29,6 +29,8 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     addShortcut(&actionSwitchChannel, "CursorSwitchChannel");
     addShortcut(&actionFirstRow, "CursorFirstRow");
     addShortcut(&actionLastRow, "CursorLastRow");
+    addShortcut(&actionNextPattern, "CursorNextPattern");
+    addShortcut(&actionPreviousPattern, "CursorPreviousPattern");
 
     // Pattern
     patternContextMenu.addAction(&actionInsertPatternBefore);
@@ -92,6 +94,8 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionSwitchChannel, SIGNAL(triggered(bool)), editor, SLOT(switchChannel(bool)));
     QObject::connect(&actionFirstRow, SIGNAL(triggered(bool)), editor, SLOT(gotoFirstRow(bool)));
     QObject::connect(&actionLastRow, SIGNAL(triggered(bool)), editor, SLOT(gotoLastRow(bool)));
+    QObject::connect(&actionNextPattern, SIGNAL(triggered(bool)), editor, SLOT(gotoNextPattern(bool)));
+    QObject::connect(&actionPreviousPattern, SIGNAL(triggered(bool)), editor, SLOT(gotoPreviousPattern(bool)));
 
     // Pattern context menu
     QObject::connect(&actionSetStartPattern, SIGNAL(triggered(bool)), this, SLOT(setStartPattern(bool)));

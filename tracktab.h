@@ -79,6 +79,8 @@ private:
     QAction actionSwitchChannel{this};
     QAction actionFirstRow{this};
     QAction actionLastRow{this};
+    QAction actionNextPattern{this};
+    QAction actionPreviousPattern{this};
 
     // Pattern actions
     QMenu patternContextMenu{this};
