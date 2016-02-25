@@ -36,7 +36,6 @@ void InstrumentSelector::initSelector() {
     for (int i = 0; i < Track::Track::numInstruments; ++i) {
         QString actionName = "Instrument" + QString::number(i + 1);
         QString shortcut = MainWindow::keymap[actionName].toString();
-        std::cout << "Adding " << i << ": " << shortcut.toStdString() << "\n";
         QAction *action = new QAction(this);
         action->setShortcut(QKeySequence(shortcut));
         QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(keyShortcut(bool)));
@@ -47,7 +46,6 @@ void InstrumentSelector::initSelector() {
     for (int i = 0; i < 10; ++i) {
         QString actionName = "Percussion" + QString::number(i + 1);
         QString shortcut = MainWindow::keymap[actionName].toString();
-        std::cout << "Adding " << i << ": " << shortcut.toStdString() << "\n";
         QAction *action = new QAction(this);
         action->setShortcut(QKeySequence(shortcut));
         QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(keyShortcut(bool)));
@@ -85,7 +83,16 @@ QSize InstrumentSelector::sizeHint() const {
 
 void InstrumentSelector::keyShortcut(bool) {
     QAction *action = qobject_cast<QAction *>(sender());
-    std::cout << "Triggered: " << action->data().toInt() << "\n"; std::cout.flush();
+    selected = action->data().toInt();
+    if (selected < 7) {
+        // Instrument
+        TiaSound::Distortion dist = pTrack->instruments[selected].baseDistortion;
+        emit setWaveform(dist);
+    } else {
+        // Percussion
+        emit setUsePitchGuide(false);
+    }
+    update();
 }
 
 /*************************************************************************/
