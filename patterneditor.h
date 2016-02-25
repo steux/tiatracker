@@ -34,6 +34,9 @@ public slots:
     void moveDown(bool);
     void moveLeft(bool);
     void moveRight(bool);
+    void switchChannel(bool);
+    void gotoFirstRow(bool);
+    void gotoLastRow(bool);
 
     void setEditPos(int newPos);
     void setRowsPerBeat(int value);

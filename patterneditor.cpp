@@ -118,6 +118,25 @@ void PatternEditor::moveRight(bool) {
 
 /*************************************************************************/
 
+void PatternEditor::switchChannel(bool) {
+    selectedChannel = 1 - selectedChannel;
+    setEditPos(editPos);
+}
+
+/*************************************************************************/
+
+void PatternEditor::gotoFirstRow(bool) {
+    setEditPos(0);
+}
+
+/*************************************************************************/
+
+void PatternEditor::gotoLastRow(bool) {
+    setEditPos(pTrack->getChannelNumRows(selectedChannel) - 1);
+}
+
+/*************************************************************************/
+
 QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern) {
     QString rowText = QString::number(curPatternNoteIndex + 1);
     if (curPatternNoteIndex + 1 < 10) {
