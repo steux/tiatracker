@@ -85,9 +85,11 @@ private slots:
 
     void on_actionSave_triggered();
 
-    void on_actionSave_as_triggered();
+    void on_actionSaveAs_triggered();
 
     void on_actionOpen_triggered();
+
+    void on_actionQuit_triggered();
 
 private:
     /* Tab index values */
@@ -103,6 +105,8 @@ private:
     void setTrackName(QString name);
 
     void updateAllTabs();
+
+    void addShortcut(QAction *action, QString actionName);
 
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;

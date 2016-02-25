@@ -14,6 +14,8 @@
 #include <QFileDialog>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QAction>
+#include <QKeySequence>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -72,6 +74,13 @@ void MainWindow::loadKeymap() {
 /*************************************************************************/
 
 void MainWindow::initConnections() {
+    // Global
+    addShortcut(ui->actionNew, "TrackNew");
+    addShortcut(ui->actionOpen, "TrackOpen");
+    addShortcut(ui->actionSave, "TrackSave");
+    addShortcut(ui->actionSaveAs, "TrackSaveAs");
+    addShortcut(ui->actionQuit, "Quit");
+
     // Shaper context menu
     QObject::connect(&actionInsertBefore, SIGNAL(triggered(bool)), this, SLOT(insertFrameBefore(bool)));
     QObject::connect(&actionInsertAfter, SIGNAL(triggered(bool)), this, SLOT(insertFrameAfter(bool)));
@@ -295,7 +304,7 @@ void MainWindow::deleteFrame(bool) {
 
 void MainWindow::on_actionSave_triggered() {
     if (pTrack->name == "new track.ttt") {
-        on_actionSave_as_triggered();
+        on_actionSaveAs_triggered();
     } else {
         saveTrackByName(pTrack->name);
     }
@@ -362,7 +371,17 @@ void MainWindow::updateAllTabs() {
 
 /*************************************************************************/
 
-void MainWindow::on_actionSave_as_triggered() {
+void MainWindow::addShortcut(QAction *action, QString actionName) {
+    if (keymap.contains(actionName) ) {
+        QString shortcut = keymap[actionName].toString();
+        action->setShortcut(QKeySequence(shortcut));
+        addAction(action);
+    }
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionSaveAs_triggered() {
     QFileDialog dialog(this);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
@@ -385,17 +404,12 @@ void MainWindow::on_actionSave_as_triggered() {
 
 void MainWindow::on_actionOpen_triggered() {
     // Ask if current track should really be discarded
-    bool doOpen = true;
     QMessageBox msgBox(QMessageBox::NoIcon,
                        "Open track",
                        "Do you really want to discard the current track?",
                        QMessageBox::Yes | QMessageBox::No, this,
                        Qt::FramelessWindowHint);
-    int reply = msgBox.exec();
-    if (reply != QMessageBox::Yes) {
-        doOpen = false;
-    }
-    if (!doOpen) {
+    if (msgBox.exec() != QMessageBox::Yes) {
         return;
     }
 
@@ -416,4 +430,19 @@ void MainWindow::on_actionOpen_triggered() {
     }
     QString fileName = fileNames[0];
     loadTrackByName(fileName);
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionQuit_triggered() {
+    // Ask if current track should really be discarded
+    QMessageBox msgBox(QMessageBox::NoIcon,
+                       "Quit",
+                       "Do you really want to quit?",
+                       QMessageBox::Yes | QMessageBox::No, this,
+                       Qt::FramelessWindowHint);
+    if (msgBox.exec() != QMessageBox::Yes) {
+        return;
+    }
+    QApplication::quit();
 }
