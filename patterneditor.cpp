@@ -58,6 +58,12 @@ void PatternEditor::registerChannelMenu(QMenu *newChannelMenu) {
 
 /*************************************************************************/
 
+void PatternEditor::registerInstrumentSelector(InstrumentSelector *selector) {
+    pInsSelector = selector;
+}
+
+/*************************************************************************/
+
 void PatternEditor::setEditPos(int newPos) {
     editPos = newPos;
     if (editPos < 0) {
@@ -81,7 +87,22 @@ void PatternEditor::setRowsPerBeat(int value) {
 /*************************************************************************/
 
 void PatternEditor::setRowToInstrument(int frequency) {
-    std::cout << "Set row to freq " << frequency << "\n"; std::cout.flush();
+    int patternIndex = pTrack->getPatternIndex(selectedChannel, editPos);
+    int noteIndex = pTrack->getNoteIndexInPattern(selectedChannel, editPos);
+    int instrumentIndex = pInsSelector->getSelectedInstrument();
+    if (instrumentIndex < 7) {
+        // Meldodic instrument
+        pTrack->patterns[patternIndex].notes[noteIndex].type = Track::Note::instrumentType::Instrument;
+        pTrack->patterns[patternIndex].notes[noteIndex].instrumentNumber = instrumentIndex;
+        pTrack->patterns[patternIndex].notes[noteIndex].value = frequency;
+    } else {
+        // Percussion instrument
+        pTrack->patterns[patternIndex].notes[noteIndex].type = Track::Note::instrumentType::Percussion;
+        pTrack->patterns[patternIndex].notes[noteIndex].instrumentNumber = instrumentIndex - Track::Track::numInstruments;
+    }
+    pTrack->validatePattern(patternIndex);
+    setEditPos(editPos + 1);
+    update();
 }
 
 /*************************************************************************/

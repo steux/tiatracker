@@ -43,7 +43,7 @@ void InstrumentSelector::initSelector() {
         addAction(action);
         shortcutActions.append(action);
     }
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < Track::Track::numPercussion; ++i) {
         QString actionName = "Percussion" + QString::number(i + 1);
         QString shortcut = MainWindow::keymap[actionName].toString();
         QAction *action = new QAction(this);

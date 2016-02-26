@@ -98,6 +98,7 @@ void TrackTab::initTrackTab() {
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
+    editor->registerInstrumentSelector(insSel);
 
     // Gloabl actions
     QObject::connect(&actionMoveUp, SIGNAL(triggered(bool)), editor, SLOT(moveUp(bool)));

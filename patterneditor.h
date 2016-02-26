@@ -7,6 +7,7 @@
 #include <QFontDatabase>
 #include "tiasound/pitchguide.h"
 #include <QMenu>
+#include "instrumentselector.h"
 
 
 class PatternEditor : public QWidget
@@ -19,6 +20,7 @@ public:
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
     void registerPatternMenu(QMenu *newPatternMenu);
     void registerChannelMenu(QMenu *newChannelMenu);
+    void registerInstrumentSelector(InstrumentSelector *selector);
 
     int getEditPos();
 
@@ -91,6 +93,7 @@ private:
     TiaSound::PitchGuide *pPitchGuide;
     QMenu *pPatternMenu = nullptr;
     QMenu *pChannelMenu = nullptr;
+    InstrumentSelector *pInsSelector = nullptr;
 
     int selectedChannel = 0;
     // Current editor note focus, i.e. middle-of-screen highlight
