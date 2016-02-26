@@ -51,7 +51,7 @@ void Player::setFrameRate(float rate) {
 /*************************************************************************/
 
 void Player::silence() {
-    mode = PlayMode::NONE;
+    mode = PlayMode::None;
 }
 
 /*************************************************************************/
@@ -60,7 +60,16 @@ void Player::playInstrument(Track::Instrument *instrument, int frequency) {
     currentInstrument = instrument;
     currentInstrumentFrequency = frequency;
     currentInstrumentFrame = 0;
-    mode = PlayMode::INSTRUMENT;
+    mode = PlayMode::Instrument;
+}
+
+/*************************************************************************/
+
+void Player::playInstrumentOnce(Track::Instrument *instrument, int frequency) {
+    currentInstrument = instrument;
+    currentInstrumentFrequency = frequency;
+    currentInstrumentFrame = 0;
+    mode = PlayMode::InstrumentOnce;
 }
 
 /*************************************************************************/
@@ -74,13 +83,13 @@ void Player::stopInstrument() {
 void Player::playPercussion(Track::Percussion *percussion) {
     currentPercussion = percussion;
     currentPercussionFrame = 0;
-    mode = PlayMode::PERCUSSION;
+    mode = PlayMode::Percussion;
 }
 
 /*************************************************************************/
 
 void Player::stopPercussion() {
-    mode = PlayMode::NONE;
+    mode = PlayMode::None;
 }
 
 /*************************************************************************/
@@ -96,7 +105,7 @@ void Player::setChannel0(int distortion, int frequency, int volume) {
 void Player::playWaveform(TiaSound::Distortion waveform, int frequency, int volume) {
     int distortion = TiaSound::getDistortionInt(waveform);
     setChannel0(distortion, frequency, volume);
-    mode = PlayMode::WAVEFORM;
+    mode = PlayMode::Waveform;
 }
 
 /*************************************************************************/
@@ -113,7 +122,7 @@ void Player::updateInstrument() {
     pTrack->lock();
     if (currentInstrumentFrame >= currentInstrument->getEnvelopeLength()) {
         // Go into silence if currentFrame is illegal
-        mode = PlayMode::NONE;
+        mode = PlayMode::None;
     } else {
         int CValue = currentInstrument->getAudCValue(currentInstrumentFrequency);
         int realFrequency = currentInstrumentFrequency <= 31 ? currentInstrumentFrequency : currentInstrumentFrequency - 32;
@@ -128,12 +137,12 @@ void Player::updateInstrument() {
         /* Advance frame */
         currentInstrumentFrame++;
         // Check for end of sustain or release
-        if (currentInstrumentFrame == currentInstrument->getReleaseStart()) {
-            // Remain in sustain
+        if (mode != PlayMode::InstrumentOnce
+                && currentInstrumentFrame == currentInstrument->getReleaseStart()) {
             currentInstrumentFrame = currentInstrument->getSustainStart();
         } else if (currentInstrumentFrame == currentInstrument->getEnvelopeLength()) {
             // End of release: Go into silence
-            mode = PlayMode::NONE;
+            mode = PlayMode::None;
         }
     }
     pTrack->unlock();
@@ -146,7 +155,7 @@ void Player::updatePercussion() {
     pTrack->lock();
     if (currentPercussionFrame >= currentPercussion->getEnvelopeLength()) {
         // Go into silence if currentFrame is illegal
-        mode = PlayMode::NONE;
+        mode = PlayMode::None;
     } else {
         TiaSound::Distortion waveform = currentPercussion->waveforms[currentPercussionFrame];
         int CValue = TiaSound::getDistortionInt(waveform);
@@ -164,12 +173,13 @@ void Player::updatePercussion() {
 
 void Player::timerFired() {
     switch (mode) {
-    case PlayMode::INSTRUMENT:
+    case PlayMode::Instrument:
+    case PlayMode::InstrumentOnce:
         updateInstrument();
         break;
-    case PlayMode::WAVEFORM:
+    case PlayMode::Waveform:
         break;
-    case PlayMode::PERCUSSION:
+    case PlayMode::Percussion:
         updatePercussion();
         break;
     default:

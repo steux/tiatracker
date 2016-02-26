@@ -61,6 +61,7 @@ public:
 
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);
+    void playInstrumentOnce(Track::Instrument *instrument, int frequency);
     void stopInstrument();
     void playPercussion(Track::Percussion *percussion);
     void stopPercussion();

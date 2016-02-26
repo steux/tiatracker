@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
+    QObject::connect(&w, SIGNAL(playInstrumentOnce(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrumentOnce(Track::Instrument*,int)));
     QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
     QObject::connect(pt, SIGNAL(playWaveform(TiaSound::Distortion,int,int)), &tiaPlayer, SLOT(playWaveform(TiaSound::Distortion,int,int)));
     QObject::connect(&w, SIGNAL(playPercussion(Track::Percussion*)), &tiaPlayer, SLOT(playPercussion(Track::Percussion*)));

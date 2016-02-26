@@ -157,12 +157,10 @@ void PianoKeyboard::pianoKeyShortcut(bool) {
         if (usePitchGuide) {
             if (keyInfo[keyIndex].isEnabled) {
                 emit newKeyPressed(keyInfo[keyIndex].frequency);
-                emit keyReleased();
                 update();
             }
         } else {
             emit newKeyPressed(-1);
-            emit keyReleased();
             update();
         }
     }

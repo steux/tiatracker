@@ -187,6 +187,14 @@ void MainWindow::newPianoKeyPressed(int frequency) {
     case iTabTrack:
     {
         emit setRowToInstrument(frequency);
+        int insIndex = ui->trackInstrumentSelector->getSelectedInstrument();
+        if (insIndex < Track::Track::numInstruments) {
+            Track::Instrument *instrument = &(pTrack->instruments[insIndex]);
+            emit playInstrumentOnce(instrument, frequency);
+        } else {
+            Track::Percussion *percussion = &(pTrack->percussion[insIndex - Track::Track::numInstruments]);
+            emit playPercussion(percussion);
+        }
         break;
     }
     case iTabInstruments:

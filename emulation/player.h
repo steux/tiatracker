@@ -34,6 +34,7 @@ public slots:
 
     /* Start to play a note with a given instrument */
     void playInstrument(Track::Instrument *instrument, int frequency);
+    void playInstrumentOnce(Track::Instrument *instrument, int frequency);
     /* Stop playing a note, i.e. send instrument into release */
     void stopInstrument();
 
@@ -55,9 +56,9 @@ private:
 
     // Play mode we are in
     enum class PlayMode {
-        NONE, INSTRUMENT, PERCUSSION, WAVEFORM
+        None, Instrument, InstrumentOnce, Percussion, Waveform
     };
-    PlayMode mode = PlayMode::NONE;
+    PlayMode mode = PlayMode::None;
 
     /* Current values for instrument play */
     Track::Instrument *currentInstrument;
