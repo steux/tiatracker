@@ -152,7 +152,22 @@ void PianoKeyboard::changeOctave(bool) {
 void PianoKeyboard::pianoKeyShortcut(bool) {
     QAction *action = qobject_cast<QAction *>(sender());
     int noteBaseIndex = action->data().toInt();
-    std::cout << "Hit: " << noteBaseIndex << "\n"; std::cout.flush();
+    int keyIndex = selectedOctave*12 + noteBaseIndex;
+    if (keyIndex < numKeys) {
+        if (usePitchGuide) {
+            if (keyInfo[keyIndex].isEnabled) {
+                isValidKeyPressed = true;
+                keyPressed = keyIndex;
+                emit newKeyPressed(keyInfo[keyIndex].frequency);
+                update();
+            }
+        } else {
+            isValidKeyPressed = true;
+            keyPressed = keyIndex;
+            emit newKeyPressed(-1);
+            update();
+        }
+    }
 }
 
 /*************************************************************************/
