@@ -62,6 +62,20 @@ void PianoKeyboard::initPianoKeyboard() {
     }
 
     // Note shortcuts
+    for (int octave = 0; octave < 3; ++octave) {
+        for (int i = 0; i < 12; ++i) {
+            TiaSound::Note n = TiaSound::Note((static_cast<TiaSound::Note>(octave*12 + i)));
+            QString noteName = TiaSound::getNoteNameWithOctaveFixedWidth(n);
+            QString actionName = "Note" + noteName;
+            QString shortcut = MainWindow::keymap[actionName].toString();
+            QAction *action = new QAction(this);
+            action->setShortcut(QKeySequence(shortcut));
+            QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(pianoKeyShortcut(bool)));
+            action->setData(QVariant(octave*12 + i));
+            addAction(action);
+            shortcutActions.append(action);
+        }
+    }
 }
 
 /*************************************************************************/
@@ -136,7 +150,9 @@ void PianoKeyboard::changeOctave(bool) {
 /*************************************************************************/
 
 void PianoKeyboard::pianoKeyShortcut(bool) {
-    std::cout << "HIT\n"; std::cout.flush();
+    QAction *action = qobject_cast<QAction *>(sender());
+    int noteBaseIndex = action->data().toInt();
+    std::cout << "Hit: " << noteBaseIndex << "\n"; std::cout.flush();
 }
 
 /*************************************************************************/
