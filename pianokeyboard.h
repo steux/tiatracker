@@ -2,6 +2,7 @@
 #define PIANOKEYBOARD_H
 
 #include <QWidget>
+#include <QAction>
 
 #include "tiasound/tiasound.h"
 #include "tiasound/instrumentpitchguide.h"
@@ -29,6 +30,8 @@ public:
 
     explicit PianoKeyboard(QWidget *parent = 0);
 
+    void initPianoKeyboard();
+
     /* Inits all isEnabled to false, then goes through list in pitchGuide.
      * Keys for found notes are activated and frequency, note and off-tune value
      * are stored. If a note has multiple entries, the one with the least
@@ -48,6 +51,10 @@ signals:
 
 public slots:
     void setUsePitchGuide(bool value);
+    void setOctave(int newOctave);
+    void octaveUp(bool);
+    void octaveDown(bool);
+    void pianoKeyShortcut(bool);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -79,6 +86,8 @@ private:
     bool isValidKeyPressed = false;
     // Index of key that is currently pressed
     int keyPressed = -1;
+    // Currently selected octave, i.e. base for key shortcuts
+    int selectedOctave = 0;
 
     // Key hints
     static const int keyFontSize = 10;
@@ -87,12 +96,19 @@ private:
     int keyFontHeight;
     int keyInfoRectHeight;
 
+    QList<QAction *> shortcutActions{};
+
+    QAction actionOctaveUp{this};
+    QAction actionOctaveDown{this};
+
     /* Calc x-pos for a given white or black key (0..numKeys) */
     int calcWhiteKeyXPos(int key);
     int calcBlackKeyXPos(int key);
 
     /* Calc the key index for a white key for a given x coordinate */
     int calcKeyIndexForWhiteKey(int xPos);
+
+    void addShortcut(QAction *action, QString actionName);
 };
 
 #endif // PIANOKEYBOARD_H

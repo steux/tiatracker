@@ -116,7 +116,6 @@ int main(int argc, char *argv[])
     MainWindow::loadKeymap();
     MainWindow w;
     w.initConnections();
-
     w.registerTrack(&myTrack);
 
     InstrumentsTab *it = w.findChild<InstrumentsTab *>("tabInstruments");

@@ -37,6 +37,15 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
 
 /*************************************************************************/
 
+void PianoKeyboard::initPianoKeyboard() {
+    addShortcut(&actionOctaveUp, "OctaveUp");
+    QObject::connect(&actionOctaveUp, SIGNAL(triggered(bool)), this, SLOT(octaveUp(bool)));
+    addShortcut(&actionOctaveDown, "OctaveDown");
+    QObject::connect(&actionOctaveDown, SIGNAL(triggered(bool)), this, SLOT(octaveDown(bool)));
+}
+
+/*************************************************************************/
+
 void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide) {
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].isEnabled = false;
@@ -77,6 +86,33 @@ void PianoKeyboard::setUsePitchGuide(bool value) {
 
 /*************************************************************************/
 
+void PianoKeyboard::setOctave(int newOctave) {
+    if (newOctave >= 0 && newOctave <= 5) {
+        selectedOctave = newOctave;
+        update();
+    }
+}
+
+/*************************************************************************/
+
+void PianoKeyboard::octaveUp(bool) {
+    setOctave(selectedOctave + 1);
+}
+
+/*************************************************************************/
+
+void PianoKeyboard::octaveDown(bool) {
+    setOctave(selectedOctave - 1);
+}
+
+/*************************************************************************/
+
+void PianoKeyboard::pianoKeyShortcut(bool) {
+    std::cout << "HIT\n"; std::cout.flush();
+}
+
+/*************************************************************************/
+
 void PianoKeyboard::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 
@@ -101,13 +137,23 @@ void PianoKeyboard::paintEvent(QPaintEvent *) {
     }
 
     // Octave number hints
-    painter.setPen(MainWindow::contentDark);
     painter.setFont(keyFont);
     for (int octave = 0; octave < numOctaves; ++octave) {
         const int xPos = octave*numWhiteKeysPerOctave*keyWidth - 2;
         const int yPos = keyHeight/2 - 4*keyFontHeight;
+        if (octave >= selectedOctave && octave <= selectedOctave + 2) {
+            painter.setPen(MainWindow::red);
+            keyFont.setBold(true);
+            painter.setFont(keyFont);
+        } else {
+            painter.setPen(MainWindow::contentDark);
+            keyFont.setBold(false);
+            painter.setFont(keyFont);
+        }
         painter.drawText(xPos, yPos, keyWidth, keyFontHeight, Qt::AlignHCenter, QString::number(octave + 1));
     }
+    keyFont.setBold(false);
+    painter.setFont(keyFont);
 
     // Black keys
     for (int key = 0; key < numKeys; ++key) {
@@ -170,6 +216,18 @@ int PianoKeyboard::calcKeyIndexForWhiteKey(int xPos) {
     int keyIndex = octave*12 + whiteKeyIndexToKeyIndex[whiteKeyIndex];
     return keyIndex;
 }
+
+/*************************************************************************/
+
+void PianoKeyboard::addShortcut(QAction *action, QString actionName) {
+    if (MainWindow::keymap.contains(actionName)) {
+        QString shortcut = MainWindow::keymap[actionName].toString();
+        action->setShortcut(QKeySequence(shortcut));
+        addAction(action);
+    }
+}
+
+/*************************************************************************/
 
 void PianoKeyboard::mousePressEvent(QMouseEvent *event)
 {

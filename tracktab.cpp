@@ -527,7 +527,7 @@ int TrackTab::choosePatternToInsert(bool doBefore) {
 /*************************************************************************/
 
 void TrackTab::addShortcut(QAction *action, QString actionName) {
-    if (MainWindow::keymap.contains(actionName) ) {
+    if (MainWindow::keymap.contains(actionName)) {
         QString shortcut = MainWindow::keymap[actionName].toString();
         action->setShortcut(QKeySequence(shortcut));
         addAction(action);
