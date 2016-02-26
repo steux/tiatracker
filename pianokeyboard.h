@@ -30,6 +30,8 @@ public:
 
     explicit PianoKeyboard(QWidget *parent = 0);
 
+    ~PianoKeyboard();
+
     void initPianoKeyboard();
 
     /* Inits all isEnabled to false, then goes through list in pitchGuide.
@@ -51,9 +53,9 @@ signals:
 
 public slots:
     void setUsePitchGuide(bool value);
-    void setOctave(int newOctave);
     void octaveUp(bool);
     void octaveDown(bool);
+    void changeOctave(bool);
     void pianoKeyShortcut(bool);
 
 protected:
@@ -88,6 +90,8 @@ private:
     int keyPressed = -1;
     // Currently selected octave, i.e. base for key shortcuts
     int selectedOctave = 0;
+
+    void setOctave(int newOctave);
 
     // Key hints
     static const int keyFontSize = 10;

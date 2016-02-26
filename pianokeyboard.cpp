@@ -35,13 +35,33 @@ PianoKeyboard::PianoKeyboard(QWidget *parent) : QWidget(parent)
     setFixedHeight(keyboardHeight+1);
 }
 
+PianoKeyboard::~PianoKeyboard()
+{
+    for (int i = 0; i < shortcutActions.size(); ++i) {
+        delete shortcutActions[i];
+    }
+}
+
 /*************************************************************************/
 
 void PianoKeyboard::initPianoKeyboard() {
+    // Octave shortcuts
     addShortcut(&actionOctaveUp, "OctaveUp");
     QObject::connect(&actionOctaveUp, SIGNAL(triggered(bool)), this, SLOT(octaveUp(bool)));
     addShortcut(&actionOctaveDown, "OctaveDown");
     QObject::connect(&actionOctaveDown, SIGNAL(triggered(bool)), this, SLOT(octaveDown(bool)));
+    for (int i = 0; i < 6; ++i) {
+        QString actionName = "Octave" + QString::number(i + 1);
+        QString shortcut = MainWindow::keymap[actionName].toString();
+        QAction *action = new QAction(this);
+        action->setShortcut(QKeySequence(shortcut));
+        QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(changeOctave(bool)));
+        action->setData(QVariant(i));
+        addAction(action);
+        shortcutActions.append(action);
+    }
+
+    // Note shortcuts
 }
 
 /*************************************************************************/
@@ -103,6 +123,14 @@ void PianoKeyboard::octaveUp(bool) {
 
 void PianoKeyboard::octaveDown(bool) {
     setOctave(selectedOctave - 1);
+}
+
+/*************************************************************************/
+
+void PianoKeyboard::changeOctave(bool) {
+    QAction *action = qobject_cast<QAction *>(sender());
+    int newOctave = action->data().toInt();
+    setOctave(newOctave);
 }
 
 /*************************************************************************/
