@@ -352,6 +352,7 @@ void TrackTab::setSlideValue(bool) {
     if (dialog.exec() == QDialog::Accepted) {
         selectedNote->type = Track::Note::instrumentType::Slide;
         selectedNote->value = dialog.getSlideValue();
+        emit advanceEditPos();
         updatePatternEditor();
     }
 }
@@ -371,6 +372,7 @@ void TrackTab::setFrequency(bool) {
     dialog.setMaxFrequencyValue(maxFreq);
     if (dialog.exec() == QDialog::Accepted) {
         selectedNote->value = dialog.getFrequencyValue();
+        emit advanceEditPos();
         updatePatternEditor();
     }
 }
@@ -379,6 +381,7 @@ void TrackTab::setFrequency(bool) {
 
 void TrackTab::setHold(bool) {
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Hold;
+    emit advanceEditPos();
     update();
 }
 
@@ -388,6 +391,7 @@ void TrackTab::setPause(bool) {
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Pause;
     int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
     pTrack->validatePattern(patternIndex);
+    emit advanceEditPos();
     update();
 
 }

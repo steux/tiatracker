@@ -43,6 +43,7 @@ public slots:
     void gotoPreviousPattern(bool);
 
     void setEditPos(int newPos);
+    void advanceEditPos();
     void setRowsPerBeat(int value);
 
     void setRowToInstrument(int frequency);

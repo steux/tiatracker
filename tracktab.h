@@ -27,6 +27,7 @@ public:
     void updateTrackTab();
 
 signals:
+    void advanceEditPos();
 
 public slots:
     void setEvenSpeed(int value);

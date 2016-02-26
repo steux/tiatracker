@@ -30,6 +30,8 @@ PatternEditor::PatternEditor(QWidget *parent) : QWidget(parent)
             + 2*noteAreaWidth
             + timeAreaWidth;
     setFixedWidth(widgetWidth);
+
+    setFocusPolicy(Qt::StrongFocus);
 }
 
 /*************************************************************************/
@@ -79,6 +81,12 @@ void PatternEditor::setEditPos(int newPos) {
 
 /*************************************************************************/
 
+void PatternEditor::advanceEditPos() {
+    setEditPos(editPos + 1);
+}
+
+/*************************************************************************/
+
 void PatternEditor::setRowsPerBeat(int value) {
     pTrack->rowsPerBeat = value;
     update();
@@ -101,7 +109,7 @@ void PatternEditor::setRowToInstrument(int frequency) {
         pTrack->patterns[patternIndex].notes[noteIndex].instrumentNumber = instrumentIndex - Track::Track::numInstruments;
     }
     pTrack->validatePattern(patternIndex);
-    setEditPos(editPos + 1);
+    advanceEditPos();
     update();
 }
 
