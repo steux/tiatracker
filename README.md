@@ -26,5 +26,7 @@ A music tracker for making Atari VCS 2600 music on the PC, including a new sound
 * Player variants for optimized RAM
 * Editing while track plays
 * Undo
+* Mark overlay percussion in track
+* Mark duration of percussion in track
 * Syntax highlighting
 * Menu item "Play in Stella..."
