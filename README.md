@@ -8,7 +8,7 @@ A music tracker for making Atari VCS 2600 music on the PC, including a new sound
 
 ### 0.9 ###
 
-* Player
+* Player emulation
 * Info tab
 
 ### 1.0 ###
