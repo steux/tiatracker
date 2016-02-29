@@ -66,7 +66,7 @@ signals:
     void playPercussion(Track::Percussion *percussion);
     void stopPercussion();
     void setRowToInstrument(int frequency);
-
+    void playTrack(int start1, int start2);
 
 private slots:
     // Set a new pitch guide for the piano keyboard
@@ -93,6 +93,8 @@ private slots:
     void on_actionOpen_triggered();
 
     void on_actionQuit_triggered();
+
+    void on_actionPlayFromStart_triggered();
 
 private:
     /* Tab index values */

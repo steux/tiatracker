@@ -110,6 +110,18 @@ void Player::playWaveform(TiaSound::Distortion waveform, int frequency, int volu
 
 /*************************************************************************/
 
+void Player::playTrack(int start1, int start2) {
+    trackCurNoteIndex[0] = pTrack->getNoteIndexInPattern(0, start1);
+    trackCurNoteIndex[1] = pTrack->getNoteIndexInPattern(1, start2);
+    trackCurEntryIndex[0] = pTrack->getSequenceEntryIndex(0, start1);
+    trackCurEntryIndex[1] = pTrack->getSequenceEntryIndex(0, start2);
+    trackCurTick[0] = 0;
+    trackCurTick[1] = 0;
+    mode = PlayMode::Track;
+}
+
+/*************************************************************************/
+
 void Player::updateSilence() {
     setChannel0(0, 0, 0);
 }
@@ -171,6 +183,12 @@ void Player::updatePercussion() {
 
 /*************************************************************************/
 
+void Player::updateTrack() {
+    // TODO
+}
+
+/*************************************************************************/
+
 void Player::timerFired() {
     switch (mode) {
     case PlayMode::Instrument:
@@ -181,6 +199,9 @@ void Player::timerFired() {
         break;
     case PlayMode::Percussion:
         updatePercussion();
+        break;
+    case PlayMode::Track:
+        updateTrack();
         break;
     default:
         updateSilence();

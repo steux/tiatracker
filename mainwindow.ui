@@ -906,7 +906,8 @@
     <property name="title">
      <string>Track</string>
     </property>
-    <addaction name="actionValidate_and_correct_track"/>
+    <addaction name="actionPlayFromStart"/>
+    <addaction name="actionStop"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuTrack"/>
@@ -973,9 +974,14 @@
     <string>Redo</string>
    </property>
   </action>
-  <action name="actionValidate_and_correct_track">
+  <action name="actionPlayFromStart">
    <property name="text">
-    <string>Validate and correct track...</string>
+    <string>Play from start</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
    </property>
   </action>
  </widget>

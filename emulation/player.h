@@ -45,6 +45,9 @@ public slots:
     /* Start waveform */
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
+    /* Play song from given channel note indexes */
+    void playTrack(int start1, int start2);
+
 signals:
 
 private:
@@ -56,7 +59,7 @@ private:
 
     // Play mode we are in
     enum class PlayMode {
-        None, Instrument, InstrumentOnce, Percussion, Waveform
+        None, Instrument, InstrumentOnce, Percussion, Waveform, Track
     };
     PlayMode mode = PlayMode::None;
 
@@ -73,9 +76,19 @@ private:
     void updateSilence();
     void updateInstrument();
     void updatePercussion();
+    void updateTrack();
 
     /* Set values for channel 0 */
     void setChannel0(int distortion, int frequency, int volume);
+
+    /* Play track vars */
+    // current note index inside pattern
+    int trackCurNoteIndex[2];
+    // Current entry in sequence
+    Track::SequenceEntry trackCurEntryIndex[2];
+    int trackCurTick[2];
+    Track::Note trackCurNote[2];
+    int curEnvelopeIndex[2];
 
 private slots:
     void timerFired();
