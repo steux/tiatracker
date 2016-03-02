@@ -81,6 +81,7 @@ void MainWindow::initConnections() {
     addShortcut(ui->actionSaveAs, "TrackSaveAs");
     addShortcut(ui->actionQuit, "Quit");
     addShortcut(ui->actionPlayFromStart, "TrackPlayFromStart");
+    addShortcut(ui->actionStop, "TrackStop");
 
     // Shaper context menu
     QObject::connect(&actionInsertBefore, SIGNAL(triggered(bool)), this, SLOT(insertFrameBefore(bool)));
@@ -472,4 +473,22 @@ void MainWindow::on_actionPlayFromStart_triggered() {
     int startIndex2 = pTrack->startPatterns[1];
     int startNote2 = pTrack->channelSequences[1].sequence[startIndex2].firstNoteNumber;
     emit playTrack(startNote1, startNote2);
+}
+
+/*************************************************************************/
+
+void MainWindow::on_pushButtonPlay_clicked() {
+    on_actionPlayFromStart_triggered();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionStop_triggered() {
+    emit stopTrack();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_pushButtonStop_clicked() {
+    on_actionStop_triggered();
 }

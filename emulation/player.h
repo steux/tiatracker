@@ -42,6 +42,8 @@ public slots:
     void playPercussion(Track::Percussion *percussion);
     void stopPercussion();
 
+    void stopTrack();
+
     /* Start waveform */
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 

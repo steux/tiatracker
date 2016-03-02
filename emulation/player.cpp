@@ -94,6 +94,12 @@ void Player::stopPercussion() {
 
 /*************************************************************************/
 
+void Player::stopTrack() {
+    mode = PlayMode::None;
+}
+
+/*************************************************************************/
+
 void Player::setChannel0(int distortion, int frequency, int volume) {
     sdlSound.set(AUDC0, distortion, 10);
     sdlSound.set(AUDV0, volume, 15);
@@ -223,7 +229,6 @@ void Player::sequenceChannel(int channel) {
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
             updateSilence();
-            std::cout << "A\n"; std::cout.flush();
             emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
         } else {
             trackMode[channel] = Track::Note::instrumentType::Hold;
@@ -240,7 +245,6 @@ void Player::sequenceChannel(int channel) {
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
             updateSilence();
-            std::cout << "B\n"; std::cout.flush();
             emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
         } else {
             trackCurNote[channel].value += nextNote->value;
@@ -249,7 +253,6 @@ void Player::sequenceChannel(int channel) {
                     || (trackCurNote[channel].value)%32 > 31) {
                 mode = PlayMode::None;
                 updateSilence();
-                std::cout << "C\n"; std::cout.flush();
                 emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
             }
         }
