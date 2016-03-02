@@ -183,7 +183,9 @@ void Player::updatePercussion() {
 /*************************************************************************/
 
 void Player::updateChannel(int channel) {
-    return;
+    if (!pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
+        mode = PlayMode::None;
+    }
 }
 
 /*************************************************************************/

@@ -59,6 +59,11 @@ public:
      * Returns false if there is no next note. */
     bool getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex);
 
+    /* Get index of next note (and entry, if new pattern is reached)
+     * for a specific channel, observing goto.
+     * Returns false if there is no next note. */
+    bool getNextNoteWithGoto(int channel, int *pEntryIndex, int *pPatternNoteIndex);
+
     bool checkSlideValidity(int channel, int row);
 
     int skipInstrumentType(int channel, int row, Note::instrumentType type, int direction);
