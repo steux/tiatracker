@@ -78,11 +78,18 @@ private:
     void updateSilence();
     void updateInstrument();
     void updatePercussion();
+    // Get and process next note in channel
+    void sequenceChannel(int channel);
+    // Play current note in channel
     void updateChannel(int channel);
+    // Do next tick for track
     void updateTrack();
 
     /* Set values for channel 0 */
     void setChannel0(int distortion, int frequency, int volume);
+
+    /* Set values for a channel */
+    void setChannel(int channel, int distortion, int frequency, int volume);
 
     /* Play track vars */
     // current note index inside pattern
@@ -90,8 +97,8 @@ private:
     // Current entry in sequence
     int trackCurEntryIndex[2];
     int trackCurTick;
-    Track::Note* trackCurNote[2];
-    int curEnvelopeIndex[2];
+    Track::Note trackCurNote[2];
+    int trackCurEnvelopeIndex[2];
     // Current mode, to validate track
     Track::Note::instrumentType trackMode[2];
 

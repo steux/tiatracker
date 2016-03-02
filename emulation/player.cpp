@@ -102,6 +102,17 @@ void Player::setChannel0(int distortion, int frequency, int volume) {
 
 /*************************************************************************/
 
+void Player::setChannel(int channel, int distortion, int frequency, int volume) {
+    int audC = channel == 0 ? AUDC0 : AUDC1;
+    int audV = channel == 0 ? AUDV0 : AUDV1;
+    int audF = channel == 0 ? AUDF0 : AUDF1;
+    sdlSound.set(audC, distortion, 10);
+    sdlSound.set(audV, volume, 15);
+    sdlSound.set(audF, frequency, 18);
+}
+
+/*************************************************************************/
+
 void Player::playWaveform(TiaSound::Distortion waveform, int frequency, int volume) {
     int distortion = TiaSound::getDistortionInt(waveform);
     setChannel0(distortion, frequency, volume);
@@ -118,13 +129,18 @@ void Player::playTrack(int start1, int start2) {
     trackCurTick = 0;
     trackMode[0] = Track::Note::instrumentType::Hold;
     trackMode[1] = Track::Note::instrumentType::Hold;
+    // InstrumentNumber -1 means: No note yet
+    Track::Note startNote(Track::Note::instrumentType::Instrument, -1, -1);
+    trackCurNote[0] = startNote;
+    trackCurNote[1] = startNote;
     mode = PlayMode::Track;
 }
 
 /*************************************************************************/
 
 void Player::updateSilence() {
-    setChannel0(0, 0, 0);
+    setChannel(0, 0, 0, 0);
+    setChannel(1, 0, 0, 0);
 }
 
 /*************************************************************************/
@@ -184,7 +200,10 @@ void Player::updatePercussion() {
 
 /*************************************************************************/
 
-void Player::updateChannel(int channel) {
+void Player::sequenceChannel(int channel) {
+    if (mode == PlayMode::None) {
+        return;
+    }
     // Get next note
     if (!pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
         mode = PlayMode::None;
@@ -197,45 +216,105 @@ void Player::updateChannel(int channel) {
         break;
     case Track::Note::instrumentType::Instrument:
         trackMode[channel] = Track::Note::instrumentType::Instrument;
-        trackCurNote[channel] = nextNote;
-        // TODO: Set envelope
+        trackCurNote[channel] = *nextNote;
+        trackCurEnvelopeIndex[channel] = 0;
         break;
     case Track::Note::instrumentType::Pause:
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
+            updateSilence();
+            std::cout << "A\n"; std::cout.flush();
             emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
         } else {
             trackMode[channel] = Track::Note::instrumentType::Hold;
-            // TODO: Put into release
+            Track::Instrument *curInstrument = &(pTrack->instruments[trackCurNote[channel].instrumentNumber]);
+            trackCurEnvelopeIndex[channel] = curInstrument->getSustainStart();
         }
         break;
     case Track::Note::instrumentType::Percussion:
         trackMode[channel] = Track::Note::instrumentType::Percussion;
-        trackCurNote[channel] = nextNote;
-        // TODO: Set envelope
+        trackCurNote[channel] = *nextNote;
+        trackCurEnvelopeIndex[channel] = 0;
         break;
     case Track::Note::instrumentType::Slide:
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
+            updateSilence();
+            std::cout << "B\n"; std::cout.flush();
             emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
         } else {
-            // TODO: Slide
+            trackCurNote[channel].value += nextNote->value;
+            // Check for over-/underflow
+            if (trackCurNote[channel].value < 0
+                    || (trackCurNote[channel].value)%32 > 31) {
+                mode = PlayMode::None;
+                updateSilence();
+                std::cout << "C\n"; std::cout.flush();
+                emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+            }
         }
         break;
     }
+}
 
+/*************************************************************************/
+
+void Player::updateChannel(int channel) {
+    if (mode == PlayMode::None) {
+        return;
+    }
     // Play current note
-    switch(trackCurNote[channel]->type) {
-    case Track::Note::instrumentType::Hold:
-        break;
-    case Track::Note::instrumentType::Instrument:
-        break;
-    case Track::Note::instrumentType::Pause:
-        break;
-    case Track::Note::instrumentType::Percussion:
-        break;
-    case Track::Note::instrumentType::Slide:
-        break;
+    if (trackCurNote[channel].instrumentNumber != -1) {
+        switch(trackCurNote[channel].type) {
+        case Track::Note::instrumentType::Instrument:
+        {
+            Track::Instrument *curInstrument = &(pTrack->instruments[trackCurNote[channel].instrumentNumber]);
+            int CValue = curInstrument->getAudCValue(trackCurNote[channel].value);
+            // If at end of release, play silence; otherwise ADSR envelope
+            if (trackCurEnvelopeIndex[channel] >= curInstrument->getEnvelopeLength()) {
+                setChannel(channel, CValue, 0, 0);
+            } else {
+                int curFrequency = trackCurNote[channel].value;
+                int realFrequency = curFrequency <= 31 ? curFrequency : curFrequency - 32;
+                int FValue = realFrequency + curInstrument->frequencies[trackCurEnvelopeIndex[channel]];
+                // Check if envelope has caused an underrun
+                if (FValue < 0) {
+                    FValue = 256 + FValue;
+                }
+                int VValue = curInstrument->volumes[trackCurEnvelopeIndex[channel]];
+                setChannel(channel, CValue, FValue, VValue);
+                // Advance frame
+                trackCurEnvelopeIndex[channel]++;
+                // Check for end of sustain
+                if (trackCurEnvelopeIndex[channel] == curInstrument->getReleaseStart()) {
+                    trackCurEnvelopeIndex[channel] = curInstrument->getSustainStart();
+                }
+            }
+            break;
+        }
+        case Track::Note::instrumentType::Percussion:
+        {
+            Track::Percussion *curPercussion = &(pTrack->percussion[trackCurNote[channel].instrumentNumber]);
+            if (trackCurEnvelopeIndex[channel] < curPercussion->getEnvelopeLength()) {
+                TiaSound::Distortion waveform = curPercussion->waveforms[trackCurEnvelopeIndex[channel]];
+                int CValue = TiaSound::getDistortionInt(waveform);
+                int FValue = curPercussion->frequencies[trackCurEnvelopeIndex[channel]];
+                int VValue = curPercussion->volumes[trackCurEnvelopeIndex[channel]];
+                setChannel(channel, CValue, FValue, VValue);
+                // Advance frame
+                trackCurEnvelopeIndex[channel]++;
+            } else {
+                // TODO: Handle overlay
+                // Get last AUDC value, to mimick play routine
+                TiaSound::Distortion waveform = curPercussion->waveforms[trackCurEnvelopeIndex[channel] - 1];
+                int CValue = TiaSound::getDistortionInt(waveform);
+                setChannel(channel, CValue, 0, 0);
+            }
+            break;
+        }
+        default:
+            break;
+        }
     }
 }
 
@@ -244,8 +323,8 @@ void Player::updateChannel(int channel) {
 void Player::updateTrack() {
     pTrack->lock();
     if (--trackCurTick < 0) {
-        updateChannel(0);
-        updateChannel(1);
+        sequenceChannel(0);
+        sequenceChannel(1);
         trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed : pTrack->evenSpeed;
         int pos1 = pTrack->channelSequences[0].sequence[trackCurEntryIndex[0]].firstNoteNumber
                 + trackCurNoteIndex[0];
@@ -253,6 +332,8 @@ void Player::updateTrack() {
                 + trackCurNoteIndex[1];
         emit newPlayerPos(pos1, pos2);
     }
+    updateChannel(0);
+    updateChannel(1);
     pTrack->unlock();
 }
 
