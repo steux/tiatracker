@@ -410,9 +410,10 @@ bool PatternEditor::clickedInValidRow(int x, int y, int *channel, int *noteIndex
     *noteIndex = editPos - (numRows/2 - row);
     if (x < patternNameWidth + noteAreaWidth) {
         *channel = 0;
-    }
-    if (x >= patternNameWidth + noteAreaWidth + timeAreaWidth) {
+    } else  if (x >= patternNameWidth + noteAreaWidth + timeAreaWidth) {
         *channel = 1;
+    } else {
+        return false;
     }
     int channelSize = pTrack->getChannelNumRows(*channel);
     if (*noteIndex < 0 || *noteIndex >= channelSize) {
