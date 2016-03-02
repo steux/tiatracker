@@ -115,8 +115,7 @@ void Player::playTrack(int start1, int start2) {
     trackCurNoteIndex[1] = pTrack->getNoteIndexInPattern(1, start2);
     trackCurEntryIndex[0] = pTrack->getSequenceEntryIndex(0, start1);
     trackCurEntryIndex[1] = pTrack->getSequenceEntryIndex(0, start2);
-    trackCurTick[0] = 0;
-    trackCurTick[1] = 0;
+    trackCurTick = 0;
     mode = PlayMode::Track;
 }
 
@@ -183,8 +182,23 @@ void Player::updatePercussion() {
 
 /*************************************************************************/
 
+void Player::updateChannel(int channel) {
+    return;
+}
+
+/*************************************************************************/
+
 void Player::updateTrack() {
-    // TODO
+    if (--trackCurTick < 0) {
+        updateChannel(0);
+        updateChannel(1);
+        trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed : pTrack->evenSpeed;
+        int pos1 = pTrack->channelSequences[0].sequence[trackCurEntryIndex[0]].firstNoteNumber
+                + trackCurNoteIndex[0];
+        int pos2 = pTrack->channelSequences[1].sequence[trackCurEntryIndex[1]].firstNoteNumber
+                + trackCurNoteIndex[1];
+        emit newPlayerPos(pos1, pos2);
+    }
 }
 
 /*************************************************************************/

@@ -42,6 +42,14 @@ void Timeline::editPosChanged(int newPos) {
 
 /*************************************************************************/
 
+void Timeline::playerPosChanged(int pos1, int pos2) {
+    playerPos[0] = pos1;
+    playerPos[1] = pos2;
+    update();
+}
+
+/*************************************************************************/
+
 double Timeline::calcRowHeight()
 {
     int lastEntry0 = pTrack->channelSequences[0].sequence.size() - 1;
@@ -87,6 +95,9 @@ void Timeline::paintEvent(QPaintEvent *) {
 
     // Draw edit position
     painter.fillRect(0, channelMargin + editPos*rowHeight + rowHeight/2, width(), 2, MainWindow::blue);
+    // Draw player positions
+    painter.fillRect(0, channelMargin + playerPos[0]*rowHeight + rowHeight/2, width()/2, 2, MainWindow::orange);
+    painter.fillRect(width()/2, channelMargin + playerPos[1]*rowHeight + rowHeight/2, width()/2, 2, MainWindow::orange);
 }
 
 /*************************************************************************/

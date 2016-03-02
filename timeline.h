@@ -24,6 +24,7 @@ signals:
 
 public slots:
     void editPosChanged(int newPos);
+    void playerPosChanged(int pos1, int pos2);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -43,6 +44,7 @@ private:
 
     int widgetWidth;
     int editPos = 0;
+    int playerPos[2]{0};
 
     Track::Track *pTrack = nullptr;
     QMenu *pPatternMenu = nullptr;

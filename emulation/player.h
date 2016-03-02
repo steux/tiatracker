@@ -49,6 +49,7 @@ public slots:
     void playTrack(int start1, int start2);
 
 signals:
+    void newPlayerPos(int pos1, int pos2);
 
 private:
     Track::Track *pTrack = nullptr;
@@ -76,6 +77,7 @@ private:
     void updateSilence();
     void updateInstrument();
     void updatePercussion();
+    void updateChannel(int channel);
     void updateTrack();
 
     /* Set values for channel 0 */
@@ -85,8 +87,8 @@ private:
     // current note index inside pattern
     int trackCurNoteIndex[2];
     // Current entry in sequence
-    Track::SequenceEntry trackCurEntryIndex[2];
-    int trackCurTick[2];
+    int trackCurEntryIndex[2];
+    int trackCurTick;
     Track::Note trackCurNote[2];
     int curEnvelopeIndex[2];
 

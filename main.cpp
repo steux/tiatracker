@@ -22,7 +22,7 @@
 #include <QFile>
 #include <QJsonObject>
 #include <QJsonDocument>
-
+#include "timeline.h"
 #include <iostream>
 
 
@@ -143,6 +143,9 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(playPercussion(Track::Percussion*)), &tiaPlayer, SLOT(playPercussion(Track::Percussion*)));
     QObject::connect(&w, SIGNAL(stopPercussion()), &tiaPlayer, SLOT(stopPercussion()));
     QObject::connect(&w, SIGNAL(playTrack(int,int)), &tiaPlayer, SLOT(playTrack(int,int)));
+    Timeline *tl = w.findChild<Timeline *>("trackTimeline");
+    QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
+
     pt->connectPlayer(&tiaPlayer);
     tiaPlayer.run();
 
