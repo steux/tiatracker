@@ -50,6 +50,7 @@ public slots:
 
 signals:
     void newPlayerPos(int pos1, int pos2);
+    void invalidNoteFound(int channel, int entryIndex, int noteIndex);
 
 private:
     Track::Track *pTrack = nullptr;
@@ -89,8 +90,10 @@ private:
     // Current entry in sequence
     int trackCurEntryIndex[2];
     int trackCurTick;
-    Track::Note trackCurNote[2];
+    Track::Note* trackCurNote[2];
     int curEnvelopeIndex[2];
+    // Current mode, to validate track
+    Track::Note::instrumentType trackMode[2];
 
 private slots:
     void timerFired();

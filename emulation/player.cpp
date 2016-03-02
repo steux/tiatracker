@@ -116,6 +116,8 @@ void Player::playTrack(int start1, int start2) {
     trackCurEntryIndex[0] = pTrack->getSequenceEntryIndex(0, start1);
     trackCurEntryIndex[1] = pTrack->getSequenceEntryIndex(0, start2);
     trackCurTick = 0;
+    trackMode[0] = Track::Note::instrumentType::Hold;
+    trackMode[1] = Track::Note::instrumentType::Hold;
     mode = PlayMode::Track;
 }
 
@@ -183,14 +185,64 @@ void Player::updatePercussion() {
 /*************************************************************************/
 
 void Player::updateChannel(int channel) {
+    // Get next note
     if (!pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
         mode = PlayMode::None;
+    }
+    int patternIndex = pTrack->channelSequences[channel].sequence[trackCurEntryIndex[channel]].patternIndex;
+    Track::Note *nextNote = &(pTrack->patterns[patternIndex].notes[trackCurNoteIndex[channel]]);
+    // Parse and validate next note
+    switch(nextNote->type) {
+    case Track::Note::instrumentType::Hold:
+        break;
+    case Track::Note::instrumentType::Instrument:
+        trackMode[channel] = Track::Note::instrumentType::Instrument;
+        trackCurNote[channel] = nextNote;
+        // TODO: Set envelope
+        break;
+    case Track::Note::instrumentType::Pause:
+        if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
+            mode = PlayMode::None;
+            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+        } else {
+            trackMode[channel] = Track::Note::instrumentType::Hold;
+            // TODO: Put into release
+        }
+        break;
+    case Track::Note::instrumentType::Percussion:
+        trackMode[channel] = Track::Note::instrumentType::Percussion;
+        trackCurNote[channel] = nextNote;
+        // TODO: Set envelope
+        break;
+    case Track::Note::instrumentType::Slide:
+        if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
+            mode = PlayMode::None;
+            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+        } else {
+            // TODO: Slide
+        }
+        break;
+    }
+
+    // Play current note
+    switch(trackCurNote[channel]->type) {
+    case Track::Note::instrumentType::Hold:
+        break;
+    case Track::Note::instrumentType::Instrument:
+        break;
+    case Track::Note::instrumentType::Pause:
+        break;
+    case Track::Note::instrumentType::Percussion:
+        break;
+    case Track::Note::instrumentType::Slide:
+        break;
     }
 }
 
 /*************************************************************************/
 
 void Player::updateTrack() {
+    pTrack->lock();
     if (--trackCurTick < 0) {
         updateChannel(0);
         updateChannel(1);
@@ -201,6 +253,7 @@ void Player::updateTrack() {
                 + trackCurNoteIndex[1];
         emit newPlayerPos(pos1, pos2);
     }
+    pTrack->unlock();
 }
 
 /*************************************************************************/

@@ -451,6 +451,13 @@ void TrackTab::insertRowAfter(bool) {
 
 /*************************************************************************/
 
+void TrackTab::invalidNoteFound(int channel, int entryIndex, int noteIndex) {
+    // TODO: Create sensible error string
+    MainWindow::displayMessage("Invalid note found!");
+}
+
+/*************************************************************************/
+
 void TrackTab::updateTrackStats() {
     // Patterns
     QLabel *statsLabel = findChild<QLabel *>("labelPatternsUsed");

@@ -145,6 +145,7 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(playTrack(int,int)), &tiaPlayer, SLOT(playTrack(int,int)));
     Timeline *tl = w.findChild<Timeline *>("trackTimeline");
     QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
+    QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int)), tt, SLOT(invalidNoteFound(int,int,int)));
 
     pt->connectPlayer(&tiaPlayer);
     tiaPlayer.run();

@@ -55,6 +55,8 @@ public slots:
     void insertRowBefore(bool);
     void insertRowAfter(bool);
 
+    // Player error
+    void invalidNoteFound(int channel, int entryIndex, int noteIndex);
 
 private:
     /* Just updates the number of patterns and track length stats */
