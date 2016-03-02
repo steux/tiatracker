@@ -115,6 +115,24 @@ void PatternEditor::setRowToInstrument(int frequency) {
 
 /*************************************************************************/
 
+void PatternEditor::newPlayerPos(int pos1, int pos2) {
+    if (follow) {
+        if (selectedChannel == 0) {
+            setEditPos(pos1);
+        } else {
+            setEditPos(pos2);
+        }
+    }
+}
+
+/*************************************************************************/
+
+void PatternEditor::toggleFollow_clicked(bool toggle) {
+    follow = toggle;
+}
+
+/*************************************************************************/
+
 int PatternEditor::getEditPos() {
     return editPos;
 }

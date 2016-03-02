@@ -24,6 +24,7 @@
 #include <QJsonDocument>
 #include "timeline.h"
 #include <iostream>
+#include <patterneditor.h>
 
 
 #include "SDL.h"
@@ -145,7 +146,9 @@ int main(int argc, char *argv[])
     QObject::connect(&w, SIGNAL(playTrack(int,int)), &tiaPlayer, SLOT(playTrack(int,int)));
     QObject::connect(&w, SIGNAL(stopTrack()), &tiaPlayer, SLOT(stopTrack()));
     Timeline *tl = w.findChild<Timeline *>("trackTimeline");
+    PatternEditor *editor = w.findChild<PatternEditor *>("trackEditor");
     QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
+    QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), editor, SLOT(newPlayerPos(int,int)));
     QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int)), tt, SLOT(invalidNoteFound(int,int,int)));
 
     pt->connectPlayer(&tiaPlayer);

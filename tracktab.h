@@ -33,6 +33,8 @@ public slots:
     void setEvenSpeed(int value);
     void setOddSpeed(int value);
     void channelContextEvent(int channel, int noteIndex);
+    // For shortcut action "TrackToggleFollow"
+    void toggleFollow(bool);
 
     // Pattern context menu
     void setStartPattern(bool);

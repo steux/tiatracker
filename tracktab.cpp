@@ -17,6 +17,7 @@
 #include "mainwindow.h"
 #include "insertpatterndialog.h"
 #include "createpatterndialog.h"
+#include <qcheckbox.h>
 
 
 TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
@@ -173,6 +174,13 @@ void TrackTab::setOddSpeed(int value) {
 void TrackTab::channelContextEvent(int channel, int noteIndex) {
     contextEventChannel = channel;
     contextEventNoteIndex = noteIndex;
+}
+
+/*************************************************************************/
+
+void TrackTab::toggleFollow(bool) {
+    QCheckBox *cb = findChild<QCheckBox *>("checkBoxFollow");
+    cb->toggle();
 }
 
 /*************************************************************************/

@@ -48,6 +48,11 @@ public slots:
 
     void setRowToInstrument(int frequency);
 
+    void newPlayerPos(int pos1, int pos2);
+
+    // Slot for QCheckBox "follow"
+    void toggleFollow_clicked(bool toggle);
+
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
     void wheelEvent(QWheelEvent *) Q_DECL_OVERRIDE;
@@ -99,6 +104,8 @@ private:
     int selectedChannel = 0;
     // Current editor note focus, i.e. middle-of-screen highlight
     int editPos = 0;
+
+    bool follow = false;
 };
 
 #endif // PATTERNEDITOR_H

@@ -232,7 +232,7 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QCheckBox" name="checkBox">
+               <widget class="QCheckBox" name="checkBoxFollow">
                 <property name="text">
                  <string>Follow</string>
                 </property>

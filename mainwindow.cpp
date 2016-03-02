@@ -129,6 +129,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->spinBoxEvenTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setEvenSpeed(int)));
     QObject::connect(ui->spinBoxOddTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setOddSpeed(int)));
     QObject::connect(this, SIGNAL(setRowToInstrument(int)), ui->trackEditor, SLOT(setRowToInstrument(int)));
+    addShortcut(&actionToggleFollow, "TrackToggleFollow");
+    QObject::connect(&actionToggleFollow, SIGNAL(triggered(bool)), ui->tabTrack, SLOT(toggleFollow(bool)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -143,6 +145,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->trackInstrumentSelector, SIGNAL(setUsePitchGuide(bool)), ui->pianoKeyboard, SLOT(setUsePitchGuide(bool)));
     QObject::connect(ui->trackEditor, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));
     QObject::connect(ui->tabTrack, SIGNAL(advanceEditPos()), ui->trackEditor, SLOT(advanceEditPos()));
+    QObject::connect(ui->checkBoxFollow, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleFollow_clicked(bool)));
 
     // Timeline
     QObject::connect(ui->trackTimeline, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));

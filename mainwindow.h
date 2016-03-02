@@ -86,7 +86,6 @@ private slots:
     void insertFrameAfter(bool);
     void deleteFrame(bool);
 
-
     void on_actionSave_triggered();
 
     void on_actionSaveAs_triggered();
@@ -130,6 +129,8 @@ private:
     QAction actionInsertAfter{"Insert frame after", this};
     QAction actionDelete{"Delete frame", this};
     int waveformContextFrame;
+
+    QAction actionToggleFollow{this};
 };
 
 #endif // MAINWINDOW_H
