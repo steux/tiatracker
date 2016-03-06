@@ -510,6 +510,7 @@ void MainWindow::on_actionNew_triggered() {
     }
     pTrack->lock();
     pTrack->newTrack();
+    updateAllTabs();
     pTrack->unlock();
     update();
 }
