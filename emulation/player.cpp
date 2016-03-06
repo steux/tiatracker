@@ -139,6 +139,8 @@ void Player::playTrack(int start1, int start2) {
     Track::Note startNote(Track::Note::instrumentType::Instrument, -1, -1);
     trackCurNote[0] = startNote;
     trackCurNote[1] = startNote;
+    trackIsOverlay[0] = false;
+    trackIsOverlay[0] = false;
     mode = PlayMode::Track;
 }
 
@@ -211,7 +213,8 @@ void Player::sequenceChannel(int channel) {
         return;
     }
     // Get next note
-    if (!pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
+    if (!trackIsOverlay[channel]
+            && !pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
         mode = PlayMode::None;
     }
     int patternIndex = pTrack->channelSequences[channel].sequence[trackCurEntryIndex[channel]].patternIndex;
@@ -221,9 +224,12 @@ void Player::sequenceChannel(int channel) {
     case Track::Note::instrumentType::Hold:
         break;
     case Track::Note::instrumentType::Instrument:
-        trackMode[channel] = Track::Note::instrumentType::Instrument;
-        trackCurNote[channel] = *nextNote;
-        trackCurEnvelopeIndex[channel] = 0;
+        // No need to do anything if it has been pre-fetched by overlay already
+        if (!trackIsOverlay[channel]) {
+            trackMode[channel] = Track::Note::instrumentType::Instrument;
+            trackCurNote[channel] = *nextNote;
+            trackCurEnvelopeIndex[channel] = 0;
+        }
         break;
     case Track::Note::instrumentType::Pause:
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
@@ -258,6 +264,7 @@ void Player::sequenceChannel(int channel) {
         }
         break;
     }
+    trackIsOverlay[channel] = false;
 }
 
 /*************************************************************************/
@@ -298,7 +305,8 @@ void Player::updateChannel(int channel) {
         case Track::Note::instrumentType::Percussion:
         {
             Track::Percussion *curPercussion = &(pTrack->percussion[trackCurNote[channel].instrumentNumber]);
-            if (trackCurEnvelopeIndex[channel] < curPercussion->getEnvelopeLength()) {
+            if (!trackIsOverlay[channel]
+                    && trackCurEnvelopeIndex[channel] < curPercussion->getEnvelopeLength()) {
                 TiaSound::Distortion waveform = curPercussion->waveforms[trackCurEnvelopeIndex[channel]];
                 int CValue = TiaSound::getDistortionInt(waveform);
                 int FValue = curPercussion->frequencies[trackCurEnvelopeIndex[channel]];
@@ -306,10 +314,29 @@ void Player::updateChannel(int channel) {
                 setChannel(channel, CValue, FValue, VValue);
                 // Advance frame
                 trackCurEnvelopeIndex[channel]++;
+                // Check for overlay
+                if (trackCurEnvelopeIndex[channel] == curPercussion->getEnvelopeLength()
+                        && curPercussion->overlay) {
+                    // Get next note
+                    if (!pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
+                        mode = PlayMode::None;
+                    } else {
+                        trackIsOverlay[channel] = true;
+                        int patternIndex = pTrack->channelSequences[channel].sequence[trackCurEntryIndex[channel]].patternIndex;
+                        Track::Note *nextNote = &(pTrack->patterns[patternIndex].notes[trackCurNoteIndex[channel]]);
+                        // Only start if melodic instrument
+                        if (nextNote->type == Track::Note::instrumentType::Instrument) {
+                            // Start in sustain
+                            trackMode[channel] = Track::Note::instrumentType::Instrument;
+                            trackCurNote[channel] = *nextNote;
+                            trackCurEnvelopeIndex[channel] = pTrack->instruments[nextNote->instrumentNumber].getSustainStart();
+                        }
+                    }
+                }
             } else {
-                // TODO: Handle overlay
-                // Get last AUDC value, to mimick play routine
-                TiaSound::Distortion waveform = curPercussion->waveforms[trackCurEnvelopeIndex[channel] - 1];
+                // Percussion has finished, or overlay is active but no instrument followed: Silence
+                // Get last AUDC value, to mimick play routine. Needed?
+                TiaSound::Distortion waveform = curPercussion->waveforms.last();
                 int CValue = TiaSound::getDistortionInt(waveform);
                 setChannel(channel, CValue, 0, 0);
             }

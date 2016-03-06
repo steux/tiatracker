@@ -103,6 +103,8 @@ private:
     int trackCurEnvelopeIndex[2];
     // Current mode, to validate track
     Track::Note::instrumentType trackMode[2];
+    // Was the current note fetched via overlay?
+    bool trackIsOverlay[2];
 
 private slots:
     void timerFired();
