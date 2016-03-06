@@ -28,6 +28,7 @@ public:
 
 signals:
     void advanceEditPos();
+    void stopTrack();
 
 public slots:
     void setEvenSpeed(int value);

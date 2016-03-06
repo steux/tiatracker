@@ -186,7 +186,9 @@ void TrackTab::toggleFollow(bool) {
 /*************************************************************************/
 
 void TrackTab::setStartPattern(bool) {
+    pTrack->lock();
     pTrack->startPatterns[contextEventChannel] = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+    pTrack->unlock();
     update();
 }
 
@@ -213,7 +215,9 @@ void TrackTab::setGoto(bool) {
     Track::SequenceEntry *entry = &(pTrack->channelSequences[contextEventChannel].sequence[entryIndex]);
     dialog.setGotoValue(std::max(1, entry->gotoTarget + 1));
     if (dialog.exec() == QDialog::Accepted) {
+        pTrack->lock();
         entry->gotoTarget = dialog.getGotoValue() - 1;
+        pTrack->unlock();
         update();
     }
 
@@ -222,9 +226,11 @@ void TrackTab::setGoto(bool) {
 /*************************************************************************/
 
 void TrackTab::removeGoto(bool) {
+    pTrack->lock();
     int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     Track::SequenceEntry *entry = &(pTrack->channelSequences[contextEventChannel].sequence[entryIndex]);
     entry->gotoTarget = -1;
+    pTrack->unlock();
     update();
 }
 
@@ -233,6 +239,7 @@ void TrackTab::removeGoto(bool) {
 void TrackTab::movePatternUp(bool) {
     int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     if (entryIndex > 0) {
+        emit stopTrack();
         pTrack->channelSequences[contextEventChannel].sequence.swap(entryIndex, entryIndex - 1);
         pTrack->updateFirstNoteNumbers();
         update();
@@ -244,6 +251,7 @@ void TrackTab::movePatternUp(bool) {
 void TrackTab::movePatternDown(bool) {
     int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     if (entryIndex != pTrack->channelSequences[contextEventChannel].sequence.size() - 1) {
+        emit stopTrack();
         pTrack->channelSequences[contextEventChannel].sequence.swap(entryIndex, entryIndex + 1);
         pTrack->updateFirstNoteNumbers();
         update();
@@ -253,6 +261,7 @@ void TrackTab::movePatternDown(bool) {
 /*************************************************************************/
 
 void TrackTab::insertPatternBefore(bool) {
+    emit stopTrack();
     int patternIndex = choosePatternToInsert(true);
     if (patternIndex == -1) {
         return;
@@ -267,6 +276,7 @@ void TrackTab::insertPatternBefore(bool) {
 /*************************************************************************/
 
 void TrackTab::insertPatternAfter(bool) {
+    emit stopTrack();
     int patternIndex = choosePatternToInsert(false);
     if (patternIndex == -1) {
         return;
@@ -281,6 +291,7 @@ void TrackTab::insertPatternAfter(bool) {
 /*************************************************************************/
 
 void TrackTab::removePattern(bool) {
+    emit stopTrack();
     if (pTrack->channelSequences[contextEventChannel].sequence.size() == 1) {
         MainWindow::displayMessage("A channel must contain at least one pattern!");
         return;
@@ -332,6 +343,7 @@ void TrackTab::removePattern(bool) {
 /*************************************************************************/
 
 void TrackTab::duplicatePattern(bool) {
+    emit stopTrack();
     RenamePatternDialog dialog(this);
     int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
     int patternIndex = pTrack->channelSequences[contextEventChannel].sequence[entryIndex].patternIndex;
@@ -346,6 +358,7 @@ void TrackTab::duplicatePattern(bool) {
 /*************************************************************************/
 
 void TrackTab::setSlideValue(bool) {
+    emit stopTrack();
     if (!pTrack->checkSlideValidity(contextEventChannel, contextEventNoteIndex)) {
         MainWindow::displayMessage("A SLIDE can only follow a melodic instrument or another slide!");
         return;
@@ -368,6 +381,7 @@ void TrackTab::setSlideValue(bool) {
 /*************************************************************************/
 
 void TrackTab::setFrequency(bool) {
+    emit stopTrack();
     Track::Note *selectedNote = pTrack->getNote(contextEventChannel, contextEventNoteIndex);
     if (selectedNote->type != Track::Note::instrumentType::Instrument) {
         MainWindow::displayMessage("Only a melodic instrument can have a frequency value!");
@@ -388,7 +402,9 @@ void TrackTab::setFrequency(bool) {
 /*************************************************************************/
 
 void TrackTab::setHold(bool) {
+    pTrack->lock();
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Hold;
+    pTrack->unlock();
     emit advanceEditPos();
     update();
 }
@@ -396,9 +412,11 @@ void TrackTab::setHold(bool) {
 /*************************************************************************/
 
 void TrackTab::setPause(bool) {
+    pTrack->lock();
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Pause;
     int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
     pTrack->validatePattern(patternIndex);
+    pTrack->unlock();
     emit advanceEditPos();
     update();
 
@@ -407,6 +425,7 @@ void TrackTab::setPause(bool) {
 /*************************************************************************/
 
 void TrackTab::deleteRow(bool) {
+    emit stopTrack();
     int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
     Track::Pattern *pattern = &(pTrack->patterns[patternIndex]);
     if (pattern->notes.size() == Track::Pattern::minSize) {
@@ -424,6 +443,7 @@ void TrackTab::deleteRow(bool) {
 /*************************************************************************/
 
 void TrackTab::insertRowBefore(bool) {
+    emit stopTrack();
     int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
     Track::Pattern *pattern = &(pTrack->patterns[patternIndex]);
     if (pattern->notes.size() == Track::Pattern::maxSize) {
@@ -442,6 +462,7 @@ void TrackTab::insertRowBefore(bool) {
 /*************************************************************************/
 
 void TrackTab::insertRowAfter(bool) {
+    emit stopTrack();
     int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
     Track::Pattern *pattern = &(pTrack->patterns[patternIndex]);
     if (pattern->notes.size() == Track::Pattern::maxSize) {
