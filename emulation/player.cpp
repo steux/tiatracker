@@ -128,6 +128,7 @@ void Player::playWaveform(TiaSound::Distortion waveform, int frequency, int volu
 /*************************************************************************/
 
 void Player::playTrack(int start1, int start2) {
+    pTrack->lock();
     trackCurNoteIndex[0] = pTrack->getNoteIndexInPattern(0, start1);
     trackCurNoteIndex[1] = pTrack->getNoteIndexInPattern(1, start2);
     trackCurEntryIndex[0] = pTrack->getSequenceEntryIndex(0, start1);
@@ -142,6 +143,8 @@ void Player::playTrack(int start1, int start2) {
     trackIsOverlay[0] = false;
     trackIsOverlay[0] = false;
     mode = PlayMode::Track;
+    isFirstNote = true;
+    pTrack->unlock();
 }
 
 /*************************************************************************/
@@ -156,7 +159,6 @@ void Player::updateSilence() {
 void Player::updateInstrument() {
     /* Play current frame */
     // Check if instrument has changed and made currentFrame illegal
-    pTrack->lock();
     if (currentInstrumentFrame >= currentInstrument->getEnvelopeLength()) {
         // Go into silence if currentFrame is illegal
         mode = PlayMode::None;
@@ -182,14 +184,12 @@ void Player::updateInstrument() {
             mode = PlayMode::None;
         }
     }
-    pTrack->unlock();
 }
 
 /*************************************************************************/
 
 void Player::updatePercussion() {
     /* Play current frame */
-    pTrack->lock();
     if (currentPercussionFrame >= currentPercussion->getEnvelopeLength()) {
         // Go into silence if currentFrame is illegal
         mode = PlayMode::None;
@@ -203,7 +203,6 @@ void Player::updatePercussion() {
         /* Advance frame. End of waveform is handled next frame */
         currentPercussionFrame++;
     }
-    pTrack->unlock();
 }
 
 /*************************************************************************/
@@ -212,8 +211,8 @@ void Player::sequenceChannel(int channel) {
     if (mode == PlayMode::None) {
         return;
     }
-    // Get next note
-    if (!trackIsOverlay[channel]
+    // Get next note if not first one and not in overlay mode
+    if (!isFirstNote && !trackIsOverlay[channel]
             && !pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
         mode = PlayMode::None;
     }
@@ -351,10 +350,10 @@ void Player::updateChannel(int channel) {
 /*************************************************************************/
 
 void Player::updateTrack() {
-    pTrack->lock();
     if (--trackCurTick < 0) {
         sequenceChannel(0);
         sequenceChannel(1);
+        isFirstNote = false;
         trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed : pTrack->evenSpeed;
         int pos1 = pTrack->channelSequences[0].sequence[trackCurEntryIndex[0]].firstNoteNumber
                 + trackCurNoteIndex[0];
@@ -364,12 +363,12 @@ void Player::updateTrack() {
     }
     updateChannel(0);
     updateChannel(1);
-    pTrack->unlock();
 }
 
 /*************************************************************************/
 
 void Player::timerFired() {
+    pTrack->lock();
     switch (mode) {
     case PlayMode::Instrument:
     case PlayMode::InstrumentOnce:
@@ -386,6 +385,7 @@ void Player::timerFired() {
     default:
         updateSilence();
     }
+    pTrack->unlock();
 }
 
 }

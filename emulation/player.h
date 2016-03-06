@@ -105,6 +105,7 @@ private:
     Track::Note::instrumentType trackMode[2];
     // Was the current note fetched via overlay?
     bool trackIsOverlay[2];
+    bool isFirstNote;
 
 private slots:
     void timerFired();
