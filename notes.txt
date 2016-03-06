@@ -1,5 +1,7 @@
 TODO:
-- Play overlay
+- on tab switch, what to do with player? Stop play? Do more locking?
+- lock track for load, or better: stop player
+- lock ins/perc for import
 - On instrument base waveform change from PURE_COMBINED to something else: What happens
   with notes with freq>31? Right now, player automatically does -32. What to do on export?
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
@@ -8,8 +10,6 @@ TODO:
 - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
 - Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
 - Pattern names tooltip in timeline
-- lock track for load, or better: stop player
-- lock ins/perc for import
 - switch json format to binary, at least for track?
 - Recover gracefully after trying to load corrupted track
 - Pitch Perfect NTSC
