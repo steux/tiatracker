@@ -1,4 +1,5 @@
 TODO:
+- on load/new: Set editpos to 0
 - on tab switch, what to do with player? Stop play? Do more locking?
 - lock track for load, or better: stop player
 - lock ins/perc for import

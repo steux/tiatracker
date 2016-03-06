@@ -495,3 +495,21 @@ void MainWindow::on_actionStop_triggered() {
 void MainWindow::on_pushButtonStop_clicked() {
     on_actionStop_triggered();
 }
+
+/*************************************************************************/
+
+void MainWindow::on_actionNew_triggered() {
+    // Ask if current track should really be discarded
+    QMessageBox msgBox(QMessageBox::NoIcon,
+                       "Quit",
+                       "Do you really want to discard the current track?",
+                       QMessageBox::Yes | QMessageBox::No, this,
+                       Qt::FramelessWindowHint);
+    if (msgBox.exec() != QMessageBox::Yes) {
+        return;
+    }
+    pTrack->lock();
+    pTrack->newTrack();
+    pTrack->unlock();
+    update();
+}

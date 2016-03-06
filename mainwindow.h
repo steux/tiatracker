@@ -102,6 +102,8 @@ private slots:
 
     void on_pushButtonStop_clicked();
 
+    void on_actionNew_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
