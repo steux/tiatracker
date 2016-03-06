@@ -54,6 +54,7 @@ void Track::newTrack() {
     playPos[0] = 0;
     playPos[1] = 0;
     tvMode = TiaSound::TvStandard::PAL;
+    updateFirstNoteNumbers();
 }
 
 /*************************************************************************/

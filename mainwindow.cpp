@@ -238,9 +238,11 @@ void MainWindow::pianoKeyReleased() {
 void MainWindow::on_tabWidget_currentChanged(int index) {
     switch (index) {
     case iTabInstruments:
+        emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(true);
         break;
     case iTabPercussion:
+        emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(false);
         break;
     }
@@ -324,6 +326,7 @@ void MainWindow::deleteFrame(bool) {
 /*************************************************************************/
 
 void MainWindow::on_actionSave_triggered() {
+    emit stopTrack();
     if (pTrack->name == "new track.ttt") {
         on_actionSaveAs_triggered();
     } else {
@@ -358,12 +361,16 @@ void MainWindow::loadTrackByName(const QString &fileName) {
     }
     QJsonDocument loadDoc(QJsonDocument::fromJson(loadFile.readAll()));
 
+    pTrack->lock();
     // Parse in data
     if (!pTrack->fromJson(loadDoc.object())) {
         displayMessage("Unable to parse track!");
+        pTrack->unlock();
         return;
     }
+    pTrack->unlock();
     setTrackName(fileName);
+    ui->trackEditor->setEditPos(0);
     updateAllTabs();
 }
 
@@ -403,6 +410,7 @@ void MainWindow::addShortcut(QAction *action, QString actionName) {
 /*************************************************************************/
 
 void MainWindow::on_actionSaveAs_triggered() {
+    emit stopTrack();
     QFileDialog dialog(this);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
@@ -424,6 +432,7 @@ void MainWindow::on_actionSaveAs_triggered() {
 /*************************************************************************/
 
 void MainWindow::on_actionOpen_triggered() {
+    emit stopTrack();
     // Ask if current track should really be discarded
     QMessageBox msgBox(QMessageBox::NoIcon,
                        "Open track",
@@ -456,6 +465,7 @@ void MainWindow::on_actionOpen_triggered() {
 /*************************************************************************/
 
 void MainWindow::on_actionQuit_triggered() {
+    emit stopTrack();
     // Ask if current track should really be discarded
     QMessageBox msgBox(QMessageBox::NoIcon,
                        "Quit",
@@ -499,6 +509,7 @@ void MainWindow::on_pushButtonStop_clicked() {
 /*************************************************************************/
 
 void MainWindow::on_actionNew_triggered() {
+    emit stopTrack();
     // Ask if current track should really be discarded
     QMessageBox msgBox(QMessageBox::NoIcon,
                        "Quit",
@@ -510,6 +521,7 @@ void MainWindow::on_actionNew_triggered() {
     }
     pTrack->lock();
     pTrack->newTrack();
+    ui->trackEditor->setEditPos(0);
     updateAllTabs();
     pTrack->unlock();
     update();

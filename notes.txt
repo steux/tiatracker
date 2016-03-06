@@ -1,7 +1,5 @@
 TODO:
 - on load/new: Set editpos to 0
-- on tab switch, what to do with player? Stop play? Do more locking?
-- lock track for load, or better: stop player
 - lock ins/perc for import
 - On instrument base waveform change from PURE_COMBINED to something else: What happens
   with notes with freq>31? Right now, player automatically does -32. What to do on export?
