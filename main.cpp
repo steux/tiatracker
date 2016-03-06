@@ -40,78 +40,7 @@ int main(int argc, char *argv[])
 
     // Track
     Track::Track myTrack{};
-    // Test track
-    // Ins 0: lead, 1: base drum, 2: hi drum
-    Track::Pattern patDrums("Drum loop");
-    patDrums.notes = QList<Track::Note>{
-        {Track::Note::instrumentType::Percussion, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Percussion, 1, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Percussion, 1, 0},
-        {Track::Note::instrumentType::Hold, 0, 0}
-    };
-    Track::Pattern patMelody1("Melody 1");
-    patMelody1.notes = QList<Track::Note>{
-        {Track::Note::instrumentType::Instrument, 0, 8},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Instrument, 0, 16},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Instrument, 0, 24},
-        {Track::Note::instrumentType::Slide, 0, -1},
-        {Track::Note::instrumentType::Slide, 0, -2},
-        {Track::Note::instrumentType::Slide, 0, -3},
-        {Track::Note::instrumentType::Instrument, 0, 31},
-        {Track::Note::instrumentType::Slide, 0, 1},
-        {Track::Note::instrumentType::Slide, 0, 2},
-        {Track::Note::instrumentType::Slide, 0, 3}
-    };
-    Track::Pattern patMelody2("Melody 2");
-    patMelody2.notes = QList<Track::Note>{
-        {Track::Note::instrumentType::Instrument, 0, 8},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Instrument, 0, 16},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Instrument, 0, 24},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Instrument, 0, 31},
-        {Track::Note::instrumentType::Hold, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0},
-        {Track::Note::instrumentType::Pause, 0, 0}
-    };
-
-    myTrack.patterns.append(patDrums);
-    myTrack.patterns.append(patMelody1);
-    myTrack.patterns.append(patMelody2);
-
-    Track::SequenceEntry intro0{0};
-    Track::SequenceEntry intro1{0, 0};
-    myTrack.channelSequences[0].sequence.append(intro0);
-    myTrack.channelSequences[1].sequence.append(intro1);
-    Track::SequenceEntry melody1_0{1};
-    Track::SequenceEntry melody1_10{0};
-    Track::SequenceEntry melody1_11{0};
-    myTrack.channelSequences[0].sequence.append(melody1_0);
-//    myTrack.channelSequences[1].sequence.append(melody1_10);
-//    myTrack.channelSequences[1].sequence.append(melody1_11);
-    Track::SequenceEntry melody2_0{2, 1};
-    Track::SequenceEntry melody2_10{0};
-    Track::SequenceEntry melody2_11{0, 1};
-    myTrack.channelSequences[0].sequence.append(melody2_0);
-//    myTrack.channelSequences[1].sequence.append(melody2_10);
-//    myTrack.channelSequences[1].sequence.append(melody2_11);
+    myTrack.newTrack();
 
     // GUI
     MainWindow::loadKeymap();

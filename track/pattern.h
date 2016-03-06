@@ -11,7 +11,7 @@ namespace Track {
 class Pattern
 {
 public:
-    const static int minSize = 2;
+    const static int minSize = 1;
     const static int maxSize = 127;
 
     Pattern();

@@ -25,6 +25,39 @@ void Track::unlock() {
 
 /*************************************************************************/
 
+void Track::newTrack() {
+    name = "new track.ttt";
+    instruments = QList<Instrument>{
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
+    };
+    percussion = QList<Percussion>{
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"},
+        {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}, {"---"}
+    };
+
+    patterns.clear();
+    Pattern newPattern("New pattern");
+    Note newNote(Note::instrumentType::Hold, 0, 0);
+    for (int i = 0; i < 16; ++i) {
+        newPattern.notes.append(newNote);
+    }
+    patterns.append(newPattern);
+    channelSequences = QList<Sequence>{{}, {}};
+    SequenceEntry newEntry(0, -1);
+    channelSequences[0].sequence.append(newEntry);
+    channelSequences[1].sequence.append(newEntry);
+    evenSpeed = 5;
+    oddSpeed = 5;
+    rowsPerBeat = 4;
+    startPatterns[0] = 0;
+    startPatterns[1] = 0;
+    playPos[0] = 0;
+    playPos[1] = 0;
+    tvMode = TiaSound::TvStandard::PAL;
+}
+
+/*************************************************************************/
+
 int Track::getNumUsedEnvelopeFrames() {
     int numFrames = 0;
     for (int i = 0; i < numInstruments; ++i) {

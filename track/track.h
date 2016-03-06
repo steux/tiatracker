@@ -30,6 +30,8 @@ public:
     void lock();
     void unlock();
 
+    void newTrack();
+
     /* Counts all envelope frames over all instruments */
     int getNumUsedEnvelopeFrames();
     int getNumUsedPercussionFrames();
