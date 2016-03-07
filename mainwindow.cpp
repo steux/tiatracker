@@ -460,6 +460,7 @@ void MainWindow::on_actionOpen_triggered() {
     }
     QString fileName = fileNames[0];
     loadTrackByName(fileName);
+    ui->trackEditor->setEditPos(0);
 }
 
 /*************************************************************************/

@@ -1,5 +1,4 @@
 TODO:
-- on load/new: Set editpos to 0
 - lock ins/perc for import
 - On instrument base waveform change from PURE_COMBINED to something else: What happens
   with notes with freq>31? Right now, player automatically does -32. What to do on export?
@@ -17,6 +16,7 @@ TODO:
 - Should paintEvents (timeline, patternEditor) obey the Track mutex?
   updateFirstNoteNumbers might otherwise be not fast enough in some cases?
 - On export/during size calc, look for ending 0 in instruments/percs
+- Better error messages during play
 
 
 FEATURES:
