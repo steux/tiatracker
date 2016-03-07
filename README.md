@@ -8,18 +8,19 @@ A music tracker for making Atari VCS 2600 music on the PC, including a new sound
 
 ### 0.9 ###
 
-* Player emulation
+* Loop and mute pattern
+* Play from here, play next/previous pattern
 * Info tab
+* Options tab
+* NTSC pitch guide
+* Export to .dasm
+* License for the tracker and the sound routine
+* Manual
 
 ### 1.0 ###
 
-* Manual
-* NTSC pitch guide
-* Options tab
-* Export to .dasm
 * Pitch guide creator
 * Persistent options and file paths
-* License for the tracker and the sound routine
 
 ### 1.1 and later ###
 
