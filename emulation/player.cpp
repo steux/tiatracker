@@ -215,6 +215,7 @@ void Player::sequenceChannel(int channel) {
     if (!isFirstNote && !trackIsOverlay[channel]
             && !pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
         mode = PlayMode::None;
+        return;
     }
     int patternIndex = pTrack->channelSequences[channel].sequence[trackCurEntryIndex[channel]].patternIndex;
     Track::Note *nextNote = &(pTrack->patterns[patternIndex].notes[trackCurNoteIndex[channel]]);
@@ -353,6 +354,9 @@ void Player::updateTrack() {
     if (--trackCurTick < 0) {
         sequenceChannel(0);
         sequenceChannel(1);
+        if (mode == PlayMode::None) {
+            return;
+        }
         isFirstNote = false;
         trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed : pTrack->evenSpeed;
         int pos1 = pTrack->channelSequences[0].sequence[trackCurEntryIndex[0]].firstNoteNumber
