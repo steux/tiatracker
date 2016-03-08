@@ -6,3 +6,4 @@ copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\release\TIATracker
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\keymap.cfg deploy\
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\license.txt deploy\
 copy sdl\windows\lib\SDL2.dll deploy\
+xcopy /S player deploy\

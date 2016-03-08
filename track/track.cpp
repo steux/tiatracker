@@ -291,6 +291,43 @@ void Track::validatePattern(int patternIndex) {
 
 /*************************************************************************/
 
+bool Track::usesGoto() {
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < channelSequences[channel].sequence.size(); ++i) {
+            if (channelSequences[channel].sequence[i].gotoTarget != -1) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/*************************************************************************/
+
+bool Track::startsWithHold() {
+
+}
+
+/*************************************************************************/
+
+bool Track::usesSlide() {
+
+}
+
+/*************************************************************************/
+
+bool Track::usesOverlay() {
+
+}
+
+/*************************************************************************/
+
+bool Track::usesFunktempo() {
+
+}
+
+/*************************************************************************/
+
 void Track::toJson(QJsonObject &json) {
     // General data
     json["version"] = MainWindow::version;

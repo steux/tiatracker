@@ -77,6 +77,13 @@ public:
      * Does not consider notes outside the pattern. */
     void validatePattern(int patternIndex);
 
+    /* Feature checks */
+    bool usesGoto();
+    bool startsWithHold();
+    bool usesSlide();
+    bool usesOverlay();
+    bool usesFunktempo();
+
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);
 
