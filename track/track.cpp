@@ -385,6 +385,34 @@ int Track::getNumPercussionFromTrack() {
 
 /*************************************************************************/
 
+int Track::calcInstrumentsSize() {
+    return 42;
+}
+
+/*************************************************************************/
+
+int Track::calcPercussionSize() {
+    QList<int> found{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            Note *n = getNote(channel, i);
+            if (n->type == Note::instrumentType::Percussion) {
+                found[n->instrumentNumber] = 1;
+            }
+        }
+    }
+    int result = 0;
+    for (int i = 0; i < numPercussion; ++i) {
+        if (found[i] != 0) {
+            result += Emulation::Player::RomPerPercussion;
+            result += 2*percussion[i].calcEffectiveSize();
+        }
+    }
+    return result;
+}
+
+/*************************************************************************/
+
 void Track::toJson(QJsonObject &json) {
     // General data
     json["version"] = MainWindow::version;

@@ -39,6 +39,9 @@ public:
     void insertFrameAfter(int frame);
     void deleteFrame(int frame);
 
+    /* Calc ROM usage without superfluous trailing 0 bytes */
+    int calcEffectiveSize();
+
     QString name;
     QList<int> volumes{0};
     QList<int> frequencies{0};

@@ -424,6 +424,10 @@ void MainWindow::updateInfo() {
     ui->labelInfoInstruments->setText(QString::number(numInstruments));
     int numPercussion = pTrack->getNumPercussionFromTrack();
     ui->labelInfoPercussion->setText(QString::number(numPercussion));
+    int instrumentsSize = pTrack->calcInstrumentsSize();
+    ui->labelInstrumentsRom->setText(QString::number(instrumentsSize));
+    int percussionSize = pTrack->calcPercussionSize();
+    ui->labelPercussionRom->setText(QString::number(percussionSize));
 
     ui->tabInfo->update();
 }

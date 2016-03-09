@@ -85,6 +85,8 @@ public:
     bool usesFunktempo();
     int getNumInstrumentsFromTrack();
     int getNumPercussionFromTrack();
+    int calcInstrumentsSize();
+    int calcPercussionSize();
 
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);

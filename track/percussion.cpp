@@ -246,4 +246,14 @@ void Percussion::deleteFrame(int frame) {
     waveforms.removeAt(frame);
 }
 
+/*************************************************************************/
+
+int Percussion::calcEffectiveSize() {
+    int realSize = envelopeLength;
+    while (waveforms[realSize - 1] == TiaSound::Distortion::SILENT && volumes[realSize - 1] == 0) {
+        realSize--;
+    }
+    return realSize;
+}
+
 }
