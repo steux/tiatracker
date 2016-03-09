@@ -84,6 +84,7 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitc
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].isEnabled = false;
     }
+    int smallestOctave = 99;
     for (int freq = 0; freq < pitchGuide->getNumFrequencies(); ++freq) {
         TiaSound::Note note = pitchGuide->getNote(freq);
         if (note != TiaSound::Note::NotANote) {
@@ -104,10 +105,14 @@ void PianoKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitc
                     keyInfo[iNote].frequency = freq;
                     keyInfo[iNote].note = note;
                     keyInfo[iNote].off = off;
+                    if (int(iNote/12) < smallestOctave) {
+                        smallestOctave = int(iNote/12);
+                    }
                 }
             }
         }
     }
+    setOctave(smallestOctave);
     setUsePitchGuide(true);
 }
 
