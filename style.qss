@@ -137,3 +137,12 @@ QCheckBox::indicator:unchecked {
 QCheckBox::indicator:checked {
     image: url(:/graphics/checkbox_checked.png);
 }
+
+QWidget#widgetInfoTable {
+    background-color: #eee8d5;
+}
+
+QWidget#widgetInfoTable > QLabel {
+    background-color: #eee8d5;
+}
+

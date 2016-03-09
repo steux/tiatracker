@@ -305,25 +305,82 @@ bool Track::usesGoto() {
 /*************************************************************************/
 
 bool Track::startsWithHold() {
-
+    return (getNote(0, 0)->type == Note::instrumentType::Hold && getNote(1, 0)->type == Note::instrumentType::Hold);
 }
 
 /*************************************************************************/
 
 bool Track::usesSlide() {
-
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            if (getNote(channel, i)->type == Note::instrumentType::Slide) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /*************************************************************************/
 
 bool Track::usesOverlay() {
-
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            Note *n = getNote(channel, i);
+            if (n->type == Note::instrumentType::Percussion && percussion[n->instrumentNumber].overlay) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 /*************************************************************************/
 
 bool Track::usesFunktempo() {
+    return (evenSpeed != oddSpeed);
+}
 
+/*************************************************************************/
+
+int Track::getNumInstrumentsFromTrack() {
+    QList<int> found{0, 0, 0, 0, 0, 0, 0};
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            Note *n = getNote(channel, i);
+            if (n->type == Note::instrumentType::Instrument) {
+                if (instruments[n->instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                    found[n->instrumentNumber] = 2;
+                } else {
+                    found[n->instrumentNumber] = 1;
+                }
+            }
+        }
+    }
+    int result = 0;
+    for (int i = 0; i < numInstruments; ++i) {
+        result += found[i];
+    }
+    return result;
+}
+
+/*************************************************************************/
+
+int Track::getNumPercussionFromTrack() {
+    QList<int> found{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            Note *n = getNote(channel, i);
+            if (n->type == Note::instrumentType::Percussion) {
+                found[n->instrumentNumber] = 1;
+            }
+        }
+    }
+    int result = 0;
+    for (int i = 0; i < numPercussion; ++i) {
+        result += found[i];
+    }
+    return result;
 }
 
 /*************************************************************************/

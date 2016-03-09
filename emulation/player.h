@@ -19,6 +19,18 @@ class Player : public QThread {
     Q_OBJECT
 
 public:
+    /* Player ROM usage per feature */
+    static const int RomGoto = 8;
+    static const int RomSlide = 11;
+    static const int RomOverlay = 40;
+    static const int RomFunktempo = 7;
+    static const int RomStartsWithHold = 2;
+    static const int RomPerInstrument = 5;
+    static const int RomPerPercussion = 3;
+    static const int RomPerPattern = 3;
+    static const int RomPerSequence = 1;
+    static const int RomTrack = 2;
+
     explicit Player(Track::Track *parentTrack, QObject *parent = 0);
     ~Player();
 

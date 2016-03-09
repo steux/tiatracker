@@ -437,6 +437,7 @@ void TrackTab::deleteRow(bool) {
     pattern->notes.removeAt(noteInPattern);
     pTrack->updateFirstNoteNumbers();
     pTrack->validatePattern(patternIndex);
+    emit validateEditPos();
     update();
 }
 

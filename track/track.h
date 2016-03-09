@@ -83,6 +83,8 @@ public:
     bool usesSlide();
     bool usesOverlay();
     bool usesFunktempo();
+    int getNumInstrumentsFromTrack();
+    int getNumPercussionFromTrack();
 
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);

@@ -119,6 +119,8 @@ private:
 
     void updateAllTabs();
 
+    void updateInfo();
+
     void addShortcut(QAction *action, QString actionName);
 
     Ui::MainWindow *ui = nullptr;

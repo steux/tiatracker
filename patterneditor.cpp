@@ -81,6 +81,12 @@ void PatternEditor::setEditPos(int newPos) {
 
 /*************************************************************************/
 
+void PatternEditor::validateEditPos() {
+    setEditPos(editPos);
+}
+
+/*************************************************************************/
+
 void PatternEditor::advanceEditPos() {
     setEditPos(editPos + 1);
 }

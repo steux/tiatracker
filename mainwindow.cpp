@@ -131,6 +131,7 @@ void MainWindow::initConnections() {
     QObject::connect(this, SIGNAL(setRowToInstrument(int)), ui->trackEditor, SLOT(setRowToInstrument(int)));
     addShortcut(&actionToggleFollow, "TrackToggleFollow");
     QObject::connect(&actionToggleFollow, SIGNAL(triggered(bool)), ui->tabTrack, SLOT(toggleFollow(bool)));
+    QObject::connect(ui->tabTrack, SIGNAL(validateEditPos()), ui->trackEditor, SLOT(validateEditPos()));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -244,6 +245,9 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     case iTabPercussion:
         emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(false);
+        break;
+    case iTabInfo:
+        updateInfo();
         break;
     }
 }
@@ -395,6 +399,33 @@ void MainWindow::updateAllTabs() {
     PercussionTab *percTab = findChild<PercussionTab *>("tabPercussion");
     percTab->updatePercussionTab();
     percTab->update();
+}
+
+/*************************************************************************/
+
+void MainWindow::updateInfo() {
+    bool usesGoto = pTrack->usesGoto();
+    ui->labelGotoUsed->setText(usesGoto ? "X" : "-");
+    ui->labelGotoRom->setText(usesGoto ? QString::number(Emulation::Player::RomGoto) : "<s>" + QString::number(Emulation::Player::RomGoto) + "</s>");
+    bool usesSlide = pTrack->usesSlide();
+    ui->labelSlideUsed->setText(usesSlide ? "X" : "-");
+    ui->labelSlideRom->setText(usesSlide ? QString::number(Emulation::Player::RomSlide) : "<s>" + QString::number(Emulation::Player::RomSlide) + "</s>");
+    bool usesOverlay = pTrack->usesOverlay();
+    ui->labelOverlayUsed->setText(usesOverlay ? "X" : "-");
+    ui->labelOverlayRom->setText(usesOverlay ? QString::number(Emulation::Player::RomOverlay) : "<s>" + QString::number(Emulation::Player::RomOverlay) + "</s>");
+    bool usesFunk = pTrack->usesFunktempo();
+    ui->labelFunktempoUsed->setText(usesFunk ? "X" : "-");
+    ui->labelFunktempoRom->setText(usesFunk ? QString::number(Emulation::Player::RomFunktempo) : "<s>" + QString::number(Emulation::Player::RomFunktempo) + "</s>");
+    bool startsWithHold = pTrack->startsWithHold();
+    ui->labelStartsWithHold->setText(startsWithHold ? "X" : "-");
+    ui->labelStartsWithHoldRom->setText(startsWithHold ? QString::number(Emulation::Player::RomStartsWithHold) : "<s>" + QString::number(Emulation::Player::RomStartsWithHold) + "</s>");
+
+    int numInstruments = pTrack->getNumInstrumentsFromTrack();
+    ui->labelInfoInstruments->setText(QString::number(numInstruments));
+    int numPercussion = pTrack->getNumPercussionFromTrack();
+    ui->labelInfoPercussion->setText(QString::number(numPercussion));
+
+    ui->tabInfo->update();
 }
 
 /*************************************************************************/

@@ -28,6 +28,7 @@ public:
 
 signals:
     void advanceEditPos();
+    void validateEditPos();
     void stopTrack();
 
 public slots:
