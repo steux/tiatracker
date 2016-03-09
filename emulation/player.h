@@ -29,7 +29,7 @@ public:
     static const int RomPerPercussion = 3;
     static const int RomPerPattern = 3;
     static const int RomPerSequence = 1;
-    static const int RomTrack = 2;
+    static const int RomTrack = 164;
 
     explicit Player(Track::Track *parentTrack, QObject *parent = 0);
     ~Player();

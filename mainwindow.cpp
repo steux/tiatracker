@@ -428,6 +428,24 @@ void MainWindow::updateInfo() {
     ui->labelInstrumentsRom->setText(QString::number(instrumentsSize));
     int percussionSize = pTrack->calcPercussionSize();
     ui->labelPercussionRom->setText(QString::number(percussionSize));
+    int numPatterns = pTrack->numPatternsUsed();
+    ui->labelInfoPatterns->setText(QString::number(numPatterns));
+    int patternSize = pTrack->calcPatternSize();
+    ui->labelPatternsRom->setText(QString::number(patternSize));
+    int sequencesSize = pTrack->sequencesSize();
+    ui->labelSequencesRom->setText(QString::number(sequencesSize));
+    int totalRom =
+            Emulation::Player::RomTrack
+            + (usesGoto ? Emulation::Player::RomGoto : 0)
+            + (usesSlide ? Emulation::Player::RomSlide : 0)
+            + (usesOverlay ? Emulation::Player::RomOverlay : 0)
+            + (usesFunk ? Emulation::Player::RomFunktempo : 0)
+            + (startsWithHold ? Emulation::Player::RomStartsWithHold : 0)
+            + instrumentsSize
+            + percussionSize
+            + patternSize
+            + sequencesSize;
+    ui->labelInfoRomTotal->setText(QString::number(totalRom));
 
     ui->tabInfo->update();
 }

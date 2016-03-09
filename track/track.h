@@ -87,6 +87,9 @@ public:
     int getNumPercussionFromTrack();
     int calcInstrumentsSize();
     int calcPercussionSize();
+    int numPatternsUsed();
+    int calcPatternSize();
+    int sequencesSize();
 
     void toJson(QJsonObject &json);
     bool fromJson(const QJsonObject &json);

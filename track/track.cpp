@@ -433,6 +433,47 @@ int Track::calcPercussionSize() {
 
 /*************************************************************************/
 
+int Track::numPatternsUsed() {
+    QMap<int, bool> found{};
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < channelSequences[channel].sequence.size(); ++i) {
+            found[channelSequences[channel].sequence[i].patternIndex] = true;
+        }
+    }
+    QMapIterator<int, bool> i(found);
+    while (i.hasNext()) {
+        i.next();
+    }
+    return found.size();
+}
+
+/*************************************************************************/
+
+int Track::calcPatternSize() {
+    QMap<int, bool> found;
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < channelSequences[channel].sequence.size(); ++i) {
+            found[channelSequences[channel].sequence[i].patternIndex] = true;
+        }
+    }
+    int result = 0;
+    QMapIterator<int, bool> i(found);
+    while (i.hasNext()) {
+        i.next();
+        result += Emulation::Player::RomPerPattern + patterns[i.key()].notes.size();
+    }
+    return result;
+}
+
+/*************************************************************************/
+
+int Track::sequencesSize() {
+    return channelSequences[0].sequence.size() + channelSequences[1].sequence.size()
+            + 2*Emulation::Player::RomPerSequence;
+}
+
+/*************************************************************************/
+
 void Track::toJson(QJsonObject &json) {
     // General data
     json["version"] = MainWindow::version;
