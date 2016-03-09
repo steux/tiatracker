@@ -250,10 +250,10 @@ void Percussion::deleteFrame(int frame) {
 
 int Percussion::calcEffectiveSize() {
     int realSize = envelopeLength;
-    while (waveforms[realSize - 1] == TiaSound::Distortion::SILENT && volumes[realSize - 1] == 0) {
+    while (realSize > 0 && waveforms[realSize - 1] == TiaSound::Distortion::SILENT && volumes[realSize - 1] == 0) {
         realSize--;
     }
-    return realSize;
+    return realSize + 2;
 }
 
 }

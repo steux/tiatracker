@@ -53,6 +53,9 @@ public:
     int getSustainStart() const;
     int getReleaseStart() const;
 
+    /* Calc ROM usage without superfluous trailing 0 bytes */
+    int calcEffectiveSize();
+
     QString name;
     TiaSound::Distortion baseDistortion{TiaSound::Distortion::PURE_COMBINED};
     QList<int> volumes{0, 0};

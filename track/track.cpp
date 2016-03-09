@@ -386,7 +386,27 @@ int Track::getNumPercussionFromTrack() {
 /*************************************************************************/
 
 int Track::calcInstrumentsSize() {
-    return 42;
+    QList<int> found{0, 0, 0, 0, 0, 0, 0};
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int i = 0; i < getChannelNumRows(channel); ++i) {
+            Note *n = getNote(channel, i);
+            if (n->type == Note::instrumentType::Instrument) {
+                if (instruments[n->instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                    found[n->instrumentNumber] = 2;
+                } else {
+                    found[n->instrumentNumber] = 1;
+                }
+            }
+        }
+    }
+    int result = 0;
+    for (int i = 0; i < numInstruments; ++i) {
+        if (found[i] != 0) {
+            result += found[i]*Emulation::Player::RomPerInstrument;
+            result += instruments[i].calcEffectiveSize();
+        }
+    }
+    return result;
 }
 
 /*************************************************************************/
