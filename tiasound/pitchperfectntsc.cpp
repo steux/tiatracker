@@ -323,7 +323,7 @@ InstrumentPitchGuide perfectNtscDist16{
         {Note::Cis_5, -40},
         {Note::C_5, +2},
         {Note::H_4, +45},
-        {Note::H_4, -9}
+        {Note::H_4, -9},
         // Dist12 starts here
         {Note::E_8, -11},
         {Note::E_7, -11},
