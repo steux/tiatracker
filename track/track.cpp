@@ -36,16 +36,22 @@ void Track::newTrack() {
     };
 
     patterns.clear();
-    Pattern newPattern("New pattern");
+    Pattern newPatternLeft("Intro left");
     Note newNote(Note::instrumentType::Hold, 0, 0);
     for (int i = 0; i < 16; ++i) {
-        newPattern.notes.append(newNote);
+        newPatternLeft.notes.append(newNote);
     }
-    patterns.append(newPattern);
+    patterns.append(newPatternLeft);
+    Pattern newPatternRight("Intro right");
+    for (int i = 0; i < 16; ++i) {
+        newPatternRight.notes.append(newNote);
+    }
+    patterns.append(newPatternRight);
     channelSequences = QList<Sequence>{{}, {}};
-    SequenceEntry newEntry(0, -1);
-    channelSequences[0].sequence.append(newEntry);
-    channelSequences[1].sequence.append(newEntry);
+    SequenceEntry newEntryLeft(0, -1);
+    SequenceEntry newEntryRight(1, -1);
+    channelSequences[0].sequence.append(newEntryLeft);
+    channelSequences[1].sequence.append(newEntryRight);
     evenSpeed = 5;
     oddSpeed = 5;
     rowsPerBeat = 4;
