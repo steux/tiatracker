@@ -135,6 +135,7 @@ private:
     int waveformContextFrame;
 
     QAction actionToggleFollow{this};
+    QAction actionToggleLoop{this};
 };
 
 #endif // MAINWINDOW_H

@@ -65,6 +65,7 @@ public slots:
     void playTrack(int start1, int start2);
 
     void selectedChannelChanged(int newChannel);
+    void toggleLoop(bool toggle);
 
 signals:
     void newPlayerPos(int pos1, int pos2);

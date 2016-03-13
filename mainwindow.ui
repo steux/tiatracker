@@ -239,7 +239,7 @@
                </widget>
               </item>
               <item alignment="Qt::AlignRight">
-               <widget class="QCheckBox" name="checkBoxLoopPattern">
+               <widget class="QCheckBox" name="checkBoxLoop">
                 <property name="text">
                  <string>Loop pattern</string>
                 </property>

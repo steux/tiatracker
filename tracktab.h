@@ -39,6 +39,7 @@ public slots:
     void channelContextEvent(int channel, int noteIndex);
     // For shortcut action "TrackToggleFollow"
     void toggleFollow(bool);
+    void toggleLoop(bool);
 
     // Pattern context menu
     void setStartPattern(bool);

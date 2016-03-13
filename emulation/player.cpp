@@ -155,6 +155,12 @@ void Player::selectedChannelChanged(int newChannel) {
 
 /*************************************************************************/
 
+void Player::toggleLoop(bool toggle) {
+    loopPattern = toggle;
+}
+
+/*************************************************************************/
+
 void Player::updateSilence() {
     setChannel(0, 0, 0, 0);
     setChannel(1, 0, 0, 0);

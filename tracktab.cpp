@@ -193,6 +193,13 @@ void TrackTab::toggleFollow(bool) {
 
 /*************************************************************************/
 
+void TrackTab::toggleLoop(bool) {
+    QCheckBox *cb = findChild<QCheckBox *>("checkBoxLoop");
+    cb->toggle();
+}
+
+/*************************************************************************/
+
 void TrackTab::setStartPattern(bool) {
     pTrack->lock();
     pTrack->startPatterns[contextEventChannel] = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);

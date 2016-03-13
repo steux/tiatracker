@@ -32,6 +32,7 @@ public:
 signals:
     void editPosChanged(int newPos);
     void channelContextEvent(int channel, int row);
+    void editChannelChanged(int newChannel);
 
 public slots:
     // Global actions
@@ -56,6 +57,8 @@ public slots:
 
     // Slot for QCheckBox "follow"
     void toggleFollow_clicked(bool toggle);
+
+    void toggleLoop_clicked(bool toggle);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -112,6 +115,7 @@ private:
     int editPos = 0;
 
     bool follow = false;
+    bool loop = false;
 };
 
 #endif // PATTERNEDITOR_H
