@@ -30,6 +30,7 @@ signals:
     void advanceEditPos();
     void validateEditPos();
     void stopTrack();
+    void setMuted(int channel, bool isMuted);
 
 public slots:
     void setEvenSpeed(int value);
@@ -58,6 +59,7 @@ public slots:
     void deleteRow(bool);
     void insertRowBefore(bool);
     void insertRowAfter(bool);
+    void toggleMute(bool);
 
     // Player error
     void invalidNoteFound(int channel, int entryIndex, int noteIndex);
@@ -115,6 +117,8 @@ private:
 
     int contextEventChannel;
     int contextEventNoteIndex;
+
+    bool isMuted[2]{false, false};
 
     // Last value the user selected for length of new pattern
     int lastNewPatternLength = 32;

@@ -80,6 +80,7 @@ int main(int argc, char *argv[])
     QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), editor, SLOT(newPlayerPos(int,int)));
     QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int)), tt, SLOT(invalidNoteFound(int,int,int)));
     QObject::connect(tt, SIGNAL(stopTrack()), &tiaPlayer, SLOT(stopTrack()));
+    QObject::connect(tt, SIGNAL(setMuted(int,bool)), &tiaPlayer, SLOT(setMuted(int,bool)));
 
     pt->connectPlayer(&tiaPlayer);
     tiaPlayer.run();

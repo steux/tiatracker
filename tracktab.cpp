@@ -132,6 +132,7 @@ void TrackTab::initTrackTab() {
     QObject::connect(&actionDeleteRow, SIGNAL(triggered(bool)), this, SLOT(deleteRow(bool)));
     QObject::connect(&actionInsertRowBefore, SIGNAL(triggered(bool)), this, SLOT(insertRowBefore(bool)));
     QObject::connect(&actionInsertRowAfter, SIGNAL(triggered(bool)), this, SLOT(insertRowAfter(bool)));
+    QObject::connect(&actionMuteChannel, SIGNAL(triggered(bool)), this, SLOT(toggleMute(bool)));
 
     editor->registerPatternMenu(&patternContextMenu);
     editor->registerChannelMenu(&channelContextMenu);
@@ -477,6 +478,14 @@ void TrackTab::insertRowAfter(bool) {
     pTrack->updateFirstNoteNumbers();
     pTrack->validatePattern(patternIndex);
     update();
+}
+
+/*************************************************************************/
+
+void TrackTab::toggleMute(bool) {
+    isMuted[contextEventChannel] = !isMuted[contextEventChannel];
+    emit setMuted(contextEventChannel, isMuted[contextEventChannel]);
+
 }
 
 /*************************************************************************/

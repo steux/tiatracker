@@ -149,6 +149,12 @@ void Player::playTrack(int start1, int start2) {
 
 /*************************************************************************/
 
+void Player::setMuted(int channel, bool isMuted) {
+    channelMuted[channel] = isMuted;
+}
+
+/*************************************************************************/
+
 void Player::updateSilence() {
     setChannel(0, 0, 0, 0);
     setChannel(1, 0, 0, 0);
@@ -365,8 +371,13 @@ void Player::updateTrack() {
                 + trackCurNoteIndex[1];
         emit newPlayerPos(pos1, pos2);
     }
-    updateChannel(0);
-    updateChannel(1);
+    for (int channel = 0; channel < 2; ++channel) {
+        if (!channelMuted[channel]) {
+            updateChannel(channel);
+        } else {
+            setChannel(channel, 0, 0, 0);
+        }
+    }
 }
 
 /*************************************************************************/
