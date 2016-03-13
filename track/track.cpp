@@ -69,7 +69,8 @@ int Track::getNumUsedEnvelopeFrames() {
     int numFrames = 0;
     for (int i = 0; i < numInstruments; ++i) {
         if (!instruments[i].isEmpty()) {
-            int envelopeLength = instruments[i].getEnvelopeLength();
+            // +1 for dummy byte between sustain and release
+            int envelopeLength = instruments[i].getEnvelopeLength() + 1;
             numFrames += envelopeLength;
             // If last volume/frequency frames are not 0, add one (0 is mandatory)
             int iLast = envelopeLength - 1;
