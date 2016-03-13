@@ -409,7 +409,8 @@ int Track::calcInstrumentsSize() {
     for (int i = 0; i < numInstruments; ++i) {
         if (found[i] != 0) {
             result += found[i]*Emulation::Player::RomPerInstrument;
-            result += instruments[i].calcEffectiveSize();
+            // +1 b/c of dummy byte between sustain and release
+            result += instruments[i].calcEffectiveSize() + 1;
         }
     }
     return result;

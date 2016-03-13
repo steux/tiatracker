@@ -260,6 +260,10 @@ QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Patter
         // Pitch
         int frequency = curPattern->notes[curPatternNoteIndex].value;
         TiaSound::Distortion dist = pTrack->instruments[insNum].baseDistortion;
+        // In case the instrument got changed from PURE_COMBINED to something else
+        if (frequency > 31 && dist != TiaSound::Distortion::PURE_COMBINED) {
+            frequency -= 32;
+        }
         TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
         TiaSound::Note note = pIPG->getNote(frequency);
         if (note == TiaSound::Note::NotANote) {
