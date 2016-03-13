@@ -9,6 +9,7 @@
 #include "tiasound/instrumentpitchguide.h"
 #include <QMenu>
 #include <QAction>
+#include "emulation/player.h"
 
 
 class TrackTab : public QWidget
@@ -19,6 +20,7 @@ public:
 
     void registerTrack(Track::Track *newTrack);
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
+    void registerPlayer(Emulation::Player *newPlayer);
 
     /* Initializes the GUI components. Must be called once during init. */
     void initTrackTab();
@@ -30,7 +32,6 @@ signals:
     void advanceEditPos();
     void validateEditPos();
     void stopTrack();
-    void setMuted(int channel, bool isMuted);
 
 public slots:
     void setEvenSpeed(int value);
@@ -79,6 +80,7 @@ private:
 
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuide *pPitchGuide;
+    Emulation::Player *pPlayer = nullptr;
 
     // Global actions
     QAction actionMoveUp{this};
@@ -117,8 +119,6 @@ private:
 
     int contextEventChannel;
     int contextEventNoteIndex;
-
-    bool isMuted[2]{false, false};
 
     // Last value the user selected for length of new pattern
     int lastNewPatternLength = 32;

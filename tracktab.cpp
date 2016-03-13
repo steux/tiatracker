@@ -88,6 +88,12 @@ void TrackTab::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
 
 /*************************************************************************/
 
+void TrackTab::registerPlayer(Emulation::Player *newPlayer) {
+    pPlayer = newPlayer;
+}
+
+/*************************************************************************/
+
 void TrackTab::initTrackTab() {
     pTrack->updateFirstNoteNumbers();
 
@@ -99,6 +105,7 @@ void TrackTab::initTrackTab() {
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     editor->registerTrack(pTrack);
     editor->registerPitchGuide(pPitchGuide);
+    editor->registerMuteAction(&actionMuteChannel);
     editor->registerInstrumentSelector(insSel);
 
     // Gloabl actions
@@ -483,9 +490,7 @@ void TrackTab::insertRowAfter(bool) {
 /*************************************************************************/
 
 void TrackTab::toggleMute(bool) {
-    isMuted[contextEventChannel] = !isMuted[contextEventChannel];
-    emit setMuted(contextEventChannel, isMuted[contextEventChannel]);
-
+    pPlayer->channelMuted[contextEventChannel] = !pPlayer->channelMuted[contextEventChannel];
 }
 
 /*************************************************************************/

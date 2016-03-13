@@ -31,6 +31,8 @@ public:
     static const int RomPerSequence = 1;
     static const int RomTrack = 164;
 
+    bool channelMuted[2]{false, false};
+
     explicit Player(Track::Track *parentTrack, QObject *parent = 0);
     ~Player();
 
@@ -61,8 +63,6 @@ public slots:
 
     /* Play song from given channel note indexes */
     void playTrack(int start1, int start2);
-
-    void setMuted(int channel, bool isMuted);
 
 signals:
     void newPlayerPos(int pos1, int pos2);
@@ -120,7 +120,6 @@ private:
     // Was the current note fetched via overlay?
     bool trackIsOverlay[2];
     bool isFirstNote;
-    bool channelMuted[2]{false, false};
 
 private slots:
     void timerFired();

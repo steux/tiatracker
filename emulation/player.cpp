@@ -149,12 +149,6 @@ void Player::playTrack(int start1, int start2) {
 
 /*************************************************************************/
 
-void Player::setMuted(int channel, bool isMuted) {
-    channelMuted[channel] = isMuted;
-}
-
-/*************************************************************************/
-
 void Player::updateSilence() {
     setChannel(0, 0, 0, 0);
     setChannel(1, 0, 0, 0);

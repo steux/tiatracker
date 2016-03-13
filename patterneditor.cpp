@@ -48,6 +48,18 @@ void PatternEditor::registerPitchGuide(TiaSound::PitchGuide *newGuide) {
 
 /*************************************************************************/
 
+void PatternEditor::registerPlayer(Emulation::Player *newPlayer) {
+    pPlayer = newPlayer;
+}
+
+/*************************************************************************/
+
+void PatternEditor::registerMuteAction(QAction *newAction) {
+    muteAction = newAction;
+}
+
+/*************************************************************************/
+
 void PatternEditor::registerPatternMenu(QMenu *newPatternMenu) {
     pPatternMenu = newPatternMenu;
 }
@@ -468,7 +480,6 @@ void PatternEditor::mousePressEvent(QMouseEvent *event) {
 
 /*************************************************************************/
 
-
 void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
     int channel;
     int noteIndex;
@@ -476,6 +487,8 @@ void PatternEditor::contextMenuEvent(QContextMenuEvent *event) {
         return;
     }
 
+    // Set correct mute toggle state
+    muteAction->setChecked(pPlayer->channelMuted[channel]);
     // Determine correct context menu to display
     if (event->x() < patternNameWidth) {
         emit channelContextEvent(channel, noteIndex);

@@ -8,6 +8,7 @@
 #include "tiasound/pitchguide.h"
 #include <QMenu>
 #include "instrumentselector.h"
+#include "emulation/player.h"
 
 
 class PatternEditor : public QWidget
@@ -18,6 +19,8 @@ public:
 
     void registerTrack(Track::Track *newTrack);
     void registerPitchGuide(TiaSound::PitchGuide *newGuide);
+    void registerPlayer(Emulation::Player *newPlayer);
+    void registerMuteAction(QAction *newAction);
     void registerPatternMenu(QMenu *newPatternMenu);
     void registerChannelMenu(QMenu *newChannelMenu);
     void registerInstrumentSelector(InstrumentSelector *selector);
@@ -98,6 +101,8 @@ private:
 
     Track::Track *pTrack;
     TiaSound::PitchGuide *pPitchGuide;
+    Emulation::Player *pPlayer = nullptr;
+    QAction *muteAction = nullptr;
     QMenu *pPatternMenu = nullptr;
     QMenu *pChannelMenu = nullptr;
     InstrumentSelector *pInsSelector = nullptr;
