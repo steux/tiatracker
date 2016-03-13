@@ -149,6 +149,12 @@ void Player::playTrack(int start1, int start2) {
 
 /*************************************************************************/
 
+void Player::selectedChannelChanged(int newChannel) {
+    channelSelected = newChannel;
+}
+
+/*************************************************************************/
+
 void Player::updateSilence() {
     setChannel(0, 0, 0, 0);
     setChannel(1, 0, 0, 0);
@@ -213,7 +219,8 @@ void Player::sequenceChannel(int channel) {
     }
     // Get next note if not first one and not in overlay mode
     if (!isFirstNote && !trackIsOverlay[channel]
-            && !pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]))) {
+            && !pTrack->getNextNoteWithGoto(channel, &(trackCurEntryIndex[channel]), &(trackCurNoteIndex[channel]),
+                                            channel == channelSelected && loopPattern)) {
         mode = PlayMode::None;
         return;
     }

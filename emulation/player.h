@@ -64,6 +64,8 @@ public slots:
     /* Play song from given channel note indexes */
     void playTrack(int start1, int start2);
 
+    void selectedChannelChanged(int newChannel);
+
 signals:
     void newPlayerPos(int pos1, int pos2);
     void invalidNoteFound(int channel, int entryIndex, int noteIndex);
@@ -120,6 +122,9 @@ private:
     // Was the current note fetched via overlay?
     bool trackIsOverlay[2];
     bool isFirstNote;
+
+    bool loopPattern = false;
+    int channelSelected = 0;
 
 private slots:
     void timerFired();

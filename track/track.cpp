@@ -202,19 +202,21 @@ bool Track::getNextNote(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
 
 /*************************************************************************/
 
-bool Track::getNextNoteWithGoto(int channel, int *pEntryIndex, int *pPatternNoteIndex) {
+bool Track::getNextNoteWithGoto(int channel, int *pEntryIndex, int *pPatternNoteIndex, bool loop) {
     SequenceEntry *curEntry = &(channelSequences[channel].sequence[*pEntryIndex]);
     Pattern *curPattern = &(patterns[curEntry->patternIndex]);
     (*pPatternNoteIndex)++;
     if (*pPatternNoteIndex == curPattern->notes.size()) {
-        if (curEntry->gotoTarget == -1) {
-            *(pEntryIndex) = *(pEntryIndex) + 1;
-        } else {
-            *(pEntryIndex) = curEntry->gotoTarget;
-        }
-        if (*pEntryIndex >= channelSequences[channel].sequence.size()) {
-            // End of track or invalid goto: There is no next note
-            return false;
+        if (!loop) {
+            if (curEntry->gotoTarget == -1) {
+                *(pEntryIndex) = *(pEntryIndex) + 1;
+            } else {
+                *(pEntryIndex) = curEntry->gotoTarget;
+            }
+            if (*pEntryIndex >= channelSequences[channel].sequence.size()) {
+                // End of track or invalid goto: There is no next note
+                return false;
+            }
         }
         *(pPatternNoteIndex) = 0;
     }
