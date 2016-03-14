@@ -23,6 +23,7 @@
 #include <QJsonObject>
 #include <QAction>
 #include <QKeySequence>
+#include <QTextStream>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -593,6 +594,18 @@ void MainWindow::on_actionNew_triggered() {
 
 /*************************************************************************/
 
+QString MainWindow::readAsm(QString fileName) {
+    QFile fileIn(fileName);
+    if (!fileIn.open(QIODevice::ReadOnly)) {
+        MainWindow::displayMessage("Unable to open file " + fileName + "!");
+        return "";
+    }
+    QTextStream inStream(&fileIn);
+    QString inString = inStream.readAll();
+    fileIn.close();
+    return inString;
+}
+
 void MainWindow::on_actionExportDasm_triggered() {
     emit stopTrack();
     QFileDialog dialog(this);
@@ -608,4 +621,19 @@ void MainWindow::on_actionExportDasm_triggered() {
         return;
     }
     QString fileName = fileNames[0];
+    // Remove extension, if there
+    if (fileName.endsWith(".ttt")) {
+        fileName.truncate(fileName.length() - 4);
+    }
+
+    // Export flags
+    QString flagsString = readAsm("player/dasm/tt_variables.asm");
+    if (flagsString == "") {
+        return;
+    }
+
+    // Export Init
+
+    // Export track data
+
 }

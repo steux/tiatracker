@@ -113,3 +113,10 @@ install_it.files = $$PWD/data/*
 
 INSTALLS += \
     install_it
+
+# Copy player to output directory
+install_player.path = $$OUT_PWD
+install_player.files = $$PWD/player
+
+INSTALLS += \
+    install_player

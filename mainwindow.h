@@ -132,6 +132,8 @@ private:
 
     void addShortcut(QAction *action, QString actionName);
 
+    QString readAsm(QString fileName);
+
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuideFactory pgFactory;

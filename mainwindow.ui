@@ -1281,6 +1281,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="actionExportDasm"/>
+    <addaction name="actionExport_complete_player_to_dasm"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1313,7 +1314,7 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save...</string>
+    <string>Save</string>
    </property>
   </action>
   <action name="actionSaveAs">
@@ -1323,7 +1324,7 @@
   </action>
   <action name="actionExportDasm">
    <property name="text">
-    <string>Export to dasm...</string>
+    <string>Export track data to dasm...</string>
    </property>
   </action>
   <action name="actionQuit">
@@ -1369,6 +1370,11 @@
   <action name="actionStop">
    <property name="text">
     <string>Stop</string>
+   </property>
+  </action>
+  <action name="actionExport_complete_player_to_dasm">
+   <property name="text">
+    <string>Export complete player to dasm...</string>
    </property>
   </action>
  </widget>
