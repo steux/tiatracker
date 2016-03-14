@@ -590,3 +590,22 @@ void MainWindow::on_actionNew_triggered() {
     pTrack->unlock();
     update();
 }
+
+/*************************************************************************/
+
+void MainWindow::on_actionExportDasm_triggered() {
+    emit stopTrack();
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setViewMode(QFileDialog::Detail);
+    dialog.selectFile(pTrack->name);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+}

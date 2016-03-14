@@ -111,6 +111,8 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_actionExportDasm_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
