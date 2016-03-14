@@ -1,21 +1,16 @@
 TODO:
 - lock ins/perc for import
-- On instrument base waveform change from PURE_COMBINED to something else: What happens
-  with notes with freq>31? Right now, player automatically does -32. What to do on export?
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
 - NTSC/PAL in Stella: How? In SoundSDL2.cpp is setFrameRate() but does it do anything?
 - in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
-- Check if "Envelope frames used" is correct (Pure Combined? Packing when exporting? ...)
 - Pattern names tooltip in timeline
 - switch json format to binary, at least for track?
 - Recover gracefully after trying to load corrupted track
-- Pitch Perfect NTSC
 - Option: "Show invalid note warnings on/off"
 - Set Goto dialog: Either a dropdown list of all sequence entries, or a label showing the target name for a given value
 - Should paintEvents (timeline, patternEditor) obey the Track mutex?
   updateFirstNoteNumbers might otherwise be not fast enough in some cases?
-- On export/during size calc, look for ending 0 in instruments/percs
 - Better error messages during play
 
 

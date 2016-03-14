@@ -1,3 +1,10 @@
+/* TIATracker, (c) 2016 Andre "Kylearan" Wichmann.
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ * See the file "license.txt" for information on usage and redistribution
+ * of this file.
+ */
+
 #ifndef PATTERNEDITOR_H
 #define PATTERNEDITOR_H
 
@@ -32,6 +39,7 @@ public:
 signals:
     void editPosChanged(int newPos);
     void channelContextEvent(int channel, int row);
+    void editChannelChanged(int newChannel);
 
 public slots:
     // Global actions
@@ -56,6 +64,8 @@ public slots:
 
     // Slot for QCheckBox "follow"
     void toggleFollow_clicked(bool toggle);
+
+    void toggleLoop_clicked(bool toggle);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;
@@ -112,6 +122,7 @@ private:
     int editPos = 0;
 
     bool follow = false;
+    bool loop = false;
 };
 
 #endif // PATTERNEDITOR_H

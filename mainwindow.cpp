@@ -1,3 +1,10 @@
+/* TIATracker, (c) 2016 Andre "Kylearan" Wichmann.
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ * See the file "license.txt" for information on usage and redistribution
+ * of this file.
+ */
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
@@ -132,6 +139,8 @@ void MainWindow::initConnections() {
     addShortcut(&actionToggleFollow, "TrackToggleFollow");
     QObject::connect(&actionToggleFollow, SIGNAL(triggered(bool)), ui->tabTrack, SLOT(toggleFollow(bool)));
     QObject::connect(ui->tabTrack, SIGNAL(validateEditPos()), ui->trackEditor, SLOT(validateEditPos()));
+    addShortcut(&actionToggleLoop, "ToggleLoop");
+    QObject::connect(&actionToggleLoop, SIGNAL(triggered(bool)), ui->tabTrack, SLOT(toggleLoop(bool)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -147,6 +156,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->trackEditor, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));
     QObject::connect(ui->tabTrack, SIGNAL(advanceEditPos()), ui->trackEditor, SLOT(advanceEditPos()));
     QObject::connect(ui->checkBoxFollow, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleFollow_clicked(bool)));
+    QObject::connect(ui->checkBoxLoop, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleLoop_clicked(bool)));
 
     // Timeline
     QObject::connect(ui->trackTimeline, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));
@@ -579,4 +589,23 @@ void MainWindow::on_actionNew_triggered() {
     updateAllTabs();
     pTrack->unlock();
     update();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExportDasm_triggered() {
+    emit stopTrack();
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setViewMode(QFileDialog::Detail);
+    dialog.selectFile(pTrack->name);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
 }

@@ -1,3 +1,10 @@
+/* TIATracker, (c) 2016 Andre "Kylearan" Wichmann.
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ * See the file "license.txt" for information on usage and redistribution
+ * of this file.
+ */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -104,6 +111,8 @@ private slots:
 
     void on_actionNew_triggered();
 
+    void on_actionExportDasm_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
@@ -135,6 +144,7 @@ private:
     int waveformContextFrame;
 
     QAction actionToggleFollow{this};
+    QAction actionToggleLoop{this};
 };
 
 #endif // MAINWINDOW_H

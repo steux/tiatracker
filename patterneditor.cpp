@@ -1,3 +1,10 @@
+/* TIATracker, (c) 2016 Andre "Kylearan" Wichmann.
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ * See the file "license.txt" for information on usage and redistribution
+ * of this file.
+ */
+
 #include "patterneditor.h"
 #include <QFontMetrics>
 #include <QPainter>
@@ -151,6 +158,12 @@ void PatternEditor::toggleFollow_clicked(bool toggle) {
 
 /*************************************************************************/
 
+void PatternEditor::toggleLoop_clicked(bool toggle) {
+    loop = toggle;
+}
+
+/*************************************************************************/
+
 int PatternEditor::getEditPos() {
     return editPos;
 }
@@ -178,6 +191,7 @@ void PatternEditor::moveDown(bool) {
 void PatternEditor::moveLeft(bool) {
     selectedChannel = 0;
     setEditPos(editPos);
+    emit editChannelChanged(selectedChannel);
 }
 
 /*************************************************************************/
@@ -185,6 +199,7 @@ void PatternEditor::moveLeft(bool) {
 void PatternEditor::moveRight(bool) {
     selectedChannel = 1;
     setEditPos(editPos);
+    emit editChannelChanged(selectedChannel);
 }
 
 /*************************************************************************/
@@ -192,6 +207,7 @@ void PatternEditor::moveRight(bool) {
 void PatternEditor::switchChannel(bool) {
     selectedChannel = 1 - selectedChannel;
     setEditPos(editPos);
+    emit editChannelChanged(selectedChannel);
 }
 
 /*************************************************************************/
@@ -476,6 +492,7 @@ void PatternEditor::mousePressEvent(QMouseEvent *event) {
     }
     selectedChannel = channel;
     setEditPos(noteIndex);
+    emit editChannelChanged(selectedChannel);
 }
 
 /*************************************************************************/

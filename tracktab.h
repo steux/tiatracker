@@ -1,3 +1,10 @@
+/* TIATracker, (c) 2016 Andre "Kylearan" Wichmann.
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ * See the file "license.txt" for information on usage and redistribution
+ * of this file.
+ */
+
 #ifndef TRACKTAB_H
 #define TRACKTAB_H
 
@@ -39,6 +46,7 @@ public slots:
     void channelContextEvent(int channel, int noteIndex);
     // For shortcut action "TrackToggleFollow"
     void toggleFollow(bool);
+    void toggleLoop(bool);
 
     // Pattern context menu
     void setStartPattern(bool);
