@@ -24,6 +24,8 @@
 #include <QAction>
 #include <QKeySequence>
 #include <QTextStream>
+#include "track/sequence.h"
+#include "track/sequenceentry.h"
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -617,6 +619,20 @@ bool MainWindow::writeAsm(QString fileName, QString content, QString extension) 
     return true;
 }
 
+QString MainWindow::listToBytes(QList<int> list) {
+    QString out;
+    for (int i = 0; i < list.size(); ++i) {
+        if (i%8 == 0) {
+            out.append("\n        dc.b ");
+        }
+        out = (out + "$%1").arg(list[i], 2, 16, QChar('0'));
+        if (i%8 != 7 && i != list.size() - 1) {
+            out.append(", ");
+        }
+    }
+    return out;
+}
+
 void MainWindow::on_actionExportDasm_triggered() {
     emit stopTrack();
     QFileDialog dialog(this);
@@ -665,8 +681,58 @@ void MainWindow::on_actionExportDasm_triggered() {
         return;
     }
 
-    // Export Init
-
     // Export track data
+    QString trackString = readAsm("player/dasm/tt_trackdata.asm");
+    if (trackString == "") {
+        return;
+    }
+    // Mapping of encountered to real, to weed out the unused
+    QMap<int, int> insMapping{};
+    QString insString;
+    QMap<int, int> percMapping{};
+    QString percString;
+    QMap<int, int> patternMapping{};
+    QString patternString;
+    QString patternPtrString;
+    QVector<QList<int>> sequence(2);
+    int numPatterns = 0;
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
+            int patternIndex = pTrack->channelSequences[channel].sequence[entry].patternIndex;
+            if (!patternMapping.contains(patternIndex)) {
+                // Pattern not encountered yet
+                patternMapping[patternIndex] = numPatterns;
+                numPatterns++;
+                // Write out pattern
+                patternString.append("; " + pTrack->patterns[patternIndex].name + "\n");
+                patternString.append("tt_pattern" + QString::number(patternMapping[patternIndex]) + ":\n");
+
+                patternString.append("\n");
+                // Pattern ptr
+                if (patternMapping[patternIndex]%4 == 0) {
+                    patternPtrString.append("        dc.b ");
+                } else {
+                    patternPtrString.append(", ");
+                }
+                patternPtrString.append("<tt_pattern" + QString::number(patternMapping[patternIndex]));
+            }
+            int value = patternMapping[patternIndex];
+            int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
+            if (gotoTarget != -1) {
+                value = 128 + gotoTarget;
+            }
+            sequence[channel].append(value);
+        }
+    }
+    trackString.replace("%%SEQUENCECHANNEL0%%", listToBytes(sequence[0]));
+    trackString.replace("%%SEQUENCECHANNEL1%%", listToBytes(sequence[1]));
+    trackString.replace("%%PATTERNDEFS%%", patternString);
+    trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
+    patternPtrString.replace("<", ">");
+    trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
+
+    std::cout << trackString.toStdString(); std::cout.flush();
+
+    // Export Init
 
 }
