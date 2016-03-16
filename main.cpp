@@ -53,7 +53,6 @@ int main(int argc, char *argv[])
     // GUI
     MainWindow::loadKeymap();
     MainWindow w;
-    w.initConnections();
     w.registerTrack(&myTrack);
 
     InstrumentsTab *it = w.findChild<InstrumentsTab *>("tabInstruments");
@@ -71,6 +70,8 @@ int main(int argc, char *argv[])
     tt->registerPitchGuide(w.getPitchGuide());
     tt->initTrackTab();
     tt->updateTrackTab();
+
+    w.initConnections();
 
     /* Create and initialize player thread */
     Emulation::Player tiaPlayer(&myTrack);

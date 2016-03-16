@@ -19,8 +19,8 @@
         include vcs.h
         
 ; TV format switches
-PAL             = 1
-NTSC            = 0
+PAL             = %%PAL%%
+NTSC            = %%NTSC%%
 
         IF PAL
 TIM_VBLANK      = 43

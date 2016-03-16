@@ -133,6 +133,7 @@ private:
     void addShortcut(QAction *action, QString actionName);
 
     QString readAsm(QString fileName);
+    bool writeAsm(QString fileName, QString content, QString extension);
 
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;

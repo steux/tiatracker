@@ -606,13 +606,29 @@ QString MainWindow::readAsm(QString fileName) {
     return inString;
 }
 
+bool MainWindow::writeAsm(QString fileName, QString content, QString extension) {
+    QFile outFile(fileName + extension);
+    if (!outFile.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+    QTextStream outStream(&outFile);
+    outStream << content;
+    outFile.close();
+    return true;
+}
+
 void MainWindow::on_actionExportDasm_triggered() {
     emit stopTrack();
     QFileDialog dialog(this);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setViewMode(QFileDialog::Detail);
-    dialog.selectFile(pTrack->name);
+    // Remove extension, if there
+    QString trackName = pTrack->name;
+    if (trackName.endsWith(".ttt")) {
+        trackName.truncate(trackName.length() - 4);
+    }
+    dialog.selectFile(trackName);
     QStringList fileNames;
     if (dialog.exec()) {
         fileNames = dialog.selectedFiles();
@@ -629,6 +645,23 @@ void MainWindow::on_actionExportDasm_triggered() {
     // Export flags
     QString flagsString = readAsm("player/dasm/tt_variables.asm");
     if (flagsString == "") {
+        return;
+    }
+    flagsString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
+    flagsString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
+    bool usesGoto = pTrack->usesGoto();
+    flagsString.replace("%%USEGOTO%%", (usesGoto ? "1" : "0"));
+    bool usesSlide = pTrack->usesSlide();
+    flagsString.replace("%%USESLIDE%%", (usesSlide ? "1" : "0"));
+    bool usesOverlay = pTrack->usesOverlay();
+    flagsString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
+    bool usesFunk = pTrack->usesFunktempo();
+    flagsString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    bool startsWithHold = pTrack->startsWithHold();
+    flagsString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
+    // Write flags
+    if (!writeAsm(fileName, flagsString, "_variables.asm")) {
+        displayMessage("Unable to write variables file!");
         return;
     }
 
