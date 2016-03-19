@@ -694,7 +694,6 @@ void MainWindow::on_actionExportDasm_triggered() {
     QList<int> insADStarts;
     QList<int> insSustainStarts;
     QList<int> insReleaseStarts;
-    QList<int> insEnvelopeValues;
     int envelopeIndex = 0;
     QString insString;
     QMap<int, int> percMapping{};
@@ -718,8 +717,8 @@ void MainWindow::on_actionExportDasm_triggered() {
                 // Loop over all notes
                 QList<int> patternValues;
                 for (int n = 0; n < pTrack->patterns[patternIndex].notes.size(); ++n) {
-                    Track::Note note = pTrack->patterns[patternIndex].notes[n];
-                    switch (note.type) {
+                    Track::Note *note = &(pTrack->patterns[patternIndex].notes[n]);
+                    switch (note->type) {
                     case Track::Note::instrumentType::Hold:
                     {
                         patternValues.append(int(Emulation::Player::NoteHold));
@@ -727,34 +726,56 @@ void MainWindow::on_actionExportDasm_triggered() {
                     }
                     case Track::Note::instrumentType::Instrument:
                     {
-                        if (!insMapping.contains(note.instrumentNumber)) {
+                        if (!insMapping.contains(note->instrumentNumber)) {
                             // Instrument not encountered yet
+                            insMapping[note->instrumentNumber] = numInstruments;
                             insADStarts.append(envelopeIndex);
-                            Track::Instrument *ins = &(pTrack->instruments[note.instrumentNumber]);
+                            Track::Instrument *ins = &(pTrack->instruments[note->instrumentNumber]);
                             // insSize includes end marker that is not in vol/freq lists, so do -1
                             int insSize = ins->calcEffectiveSize() - 1;
+                            QList<int> insEnvelopeValues;
                             for (int i = 0; i < insSize; ++i) {
                                 int freqValue = ins->frequencies[i] + 8;
                                 int volValue = ins->volumes[i];
                                 insEnvelopeValues.append((freqValue<<4)|volValue);
                             }
                             // Insert dummy byte between sustain and release
-                            insEnvelopeValues.insert(insEnvelopeValues.size() - insSize + ins->getReleaseStart(), 0);
+                            insEnvelopeValues.insert(ins->getReleaseStart(), 0);
                             // Insert end marker
                             insEnvelopeValues.append(0);
                             // Insert indexes. Two times if PURE_COMBINED
-                            // TODO
-
+                            for (int i = 0; i < (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1); ++i) {
+                                insADStarts.append(envelopeIndex);
+                                insSustainStarts.append(envelopeIndex + ins->getSustainStart());
+                                // +1 for dummy byte, -1 because player expects that
+                                insReleaseStarts.append(envelopeIndex + ins->getReleaseStart());
+                            }
+                            // Store waveform(s) and increase index count
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_HIGH));
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_LOW));
+                            } else {
+                                insWaveforms.append(TiaSound::getDistortionInt(ins->baseDistortion));
+                            }
+                            // Write out instrument data
+                            insString.append("\n; " + QString::number(numInstruments));
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insString.append("+" + QString::number(numInstruments + 1));
+                            }
+                            insString.append(": " + ins->name + "\n");
+                            insString.append(listToBytes(insEnvelopeValues));
+                            // Increase running instrument index
+                            numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
                             // +1 for dummy byte, +1 for end marker
                             envelopeIndex += insSize + 2;
                         }
                         // +1 because first instrument number is 1
-                        int valueIns = insMapping[note.instrumentNumber] + 1;
-                        if (pTrack->instruments[note.instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED
-                                && note.value > 31) {
+                        int valueIns = insMapping[note->instrumentNumber] + 1;
+                        if (pTrack->instruments[note->instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED
+                                && note->value > 31) {
                             valueIns++;
                         }
-                        int valueFreq = note.value%32;
+                        int valueFreq = (note->value)%32;
                         patternValues.append((valueIns<<5)|valueFreq);
                         break;
                     }
@@ -769,7 +790,7 @@ void MainWindow::on_actionExportDasm_triggered() {
                     }
                     case Track::Note::instrumentType::Slide:
                     {
-                        patternValues.append(Emulation::Player::NoteHold + note.value);
+                        patternValues.append(Emulation::Player::NoteHold + note->value);
                         break;
                     }
                     }
@@ -792,6 +813,11 @@ void MainWindow::on_actionExportDasm_triggered() {
             sequence[channel].append(value);
         }
     }
+    trackString.replace("%%INSFREQVOLTABLE%%", insString);
+    trackString.replace("%%INSCTRLTABLE%%", listToBytes(insWaveforms));
+    trackString.replace("%%INSADINDEXES%%", listToBytes(insADStarts));
+    trackString.replace("%%INSSUSTAININDEXES%%", listToBytes(insSustainStarts));
+    trackString.replace("%%INSRELEASEINDEXES%%", listToBytes(insReleaseStarts));
     trackString.replace("%%SEQUENCECHANNEL0%%", listToBytes(sequence[0]));
     trackString.replace("%%SEQUENCECHANNEL1%%", listToBytes(sequence[1]));
     trackString.replace("%%PATTERNDEFS%%", patternString);
