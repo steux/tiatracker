@@ -13,6 +13,8 @@ TODO:
 - Should paintEvents (timeline, patternEditor) obey the Track mutex?
   updateFirstNoteNumbers might otherwise be not fast enough in some cases?
 - Better error messages during play
+- When exporting PURE_COMBINED, check if really both waveforms are used.
+  (Store occurence in hashmap individually for 4 and 12)
 
 
 FEATURES:

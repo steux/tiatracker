@@ -634,9 +634,7 @@ QString MainWindow::listToBytes(QList<int> list) {
             out.append(", ");
         }
     }
-    if ((list.size())%8 == 0) {
-        out.append("\n");
-    }
+    out.append("\n");
     return out;
 }
 
@@ -700,11 +698,14 @@ void MainWindow::on_actionExportDasm_triggered() {
     QList<int> insADStarts;
     QList<int> insSustainStarts;
     QList<int> insReleaseStarts;
-    int envelopeIndex = 0;
+    int insEnvelopeIndex = 0;
     QString insString;
     QMap<int, int> percMapping{};
     int numPercussion = 0;
-    QString percString;
+    QList<int> percStarts;
+    int percEnvelopeIndex = 0;
+    QString percFreqString;
+    QString percCtrlVolString;
     QMap<int, int> patternMapping{};
     QString patternString;
     QString patternPtrString;
@@ -750,12 +751,12 @@ void MainWindow::on_actionExportDasm_triggered() {
                             insEnvelopeValues.append(0);
                             // Insert indexes. Two times if PURE_COMBINED
                             for (int i = 0; i < (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1); ++i) {
-                                insADStarts.append(envelopeIndex);
-                                insSustainStarts.append(envelopeIndex + ins->getSustainStart());
+                                insADStarts.append(insEnvelopeIndex);
+                                insSustainStarts.append(insEnvelopeIndex + ins->getSustainStart());
                                 // +1 for dummy byte, -1 because player expects that
-                                insReleaseStarts.append(envelopeIndex + ins->getReleaseStart());
+                                insReleaseStarts.append(insEnvelopeIndex + ins->getReleaseStart());
                             }
-                            // Store waveform(s) and increase index count
+                            // Store waveform(s)
                             if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
                                 insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_HIGH));
                                 insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_LOW));
@@ -769,11 +770,10 @@ void MainWindow::on_actionExportDasm_triggered() {
                             }
                             insString.append(": " + ins->name + "\n");
                             insString.append(listToBytes(insEnvelopeValues));
-                            insString.append("\n");
                             // Increase running instrument index
                             numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
                             // +1 for dummy byte, +1 for end marker
-                            envelopeIndex += insSize + 2;
+                            insEnvelopeIndex += insSize + 2;
                         }
                         // +1 because first instrument number is 1
                         int valueIns = insMapping[note->instrumentNumber] + 1;
@@ -792,7 +792,40 @@ void MainWindow::on_actionExportDasm_triggered() {
                     }
                     case Track::Note::instrumentType::Percussion:
                     {
-                        patternValues.append(255);
+                        if (!percMapping.contains(note->instrumentNumber)) {
+                            // Percussion not encountered yet
+                            percMapping[note->instrumentNumber] = numPercussion;
+                            Track::Percussion *perc = &(pTrack->percussion[note->instrumentNumber]);
+                            // percSize includes end marker that is not in lists, so do -1
+                            int percSize = perc->calcEffectiveSize() - 1;
+                            QList<int> percFreqValues;
+                            QList<int> percCtrlVolValues;
+                            for (int i = 0; i < percSize; ++i) {
+                                int freqValue = perc->frequencies[i];
+                                if (perc->overlay && i == percSize - 1) {
+                                    freqValue += 128;
+                                }
+                                percFreqValues.append(freqValue);
+                                int ctrlValue = TiaSound::getDistortionInt(perc->waveforms[i]);
+                                int volValue = perc->volumes[i];
+                                percCtrlVolValues.append((ctrlValue<<4)|volValue);
+                            }
+                            // Insert end marker
+                            percFreqValues.append(0);
+                            percCtrlVolValues.append(0);
+                            // Insert index. +1 because player expects that
+                            percStarts.append(percEnvelopeIndex + 1);
+                            // Write out percussion data
+                            percFreqString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percFreqString.append(listToBytes(percFreqValues));
+                            percCtrlVolString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percCtrlVolString.append(listToBytes(percCtrlVolValues));
+                            // Increase running percussion index
+                            numPercussion++;
+                            // +1 for end marker
+                            percEnvelopeIndex += percSize + 1;
+                        }
+                        patternValues.append(percMapping[note->instrumentNumber] + Emulation::Player::NoteFirstPerc);
                         break;
                     }
                     case Track::Note::instrumentType::Slide:
@@ -801,16 +834,19 @@ void MainWindow::on_actionExportDasm_triggered() {
                         break;
                     }
                     }
-                    patternString.append(listToBytes(patternValues));
                 }
+                patternString.append(listToBytes(patternValues));
                 patternString.append("\n");
                 // Pattern ptr
-                if (patternMapping[patternIndex]%4 == 0) {
+                if ((patternMapping.size())%4 == 1) {
                     patternPtrString.append("        dc.b ");
                 } else {
                     patternPtrString.append(", ");
                 }
                 patternPtrString.append("<tt_pattern" + QString::number(patternMapping[patternIndex]));
+                if ((patternMapping.size())%4 == 0) {
+                    patternPtrString.append("\n");
+                }
             }
             int value = patternMapping[patternIndex];
             int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
@@ -825,6 +861,9 @@ void MainWindow::on_actionExportDasm_triggered() {
     trackString.replace("%%INSADINDEXES%%", listToBytes(insADStarts));
     trackString.replace("%%INSSUSTAININDEXES%%", listToBytes(insSustainStarts));
     trackString.replace("%%INSRELEASEINDEXES%%", listToBytes(insReleaseStarts));
+    trackString.replace("%%PERCINDEXES%%", listToBytes(percStarts));
+    trackString.replace("%%PERCFREQTABLE%%", percFreqString);
+    trackString.replace("%%PERCCTRLVOLTABLE%%", percCtrlVolString);
     trackString.replace("%%SEQUENCECHANNEL0%%", listToBytes(sequence[0]));
     trackString.replace("%%SEQUENCECHANNEL1%%", listToBytes(sequence[1]));
     trackString.replace("%%PATTERNDEFS%%", patternString);
@@ -832,7 +871,11 @@ void MainWindow::on_actionExportDasm_triggered() {
     patternPtrString.replace("<", ">");
     trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
 
-    std::cout << trackString.toStdString(); std::cout.flush();
+    // Write track data
+    if (!writeAsm(fileName, trackString, "_trackdata.asm")) {
+        displayMessage("Unable to write trackdata file!");
+        return;
+    }
 
     // Export Init
 
