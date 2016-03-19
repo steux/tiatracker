@@ -729,7 +729,6 @@ void MainWindow::on_actionExportDasm_triggered() {
                         if (!insMapping.contains(note->instrumentNumber)) {
                             // Instrument not encountered yet
                             insMapping[note->instrumentNumber] = numInstruments;
-                            insADStarts.append(envelopeIndex);
                             Track::Instrument *ins = &(pTrack->instruments[note->instrumentNumber]);
                             // insSize includes end marker that is not in vol/freq lists, so do -1
                             int insSize = ins->calcEffectiveSize() - 1;
