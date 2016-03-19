@@ -26,6 +26,7 @@
 #include <QTextStream>
 #include "track/sequence.h"
 #include "track/sequenceentry.h"
+#include "emulation/player.h"
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -688,8 +689,16 @@ void MainWindow::on_actionExportDasm_triggered() {
     }
     // Mapping of encountered to real, to weed out the unused
     QMap<int, int> insMapping{};
+    int numInstruments = 0;
+    QList<int> insWaveforms;
+    QList<int> insADStarts;
+    QList<int> insSustainStarts;
+    QList<int> insReleaseStarts;
+    QList<int> insEnvelopeValues;
+    int envelopeIndex = 0;
     QString insString;
     QMap<int, int> percMapping{};
+    int numPercussion = 0;
     QString percString;
     QMap<int, int> patternMapping{};
     QString patternString;
@@ -706,7 +715,66 @@ void MainWindow::on_actionExportDasm_triggered() {
                 // Write out pattern
                 patternString.append("; " + pTrack->patterns[patternIndex].name + "\n");
                 patternString.append("tt_pattern" + QString::number(patternMapping[patternIndex]) + ":\n");
+                // Loop over all notes
+                QList<int> patternValues;
+                for (int n = 0; n < pTrack->patterns[patternIndex].notes.size(); ++n) {
+                    Track::Note note = pTrack->patterns[patternIndex].notes[n];
+                    switch (note.type) {
+                    case Track::Note::instrumentType::Hold:
+                    {
+                        patternValues.append(int(Emulation::Player::NoteHold));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Instrument:
+                    {
+                        if (!insMapping.contains(note.instrumentNumber)) {
+                            // Instrument not encountered yet
+                            insADStarts.append(envelopeIndex);
+                            Track::Instrument *ins = &(pTrack->instruments[note.instrumentNumber]);
+                            // insSize includes end marker that is not in vol/freq lists, so do -1
+                            int insSize = ins->calcEffectiveSize() - 1;
+                            for (int i = 0; i < insSize; ++i) {
+                                int freqValue = ins->frequencies[i] + 8;
+                                int volValue = ins->volumes[i];
+                                insEnvelopeValues.append((freqValue<<4)|volValue);
+                            }
+                            // Insert dummy byte between sustain and release
+                            insEnvelopeValues.insert(insEnvelopeValues.size() - insSize + ins->getReleaseStart(), 0);
+                            // Insert end marker
+                            insEnvelopeValues.append(0);
+                            // Insert indexes. Two times if PURE_COMBINED
+                            // TODO
 
+                            // +1 for dummy byte, +1 for end marker
+                            envelopeIndex += insSize + 2;
+                        }
+                        // +1 because first instrument number is 1
+                        int valueIns = insMapping[note.instrumentNumber] + 1;
+                        if (pTrack->instruments[note.instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED
+                                && note.value > 31) {
+                            valueIns++;
+                        }
+                        int valueFreq = note.value%32;
+                        patternValues.append((valueIns<<5)|valueFreq);
+                        break;
+                    }
+                    case Track::Note::instrumentType::Pause:
+                    {
+                        patternValues.append(int(Emulation::Player::NotePause));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Percussion:
+                    {
+                        break;
+                    }
+                    case Track::Note::instrumentType::Slide:
+                    {
+                        patternValues.append(Emulation::Player::NoteHold + note.value);
+                        break;
+                    }
+                    }
+                    patternString.append(listToBytes(patternValues));
+                }
                 patternString.append("\n");
                 // Pattern ptr
                 if (patternMapping[patternIndex]%4 == 0) {

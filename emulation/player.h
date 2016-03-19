@@ -38,6 +38,11 @@ public:
     static const int RomPerSequence = 1;
     static const int RomTrack = 164;
 
+    /* Note constants from player routine */
+    static const int NoteHold = 8;
+    static const int NotePause = 16;
+    static const int NoteFirstPerc = 17;
+
     bool channelMuted[2]{false, false};
 
     explicit Player(Track::Track *parentTrack, QObject *parent = 0);

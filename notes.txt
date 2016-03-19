@@ -1,4 +1,5 @@
 TODO:
+- check for limits (7 instruments, frames etc.) on export
 - lock ins/perc for import
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
