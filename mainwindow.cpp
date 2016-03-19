@@ -624,12 +624,18 @@ QString MainWindow::listToBytes(QList<int> list) {
     QString out;
     for (int i = 0; i < list.size(); ++i) {
         if (i%8 == 0) {
-            out.append("\n        dc.b ");
+            if (i > 0) {
+                out.append("\n");
+            }
+            out.append("        dc.b ");
         }
         out = (out + "$%1").arg(list[i], 2, 16, QChar('0'));
         if (i%8 != 7 && i != list.size() - 1) {
             out.append(", ");
         }
+    }
+    if ((list.size())%8 == 0) {
+        out.append("\n");
     }
     return out;
 }
@@ -757,12 +763,13 @@ void MainWindow::on_actionExportDasm_triggered() {
                                 insWaveforms.append(TiaSound::getDistortionInt(ins->baseDistortion));
                             }
                             // Write out instrument data
-                            insString.append("\n; " + QString::number(numInstruments));
+                            insString.append("; " + QString::number(numInstruments));
                             if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
                                 insString.append("+" + QString::number(numInstruments + 1));
                             }
                             insString.append(": " + ins->name + "\n");
                             insString.append(listToBytes(insEnvelopeValues));
+                            insString.append("\n");
                             // Increase running instrument index
                             numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
                             // +1 for dummy byte, +1 for end marker
@@ -785,6 +792,7 @@ void MainWindow::on_actionExportDasm_triggered() {
                     }
                     case Track::Note::instrumentType::Percussion:
                     {
+                        patternValues.append(255);
                         break;
                     }
                     case Track::Note::instrumentType::Slide:
