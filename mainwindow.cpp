@@ -848,12 +848,15 @@ void MainWindow::on_actionExportDasm_triggered() {
                     patternPtrString.append("\n");
                 }
             }
-            int value = patternMapping[patternIndex];
+            sequence[channel].append(patternMapping[patternIndex]);
             int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
             if (gotoTarget != -1) {
-                value = 128 + gotoTarget;
+                int value = 128 + gotoTarget;
+                if (channel == 1) {
+                    value += sequence[0].size();
+                }
+                sequence[channel].append(value);
             }
-            sequence[channel].append(value);
         }
     }
     trackString.replace("%%INSFREQVOLTABLE%%", insString);
@@ -878,5 +881,15 @@ void MainWindow::on_actionExportDasm_triggered() {
     }
 
     // Export Init
-
+    QString initString = readAsm("player/dasm/tt_init.asm");
+    if (initString == "") {
+        return;
+    }
+    initString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
+    initString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
+    // Write init
+    if (!writeAsm(fileName, initString, "_init.asm")) {
+        displayMessage("Unable to write init file!");
+        return;
+    }
 }
