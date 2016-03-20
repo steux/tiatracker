@@ -135,6 +135,8 @@ private:
     QString readAsm(QString fileName);
     bool writeAsm(QString fileName, QString content, QString extension);
     QString listToBytes(QList<int> list);
+    QString getExportFileName();
+    bool exportFlags(QString fileName);
 
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;

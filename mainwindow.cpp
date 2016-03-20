@@ -638,8 +638,7 @@ QString MainWindow::listToBytes(QList<int> list) {
     return out;
 }
 
-void MainWindow::on_actionExportDasm_triggered() {
-    emit stopTrack();
+QString MainWindow::getExportFileName() {
     QFileDialog dialog(this);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
@@ -655,18 +654,21 @@ void MainWindow::on_actionExportDasm_triggered() {
         fileNames = dialog.selectedFiles();
     }
     if (fileNames.isEmpty()) {
-        return;
+        return "";
     }
     QString fileName = fileNames[0];
     // Remove extension, if there
     if (fileName.endsWith(".ttt")) {
         fileName.truncate(fileName.length() - 4);
     }
+    return fileName;
+}
 
+bool MainWindow::exportFlags(QString fileName) {
     // Export flags
     QString flagsString = readAsm("player/dasm/tt_variables.asm");
     if (flagsString == "") {
-        return;
+        return false;
     }
     flagsString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
     flagsString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
@@ -683,6 +685,16 @@ void MainWindow::on_actionExportDasm_triggered() {
     // Write flags
     if (!writeAsm(fileName, flagsString, "_variables.asm")) {
         displayMessage("Unable to write variables file!");
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::on_actionExportDasm_triggered() {
+    emit stopTrack();
+    QString fileName = getExportFileName();
+
+    if (!exportFlags(fileName)) {
         return;
     }
 
