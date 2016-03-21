@@ -259,7 +259,7 @@ void Player::sequenceChannel(int channel) {
         } else {
             trackMode[channel] = Track::Note::instrumentType::Hold;
             Track::Instrument *curInstrument = &(pTrack->instruments[trackCurNote[channel].instrumentNumber]);
-            trackCurEnvelopeIndex[channel] = curInstrument->getSustainStart();
+            trackCurEnvelopeIndex[channel] = curInstrument->getReleaseStart();
         }
         break;
     case Track::Note::instrumentType::Percussion:
