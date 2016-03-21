@@ -378,7 +378,7 @@ void Player::updateTrack() {
             return;
         }
         isFirstNote = false;
-        trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed : pTrack->evenSpeed;
+        trackCurTick = trackCurNoteIndex[0]%2 == 0 ? pTrack->oddSpeed - 1 : pTrack->evenSpeed - 1;
         int pos1 = pTrack->channelSequences[0].sequence[trackCurEntryIndex[0]].firstNoteNumber
                 + trackCurNoteIndex[0];
         int pos2 = pTrack->channelSequences[1].sequence[trackCurEntryIndex[1]].firstNoteNumber
