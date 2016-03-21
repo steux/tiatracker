@@ -690,18 +690,15 @@ bool MainWindow::exportFlags(QString fileName) {
     return true;
 }
 
-void MainWindow::on_actionExportDasm_triggered() {
-    emit stopTrack();
-    QString fileName = getExportFileName();
-
+bool MainWindow::exportTrackSpecifics(QString fileName) {
     if (!exportFlags(fileName)) {
-        return;
+        return false;
     }
 
     // Export track data
     QString trackString = readAsm("player/dasm/tt_trackdata.asm");
     if (trackString == "") {
-        return;
+        return false;
     }
     // Mapping of encountered to real, to weed out the unused
     QMap<int, int> insMapping{};
@@ -847,6 +844,8 @@ void MainWindow::on_actionExportDasm_triggered() {
                     }
                     }
                 }
+                // Pattern end marker
+                patternValues.append(0);
                 patternString.append(listToBytes(patternValues));
                 patternString.append("\n");
                 // Pattern ptr
@@ -889,19 +888,60 @@ void MainWindow::on_actionExportDasm_triggered() {
     // Write track data
     if (!writeAsm(fileName, trackString, "_trackdata.asm")) {
         displayMessage("Unable to write trackdata file!");
-        return;
+        return false;
     }
 
     // Export Init
     QString initString = readAsm("player/dasm/tt_init.asm");
     if (initString == "") {
-        return;
+        return false;
     }
     initString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
     initString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
     // Write init
     if (!writeAsm(fileName, initString, "_init.asm")) {
         displayMessage("Unable to write init file!");
+        return false;
+    }
+
+    return true;
+}
+
+void MainWindow::on_actionExportDasm_triggered() {
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (!exportTrackSpecifics(fileName)) {
+        return;
+    }
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (!exportTrackSpecifics(fileName)) {
+        return;
+    }
+    // Player
+    QString playerString = readAsm("player/dasm/tt_player.asm");
+    if (playerString == "") {
+        return;
+    }
+    if (!writeAsm(fileName, playerString, "_player.asm")) {
+        displayMessage("Unable to write player file!");
+        return;
+    }
+    // Framework
+    QString frameworkString = readAsm("player/dasm/tt_player_framework.asm");
+    if (frameworkString == "") {
+        return;
+    }
+    frameworkString.replace("%%PAL%%", "1");
+    frameworkString.replace("%%NTSC%%", "0");
+    frameworkString.replace("%%FILENAME%%", fileName);
+    if (!writeAsm(fileName, frameworkString, "_player_framework.asm")) {
+        displayMessage("Unable to write framework file!");
         return;
     }
 }

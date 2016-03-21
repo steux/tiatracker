@@ -40,7 +40,7 @@ TIM_KERNEL      = 15
         SEG.U   variables
         ORG     $80
 
-        include "tt_variables.asm"
+        include "%%FILENAME%%_variables.asm"
 
 ; test
 player_time_max         ds 1
@@ -65,7 +65,7 @@ Start   SUBROUTINE
         pha
         bne .clearLoop
 
-        include "tt_init.asm"
+        include "%%FILENAME%%_init.asm"
 
         
 ; =====================================================================
@@ -110,7 +110,7 @@ VBlank  SUBROUTINE
         sta TIM64T
 
         ; Do VBlank stuff
-        include "tt_player.asm"
+        include "%%FILENAME%%_player.asm"
         
         ; Measure player worst case timing
         lda #TIM_VBLANK
@@ -150,7 +150,7 @@ Kernel  SUBROUTINE
 ; Data
 ; =====================================================================
 
-        include "tt_trackdata.asm"
+        include "%%FILENAME%%_trackdata.asm"
 
 
 ; =====================================================================

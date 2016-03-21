@@ -113,6 +113,8 @@ private slots:
 
     void on_actionExportDasm_triggered();
 
+    void on_actionExport_complete_player_to_dasm_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
@@ -137,6 +139,7 @@ private:
     QString listToBytes(QList<int> list);
     QString getExportFileName();
     bool exportFlags(QString fileName);
+    bool exportTrackSpecifics(QString fileName);
 
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;
