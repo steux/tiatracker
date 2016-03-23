@@ -29,6 +29,8 @@ public:
     PitchGuide getPitchPerfectPalGuide();
     PitchGuide getPitchPerfectNtscGuide();
 
+    InstrumentPitchGuide calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
+
 private:
     static const int PalFrequency = 31200;
     static const int NtscFrequency = 31440;
@@ -50,7 +52,7 @@ private:
     QMap<Distortion, QList<double>> distFrequenciesPal;
     QMap<Distortion, QList<double>> distFrequenciesNtsc;
 
-    PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
+    //PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
     PitchGuide ntscGuide{"NTSC Pitch-perfect A4=440Hz", TvStandard::NTSC};
 
 };

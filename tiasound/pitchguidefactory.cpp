@@ -34,6 +34,7 @@ PitchGuideFactory::PitchGuideFactory()
         distFrequenciesNtsc[dist] = ntscList;
     }
 
+/*
     palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
     palGuide.instrumentGuides[Distortion::BUZZY_RUMBLE] = perfectPalDist2;
     palGuide.instrumentGuides[Distortion::FLANGY_WAVERING] = perfectPalDist3;
@@ -45,11 +46,17 @@ PitchGuideFactory::PitchGuideFactory()
     palGuide.instrumentGuides[Distortion::ELECTRONIC_RUMBLE] = perfectPalDist14;
     palGuide.instrumentGuides[Distortion::ELECTRONIC_SQUEAL] = perfectPalDist15;
     palGuide.instrumentGuides[Distortion::PURE_COMBINED] = perfectPalDist16;
+*/
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
+    PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        palGuide.instrumentGuides[dist] = calcInstrumentPitchGuide(TvStandard::PAL, dist, 440.0);
+    }
     return palGuide;
 }
 
@@ -59,4 +66,16 @@ PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
     return ntscGuide;
 }
 
+/*************************************************************************/
+
+InstrumentPitchGuide PitchGuideFactory::calcInstrumentPitchGuide(TiaSound::TvStandard standard, Distortion dist, double baseFreq) {
+    // TODO:
+    // Create QList<FrequencyPitchGuide>
+    // Use it to create InstrumentPitchGuide
+    // Return that
+    xxx
 }
+
+}
+
+
