@@ -120,3 +120,5 @@ install_player.files = $$PWD/player
 
 INSTALLS += \
     install_player
+
+RC_ICONS = graphics/tt_icon.ico
