@@ -1,3 +1,13 @@
+Formel für Notenfrequenz:
+
+* Notenfrequenz: f(n) = 2^((n-49)/12)*440Hz
+* Tastennummer: log_2(f/440Hz)*12 + 49
+* A4=440Hz: Tastennummer 49
+* std::pow: double pow(double base, double exp);
+* std::log: double log(double arg) (base e)
+* log with base: log(n)/log(base)
+
+
 TODO:
 - export PAL/NTSC to framework
 - check for limits (7 instruments, frames etc.) on export
