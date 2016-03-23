@@ -24,12 +24,12 @@ class PitchGuideFactory
 public:
     PitchGuideFactory();
 
-    PitchGuide* getPitchPerfectPalGuide();
-    PitchGuide* getPitchPerfectNtscGuide();
+    PitchGuide getPitchPerfectPalGuide();
+    PitchGuide getPitchPerfectNtscGuide();
 
 private:
-    PitchGuide palGuide{"Pitch-perfect PAL", TvStandard::PAL};
-    PitchGuide ntscGuide{"Pitch-perfect NTSC", TvStandard::NTSC};
+    PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
+    PitchGuide ntscGuide{"NTSC Pitch-perfect A4=440Hz", TvStandard::NTSC};
 };
 
 }

@@ -176,7 +176,7 @@ void MainWindow::registerTrack(Track::Track *newTrack) {
 /*************************************************************************/
 
 TiaSound::PitchGuide *MainWindow::getPitchGuide() {
-    return pPitchGuide;
+    return &pPitchGuide;
 }
 
 /*************************************************************************/
@@ -194,7 +194,7 @@ void MainWindow::displayMessage(const QString &message) {
 /*************************************************************************/
 
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
-    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide->instrumentGuides[dist]);
+    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide.instrumentGuides[dist]);
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
     ui->pianoKeyboard->setUsePitchGuide(true);
     ui->pianoKeyboard->update();
@@ -255,13 +255,20 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
     case iTabInstruments:
         emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(true);
+        ui->tabInstruments->updateInstrumentsTab();
         break;
     case iTabPercussion:
         emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(false);
+        ui->tabPercussion->updatePercussionTab();
         break;
     case iTabInfo:
         updateInfo();
+        break;
+    case iTabOptions:
+        emit stopTrack();
+        ui->pianoKeyboard->setUsePitchGuide(false);
+        ui->tabOptions->updateOptionsTab();
         break;
     }
 }

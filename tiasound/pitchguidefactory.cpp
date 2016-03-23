@@ -27,14 +27,14 @@ PitchGuideFactory::PitchGuideFactory()
 
 /*************************************************************************/
 
-PitchGuide* PitchGuideFactory::getPitchPerfectPalGuide() {
-    return &palGuide;
+PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
+    return palGuide;
 }
 
 /*************************************************************************/
 
-PitchGuide* PitchGuideFactory::getPitchPerfectNtscGuide() {
-    return &ntscGuide;
+PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
+    return ntscGuide;
 }
 
 }

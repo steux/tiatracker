@@ -5,6 +5,9 @@
 #include <QWidget>
 #include "track/track.h"
 #include "emulation/player.h"
+#include "tiasound/pitchguide.h"
+#include "tiasound/pitchguidefactory.h"
+#include <QList>
 
 
 class OptionsTab : public QWidget
@@ -21,6 +24,8 @@ public:
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updateOptionsTab();
 
+
+    QList<TiaSound::PitchGuide> guides{};
 
 signals:
 
