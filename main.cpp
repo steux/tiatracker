@@ -33,6 +33,7 @@
 #include <iostream>
 #include <patterneditor.h>
 #include <QCheckBox>
+#include "optionstab.h"
 
 
 #include "SDL.h"
@@ -70,6 +71,11 @@ int main(int argc, char *argv[])
     tt->registerPitchGuide(w.getPitchGuide());
     tt->initTrackTab();
     tt->updateTrackTab();
+
+    OptionsTab *ot = w.findChild<OptionsTab *>("tabOptions");
+    ot->registerTrack(&myTrack);
+    ot->initOptionsTab();
+    ot->updateOptionsTab();
 
     w.initConnections();
 

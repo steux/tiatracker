@@ -146,3 +146,16 @@ QWidget#widgetInfoTable > QLabel {
     background-color: #eee8d5;
 }
 
+
+QGroupBox {
+    border: 1px solid #002b36;
+    margin-top: 1ex;
+}
+QGroupBox::title {
+    color: #002b36;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 16px;
+    top: -1ex;
+    padding: 0px 8px 0px 8px;
+}
