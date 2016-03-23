@@ -7,11 +7,33 @@
 
 #include "pitchguidefactory.h"
 #include "pitchperfectpal.h"
+#include "percussiontab.h"
+
 
 namespace TiaSound {
 
 PitchGuideFactory::PitchGuideFactory()
 {
+    // Generate lists of available frequencies for all TIA distortions
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        double divider = distDividers[dist];
+        QList<double> palList;
+        QList<double> ntscList;
+        for (int f = 0; f < 32; ++f) {
+            if (dist == Distortion::SILENT) {
+                palList.append(0.0);
+                ntscList.append(0.0);
+
+            } else {
+                palList.append(PalFrequency/divider/(1 + f));
+                ntscList.append(NtscFrequency/divider/(1 + f));
+            }
+        }
+        distFrequenciesPal[dist] = palList;
+        distFrequenciesNtsc[dist] = ntscList;
+    }
+
     palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
     palGuide.instrumentGuides[Distortion::BUZZY_RUMBLE] = perfectPalDist2;
     palGuide.instrumentGuides[Distortion::FLANGY_WAVERING] = perfectPalDist3;
