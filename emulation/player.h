@@ -79,6 +79,8 @@ public slots:
     void selectedChannelChanged(int newChannel);
     void toggleLoop(bool toggle);
 
+    void setTVStandard(TiaSound::TvStandard newStandard);
+
 signals:
     void newPlayerPos(int pos1, int pos2);
     void invalidNoteFound(int channel, int entryIndex, int noteIndex);

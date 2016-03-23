@@ -32,3 +32,17 @@ void OptionsTab::updateOptionsTab() {
 
 /*************************************************************************/
 
+void OptionsTab::on_radioButtonPal_toggled(bool checked) {
+    if (checked) {
+        // Set to PAL
+        pTrack->setTvMode(TiaSound::TvStandard::PAL);
+        emit setTVStandard(TiaSound::TvStandard::PAL);
+    } else {
+        // Set to NTSC
+        pTrack->setTvMode(TiaSound::TvStandard::NTSC);
+        emit setTVStandard(TiaSound::TvStandard::NTSC);
+    }
+}
+
+/*************************************************************************/
+

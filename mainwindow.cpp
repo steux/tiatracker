@@ -146,6 +146,9 @@ void MainWindow::initConnections() {
     addShortcut(&actionToggleLoop, "ToggleLoop");
     QObject::connect(&actionToggleLoop, SIGNAL(triggered(bool)), ui->tabTrack, SLOT(toggleLoop(bool)));
 
+    // OptionsTab
+    QObject::connect(ui->radioButtonPal, SIGNAL(toggled(bool)), ui->tabOptions, SLOT(on_radioButtonPal_toggled(bool)));
+
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
     QObject::connect(ui->tabInstruments, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));

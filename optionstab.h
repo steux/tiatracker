@@ -28,12 +28,17 @@ public:
     QList<TiaSound::PitchGuide> guides{};
 
 signals:
+    void setTVStandard(TiaSound::TvStandard newStandard);
 
 public slots:
 
 private:
 
     Track::Track *pTrack = nullptr;
+
+private slots:
+
+    void on_radioButtonPal_toggled(bool checked);
 
 };
 

@@ -1278,7 +1278,7 @@
            <item>
             <widget class="QRadioButton" name="radioButtonPal">
              <property name="text">
-              <string>PAL</string>
+              <string>PAL 50Hz</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -1288,7 +1288,7 @@
            <item>
             <widget class="QRadioButton" name="radioButtonNtsc">
              <property name="text">
-              <string>NTSC</string>
+              <string>NTSC 60Hz</string>
              </property>
             </widget>
            </item>

@@ -98,6 +98,7 @@ int main(int argc, char *argv[])
     QObject::connect(editor, SIGNAL(editChannelChanged(int)), &tiaPlayer, SLOT(selectedChannelChanged(int)));
     QCheckBox *cbLoop = w.findChild<QCheckBox *>("checkBoxLoop");
     QObject::connect(cbLoop, SIGNAL(toggled(bool)), &tiaPlayer, SLOT(toggleLoop(bool)));
+    QObject::connect(ot, SIGNAL(setTVStandard(TiaSound::TvStandard)), &tiaPlayer, SLOT(setTVStandard(TiaSound::TvStandard)));
 
     pt->connectPlayer(&tiaPlayer);
     tt->registerPlayer(&tiaPlayer);
