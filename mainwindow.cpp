@@ -948,8 +948,13 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     if (frameworkString == "") {
         return;
     }
-    frameworkString.replace("%%PAL%%", "1");
-    frameworkString.replace("%%NTSC%%", "0");
+    if (pTrack->getTvMode() == TiaSound::TvStandard::PAL) {
+        frameworkString.replace("%%PAL%%", "1");
+        frameworkString.replace("%%NTSC%%", "0");
+    } else {
+        frameworkString.replace("%%PAL%%", "0");
+        frameworkString.replace("%%NTSC%%", "1");
+    }
     frameworkString.replace("%%FILENAME%%", fileName);
     if (!writeAsm(fileName, frameworkString, "_player_framework.asm")) {
         displayMessage("Unable to write framework file!");
