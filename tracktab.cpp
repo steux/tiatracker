@@ -359,6 +359,7 @@ void TrackTab::removePattern(bool) {
         }
     }
 
+    emit validateEditPos();
     update();
 }
 
