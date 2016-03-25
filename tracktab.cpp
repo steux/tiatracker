@@ -373,6 +373,10 @@ void TrackTab::duplicatePattern(bool) {
     if (dialog.exec() == QDialog::Accepted) {
         pTrack->patterns.append(pTrack->patterns[patternIndex]);
         pTrack->patterns.last().name = dialog.getPatternName();
+        int entryIndex = pTrack->getSequenceEntryIndex(contextEventChannel, contextEventNoteIndex);
+        Track::SequenceEntry newEntry(pTrack->patterns.size() - 1);
+        pTrack->channelSequences[contextEventChannel].sequence.insert(entryIndex + 1, newEntry);
+        pTrack->updateFirstNoteNumbers();
         update();
     }
 }

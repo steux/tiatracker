@@ -9,6 +9,10 @@ Formel für Notenfrequenz:
 
 
 TODO:
+- When correcting a pattern during edit, do not remove SLIDEs at the beginning! Annoyed me when I created the "Slider" pattern for seminar all_sounds track
+  Same for Pause: Sometimes a Pause at the beginning is needed!
+- Remove Pattern: Correct editpos afterwards, as it can be left dangling!
+- When switching to Track tab, update piano keyboard
 - export PAL/NTSC to framework.asm
 - remove pal/ntsc manually typed pitch guides
 - check sign of percent off in PitchGuideFactory
