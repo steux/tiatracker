@@ -116,6 +116,8 @@ private slots:
     void on_actionExport_complete_player_to_dasm_triggered();
 
 
+    void on_actionAbout_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

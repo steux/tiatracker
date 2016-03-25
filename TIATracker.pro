@@ -46,7 +46,8 @@ SOURCES += main.cpp\
     insertpatterndialog.cpp \
     createpatterndialog.cpp \
     tiasound/pitchperfectntsc.cpp \
-    optionstab.cpp
+    optionstab.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -82,7 +83,8 @@ HEADERS  += mainwindow.h \
     insertpatterndialog.h \
     createpatterndialog.h \
     tiasound/pitchperfectntsc.h \
-    optionstab.h
+    optionstab.h \
+    aboutdialog.h
 
 
 FORMS    += mainwindow.ui \
@@ -91,7 +93,8 @@ FORMS    += mainwindow.ui \
     renamepatterndialog.ui \
     setgotodialog.ui \
     insertpatterndialog.ui \
-    createpatterndialog.ui
+    createpatterndialog.ui \
+    aboutdialog.ui
 
 CONFIG += c++11
 

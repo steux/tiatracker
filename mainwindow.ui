@@ -134,7 +134,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="main.qrc">
+                 <iconset>
                   <normaloff>:/graphics/restart.png</normaloff>:/graphics/restart.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -151,7 +151,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="main.qrc">
+                 <iconset>
                   <normaloff>:/graphics/last.png</normaloff>:/graphics/last.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -168,7 +168,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="main.qrc">
+                 <iconset>
                   <normaloff>:/graphics/stop.png</normaloff>:/graphics/stop.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -182,7 +182,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonPlay">
                 <property name="icon">
-                 <iconset resource="main.qrc">
+                 <iconset>
                   <normaloff>:/graphics/play.png</normaloff>:/graphics/play.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -199,7 +199,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset resource="main.qrc">
+                 <iconset>
                   <normaloff>:/graphics/next.png</normaloff>:/graphics/next.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -1320,7 +1320,7 @@
            <item>
             <widget class="QLabel" name="label_21">
              <property name="text">
-              <string>   </string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -1423,6 +1423,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionRead_the_manual"/>
    </widget>
    <widget class="QMenu" name="menuTrack">
     <property name="title">
@@ -1511,6 +1512,11 @@
     <string>Export complete player to dasm...</string>
    </property>
   </action>
+  <action name="actionRead_the_manual">
+   <property name="text">
+    <string>Read the manual...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -1581,8 +1587,6 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="main.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

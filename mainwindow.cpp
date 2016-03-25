@@ -27,6 +27,7 @@
 #include "track/sequence.h"
 #include "track/sequenceentry.h"
 #include "emulation/player.h"
+#include "aboutdialog.h"
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -954,4 +955,12 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
         displayMessage("Unable to write framework file!");
         return;
     }
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionAbout_triggered() {
+    AboutDialog about;
+    about.setWindowFlags(Qt::FramelessWindowHint);
+    about.exec();
 }
