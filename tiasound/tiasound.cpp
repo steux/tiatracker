@@ -75,4 +75,10 @@ int getDistortionInt(Distortion dist) {
     return static_cast<int>(dist);
 }
 
+/*************************************************************************/
+
+Note getNoteFromInt(int n) {
+    return static_cast<Note>(n);
+}
+
 }

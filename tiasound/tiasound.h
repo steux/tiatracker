@@ -35,6 +35,8 @@ QString getNoteNameWithOctave(Note note);
 /* Get a note name as QString from note index, with octave number,
  * a fixed 3 letters long */
 QString getNoteNameWithOctaveFixedWidth(Note note);
+/* Cast and int index into the correct Note */
+Note getNoteFromInt(int n);
 
 
 /* Distortions

@@ -29,7 +29,7 @@ public:
     PitchGuide getPitchPerfectPalGuide();
     PitchGuide getPitchPerfectNtscGuide();
 
-    InstrumentPitchGuide calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
+    QList<FrequencyPitchGuide> calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
 
 private:
     static const int PalFrequency = 31200;

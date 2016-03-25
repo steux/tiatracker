@@ -10,6 +10,7 @@ Formel für Notenfrequenz:
 
 TODO:
 - export PAL/NTSC to framework
+- check sign of percent off in PitchGuideFactory
 - check for limits (7 instruments, frames etc.) on export
 - lock ins/perc for import
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
