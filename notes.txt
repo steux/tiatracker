@@ -9,7 +9,8 @@ Formel für Notenfrequenz:
 
 
 TODO:
-- export PAL/NTSC to framework
+- export PAL/NTSC to framework.asm
+- remove pal/ntsc manually typed pitch guides
 - check sign of percent off in PitchGuideFactory
 - check for limits (7 instruments, frames etc.) on export
 - lock ins/perc for import

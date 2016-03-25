@@ -33,20 +33,6 @@ PitchGuideFactory::PitchGuideFactory()
         distFrequenciesPal[dist] = palList;
         distFrequenciesNtsc[dist] = ntscList;
     }
-
-/*
-    palGuide.instrumentGuides[Distortion::BUZZY] = perfectPalDist1;
-    palGuide.instrumentGuides[Distortion::BUZZY_RUMBLE] = perfectPalDist2;
-    palGuide.instrumentGuides[Distortion::FLANGY_WAVERING] = perfectPalDist3;
-    palGuide.instrumentGuides[Distortion::PURE_HIGH] = perfectPalDist4;
-    palGuide.instrumentGuides[Distortion::PURE_BUZZY] = perfectPalDist6;
-    palGuide.instrumentGuides[Distortion::REEDY_RUMBLE] = perfectPalDist7;
-    palGuide.instrumentGuides[Distortion::WHITE_NOISE] = perfectPalDist8;
-    palGuide.instrumentGuides[Distortion::PURE_LOW] = perfectPalDist12;
-    palGuide.instrumentGuides[Distortion::ELECTRONIC_RUMBLE] = perfectPalDist14;
-    palGuide.instrumentGuides[Distortion::ELECTRONIC_SQUEAL] = perfectPalDist15;
-    palGuide.instrumentGuides[Distortion::PURE_COMBINED] = perfectPalDist16;
-*/
 }
 
 /*************************************************************************/
@@ -68,6 +54,16 @@ PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
+    PitchGuide ntscGuide{"NTSC Pitch-perfect A4=440Hz", TvStandard::NTSC};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 440.0);
+        ntscGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, ntscGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 440.0);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 440.0));
+    ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
     return ntscGuide;
 }
 
