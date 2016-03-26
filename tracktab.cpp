@@ -441,8 +441,6 @@ void TrackTab::setHold(bool) {
 void TrackTab::setPause(bool) {
     pTrack->lock();
     pTrack->getNote(contextEventChannel, contextEventNoteIndex)->type = Track::Note::instrumentType::Pause;
-    int patternIndex = pTrack->getPatternIndex(contextEventChannel, contextEventNoteIndex);
-    pTrack->validatePattern(patternIndex);
     pTrack->unlock();
     emit advanceEditPos();
     update();
@@ -463,7 +461,6 @@ void TrackTab::deleteRow(bool) {
     int noteInPattern = pTrack->getNoteIndexInPattern(contextEventChannel, contextEventNoteIndex);
     pattern->notes.removeAt(noteInPattern);
     pTrack->updateFirstNoteNumbers();
-    pTrack->validatePattern(patternIndex);
     emit validateEditPos();
     update();
 }
@@ -483,7 +480,6 @@ void TrackTab::insertRowBefore(bool) {
     Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
     pattern->notes.insert(noteInPattern, newNote);
     pTrack->updateFirstNoteNumbers();
-    pTrack->validatePattern(patternIndex);
     update();
 }
 
@@ -502,7 +498,6 @@ void TrackTab::insertRowAfter(bool) {
     Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
     pattern->notes.insert(noteInPattern + 1, newNote);
     pTrack->updateFirstNoteNumbers();
-    pTrack->validatePattern(patternIndex);
     update();
 }
 

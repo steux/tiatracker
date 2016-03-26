@@ -133,7 +133,6 @@ void PatternEditor::setRowToInstrument(int frequency) {
         pTrack->patterns[patternIndex].notes[noteIndex].type = Track::Note::instrumentType::Percussion;
         pTrack->patterns[patternIndex].notes[noteIndex].instrumentNumber = instrumentIndex - Track::Track::numInstruments;
     }
-    pTrack->validatePattern(patternIndex);
     advanceEditPos();
     update();
 }

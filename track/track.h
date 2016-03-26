@@ -79,11 +79,6 @@ public:
 
     Note *getNote(int channel, int row);
 
-    /* Goes sequentially through a pattern and finds and corrects
-     * invalid notes, like PAUSE after a percussion, etc.
-     * Does not consider notes outside the pattern. */
-    void validatePattern(int patternIndex);
-
     /* Feature checks */
     bool usesGoto();
     bool startsWithHold();

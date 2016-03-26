@@ -276,38 +276,6 @@ Note *Track::getNote(int channel, int row) {
 
 /*************************************************************************/
 
-void Track::validatePattern(int patternIndex) {
-    Note::instrumentType mode = Note::instrumentType::Hold;
-    Pattern *pattern = &(patterns[patternIndex]);
-    for (int i = 0; i < pattern->notes.size(); ++i) {
-        Note::instrumentType curType = pattern->notes[i].type;
-        switch (curType) {
-        case Note::instrumentType::Hold:
-            break;
-        case Note::instrumentType::Instrument:
-            mode = Note::instrumentType::Instrument;
-            break;
-        case Note::instrumentType::Pause:
-            if (mode != Note::instrumentType::Instrument) {
-                pattern->notes[i].type = Note::instrumentType::Hold;
-            }
-            mode = Note::instrumentType::Hold;
-            break;
-        case Note::instrumentType::Percussion:
-            mode = Note::instrumentType::Percussion;
-            break;
-        case Note::instrumentType::Slide:
-            if (mode != Note::instrumentType::Instrument) {
-                mode = Note::instrumentType::Hold;
-                pattern->notes[i].type = Note::instrumentType::Hold;
-            }
-            break;
-        }
-    }
-}
-
-/*************************************************************************/
-
 bool Track::usesGoto() {
     for (int channel = 0; channel < 2; ++channel) {
         for (int i = 0; i < channelSequences[channel].sequence.size(); ++i) {

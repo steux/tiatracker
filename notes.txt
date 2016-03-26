@@ -9,12 +9,9 @@ Formel für Notenfrequenz:
 
 
 TODO:
-- When correcting a pattern during edit, do not remove SLIDEs at the beginning! Annoyed me when I created the "Slider" pattern for seminar all_sounds track
-  Same for Pause: Sometimes a Pause at the beginning is needed!
+- Ordnungskriterium in Menüs/Dropdowns
 - When switching to Track tab, update piano keyboard
-- export PAL/NTSC to framework.asm
 - remove pal/ntsc manually typed pitch guides
-- check sign of percent off in PitchGuideFactory
 - check for limits (7 instruments, frames etc.) on export
 - lock ins/perc for import
 - Make sure PianoKeyboard.setUsePitchGuide() is correct for starting tab on startup
@@ -31,6 +28,7 @@ TODO:
 - Better error messages during play
 - When exporting PURE_COMBINED, check if really both waveforms are used.
   (Store occurence in hashmap individually for 4 and 12)
+- Do some form of pattern validation during edit, maybe syntax highlighting?
 
 
 FEATURES:
