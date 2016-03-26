@@ -29,6 +29,9 @@ TODO:
 - When exporting PURE_COMBINED, check if really both waveforms are used.
   (Store occurence in hashmap individually for 4 and 12)
 - Do some form of pattern validation during edit, maybe syntax highlighting?
+- On new or open track, current perc (ins?) name gets taken over...?
+- Add octave spinbox to PianoKeyboard
+
 
 
 FEATURES:

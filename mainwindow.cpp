@@ -419,7 +419,7 @@ void MainWindow::loadTrackByName(const QString &fileName) {
 
 void MainWindow::setTrackName(QString name) {
     pTrack->name = name;
-    setWindowTitle("TIATracker v0.1 - " + pTrack->name);
+    setWindowTitle("TIATracker v0.8 - " + pTrack->name);
 }
 
 /*************************************************************************/
