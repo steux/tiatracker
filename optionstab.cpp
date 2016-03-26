@@ -32,6 +32,12 @@ void OptionsTab::updateOptionsTab() {
 
 /*************************************************************************/
 
+void OptionsTab::on_comboBoxPitchGuide_currentIndexChanged(int index) {
+    emit setPitchGuide(guides[index]);
+}
+
+/*************************************************************************/
+
 void OptionsTab::on_radioButtonPal_toggled(bool checked) {
     if (checked) {
         // Set to PAL

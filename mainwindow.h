@@ -58,7 +58,6 @@ public:
 
     void registerTrack(Track::Track *newTrack);
 
-    /* Get current pitch guide */
     TiaSound::PitchGuide *getPitchGuide();
 
     /* Displays a message in an "OK" messagebox */
@@ -77,6 +76,7 @@ signals:
     void stopTrack();
 
 private slots:
+    void setPitchGuide(TiaSound::PitchGuide newGuide);
     // Set a new pitch guide for the piano keyboard
     void setWaveform(TiaSound::Distortion dist);
 

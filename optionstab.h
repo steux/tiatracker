@@ -29,6 +29,7 @@ public:
 
 signals:
     void setTVStandard(TiaSound::TvStandard newStandard);
+    void setPitchGuide(TiaSound::PitchGuide newGuide);
 
 public slots:
 
@@ -37,6 +38,7 @@ private:
     Track::Track *pTrack = nullptr;
 
 private slots:
+    void on_comboBoxPitchGuide_currentIndexChanged(int index);
 
     void on_radioButtonPal_toggled(bool checked);
 

@@ -149,6 +149,8 @@ void MainWindow::initConnections() {
 
     // OptionsTab
     QObject::connect(ui->radioButtonPal, SIGNAL(toggled(bool)), ui->tabOptions, SLOT(on_radioButtonPal_toggled(bool)));
+    QObject::connect(ui->comboBoxPitchGuide, SIGNAL(currentIndexChanged(int)), ui->tabOptions, SLOT(on_comboBoxPitchGuide_currentIndexChanged(int)));
+    QObject::connect(ui->tabOptions, SIGNAL(setPitchGuide(TiaSound::PitchGuide)), this, SLOT(setPitchGuide(TiaSound::PitchGuide)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -181,6 +183,15 @@ void MainWindow::registerTrack(Track::Track *newTrack) {
 
 TiaSound::PitchGuide *MainWindow::getPitchGuide() {
     return &pPitchGuide;
+}
+
+/*************************************************************************/
+
+void MainWindow::setPitchGuide(TiaSound::PitchGuide newGuide) {
+    std::cout << "***\n"; std::cout.flush();
+    pPitchGuide = newGuide;
+    updateAllTabs();
+    update();
 }
 
 /*************************************************************************/
