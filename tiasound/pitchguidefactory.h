@@ -28,6 +28,8 @@ public:
 
     PitchGuide getPitchPerfectPalGuide();
     PitchGuide getPitchPerfectNtscGuide();
+    PitchGuide getOptimizedPurePalGuide();
+    PitchGuide getOptimizedPureNtscGuide();
 
     QList<FrequencyPitchGuide> calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
 

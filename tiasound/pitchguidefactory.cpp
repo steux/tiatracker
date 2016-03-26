@@ -38,6 +38,38 @@ PitchGuideFactory::PitchGuideFactory()
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
+
+/*
+    long bestError = 99999999;
+    double bestFreq = 0;
+    int bestNum = 0;
+    int threshold = 10;
+    for (double f = 330.0; f < 660.0; f += 0.1) {
+        long currentError = 0;
+        int curNum = 0;
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, f);
+        for (int i = 0; i < guide.size(); ++i) {
+            if (std::abs(guide[i].percentOff) <= threshold) {
+                currentError += guide[i].percentOff*guide[i].percentOff;
+                curNum++;
+            }
+        }
+        guide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, f);
+        for (int i = 0; i < guide.size(); ++i) {
+            if (std::abs(guide[i].percentOff) <= threshold) {
+                currentError += guide[i].percentOff*guide[i].percentOff;
+                curNum++;
+            }
+        }
+        if (curNum > bestNum || (curNum == bestNum && currentError < bestError)) {
+            std::cout << "Found new best: " << f << ", " << curNum << ": " << currentError << "\n";
+            bestError = currentError;
+            bestFreq = f;
+            bestNum = curNum;
+        }
+    }
+*/
+
     PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
     for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
         Distortion dist = PercussionTab::availableWaveforms[iDist];
@@ -63,6 +95,38 @@ PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
     // Pure Combined has to be added manually
     QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 440.0);
     combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 440.0));
+    ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
+    return ntscGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedPurePalGuide() {
+    PitchGuide palGuide{"PAL Optimized Pure A4=345.4Hz", TvStandard::PAL};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::PAL, dist, 345.4);
+        palGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, palGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_HIGH, 345.4);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_LOW, 345.4));
+    palGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, palGuide.name, combinedGuide);
+    return palGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedPureNtscGuide() {
+    PitchGuide ntscGuide{"NTSC Optimized Pure A4=413.9Hz", TvStandard::NTSC};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 413.9);
+        ntscGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, ntscGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 413.9);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 413.9));
     ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
     return ntscGuide;
 }
@@ -99,6 +163,9 @@ QList<FrequencyPitchGuide> PitchGuideFactory::calcInstrumentPitchGuide(TiaSound:
             if (ttNoteIndex >= 0 && ttNoteIndex < 96) {
                 ttNote = getNoteFromInt(ttNoteIndex);
             }
+        } else {
+            // So the pitch guide optimizer won't be confused
+            minPercent = 0;
         }
         fpg.append(FrequencyPitchGuide{ttNote, int(std::round(minPercent))});
     }

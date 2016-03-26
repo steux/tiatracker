@@ -7,7 +7,9 @@ OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
 {
     TiaSound::PitchGuideFactory pgFactory;
     guides.append(pgFactory.getPitchPerfectPalGuide());
+    guides.append(pgFactory.getOptimizedPurePalGuide());
     guides.append(pgFactory.getPitchPerfectNtscGuide());
+    guides.append(pgFactory.getOptimizedPureNtscGuide());
 }
 
 /*************************************************************************/
