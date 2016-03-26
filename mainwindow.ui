@@ -134,7 +134,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="main.qrc">
                   <normaloff>:/graphics/restart.png</normaloff>:/graphics/restart.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -151,7 +151,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="main.qrc">
                   <normaloff>:/graphics/last.png</normaloff>:/graphics/last.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -168,7 +168,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="main.qrc">
                   <normaloff>:/graphics/stop.png</normaloff>:/graphics/stop.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -182,7 +182,7 @@
               <item>
                <widget class="QPushButton" name="pushButtonPlay">
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="main.qrc">
                   <normaloff>:/graphics/play.png</normaloff>:/graphics/play.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -199,7 +199,7 @@
                  <string/>
                 </property>
                 <property name="icon">
-                 <iconset>
+                 <iconset resource="main.qrc">
                   <normaloff>:/graphics/next.png</normaloff>:/graphics/next.png</iconset>
                 </property>
                 <property name="iconSize">
@@ -1336,6 +1336,9 @@
              <property name="maximum">
               <number>49</number>
              </property>
+             <property name="value">
+              <number>10</number>
+             </property>
             </widget>
            </item>
            <item>
@@ -1587,6 +1590,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="main.qrc"/>
+ </resources>
  <connections/>
 </ui>

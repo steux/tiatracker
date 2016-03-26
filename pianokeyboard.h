@@ -64,6 +64,7 @@ public slots:
     void octaveDown(bool);
     void changeOctave(bool);
     void pianoKeyShortcut(bool);
+    void setOffThreshold(int value);
 
 protected:
     void paintEvent(QPaintEvent *) Q_DECL_OVERRIDE;

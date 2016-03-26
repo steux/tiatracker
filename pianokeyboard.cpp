@@ -180,6 +180,13 @@ void PianoKeyboard::pianoKeyShortcut(bool) {
 
 /*************************************************************************/
 
+void PianoKeyboard::setOffThreshold(int value) {
+    offThreshold = value;
+    update();
+}
+
+/*************************************************************************/
+
 void PianoKeyboard::paintEvent(QPaintEvent *) {
     QPainter painter(this);
 

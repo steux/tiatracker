@@ -1,5 +1,6 @@
 #include "optionstab.h"
 #include <QComboBox>
+#include <QSpinBox>
 
 
 OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
@@ -48,6 +49,13 @@ void OptionsTab::on_radioButtonPal_toggled(bool checked) {
         pTrack->setTvMode(TiaSound::TvStandard::NTSC);
         emit setTVStandard(TiaSound::TvStandard::NTSC);
     }
+}
+
+/*************************************************************************/
+
+void OptionsTab::on_spinBoxOffTuneThreshold_editingFinished() {
+    QSpinBox *sbThreshold = findChild<QSpinBox *>("spinBoxOffTuneThreshold");
+    emit setOffTuneThreshold(sbThreshold->value());
 }
 
 /*************************************************************************/
