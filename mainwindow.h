@@ -63,7 +63,14 @@ public:
     /* Displays a message in an "OK" messagebox */
     static void displayMessage(const QString &message);
 
+    void updateAllTabs();
+
     static QJsonObject keymap;
+
+public slots:
+    void setPitchGuide(TiaSound::PitchGuide newGuide);
+    // Set a new pitch guide for the piano keyboard
+    void setWaveform(TiaSound::Distortion dist);
 
 signals:
     void playInstrument(Track::Instrument *instrument, int frequency);
@@ -76,9 +83,6 @@ signals:
     void stopTrack();
 
 private slots:
-    void setPitchGuide(TiaSound::PitchGuide newGuide);
-    // Set a new pitch guide for the piano keyboard
-    void setWaveform(TiaSound::Distortion dist);
 
     // Gets signalled if a valid key from the piano is pressed
     void newPianoKeyPressed(int frequency);
@@ -130,8 +134,6 @@ private:
     void loadTrackByName(const QString &fileName);
 
     void setTrackName(QString name);
-
-    void updateAllTabs();
 
     void updateInfo();
 

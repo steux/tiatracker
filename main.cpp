@@ -105,6 +105,8 @@ int main(int argc, char *argv[])
     editor->registerPlayer(&tiaPlayer);
     tiaPlayer.run();
 
+    w.updateAllTabs();
+
     // Shrink window size to minimum and show
     w.resize(0, 0);
     w.show();

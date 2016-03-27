@@ -82,15 +82,20 @@ int InstrumentSelector::getSelectedInstrument() {
 
 /*************************************************************************/
 
+void InstrumentSelector::setSelectedInstrument(int index) {
+    selected = index;
+    updateNewSelectedInstrument();
+}
+
+/*************************************************************************/
+
 QSize InstrumentSelector::sizeHint() const {
     return QSize(minWidth, widgetHeight);
 }
 
 /*************************************************************************/
 
-void InstrumentSelector::keyShortcut(bool) {
-    QAction *action = qobject_cast<QAction *>(sender());
-    selected = action->data().toInt();
+void InstrumentSelector::updateNewSelectedInstrument() {
     if (selected < 7) {
         // Instrument
         TiaSound::Distortion dist = pTrack->instruments[selected].baseDistortion;
@@ -100,6 +105,14 @@ void InstrumentSelector::keyShortcut(bool) {
         emit setUsePitchGuide(false);
     }
     update();
+}
+
+/*************************************************************************/
+
+void InstrumentSelector::keyShortcut(bool) {
+    QAction *action = qobject_cast<QAction *>(sender());
+    selected = action->data().toInt();
+    updateNewSelectedInstrument();
 }
 
 /*************************************************************************/

@@ -436,6 +436,11 @@ void MainWindow::updateAllTabs() {
     PercussionTab *percTab = findChild<PercussionTab *>("tabPercussion");
     percTab->updatePercussionTab();
     percTab->update();
+
+    InstrumentSelector *insSel = findChild<InstrumentSelector *>("trackInstrumentSelector");
+    insSel->setSelectedInstrument(0);
+
+    updateInfo();
 }
 
 /*************************************************************************/

@@ -28,6 +28,7 @@ public:
     void registerPianoKeyboard(PianoKeyboard *pNewKeyboard);
 
     int getSelectedInstrument();
+    void setSelectedInstrument(int index);
 
     QSize sizeHint() const;
 
@@ -65,6 +66,7 @@ private:
     int selected = 0;
 
     QList<QAction *> shortcutActions{};
+    void updateNewSelectedInstrument();
 };
 
 #endif // INSTRUMENTSELECTOR_H
