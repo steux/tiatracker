@@ -6,7 +6,6 @@
  */
 
 #include "pitchguidefactory.h"
-#include "pitchperfectpal.h"
 #include "percussiontab.h"
 
 

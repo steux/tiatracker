@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     tiasound/instrumentpitchguide.cpp \
     tiasound/pitchguide.cpp \
     tiasound/pitchguidefactory.cpp \
-    tiasound/pitchperfectpal.cpp \
     track/instrument.cpp \
     track/track.cpp \
     instrumentstab.cpp \
@@ -45,7 +44,6 @@ SOURCES += main.cpp\
     setgotodialog.cpp \
     insertpatterndialog.cpp \
     createpatterndialog.cpp \
-    tiasound/pitchperfectntsc.cpp \
     optionstab.cpp \
     aboutdialog.cpp
 
@@ -55,7 +53,6 @@ HEADERS  += mainwindow.h \
     tiasound/instrumentpitchguide.h \
     tiasound/pitchguide.h \
     tiasound/pitchguidefactory.h \
-    tiasound/pitchperfectpal.h \
     track/instrument.h \
     track/track.h \
     instrumentstab.h \
@@ -82,7 +79,6 @@ HEADERS  += mainwindow.h \
     setgotodialog.h \
     insertpatterndialog.h \
     createpatterndialog.h \
-    tiasound/pitchperfectntsc.h \
     optionstab.h \
     aboutdialog.h
 

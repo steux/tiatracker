@@ -14,7 +14,6 @@
 
 #include "tiasound/tiasound.h"
 #include "pianokeyboard.h"
-#include "tiasound/pitchperfectpal.h"
 #include "envelopeshaper.h"
 #include "track/track.h"
 #include "instrumentstab.h"
