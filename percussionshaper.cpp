@@ -5,7 +5,7 @@
  * of this file.
  */
 
-#include "PercussionShaper.h"
+#include "percussionshaper.h"
 #include <QPainter>
 #include "mainwindow.h"
 #include <cassert>
