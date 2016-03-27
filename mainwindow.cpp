@@ -28,6 +28,7 @@
 #include "track/sequenceentry.h"
 #include "emulation/player.h"
 #include "aboutdialog.h"
+#include <QFileInfo>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -972,7 +973,9 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
         frameworkString.replace("%%PAL%%", "0");
         frameworkString.replace("%%NTSC%%", "1");
     }
-    frameworkString.replace("%%FILENAME%%", fileName);
+    // Remove path info from filename
+    QString baseName(QFileInfo(fileName).fileName());
+    frameworkString.replace("%%FILENAME%%", baseName);
     if (!writeAsm(fileName, frameworkString, "_player_framework.asm")) {
         displayMessage("Unable to write framework file!");
         return;
