@@ -11,5 +11,6 @@
         <file>graphics/next.png</file>
         <file>graphics/last.png</file>
         <file>graphics/restart.png</file>
+        <file>graphics/play_from_start.png</file>
     </qresource>
 </RCC>

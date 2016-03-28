@@ -169,6 +169,12 @@ int PatternEditor::getEditPos() {
 
 /*************************************************************************/
 
+int PatternEditor::getSelectedChannel() {
+    return selectedChannel;
+}
+
+/*************************************************************************/
+
 QSize PatternEditor::sizeHint() const {
     return QSize(widgetWidth, minHeight);
 }

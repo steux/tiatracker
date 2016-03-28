@@ -72,6 +72,8 @@ public:
      * for a specific channel, observing goto.
      * Returns false if there is no next note. */
     bool getNextNoteWithGoto(int channel, int *pEntryIndex, int *pPatternNoteIndex, bool loop = false);
+    /* Returns -1 if there is no next note */
+    int getNextNoteWithGoto(int channel, int row);
 
     bool checkSlideValidity(int channel, int row);
 

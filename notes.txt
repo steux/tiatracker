@@ -10,6 +10,7 @@ Formel für Notenfrequenz:
 
 TODO:
 - Ordnungskriterium in Menüs/Dropdowns
+- Left-click in timeline should consider channel clicked, not current selected channel
 - When switching to Track tab, update piano keyboard
 - remove pal/ntsc manually typed pitch guides
 - check for limits (7 instruments, frames etc.) on export

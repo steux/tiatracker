@@ -32,7 +32,7 @@
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
-         <widget class="QWidget" name="widget_4" native="true">
+         <widget class="QWidget" name="playButtonLayout" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
             <horstretch>0</horstretch>
@@ -129,23 +129,6 @@
                <number>0</number>
               </property>
               <item>
-               <widget class="QPushButton" name="pushButtonRestart">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset resource="main.qrc">
-                  <normaloff>:/graphics/restart.png</normaloff>:/graphics/restart.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>10</width>
-                  <height>10</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item>
                <widget class="QPushButton" name="pushButtonLast">
                 <property name="text">
                  <string/>
@@ -170,6 +153,23 @@
                 <property name="icon">
                  <iconset resource="main.qrc">
                   <normaloff>:/graphics/stop.png</normaloff>:/graphics/stop.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>10</width>
+                  <height>10</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButtonPlayFromStart">
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="main.qrc">
+                  <normaloff>:/graphics/play_from_start.png</normaloff>:/graphics/play_from_start.png</iconset>
                 </property>
                 <property name="iconSize">
                  <size>
@@ -1433,6 +1433,7 @@
      <string>Track</string>
     </property>
     <addaction name="actionPlayFromStart"/>
+    <addaction name="actionPlay"/>
     <addaction name="actionStop"/>
    </widget>
    <addaction name="menuFile"/>
@@ -1518,6 +1519,11 @@
   <action name="actionRead_the_manual">
    <property name="text">
     <string>Read the manual...</string>
+   </property>
+  </action>
+  <action name="actionPlay">
+   <property name="text">
+    <string>Play</string>
    </property>
   </action>
  </widget>

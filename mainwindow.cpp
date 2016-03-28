@@ -94,6 +94,7 @@ void MainWindow::initConnections() {
     addShortcut(ui->actionSaveAs, "TrackSaveAs");
     addShortcut(ui->actionQuit, "Quit");
     addShortcut(ui->actionPlayFromStart, "TrackPlayFromStart");
+    addShortcut(ui->actionPlay, "TrackPlay");
     addShortcut(ui->actionStop, "TrackStop");
 
     // Shaper context menu
@@ -577,6 +578,38 @@ void MainWindow::on_actionQuit_triggered() {
 
 /*************************************************************************/
 
+void MainWindow::on_actionPlay_triggered(){
+    emit stopTrack();
+    PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
+    int thisChannel = editor->getSelectedChannel();
+    int otherChannel = 1 - thisChannel;
+    int thisEditPos = editor->getEditPos();
+    // Try to find parallel note in other channel
+    int thisStartIndex = pTrack->startPatterns[thisChannel];
+    int thisStart = pTrack->channelSequences[thisChannel].sequence[thisStartIndex].firstNoteNumber;
+    int otherStartIndex = pTrack->startPatterns[otherChannel];
+    int otherStart = pTrack->channelSequences[otherChannel].sequence[otherStartIndex].firstNoteNumber;
+    QMap<int, bool> thisVisited;
+    while (thisStart != -1 && otherStart != -1
+           && thisStart != thisEditPos && !thisVisited.contains(thisStart)) {
+        thisVisited[thisStart] = true;
+        thisStart = pTrack->getNextNoteWithGoto(thisChannel, thisStart);
+        otherStart = pTrack->getNextNoteWithGoto(otherChannel, otherStart);
+    }
+    if (thisStart != thisEditPos) {
+        displayMessage("Unable to reach this row from start pattern!");
+        return;
+    }
+    // Play!
+    if (thisChannel == 0) {
+        emit playTrack(thisEditPos, otherStart);
+    } else {
+        emit playTrack(otherStart, thisEditPos);
+    }
+}
+
+/*************************************************************************/
+
 void MainWindow::on_actionPlayFromStart_triggered() {
     int startIndex1 = pTrack->startPatterns[0];
     int startNote1 = pTrack->channelSequences[0].sequence[startIndex1].firstNoteNumber;
@@ -588,6 +621,12 @@ void MainWindow::on_actionPlayFromStart_triggered() {
 /*************************************************************************/
 
 void MainWindow::on_pushButtonPlay_clicked() {
+    on_actionPlay_triggered();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_pushButtonPlayFromStart_clicked() {
     on_actionPlayFromStart_triggered();
 }
 
@@ -989,3 +1028,4 @@ void MainWindow::on_actionAbout_triggered() {
     about.setWindowFlags(Qt::FramelessWindowHint);
     about.exec();
 }
+

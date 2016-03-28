@@ -122,6 +122,10 @@ private slots:
 
     void on_actionAbout_triggered();
 
+    void on_pushButtonPlayFromStart_clicked();
+
+    void on_actionPlay_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

@@ -234,6 +234,17 @@ bool Track::getNextNoteWithGoto(int channel, int *pEntryIndex, int *pPatternNote
 
 /*************************************************************************/
 
+int Track::getNextNoteWithGoto(int channel, int row) {
+    int entryIndex = getSequenceEntryIndex(channel, row);
+    int noteIndex = getNoteIndexInPattern(channel, row);
+    if (!getNextNoteWithGoto(channel, &entryIndex, &noteIndex, false)) {
+        return -1;
+    }
+    return channelSequences[channel].sequence[entryIndex].firstNoteNumber + noteIndex;
+}
+
+/*************************************************************************/
+
 bool Track::checkSlideValidity(int channel, int row) {
     // Skip slides and holds immediately before
     int prevRow = row;

@@ -33,6 +33,7 @@ public:
     void registerInstrumentSelector(InstrumentSelector *selector);
 
     int getEditPos();
+    int getSelectedChannel();
 
     QSize sizeHint() const;
 
