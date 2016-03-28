@@ -126,6 +126,8 @@ private slots:
 
     void on_actionPlay_triggered();
 
+    void on_actionPlay_pattern_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
@@ -142,6 +144,7 @@ private:
     void updateInfo();
 
     void addShortcut(QAction *action, QString actionName);
+    void playTrackFrom(int channel, int row);
 
     QString readAsm(QString fileName);
     bool writeAsm(QString fileName, QString content, QString extension);

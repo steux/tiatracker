@@ -96,6 +96,7 @@ void MainWindow::initConnections() {
     addShortcut(ui->actionPlayFromStart, "TrackPlayFromStart");
     addShortcut(ui->actionPlay, "TrackPlay");
     addShortcut(ui->actionStop, "TrackStop");
+    addShortcut(ui->actionPlay_pattern, "TrackPlayPattern");
 
     // Shaper context menu
     QObject::connect(&actionInsertBefore, SIGNAL(triggered(bool)), this, SLOT(insertFrameBefore(bool)));
@@ -421,7 +422,7 @@ void MainWindow::loadTrackByName(const QString &fileName) {
 
 void MainWindow::setTrackName(QString name) {
     pTrack->name = name;
-    setWindowTitle("TIATracker v0.8 - " + pTrack->name);
+    setWindowTitle("TIATracker v0.9 - " + pTrack->name);
 }
 
 /*************************************************************************/
@@ -506,6 +507,34 @@ void MainWindow::addShortcut(QAction *action, QString actionName) {
 
 /*************************************************************************/
 
+void MainWindow::playTrackFrom(int channel, int row) {
+    int otherChannel = 1 - channel;
+    // Try to find parallel note in other channel
+    int thisStartIndex = pTrack->startPatterns[channel];
+    int thisStart = pTrack->channelSequences[channel].sequence[thisStartIndex].firstNoteNumber;
+    int otherStartIndex = pTrack->startPatterns[otherChannel];
+    int otherStart = pTrack->channelSequences[otherChannel].sequence[otherStartIndex].firstNoteNumber;
+    QMap<int, bool> thisVisited;
+    while (thisStart != -1 && otherStart != -1
+           && thisStart != row && !thisVisited.contains(thisStart)) {
+        thisVisited[thisStart] = true;
+        thisStart = pTrack->getNextNoteWithGoto(channel, thisStart);
+        otherStart = pTrack->getNextNoteWithGoto(otherChannel, otherStart);
+    }
+    if (thisStart != row) {
+        displayMessage("Unable to reach this row from start pattern!");
+        return;
+    }
+    // Play!
+    if (channel == 0) {
+        emit playTrack(row, otherStart);
+    } else {
+        emit playTrack(otherStart, row);
+    }
+}
+
+/*************************************************************************/
+
 void MainWindow::on_actionSaveAs_triggered() {
     emit stopTrack();
     QFileDialog dialog(this);
@@ -582,30 +611,8 @@ void MainWindow::on_actionPlay_triggered(){
     emit stopTrack();
     PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
     int thisChannel = editor->getSelectedChannel();
-    int otherChannel = 1 - thisChannel;
     int thisEditPos = editor->getEditPos();
-    // Try to find parallel note in other channel
-    int thisStartIndex = pTrack->startPatterns[thisChannel];
-    int thisStart = pTrack->channelSequences[thisChannel].sequence[thisStartIndex].firstNoteNumber;
-    int otherStartIndex = pTrack->startPatterns[otherChannel];
-    int otherStart = pTrack->channelSequences[otherChannel].sequence[otherStartIndex].firstNoteNumber;
-    QMap<int, bool> thisVisited;
-    while (thisStart != -1 && otherStart != -1
-           && thisStart != thisEditPos && !thisVisited.contains(thisStart)) {
-        thisVisited[thisStart] = true;
-        thisStart = pTrack->getNextNoteWithGoto(thisChannel, thisStart);
-        otherStart = pTrack->getNextNoteWithGoto(otherChannel, otherStart);
-    }
-    if (thisStart != thisEditPos) {
-        displayMessage("Unable to reach this row from start pattern!");
-        return;
-    }
-    // Play!
-    if (thisChannel == 0) {
-        emit playTrack(thisEditPos, otherStart);
-    } else {
-        emit playTrack(otherStart, thisEditPos);
-    }
+    playTrackFrom(thisChannel, thisEditPos);
 }
 
 /*************************************************************************/
@@ -616,6 +623,18 @@ void MainWindow::on_actionPlayFromStart_triggered() {
     int startIndex2 = pTrack->startPatterns[1];
     int startNote2 = pTrack->channelSequences[1].sequence[startIndex2].firstNoteNumber;
     emit playTrack(startNote1, startNote2);
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionPlay_pattern_triggered() {
+    emit stopTrack();
+    PatternEditor *editor = findChild<PatternEditor *>("trackEditor");
+    int thisChannel = editor->getSelectedChannel();
+    int thisEditPos = editor->getEditPos();
+    int entryIndex = pTrack->getSequenceEntryIndex(thisChannel, thisEditPos);
+    int startNote = pTrack->channelSequences[thisChannel].sequence[entryIndex].firstNoteNumber;
+    playTrackFrom(thisChannel, startNote);
 }
 
 /*************************************************************************/
@@ -1028,4 +1047,3 @@ void MainWindow::on_actionAbout_triggered() {
     about.setWindowFlags(Qt::FramelessWindowHint);
     about.exec();
 }
-
