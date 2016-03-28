@@ -111,9 +111,10 @@ void Timeline::paintEvent(QPaintEvent *) {
 
 void Timeline::mousePressEvent(QMouseEvent *event) {
     if (event->y() >= channelMargin && event->y() < height() - channelMargin) {
+        int channel = event->x() < width()/2 ? 0 : 1;
         double rowHeight = calcRowHeight();
         int newEditPos = int((event->y() - channelMargin)/rowHeight + 0.5);
-        emit changeEditPos(newEditPos);
+        emit changeEditPos(channel, newEditPos);
     }
 }
 

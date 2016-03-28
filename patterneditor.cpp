@@ -100,6 +100,13 @@ void PatternEditor::setEditPos(int newPos) {
 
 /*************************************************************************/
 
+void PatternEditor::setEditPos(int newChannel, int newPos) {
+    selectedChannel = newChannel;
+    setEditPos(newPos);
+}
+
+/*************************************************************************/
+
 void PatternEditor::validateEditPos() {
     setEditPos(editPos);
 }

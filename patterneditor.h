@@ -55,6 +55,8 @@ public slots:
     void gotoPreviousPattern(bool);
 
     void setEditPos(int newPos);
+    void setEditPos(int newChannel, int newPos);
+
     void validateEditPos();
     void advanceEditPos();
     void setRowsPerBeat(int value);

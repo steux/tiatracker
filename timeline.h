@@ -27,6 +27,7 @@ public:
 
 signals:
     void changeEditPos(int newPos);
+    void changeEditPos(int newChannel, int newPos);
     void channelContextEvent(int channel, int row);
 
 public slots:
