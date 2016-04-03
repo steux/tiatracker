@@ -22,7 +22,7 @@ SOURCES += main.cpp\
     track/instrument.cpp \
     track/track.cpp \
     instrumentstab.cpp \
-    emulation/Player.cpp \
+    emulation/player.cpp \
     emulation/SoundSDL2.cpp \
     emulation/TIASnd.cpp \
     envelopeshaper.cpp \
@@ -104,6 +104,7 @@ DISTFILES += \
     data/license.txt
 
 win32: LIBS += -L$$PWD/sdl/windows/lib/ -lSDL2
+linux: LIBS += -lSDL2
 
 INCLUDEPATH += $$PWD/sdl/windows/include
 DEPENDPATH += $$PWD/sdl/windows/include
