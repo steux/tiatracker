@@ -45,7 +45,9 @@ SOURCES += main.cpp\
     insertpatterndialog.cpp \
     createpatterndialog.cpp \
     optionstab.cpp \
-    aboutdialog.cpp
+    aboutdialog.cpp \
+    guidekeyboard.cpp \
+    createguidedialog.cpp
 
 HEADERS  += mainwindow.h \
     pianokeyboard.h \
@@ -80,7 +82,9 @@ HEADERS  += mainwindow.h \
     insertpatterndialog.h \
     createpatterndialog.h \
     optionstab.h \
-    aboutdialog.h
+    aboutdialog.h \
+    guidekeyboard.h \
+    createguidedialog.h
 
 
 FORMS    += mainwindow.ui \
@@ -90,7 +94,8 @@ FORMS    += mainwindow.ui \
     setgotodialog.ui \
     insertpatterndialog.ui \
     createpatterndialog.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    createguidedialog.ui
 
 CONFIG += c++11
 
