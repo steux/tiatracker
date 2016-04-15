@@ -156,6 +156,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->tabOptions, SIGNAL(setPitchGuide(TiaSound::PitchGuide)), this, SLOT(setPitchGuide(TiaSound::PitchGuide)));
     QObject::connect(ui->spinBoxOffTuneThreshold, SIGNAL(valueChanged(int)), ui->pianoKeyboard, SLOT(setOffThreshold(int)));
     QObject::connect(ui->tabOptions, SIGNAL(setOffTuneThreshold(int)), ui->pianoKeyboard, SLOT(setOffThreshold(int)));
+    QObject::connect(ui->pushButtonGuideCreate, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideCreate_clicked(bool)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();

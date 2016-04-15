@@ -1,6 +1,7 @@
 #include "optionstab.h"
 #include <QComboBox>
 #include <QSpinBox>
+#include "createguidedialog.h"
 
 
 OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
@@ -61,4 +62,11 @@ void OptionsTab::on_spinBoxOffTuneThreshold_editingFinished() {
 }
 
 /*************************************************************************/
+
+void OptionsTab::on_pushButtonGuideCreate_clicked(bool) {
+    CreateGuideDialog newDialog(this);
+    if (newDialog.exec() == QDialog::Accepted) {
+
+    }
+}
 

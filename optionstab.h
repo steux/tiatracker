@@ -45,6 +45,8 @@ private slots:
 
     void on_spinBoxOffTuneThreshold_editingFinished();
 
+    void on_pushButtonGuideCreate_clicked(bool);
+
 };
 
 #endif // OPTIONSTAB_H
