@@ -53,13 +53,6 @@ PitchGuide PitchGuideFactory::getPitchPerfectPalGuide() {
                 curNum++;
             }
         }
-        guide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, f);
-        for (int i = 0; i < guide.size(); ++i) {
-            if (std::abs(guide[i].percentOff) <= threshold) {
-                currentError += guide[i].percentOff*guide[i].percentOff;
-                curNum++;
-            }
-        }
         if (curNum > bestNum || (curNum == bestNum && currentError < bestError)) {
             std::cout << "Found new best: " << f << ", " << curNum << ": " << currentError << "\n";
             bestError = currentError;
@@ -118,6 +111,102 @@ PitchGuide PitchGuideFactory::getOptimizedPurePalGuide() {
 
 PitchGuide PitchGuideFactory::getOptimizedPureNtscGuide() {
     PitchGuide ntscGuide{"NTSC Optimized Pure A4=413.9Hz", TvStandard::NTSC};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 413.9);
+        ntscGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, ntscGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 413.9);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 413.9));
+    ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
+    return ntscGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv31PalGuide() {
+    PitchGuide palGuide{"PAL Optimized Flangy/Wavering, Pure Buzzy, White Noise A4=336.5Hz", TvStandard::PAL};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::PAL, dist, 336.5);
+        palGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, palGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_HIGH, 336.5);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_LOW, 336.5));
+    palGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, palGuide.name, combinedGuide);
+    return palGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv31NtscGuide() {
+    PitchGuide ntscGuide{"NTSC Optimized Flangy/Wavering, Pure Buzzy, White Noise A4=339.1Hz", TvStandard::NTSC};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 339.1);
+        ntscGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, ntscGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 339.1);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 339.1));
+    ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
+    return ntscGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv6PalGuide() {
+    PitchGuide palGuide{"PAL Optimized Pure Low, Electronic Aqueal A4=345.0Hz", TvStandard::PAL};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::PAL, dist, 345.0);
+        palGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, palGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_HIGH, 345.0);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_LOW, 345.0));
+    palGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, palGuide.name, combinedGuide);
+    return palGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv6NtscGuide() {
+    PitchGuide ntscGuide{"NTSC Optimized Pure Low, Electronic Aqueal A4=368.3Hz", TvStandard::NTSC};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 368.3);
+        ntscGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, ntscGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_HIGH, 368.3);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::NTSC, Distortion::PURE_LOW, 368.3));
+    ntscGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, ntscGuide.name, combinedGuide);
+    return ntscGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv2PalGuide() {
+    PitchGuide palGuide{"PAL Optimized Pure High, Reedy Rumble A4=345.4Hz", TvStandard::PAL};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::PAL, dist, 345.4);
+        palGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, palGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_HIGH, 345.4);
+    combinedGuide.append(calcInstrumentPitchGuide(TvStandard::PAL, Distortion::PURE_LOW, 345.4));
+    palGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, palGuide.name, combinedGuide);
+    return palGuide;
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv2NtscGuide() {
+    PitchGuide ntscGuide{"NTSC Optimized Pure High, Reedy Rumble A4=413.9Hz", TvStandard::NTSC};
     for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
         Distortion dist = PercussionTab::availableWaveforms[iDist];
         QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(TvStandard::NTSC, dist, 413.9);

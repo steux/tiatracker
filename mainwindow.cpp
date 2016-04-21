@@ -189,13 +189,13 @@ void MainWindow::registerTrack(Track::Track *newTrack) {
 /*************************************************************************/
 
 TiaSound::PitchGuide *MainWindow::getPitchGuide() {
-    return &pPitchGuide;
+    return &curPitchGuide;
 }
 
 /*************************************************************************/
 
 void MainWindow::setPitchGuide(TiaSound::PitchGuide newGuide) {
-    pPitchGuide = newGuide;
+    curPitchGuide = newGuide;
     updateAllTabs();
     update();
 }
@@ -215,7 +215,7 @@ void MainWindow::displayMessage(const QString &message) {
 /*************************************************************************/
 
 void MainWindow::setWaveform(TiaSound::Distortion dist) {
-    TiaSound::InstrumentPitchGuide *pIPG = &(pPitchGuide.instrumentGuides[dist]);
+    TiaSound::InstrumentPitchGuide *pIPG = &(curPitchGuide.instrumentGuides[dist]);
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
     ui->pianoKeyboard->setUsePitchGuide(true);
     ui->pianoKeyboard->update();

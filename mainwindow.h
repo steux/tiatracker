@@ -156,7 +156,7 @@ private:
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;
     TiaSound::PitchGuideFactory pgFactory;
-    TiaSound::PitchGuide pPitchGuide = pgFactory.getPitchPerfectPalGuide();
+    TiaSound::PitchGuide curPitchGuide = pgFactory.getPitchPerfectPalGuide();
 
     QMenu waveformContextMenu{this};
     QAction actionInsertBefore{"Insert frame before", this};

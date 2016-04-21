@@ -30,6 +30,12 @@ public:
     PitchGuide getPitchPerfectNtscGuide();
     PitchGuide getOptimizedPurePalGuide();
     PitchGuide getOptimizedPureNtscGuide();
+    PitchGuide getOptimizedDiv31PalGuide();
+    PitchGuide getOptimizedDiv31NtscGuide();
+    PitchGuide getOptimizedDiv6PalGuide();
+    PitchGuide getOptimizedDiv6NtscGuide();
+    PitchGuide getOptimizedDiv2PalGuide();
+    PitchGuide getOptimizedDiv2NtscGuide();
 
     QList<FrequencyPitchGuide> calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
 
