@@ -51,7 +51,6 @@ protected:
     static const KeyGfxTrait octaveTraits[];
 
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
-    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
 
 private:
     // Key states and pitch info
@@ -75,6 +74,8 @@ private:
     QFont keyFont{"Helvetica"};
     int keyFontHeight;
     int keyInfoRectHeight;
+
+    bool usePitchGuide = false;
 
     /* Calc x-pos for a given white or black key (0..numKeys) */
     int calcWhiteKeyXPos(int key);

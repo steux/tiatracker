@@ -38,6 +38,10 @@ GuideKeyboard::GuideKeyboard(QWidget *parent) : QWidget(parent)
 
     setFixedWidth(keyboardWidth+1);
     setFixedHeight(keyboardHeight+1);
+
+    for (int i = 0; i < numKeys; ++i) {
+        keyInfo[i].isEnabled = false;
+    }
 }
 
 /*************************************************************************/
@@ -51,15 +55,9 @@ void GuideKeyboard::paintEvent(QPaintEvent *) {
         if (!octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcWhiteKeyXPos(key);
             if (keyInfo[key].isEnabled) {
-                QColor color;
-                if (isValidKeyPressed && keyPressed == key) {
-                    color = MainWindow::violet;
-                } else {
-                    color = MainWindow::light;
-                }
-                painter.fillRect(xPos, 0, keyWidth, keyHeight, color);
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::violet);
             } else {
-                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::lightHighlighted);
+                painter.fillRect(xPos, 0, keyWidth, keyHeight, MainWindow::light);
             }
             painter.drawRect(xPos, 0, keyWidth, keyHeight);
         }
@@ -81,63 +79,73 @@ void GuideKeyboard::paintEvent(QPaintEvent *) {
     for (int key = 0; key < numKeys; ++key) {
         if (octaveTraits[key%numKeysPerOctave].isBlack) {
             const int xPos = calcBlackKeyXPos(key);
+            // First draw black frame, then colored interior
+            painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::darkHighlighted);
             if (keyInfo[key].isEnabled) {
-                QColor color;
-                if (isValidKeyPressed && keyPressed == key) {
-                    color = MainWindow::violet;
-                } else {
-                    color = MainWindow::dark;
-                }
-                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, color);
+                painter.fillRect(xPos + 1, 1, blackKeyWidth - 2, blackKeyHeight - 2, MainWindow::violet);
             } else {
-                painter.fillRect(xPos, 0, blackKeyWidth, blackKeyHeight, MainWindow::darkHighlighted);
+                painter.fillRect(xPos + 1, 1, blackKeyWidth - 2, blackKeyHeight - 2, MainWindow::darkHighlighted);
             }
         }
     }
 
-/*
     // Hints
-    if (usePitchGuide) {
-        painter.setFont(keyFont);
-        for (int key = 0; key < numKeys; ++key) {
-            if (keyInfo[key].isEnabled) {
-                int xPos;
-                int rectWidth;
-                int rectHeight;
-                if (octaveTraits[key%numKeysPerOctave].isBlack) {
-                    painter.setPen(MainWindow::light);
-                    xPos = calcBlackKeyXPos(key);
-                    rectWidth = blackKeyWidth;
-                    rectHeight = blackKeyHeight;
-                } else {
-                    painter.setPen(MainWindow::dark);
-                    xPos = calcWhiteKeyXPos(key);
-                    rectWidth = keyWidth;
-                    rectHeight = keyHeight;
-                }
-                if (std::abs(keyInfo[key].off) >= std::abs(offThreshold)) {
-                    painter.setPen(MainWindow::red);
-                }
-                painter.drawText(xPos, rectHeight - 3*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].frequency));
-                painter.drawText(xPos, rectHeight - 2*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].off));
-                painter.drawText(xPos, rectHeight - 1*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(keyInfo[key].note));
-            }
+    painter.setFont(keyFont);
+    for (int key = 0; key < numKeys; ++key) {
+        int xPos;
+        int rectWidth;
+        int rectHeight;
+        if (octaveTraits[key%numKeysPerOctave].isBlack) {
+            painter.setPen(MainWindow::light);
+            xPos = calcBlackKeyXPos(key);
+            rectWidth = blackKeyWidth;
+            rectHeight = blackKeyHeight;
+        } else {
+            painter.setPen(MainWindow::dark);
+            xPos = calcWhiteKeyXPos(key);
+            rectWidth = keyWidth;
+            rectHeight = keyHeight;
         }
+//        if (std::abs(keyInfo[key].off) >= std::abs(offThreshold)) {
+//            painter.setPen(MainWindow::red);
+//        }
+//        painter.drawText(xPos, rectHeight - 3*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].frequency));
+//        painter.drawText(xPos, rectHeight - 2*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].off));
+        TiaSound::Note curNote = TiaSound::getNoteFromInt(key);
+        painter.drawText(xPos, rectHeight - 1*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(curNote));
     }
-*/
-
 }
 
 /*************************************************************************/
 
 void GuideKeyboard::mousePressEvent(QMouseEvent *event) {
+    int octave = int(event->x()/(keyWidth*numWhiteKeysPerOctave));
+    int keyIndex;
+    if (event->y() < blackKeyHeight) {
+        // Potential black key
+        // TODO: More intelligent calculation instead of brute force
+        int octaveBaseKey = octave*12;
+        int xPos = event->x();
+        keyIndex = -1;
+        for (int key = 0; key < 12; ++key) {
+            if (octaveTraits[key].isBlack) {
+                int xPosCandidate = calcBlackKeyXPos(octaveBaseKey + key);
+                if (xPos >= xPosCandidate && xPos < xPosCandidate + blackKeyWidth) {
+                    keyIndex = octaveBaseKey + key;
+                }
+            }
+        }
+        if (keyIndex == -1) {
+            // Click is between black keys: White key instead
+            keyIndex = calcKeyIndexForWhiteKey(xPos);
+        }
+    } else {
+        // White key
+        keyIndex = calcKeyIndexForWhiteKey(event->x());
+    }
 
-}
-
-/*************************************************************************/
-
-void GuideKeyboard::mouseReleaseEvent(QMouseEvent *) {
-
+    keyInfo[keyIndex].isEnabled = !keyInfo[keyIndex].isEnabled;
+    update();
 }
 
 /*************************************************************************/
