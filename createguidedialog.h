@@ -15,6 +15,9 @@ public:
     explicit CreateGuideDialog(QWidget *parent = 0);
     ~CreateGuideDialog();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     Ui::CreateGuideDialog *ui;
 };
