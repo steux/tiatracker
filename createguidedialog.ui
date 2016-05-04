@@ -205,7 +205,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="pushButtonCreateGuide">
            <property name="text">
             <string>Create Guide</string>
            </property>

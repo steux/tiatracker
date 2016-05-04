@@ -18,6 +18,8 @@ public:
 private slots:
     void on_pushButton_clicked();
 
+    void on_pushButtonCreateGuide_clicked();
+
 private:
     Ui::CreateGuideDialog *ui;
 };
