@@ -127,33 +127,6 @@
             </sizepolicy>
            </property>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>Max % deviation from 440 Hz:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Note out of tune max %:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QSpinBox" name="spinBoxGuideMaxDeviation">
-              <property name="minimum">
-               <number>10</number>
-              </property>
-              <property name="maximum">
-               <number>200</number>
-              </property>
-              <property name="value">
-               <number>50</number>
-              </property>
-             </widget>
-            </item>
             <item row="4" column="1">
              <widget class="QSpinBox" name="spinBoxGuideMaxOffTune">
               <property name="minimum">
@@ -167,17 +140,44 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_6">
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines how much A4 may deviate from&lt;/p&gt;&lt;p&gt;pitch perfect A4 (440 Hz). 100% means&lt;/p&gt;&lt;p&gt;one octave.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>Note out of tune max %:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="spinBoxGuideMaxDeviation">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>24</number>
+              </property>
+              <property name="value">
+               <number>6</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>A4 max deviation from 440 Hz:</string>
               </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="label_5">
               <property name="text">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines how much a requested note is&lt;/p&gt;&lt;p&gt;allowed to be off-tune.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines how much a requested note&lt;/p&gt;&lt;p&gt;is allowed to be off-tune. 100% means&lt;/p&gt;&lt;p&gt;one half tone.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Defines how many half tones A4 is&lt;/p&gt;&lt;p&gt;allowed to deviate from pitch perfet&lt;/p&gt;&lt;p&gt;A4 (440 Hz). 12 means a full octave,&lt;/p&gt;&lt;p&gt;6 means half an octave.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
               </property>
              </widget>
             </item>
@@ -185,6 +185,36 @@
              <widget class="QLabel" name="label_7">
               <property name="text">
                <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QWidget" name="widget_2" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QRadioButton" name="radioButtonGuidePal">
+              <property name="text">
+               <string>PAL 50Hz</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButtonGuideNtsc">
+              <property name="text">
+               <string>NTSC 60Hz</string>
               </property>
              </widget>
             </item>
