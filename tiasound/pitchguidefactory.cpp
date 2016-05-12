@@ -221,6 +221,22 @@ PitchGuide PitchGuideFactory::getOptimizedDiv2NtscGuide() {
 
 /*************************************************************************/
 
+PitchGuide PitchGuideFactory::calculateGuide(QString name, TvStandard standard, double freq) {
+    PitchGuide newGuide{name, standard};
+    for (int iDist = 0; iDist < PercussionTab::availableWaveforms.size(); ++iDist) {
+        Distortion dist = PercussionTab::availableWaveforms[iDist];
+        QList<FrequencyPitchGuide> guide = calcInstrumentPitchGuide(standard, dist, freq);
+        newGuide.instrumentGuides[dist] = InstrumentPitchGuide(dist, newGuide.name, guide);
+    }
+    // Pure Combined has to be added manually
+    QList<FrequencyPitchGuide> combinedGuide = calcInstrumentPitchGuide(standard, Distortion::PURE_HIGH, freq);
+    combinedGuide.append(calcInstrumentPitchGuide(standard, Distortion::PURE_LOW, freq));
+    newGuide.instrumentGuides[Distortion::PURE_COMBINED] = InstrumentPitchGuide(Distortion::PURE_COMBINED, newGuide.name, combinedGuide);
+    return newGuide;
+}
+
+/*************************************************************************/
+
 QList<FrequencyPitchGuide> PitchGuideFactory::calcInstrumentPitchGuide(TiaSound::TvStandard standard, Distortion dist, double baseFreq) {
     QList<FrequencyPitchGuide> fpg;
     // Get nearest notes for all TIA frequencies

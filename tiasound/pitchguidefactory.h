@@ -37,6 +37,8 @@ public:
     PitchGuide getOptimizedDiv2PalGuide();
     PitchGuide getOptimizedDiv2NtscGuide();
 
+    PitchGuide calculateGuide(QString name, TvStandard standard, double freq);
+
     QList<FrequencyPitchGuide> calcInstrumentPitchGuide(TvStandard standard, Distortion dist, double baseFreq);
 
 private:

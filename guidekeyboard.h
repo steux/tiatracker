@@ -32,6 +32,16 @@ public:
     static const int keyboardWidth = keyWidth*numWhiteKeys;
     static const int keyboardHeight = keyHeight;
 
+    // Key states and pitch info
+    struct KeyInformation {
+        int frequency;
+        TiaSound::Note note;
+        int off;
+        bool isEnabled;
+    };
+
+    KeyInformation keyInfo[numKeys]{};
+
     explicit GuideKeyboard(QWidget *parent = 0);
 
     void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide);
@@ -53,16 +63,6 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
-    // Key states and pitch info
-    struct KeyInformation {
-        int frequency;
-        TiaSound::Note note;
-        int off;
-        bool isEnabled;
-    };
-
-    KeyInformation keyInfo[numKeys]{};
-
     // If a valid key is pressed with the mouse
     bool isValidKeyPressed = false;
     // Index of key that is currently pressed

@@ -81,4 +81,10 @@ Note getNoteFromInt(int n) {
     return static_cast<Note>(n);
 }
 
+/*************************************************************************/
+
+int getIntFromNote(Note n) {
+    return static_cast<int>(n);
+}
+
 }

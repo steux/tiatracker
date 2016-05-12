@@ -106,7 +106,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBoxElectronicSqueal">
+          <widget class="QCheckBox" name="checkBoxGuideElectronicSqueal">
            <property name="text">
             <string>Electronic Squeal (15)</string>
            </property>
