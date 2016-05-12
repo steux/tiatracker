@@ -1,0 +1,18 @@
+{
+    "envelopeLength": 2,
+    "frequencies": [
+        14,
+        14
+    ],
+    "name": "Slocum Kick",
+    "overlay": false,
+    "version": 1,
+    "volumes": [
+        12,
+        12
+    ],
+    "waveforms": [
+        15,
+        8
+    ]
+}

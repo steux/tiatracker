@@ -128,4 +128,18 @@ install_player.files = $$PWD/player
 INSTALLS += \
     install_player
 
+# Copy examples to output directory
+install_instruments.path = $$OUT_PWD
+install_instruments.files = $$PWD/instruments
+
+INSTALLS += \
+    install_instruments
+
+install_songs.path = $$OUT_PWD
+install_songs.files = $$PWD/songs
+
+INSTALLS += \
+    install_songs
+
+
 RC_ICONS = graphics/tt_icon.ico
