@@ -52,7 +52,7 @@ void GuideKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitc
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].frequency = -1;
     }
-    for (int freq = 0; freq < 32; ++freq) {
+    for (int freq = 0; freq < pitchGuide->getNumFrequencies(); ++freq) {
         TiaSound::Note note = pitchGuide->getNote(freq);
         if (note != TiaSound::Note::NotANote) {
             int iNote = TiaSound::getIntFromNote(note);

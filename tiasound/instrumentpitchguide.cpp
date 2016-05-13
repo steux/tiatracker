@@ -6,6 +6,8 @@
  */
 
 #include "instrumentpitchguide.h"
+#include <iostream>
+
 
 namespace TiaSound {
 
@@ -29,7 +31,11 @@ Note InstrumentPitchGuide::getNote(int frequency) {
 /*************************************************************************/
 
 int InstrumentPitchGuide::getPercentOff(int frequency) {
-    return freqPitchGuides[frequency].percentOff;
+    if (frequency >= freqPitchGuides.size()) {
+        return 99;
+    } else {
+        return freqPitchGuides[frequency].percentOff;
+    }
 }
 
 }

@@ -84,15 +84,27 @@ void CreateGuideDialog::on_pushButtonCreateGuide_clicked() {
     }
 
     // Now create pitch guide for the best frequency
-    TiaSound::PitchGuide newGuide = pg.calculateGuide(name, standard, bestFreq);
+    newGuide = pg.calculateGuide(name, standard, bestFreq);
+    isGuideCreated = true;
 
     // Set A4= label text
     ui->labelGuideBaseFreq->setText("A4 = " + QString::number(newGuide.baseFreq) + "Hz.");
-    // TODO: Set pitch guide in keyboard
+    on_comboBoxGuideWaveforms_currentIndexChanged(ui->comboBoxGuideWaveforms->currentIndex());
 }
 
 /*************************************************************************/
 
 void CreateGuideDialog::on_comboBoxGuideWaveforms_currentIndexChanged(int index) {
-
+    if (isGuideCreated) {
+        std::cout << "index: " << index << "\n"; std::cout.flush();
+        TiaSound::Distortion dist = checkBoxNames.keys()[index];
+        std::cout << "Dist: " << TiaSound::getDistortionName(dist).toStdString() << "\n"; std::cout.flush();
+        std::cout << "Guide size: " << newGuide.instrumentGuides.size() << "\n"; std::cout.flush();
+        TiaSound::InstrumentPitchGuide *guide = &(newGuide.instrumentGuides[dist]);
+        std::cout << "Num freqs: " << guide->getNumFrequencies() << "\n"; std::cout.flush();
+        int threshold = ui->spinBoxGuideMaxOffTune->value();
+        ui->guidePianoKeyboard->setInstrumentPitchGuide(guide, threshold);
+        update();
+        std::cout << "ALIVE\n"; std::cout.flush();
+    }
 }

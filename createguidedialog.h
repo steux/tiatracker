@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "tiasound/tiasound.h"
+#include "tiasound/pitchguide.h"
 #include <QMap>
 
 
@@ -36,6 +37,9 @@ private:
         {TiaSound::Distortion::ELECTRONIC_RUMBLE, "checkBoxGuideElectronicRumble"},
         {TiaSound::Distortion::ELECTRONIC_SQUEAL, "checkBoxGuideElectronicSqueal"}
     };
+
+    TiaSound::PitchGuide newGuide{"", TiaSound::TvStandard::PAL, 0.0};
+    bool isGuideCreated = false;
 
     Ui::CreateGuideDialog *ui;
 };
