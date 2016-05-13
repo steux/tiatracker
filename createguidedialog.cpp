@@ -17,6 +17,11 @@ CreateGuideDialog::CreateGuideDialog(QWidget *parent) :
     ui(new Ui::CreateGuideDialog)
 {
     ui->setupUi(this);
+    // Fill waveform selector
+    for (int i = 0; i < checkBoxNames.keys().size(); ++i) {
+        TiaSound::Distortion dist = checkBoxNames.keys()[i];
+        ui->comboBoxGuideWaveforms->addItem(TiaSound::getDistortionName(dist));
+    }
 }
 
 CreateGuideDialog::~CreateGuideDialog()
@@ -27,19 +32,6 @@ CreateGuideDialog::~CreateGuideDialog()
 /*************************************************************************/
 
 void CreateGuideDialog::on_pushButtonCreateGuide_clicked() {
-    QMap<TiaSound::Distortion, QString> checkBoxNames{
-        {TiaSound::Distortion::BUZZY, "checkBoxGuideBuzzy"},
-        {TiaSound::Distortion::BUZZY_RUMBLE, "checkBoxGuideBuzzyRumble"},
-        {TiaSound::Distortion::FLANGY_WAVERING, "checkBoxGuideFlangyWavering"},
-        {TiaSound::Distortion::PURE_HIGH, "checkBoxGuidePureHigh"},
-        {TiaSound::Distortion::PURE_BUZZY, "checkBoxGuidePureBuzzy"},
-        {TiaSound::Distortion::REEDY_RUMBLE, "checkBoxGuideReedyRumble"},
-        {TiaSound::Distortion::WHITE_NOISE, "checkBoxGuideWhiteNoise"},
-        {TiaSound::Distortion::PURE_LOW, "checkBoxGuidePureLow"},
-        {TiaSound::Distortion::ELECTRONIC_RUMBLE, "checkBoxGuideElectronicRumble"},
-        {TiaSound::Distortion::ELECTRONIC_SQUEAL, "checkBoxGuideElectronicSqueal"}
-    };
-
     int threshold = ui->spinBoxGuideMaxOffTune->value();
     QString name = ui->lineEditGuideName->text();
     TiaSound::TvStandard standard = ui->radioButtonGuidePal->isChecked() ? TiaSound::TvStandard::PAL : TiaSound::TvStandard::NTSC;
@@ -94,5 +86,13 @@ void CreateGuideDialog::on_pushButtonCreateGuide_clicked() {
     // Now create pitch guide for the best frequency
     TiaSound::PitchGuide newGuide = pg.calculateGuide(name, standard, bestFreq);
 
+    // Set A4= label text
+    ui->labelGuideBaseFreq->setText("A4 = " + QString::number(newGuide.baseFreq) + "Hz.");
     // TODO: Set pitch guide in keyboard
+}
+
+/*************************************************************************/
+
+void CreateGuideDialog::on_comboBoxGuideWaveforms_currentIndexChanged(int index) {
+
 }

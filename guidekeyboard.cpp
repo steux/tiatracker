@@ -41,6 +41,24 @@ GuideKeyboard::GuideKeyboard(QWidget *parent) : QWidget(parent)
 
     for (int i = 0; i < numKeys; ++i) {
         keyInfo[i].isEnabled = false;
+        keyInfo[i].frequency = -1;
+    }
+}
+
+/*************************************************************************/
+
+void GuideKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide, int threshold) {
+    offThreshold = threshold;
+    for (int i = 0; i < numKeys; ++i) {
+        keyInfo[i].frequency = -1;
+    }
+    for (int freq = 0; freq < 32; ++freq) {
+        TiaSound::Note note = pitchGuide->getNote(freq);
+        if (note != TiaSound::Note::NotANote) {
+            int iNote = TiaSound::getIntFromNote(note);
+            keyInfo[iNote].frequency = freq;
+            keyInfo[iNote].off = pitchGuide->getPercentOff(freq);
+        }
     }
 }
 
@@ -89,7 +107,7 @@ void GuideKeyboard::paintEvent(QPaintEvent *) {
         }
     }
 
-    // Hints
+    // Note labels and hints
     painter.setFont(keyFont);
     for (int key = 0; key < numKeys; ++key) {
         int xPos;
@@ -106,14 +124,16 @@ void GuideKeyboard::paintEvent(QPaintEvent *) {
             rectWidth = keyWidth;
             rectHeight = keyHeight;
         }
-//        if (std::abs(keyInfo[key].off) >= std::abs(offThreshold)) {
-//            painter.setPen(MainWindow::red);
-//        }
-//        painter.drawText(xPos, rectHeight - 3*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].frequency));
-//        painter.drawText(xPos, rectHeight - 2*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].off));
+        if (keyInfo[key].frequency != -1) {
+            if (std::abs(keyInfo[key].off) >= std::abs(offThreshold)) {
+                painter.setPen(MainWindow::red);
+            }
+            painter.drawText(xPos, rectHeight - 3*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].frequency));
+            painter.drawText(xPos, rectHeight - 2*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, QString::number(keyInfo[key].off));
+        }
         TiaSound::Note curNote = TiaSound::getNoteFromInt(key);
         painter.drawText(xPos, rectHeight - 1*keyInfoRectHeight, rectWidth, keyInfoRectHeight, Qt::AlignHCenter|Qt::AlignBottom, TiaSound::getNoteName(curNote));
-    }
+    }    
 }
 
 /*************************************************************************/

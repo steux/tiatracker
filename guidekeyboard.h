@@ -44,7 +44,7 @@ public:
 
     explicit GuideKeyboard(QWidget *parent = 0);
 
-    void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide);
+    void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide, int threshold);
 
 signals:
 
@@ -63,6 +63,8 @@ protected:
     void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
 
 private:
+    int offThreshold;
+
     // If a valid key is pressed with the mouse
     bool isValidKeyPressed = false;
     // Index of key that is currently pressed

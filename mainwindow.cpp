@@ -29,6 +29,7 @@
 #include "emulation/player.h"
 #include "aboutdialog.h"
 #include <QFileInfo>
+#include <QDesktopServices>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -1048,4 +1049,10 @@ void MainWindow::on_actionAbout_triggered() {
     AboutDialog about;
     about.setWindowFlags(Qt::FramelessWindowHint);
     about.exec();
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionRead_the_manual_triggered() {
+    QDesktopServices::openUrl(QUrl("TIATracker_manual.pdf", QUrl::TolerantMode));
 }

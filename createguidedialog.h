@@ -2,6 +2,9 @@
 #define CREATEGUIDEDIALOG_H
 
 #include <QDialog>
+#include "tiasound/tiasound.h"
+#include <QMap>
+
 
 namespace Ui {
 class CreateGuideDialog;
@@ -18,7 +21,22 @@ public:
 private slots:
     void on_pushButtonCreateGuide_clicked();
 
+    void on_comboBoxGuideWaveforms_currentIndexChanged(int index);
+
 private:
+    const QMap<TiaSound::Distortion, QString> checkBoxNames{
+        {TiaSound::Distortion::BUZZY, "checkBoxGuideBuzzy"},
+        {TiaSound::Distortion::BUZZY_RUMBLE, "checkBoxGuideBuzzyRumble"},
+        {TiaSound::Distortion::FLANGY_WAVERING, "checkBoxGuideFlangyWavering"},
+        {TiaSound::Distortion::PURE_HIGH, "checkBoxGuidePureHigh"},
+        {TiaSound::Distortion::PURE_BUZZY, "checkBoxGuidePureBuzzy"},
+        {TiaSound::Distortion::REEDY_RUMBLE, "checkBoxGuideReedyRumble"},
+        {TiaSound::Distortion::WHITE_NOISE, "checkBoxGuideWhiteNoise"},
+        {TiaSound::Distortion::PURE_LOW, "checkBoxGuidePureLow"},
+        {TiaSound::Distortion::ELECTRONIC_RUMBLE, "checkBoxGuideElectronicRumble"},
+        {TiaSound::Distortion::ELECTRONIC_SQUEAL, "checkBoxGuideElectronicSqueal"}
+    };
+
     Ui::CreateGuideDialog *ui;
 };
 

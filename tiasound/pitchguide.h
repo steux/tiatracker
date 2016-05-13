@@ -23,12 +23,13 @@ namespace TiaSound {
 class PitchGuide
 {
 public:
-    PitchGuide(QString name, TvStandard standard)
-        : name(name), tvStandard(standard)
+    PitchGuide(QString name, TvStandard standard, double baseFreq)
+        : name(name), tvStandard(standard), baseFreq(baseFreq)
     {}
 
     QString name;
     TvStandard tvStandard;
+    double baseFreq;
     QMap<Distortion, InstrumentPitchGuide> instrumentGuides;
 
 };

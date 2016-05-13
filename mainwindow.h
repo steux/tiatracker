@@ -128,6 +128,8 @@ private slots:
 
     void on_actionPlay_pattern_triggered();
 
+    void on_actionRead_the_manual_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

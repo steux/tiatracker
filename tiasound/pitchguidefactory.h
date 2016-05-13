@@ -62,9 +62,6 @@ private:
     QMap<Distortion, QList<double>> distFrequenciesPal;
     QMap<Distortion, QList<double>> distFrequenciesNtsc;
 
-    //PitchGuide palGuide{"PAL Pitch-perfect A4=440Hz", TvStandard::PAL};
-    PitchGuide ntscGuide{"NTSC Pitch-perfect A4=440Hz", TvStandard::NTSC};
-
 };
 
 }
