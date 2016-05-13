@@ -24,6 +24,8 @@ namespace TiaSound {
 class PitchGuideFactory
 {
 public:
+    static const int numNotes = 7*12;
+
     PitchGuideFactory();
 
     PitchGuide getPitchPerfectPalGuide();

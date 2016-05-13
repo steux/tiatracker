@@ -139,7 +139,7 @@ QList<FrequencyPitchGuide> PitchGuideFactory::calcInstrumentPitchGuide(TiaSound:
             // For real notes, n=49. In TIATracker, it's 45
             int ttNoteIndex = bestNoteIndex - 4;
             // Only store notes we can display
-            if (ttNoteIndex >= 0 && ttNoteIndex < 96) {
+            if (ttNoteIndex >= 0 && ttNoteIndex < numNotes) {
                 ttNote = getNoteFromInt(ttNoteIndex);
             }
         } else {
@@ -148,7 +148,8 @@ QList<FrequencyPitchGuide> PitchGuideFactory::calcInstrumentPitchGuide(TiaSound:
         }
         fpg.append(FrequencyPitchGuide{ttNote, int(std::round(minPercent))});
     }
-    return fpg;}
+    return fpg;
+}
 
 }
 

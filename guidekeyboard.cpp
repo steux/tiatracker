@@ -56,8 +56,8 @@ void GuideKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitc
         TiaSound::Note note = pitchGuide->getNote(freq);
         if (note != TiaSound::Note::NotANote) {
             int iNote = TiaSound::getIntFromNote(note);
-            keyInfo[iNote].frequency = freq;
-            keyInfo[iNote].off = pitchGuide->getPercentOff(freq);
+             keyInfo[iNote].frequency = freq;
+             keyInfo[iNote].off = pitchGuide->getPercentOff(freq);
         }
     }
 }
