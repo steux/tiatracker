@@ -28,6 +28,8 @@ private slots:
 
     void on_comboBoxGuideWaveforms_currentIndexChanged(int index);
 
+    void on_lineEditGuideName_editingFinished();
+
 private:
     const QMap<TiaSound::Distortion, QString> checkBoxNames{
         {TiaSound::Distortion::BUZZY, "checkBoxGuideBuzzy"},

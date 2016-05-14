@@ -292,6 +292,9 @@
         <property name="text">
          <string>New pitch guide</string>
         </property>
+        <property name="maxLength">
+         <number>128</number>
+        </property>
        </widget>
       </item>
       <item>

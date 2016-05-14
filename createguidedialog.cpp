@@ -111,11 +111,6 @@ void CreateGuideDialog::on_pushButtonCreateGuide_clicked() {
     // Set A4= label text
     ui->labelGuideBaseFreq->setText("A4 = " + QString::number(newGuide.baseFreq) + "Hz.");
     on_comboBoxGuideWaveforms_currentIndexChanged(ui->comboBoxGuideWaveforms->currentIndex());
-
-    // TODO:
-    // - cancel
-    // - LineEdit no close on enter
-    // - LineEdit set name after change if pitchguide is already there
 }
 
 /*************************************************************************/
@@ -127,5 +122,13 @@ void CreateGuideDialog::on_comboBoxGuideWaveforms_currentIndexChanged(int index)
         int threshold = ui->spinBoxGuideMaxOffTune->value();
         ui->guidePianoKeyboard->setInstrumentPitchGuide(guide, threshold);
         update();
+    }
+}
+
+/*************************************************************************/
+
+void CreateGuideDialog::on_lineEditGuideName_editingFinished() {
+    if (isGuideCreated) {
+        newGuide.name = ui->lineEditGuideName->text();
     }
 }
