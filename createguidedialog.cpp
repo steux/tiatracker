@@ -10,6 +10,7 @@
 #include "mainwindow.h"
 #include <QProgressDialog>
 #include "guidekeyboard.h"
+#include <QKeyEvent>
 
 
 CreateGuideDialog::CreateGuideDialog(QWidget *parent) :
@@ -27,6 +28,19 @@ CreateGuideDialog::CreateGuideDialog(QWidget *parent) :
 CreateGuideDialog::~CreateGuideDialog()
 {
     delete ui;
+}
+
+/*************************************************************************/
+
+void CreateGuideDialog::keyPressEvent(QKeyEvent *e) {
+    switch (e->key()) {
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        break;
+
+    default:
+        QDialog::keyPressEvent (e);
+    }
 }
 
 /*************************************************************************/
