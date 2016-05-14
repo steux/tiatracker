@@ -80,6 +80,14 @@ void CreateGuideDialog::on_pushButtonCreateGuide_clicked() {
             bestFreq = f;
             bestNum = curNum;
         }
+        // Cancel pressed?
+        if (pd.wasCanceled()) {
+            ui->labelGuideBaseFreq->setText("");
+            isGuideCreated = false;
+            ui->guidePianoKeyboard->removeGuide();
+            update();
+            return;
+        }
     }
 
     // Now create pitch guide for the best frequency

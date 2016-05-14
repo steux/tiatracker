@@ -49,9 +49,7 @@ GuideKeyboard::GuideKeyboard(QWidget *parent) : QWidget(parent)
 
 void GuideKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide, int threshold) {
     offThreshold = threshold;
-    for (int i = 0; i < numKeys; ++i) {
-        keyInfo[i].frequency = -1;
-    }
+    removeGuide();
     for (int freq = 0; freq < pitchGuide->getNumFrequencies(); ++freq) {
         TiaSound::Note note = pitchGuide->getNote(freq);
         if (note != TiaSound::Note::NotANote) {
@@ -59,6 +57,14 @@ void GuideKeyboard::setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitc
              keyInfo[iNote].frequency = freq;
              keyInfo[iNote].off = pitchGuide->getPercentOff(freq);
         }
+    }
+}
+
+/*************************************************************************/
+
+void GuideKeyboard::removeGuide() {
+    for (int i = 0; i < numKeys; ++i) {
+        keyInfo[i].frequency = -1;
     }
 }
 

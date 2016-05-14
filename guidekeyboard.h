@@ -45,6 +45,7 @@ public:
     explicit GuideKeyboard(QWidget *parent = 0);
 
     void setInstrumentPitchGuide(TiaSound::InstrumentPitchGuide *pitchGuide, int threshold);
+    void removeGuide();
 
 signals:
 
