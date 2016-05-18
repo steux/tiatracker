@@ -482,6 +482,12 @@ void Track::toJson(QJsonObject &json) {
     json["evenspeed"] = evenSpeed;
     json["oddspeed"] = oddSpeed;
     json["rowsperbeat"] = rowsPerBeat;
+    // Pitch Guide is optional
+    if (guideBaseFreq != 0.0) {
+        json["pitchGuideName"] = guideName;
+        json["pitchGuideBaseFrequency"] = guideBaseFreq;
+        json["pitchGuideTvStandard"] = (guideTvStandard == TiaSound::TvStandard::PAL ? "PAL" : "NTSC");
+    }
 
     // Instruments
     QJsonArray insArray;
@@ -537,6 +543,14 @@ bool Track::fromJson(const QJsonObject &json) {
     evenSpeed = json["evenspeed"].toInt();
     oddSpeed = json["oddspeed"].toInt();
     rowsPerBeat = json["rowsperbeat"].toInt();
+    // Pitch Guide is optional
+    if (json.contains("pitchGuideBaseFrequency")) {
+        guideBaseFreq = json["pitchGuideBaseFrequency"].toDouble();
+        guideName = json["pitchGuideName"].toString();
+        guideTvStandard = (json["pitchGuideTvStandard"].toString() == "PAL" ? TiaSound::TvStandard::PAL : TiaSound::TvStandard::NTSC);
+    } else {
+        guideBaseFreq = 0.0;
+    }
 
     // Instruments
     QJsonArray insArray = json["instruments"].toArray();

@@ -1281,7 +1281,11 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_12">
            <item>
-            <widget class="QComboBox" name="comboBoxPitchGuide"/>
+            <widget class="QComboBox" name="comboBoxPitchGuide">
+             <property name="maxVisibleItems">
+              <number>15</number>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_21">

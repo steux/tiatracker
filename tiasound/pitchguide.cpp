@@ -6,7 +6,15 @@
  */
 
 #include "pitchguide.h"
+#include <QJsonObject>
+
 
 namespace TiaSound {
+
+void PitchGuide::toJson(QJsonObject &json) {
+    json["name"] = name;
+    json["baseFrequency"] = baseFreq;
+    json["tvStandard"] = (tvStandard == TiaSound::TvStandard::PAL ? "PAL" : "NTSC");
+}
 
 }

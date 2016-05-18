@@ -38,6 +38,8 @@ private:
 
     Track::Track *pTrack = nullptr;
 
+    void addGuide(TiaSound::PitchGuide newGuide);
+
 private slots:
     void on_comboBoxPitchGuide_currentIndexChanged(int index);
 
@@ -46,6 +48,10 @@ private slots:
     void on_spinBoxOffTuneThreshold_editingFinished();
 
     void on_pushButtonGuideCreate_clicked(bool);
+
+    void on_pushButtonGuideImport_clicked(bool);
+
+    void on_pushButtonGuideExport_clicked(bool);
 
 };
 

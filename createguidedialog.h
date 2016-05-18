@@ -19,6 +19,9 @@ public:
     explicit CreateGuideDialog(QWidget *parent = 0);
     ~CreateGuideDialog();
 
+    TiaSound::PitchGuide newGuide{"", TiaSound::TvStandard::PAL, 0.0};
+    bool isGuideCreated = false;
+
 protected:
     // Prevent enter presses in QLineEdit to trigger OK button
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
@@ -43,9 +46,6 @@ private:
         {TiaSound::Distortion::ELECTRONIC_RUMBLE, "checkBoxGuideElectronicRumble"},
         {TiaSound::Distortion::ELECTRONIC_SQUEAL, "checkBoxGuideElectronicSqueal"}
     };
-
-    TiaSound::PitchGuide newGuide{"", TiaSound::TvStandard::PAL, 0.0};
-    bool isGuideCreated = false;
 
     Ui::CreateGuideDialog *ui;
 };

@@ -17,6 +17,7 @@
 #include "pattern.h"
 #include "sequence.h"
 #include <QJsonObject>
+#include "tiasound/pitchguide.h"
 
 
 namespace Track {
@@ -117,6 +118,10 @@ public:
     int rowsPerBeat = 4;
     int startPatterns[2]{};
     int playPos[2]{};
+
+    QString guideName;
+    double guideBaseFreq = 0.0;
+    TiaSound::TvStandard guideTvStandard;
 
 private:
     QMutex mutex;

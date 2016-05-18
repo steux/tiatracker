@@ -158,6 +158,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->spinBoxOffTuneThreshold, SIGNAL(valueChanged(int)), ui->pianoKeyboard, SLOT(setOffThreshold(int)));
     QObject::connect(ui->tabOptions, SIGNAL(setOffTuneThreshold(int)), ui->pianoKeyboard, SLOT(setOffThreshold(int)));
     QObject::connect(ui->pushButtonGuideCreate, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideCreate_clicked(bool)));
+    QObject::connect(ui->pushButtonGuideExport, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideExport_clicked(bool)));
+    QObject::connect(ui->pushButtonGuideImport, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideImport_clicked(bool)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -589,7 +591,35 @@ void MainWindow::on_actionOpen_triggered() {
     }
     QString fileName = fileNames[0];
     loadTrackByName(fileName);
+    // Create pitch guide if not there already
+    if (pTrack->guideBaseFreq != 0.0) {
+        bool isNewGuide = true;
+        int guideIndex = -1;
+        for (int i = 0; i < ui->tabOptions->guides.size(); ++i) {
+            if (ui->tabOptions->guides[i].name == pTrack->guideName
+                    && ui->tabOptions->guides[i].baseFreq == pTrack->guideBaseFreq
+                    && ui->tabOptions->guides[i].tvStandard == pTrack->guideTvStandard) {
+                isNewGuide = false;
+                guideIndex = i;
+                break;
+            }
+        }
+        if (isNewGuide) {
+            TiaSound::PitchGuideFactory pgFactory;
+            TiaSound::PitchGuide newPG = pgFactory.calculateGuide(
+                        pTrack->guideName,
+                        pTrack->guideTvStandard,
+                        pTrack->guideBaseFreq);
+            ui->tabOptions->guides.append(newPG);
+            ui->comboBoxPitchGuide->addItem(newPG.name);
+            guideIndex = ui->tabOptions->guides.count() - 1;
+
+        }
+        ui->comboBoxPitchGuide->setCurrentIndex(guideIndex);
+    }
+
     ui->trackEditor->setEditPos(0);
+    update();
 }
 
 /*************************************************************************/

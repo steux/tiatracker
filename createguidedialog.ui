@@ -270,7 +270,7 @@
    <item alignment="Qt::AlignHCenter">
     <widget class="QLabel" name="label_8">
      <property name="text">
-      <string>Requested notes</string>
+      <string>Requested notes (left-click keys to choose):</string>
      </property>
     </widget>
    </item>

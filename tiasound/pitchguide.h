@@ -10,6 +10,7 @@
 
 #include <QMap>
 #include <QString>
+#include <QJsonObject>
 
 #include "tiasound.h"
 #include "instrumentpitchguide.h"
@@ -31,6 +32,8 @@ public:
     TvStandard tvStandard;
     double baseFreq;
     QMap<Distortion, InstrumentPitchGuide> instrumentGuides;
+
+    void toJson(QJsonObject &json);
 
 };
 
