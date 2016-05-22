@@ -5,6 +5,14 @@ windeployqt.exe --dir deploy --release --compiler-runtime ..\build-TIATracker-De
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\release\TIATracker.exe deploy\
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\keymap.cfg deploy\
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\license.txt deploy\
+copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\TIATracker_manual.pdf deploy\
 copy sdl\windows\lib\SDL2.dll deploy\
 mkdir deploy\player
 xcopy /S player deploy\player\
+mkdir deploy\songs
+xcopy /S songs deploy\songs\
+mkdir deploy\instruments
+xcopy /S songs deploy\instruments\
+mkdir deploy\guides
+xcopy /S songs deploy\guides\
+xcopy /S songs deploy\songs\
