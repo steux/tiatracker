@@ -1086,3 +1086,9 @@ void MainWindow::on_actionAbout_triggered() {
 void MainWindow::on_actionRead_the_manual_triggered() {
     QDesktopServices::openUrl(QUrl("TIATracker_manual.pdf", QUrl::TolerantMode));
 }
+
+/*************************************************************************/
+
+void MainWindow::on_spinBoxRowsPerBeat_valueChanged(int arg1) {
+    ui->tabTrack->updateTrackStats();
+}

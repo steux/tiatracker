@@ -130,6 +130,8 @@ private slots:
 
     void on_actionRead_the_manual_triggered();
 
+    void on_spinBoxRowsPerBeat_valueChanged(int arg1);
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

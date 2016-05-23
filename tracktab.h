@@ -35,6 +35,9 @@ public:
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updateTrackTab();
 
+    /* Just updates the number of patterns and track length stats */
+    void updateTrackStats();
+
 signals:
     void advanceEditPos();
     void validateEditPos();
@@ -74,8 +77,6 @@ public slots:
     void invalidNoteFound(int channel, int entryIndex, int noteIndex);
 
 private:
-    /* Just updates the number of patterns and track length stats */
-    void updateTrackStats();
     /* Updates the pattern editor area */
     void updatePatternEditor();
 
