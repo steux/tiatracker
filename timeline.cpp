@@ -14,6 +14,8 @@
 #include "track/sequenceentry.h"
 #include <QColor>
 #include <QMouseEvent>
+#include <QHelpEvent>
+#include <QToolTip>
 
 
 Timeline::Timeline(QWidget *parent) : QWidget(parent)
@@ -136,4 +138,27 @@ void Timeline::contextMenuEvent(QContextMenuEvent *event) {
             pPatternMenu->exec(event->globalPos());
         }
     }
+}
+
+/*************************************************************************/
+
+bool Timeline::event(QEvent *event) {
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        if (helpEvent->y() >= channelMargin && helpEvent->y() < height() - channelMargin) {
+            int channel = helpEvent->x() < width()/2 ? 0 : 1;
+            double rowHeight = calcRowHeight();
+            int rowPos = int((helpEvent->y() - channelMargin)/rowHeight + 0.5);
+            if (pTrack->getChannelNumRows(channel) > rowPos) {
+                int patternIndex = pTrack->getPatternIndex(channel, rowPos);
+                QString patternName = pTrack->patterns[patternIndex].name;
+                QToolTip::showText(helpEvent->globalPos(), patternName);
+            }
+        } else {
+            QToolTip::hideText();
+            event->ignore();
+        }
+        return true;
+    }
+    return QWidget::event(event);
 }
