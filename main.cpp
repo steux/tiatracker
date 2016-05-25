@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
     PatternEditor *editor = w.findChild<PatternEditor *>("trackEditor");
     QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
     QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), editor, SLOT(newPlayerPos(int,int)));
-    QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int)), tt, SLOT(invalidNoteFound(int,int,int)));
+    QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int,QString)), tt, SLOT(invalidNoteFound(int,int,int,QString)));
     QObject::connect(tt, SIGNAL(stopTrack()), &tiaPlayer, SLOT(stopTrack()));
     QObject::connect(editor, SIGNAL(editChannelChanged(int)), &tiaPlayer, SLOT(selectedChannelChanged(int)));
     QCheckBox *cbLoop = w.findChild<QCheckBox *>("checkBoxLoop");

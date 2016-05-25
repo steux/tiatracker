@@ -509,9 +509,8 @@ void TrackTab::toggleMute(bool) {
 
 /*************************************************************************/
 
-void TrackTab::invalidNoteFound(int channel, int entryIndex, int noteIndex) {
-    // TODO: Create sensible error string
-    MainWindow::displayMessage("Invalid note found!");
+void TrackTab::invalidNoteFound(int, int, int, QString reason) {
+    MainWindow::displayMessage(reason);
 }
 
 /*************************************************************************/

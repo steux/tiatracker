@@ -30,6 +30,7 @@
 #include "aboutdialog.h"
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QCloseEvent>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -1089,6 +1090,13 @@ void MainWindow::on_actionRead_the_manual_triggered() {
 
 /*************************************************************************/
 
-void MainWindow::on_spinBoxRowsPerBeat_valueChanged(int arg1) {
+void MainWindow::on_spinBoxRowsPerBeat_valueChanged(int) {
     ui->tabTrack->updateTrackStats();
+}
+
+/*************************************************************************/
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    on_actionQuit_triggered();
+    event->ignore();
 }

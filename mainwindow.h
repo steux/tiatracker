@@ -130,7 +130,7 @@ private slots:
 
     void on_actionRead_the_manual_triggered();
 
-    void on_spinBoxRowsPerBeat_valueChanged(int arg1);
+    void on_spinBoxRowsPerBeat_valueChanged(int);
 
 private:
     /* Tab index values */
@@ -139,6 +139,8 @@ private:
     static const int iTabPercussion = 2;
     static const int iTabInfo = 3;
     static const int iTabOptions = 4;
+
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 
     void saveTrackByName(const QString &fileName);
     void loadTrackByName(const QString &fileName);

@@ -74,7 +74,7 @@ public slots:
     void toggleMute(bool);
 
     // Player error
-    void invalidNoteFound(int channel, int entryIndex, int noteIndex);
+    void invalidNoteFound(int channel, int entryIndex, int noteIndex, QString reason);
 
 private:
     /* Updates the pattern editor area */

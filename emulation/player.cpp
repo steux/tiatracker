@@ -268,7 +268,8 @@ void Player::sequenceChannel(int channel) {
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
             updateSilence();
-            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel],
+                                  "A pause can follow only after a melodic instrument!");
         } else {
             trackMode[channel] = Track::Note::instrumentType::Hold;
             Track::Instrument *curInstrument = &(pTrack->instruments[trackCurNote[channel].instrumentNumber]);
@@ -284,7 +285,8 @@ void Player::sequenceChannel(int channel) {
         if (trackMode[channel] != Track::Note::instrumentType::Instrument) {
             mode = PlayMode::None;
             updateSilence();
-            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+            emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel],
+                                  "A slide can follow only after a melodic instrument!");
         } else {
             trackCurNote[channel].value += nextNote->value;
             // Check for over-/underflow
@@ -292,7 +294,8 @@ void Player::sequenceChannel(int channel) {
                     || (trackCurNote[channel].value)%32 > 31) {
                 mode = PlayMode::None;
                 updateSilence();
-                emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel]);
+                emit invalidNoteFound(channel, trackCurEntryIndex[channel], trackCurNoteIndex[channel],
+                                      "A slide cannot change a frequency value to below 0 or above 31!");
             }
         }
         break;

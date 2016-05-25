@@ -83,7 +83,7 @@ public slots:
 
 signals:
     void newPlayerPos(int pos1, int pos2);
-    void invalidNoteFound(int channel, int entryIndex, int noteIndex);
+    void invalidNoteFound(int channel, int entryIndex, int noteIndex, QString reason);
 
 private:
     Track::Track *pTrack = nullptr;
