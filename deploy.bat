@@ -8,6 +8,11 @@ copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\license.txt deploy
 copy ..\build-TIATracker-Desktop_Qt_5_5_1_MinGW_32bit-Release\TIATracker_manual.pdf deploy\
 copy sdl\windows\lib\SDL2.dll deploy\
 mkdir deploy\player
+copy player\tt_init.asm player\
+copy player\tt_player.asm player\
+copy player\tt_player_framework.asm player\
+copy player\tt_trackdata.asm player\
+copy player\tt_variables.asm player\
 xcopy /S player deploy\player\
 mkdir deploy\songs
 xcopy /S songs deploy\songs\
