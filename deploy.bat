@@ -12,7 +12,6 @@ xcopy /S player deploy\player\
 mkdir deploy\songs
 xcopy /S songs deploy\songs\
 mkdir deploy\instruments
-xcopy /S songs deploy\instruments\
+xcopy /S instruments deploy\instruments\
 mkdir deploy\guides
-xcopy /S songs deploy\guides\
-xcopy /S songs deploy\songs\
+xcopy /S guides deploy\guides\

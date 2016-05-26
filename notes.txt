@@ -1,5 +1,4 @@
 TODO:
-- When switching to Track tab, update piano keyboard
 - check for limits (7 instruments, frames etc.) on export
 - lock ins/perc for import
 - Sensible cycle values for sdlSound.set() calls (look up in real player)
