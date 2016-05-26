@@ -277,6 +277,10 @@ void MainWindow::pianoKeyReleased() {
 
 void MainWindow::on_tabWidget_currentChanged(int index) {
     switch (index) {
+    case iTabTrack:
+        ui->pianoKeyboard->setUsePitchGuide(true);
+        ui->tabTrack->updateTrackTab();
+        break;
     case iTabInstruments:
         emit stopTrack();
         ui->pianoKeyboard->setUsePitchGuide(true);
