@@ -1,0 +1,32 @@
+{
+    "envelopeLength": 10,
+    "frequencies": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+    ],
+    "name": "Electronic Guitar",
+    "releaseStart": 6,
+    "sustainStart": 4,
+    "version": 1,
+    "volumes": [
+        12,
+        12,
+        10,
+        10,
+        8,
+        8,
+        7,
+        5,
+        3,
+        1
+    ],
+    "waveform": 7
+}
