@@ -49,16 +49,16 @@ private:
 
     const QMap<Distortion, double> distDividers{
         {Distortion::SILENT, 999999.9},
-        {Distortion::BUZZY, 15.0},
-        {Distortion::BUZZY_RUMBLE, 232.5},      // Eckhard: 465
-        {Distortion::FLANGY_WAVERING, 31.0},    // Eckhard: 465
-        {Distortion::PURE_HIGH, 2},
-        {Distortion::PURE_BUZZY, 31.0},
-        {Distortion::REEDY_RUMBLE, 2.0},
-        {Distortion::WHITE_NOISE, 31.0},        // Eckhard: 511
-        {Distortion::PURE_LOW, 6.0},
-        {Distortion::ELECTRONIC_RUMBLE, 93.0},
-        {Distortion::ELECTRONIC_SQUEAL, 6.0}
+        {Distortion::BUZZY, 15.0},              // AUDC 1
+        {Distortion::BUZZY_RUMBLE, 232.5},      // AUDC 2   Stolberg: 465
+        {Distortion::FLANGY_WAVERING, 31.0},    // AUDC 3   Stolberg: 465
+        {Distortion::PURE_HIGH, 2},             // AUDC 4
+        {Distortion::PURE_BUZZY, 31.0},         // AUDC 6
+        {Distortion::REEDY_RUMBLE, 31.0},       // AUDC 7   Stolberg: 2
+        {Distortion::WHITE_NOISE, 31.0},        // AUDC 8   Stolberg: 511
+        {Distortion::PURE_LOW, 6.0},            // AUDC 12
+        {Distortion::ELECTRONIC_RUMBLE, 93.0},  // AUDC 14
+        {Distortion::ELECTRONIC_SQUEAL, 31.0}   // AUDC 15  Stolberg: 6
     };
 
     QMap<Distortion, QList<double>> distFrequenciesPal;

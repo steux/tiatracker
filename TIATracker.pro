@@ -141,5 +141,11 @@ install_songs.files = $$PWD/songs
 INSTALLS += \
     install_songs
 
+install_guides.path = $$OUT_PWD
+install_guides.files = $$PWD/guides
+
+INSTALLS += \
+    install_guides
+
 
 RC_ICONS = graphics/tt_icon.ico
