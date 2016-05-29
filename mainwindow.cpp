@@ -301,7 +301,6 @@ void MainWindow::on_tabWidget_currentChanged(int index) {
         break;
     case iTabOptions:
         emit stopTrack();
-        ui->pianoKeyboard->setUsePitchGuide(false);
         ui->tabOptions->updateOptionsTab();
         break;
     }
