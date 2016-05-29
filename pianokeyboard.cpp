@@ -77,6 +77,7 @@ void PianoKeyboard::initPianoKeyboard() {
             QString shortcut = MainWindow::keymap[actionName].toString();
             QAction *action = new QAction(this);
             action->setShortcut(QKeySequence(shortcut));
+            action->setAutoRepeat(false);
             QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(pianoKeyShortcut(bool)));
             action->setData(QVariant(octave*12 + i));
             addAction(action);

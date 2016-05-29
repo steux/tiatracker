@@ -64,10 +64,12 @@ void Player::silence() {
 /*************************************************************************/
 
 void Player::playInstrument(Track::Instrument *instrument, int frequency) {
-    currentInstrument = instrument;
-    currentInstrumentFrequency = frequency;
-    currentInstrumentFrame = 0;
-    mode = PlayMode::Instrument;
+    if (mode != PlayMode::Instrument) {
+        currentInstrument = instrument;
+        currentInstrumentFrequency = frequency;
+        currentInstrumentFrame = 0;
+        mode = PlayMode::Instrument;
+    }
 }
 
 /*************************************************************************/
