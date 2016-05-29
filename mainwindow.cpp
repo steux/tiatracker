@@ -1117,5 +1117,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 /*************************************************************************/
 
 void MainWindow::keyReleaseEvent(QKeyEvent *event) {
-    pianoKeyReleased();
+    if (!event->isAutoRepeat()) {
+        pianoKeyReleased();
+    }
 }
