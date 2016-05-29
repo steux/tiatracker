@@ -31,6 +31,7 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QCloseEvent>
+#include <QSettings>
 
 
 const QColor MainWindow::dark{"#002b36"};
@@ -55,7 +56,11 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Context menu for envelope widgets    
+    QSettings settings("Kylearan", "TIATracker");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("state").toByteArray(), 1);
+
+    // Context menu for envelope widgets
     waveformContextMenu.addAction(&actionInsertBefore);
     waveformContextMenu.addAction(&actionInsertAfter);
     waveformContextMenu.addAction(&actionDelete);
@@ -640,6 +645,11 @@ void MainWindow::on_actionQuit_triggered() {
     if (msgBox.exec() != QMessageBox::Yes) {
         return;
     }
+
+    QSettings settings("Kylearan", "TIATracker");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("state", saveState(1));
+
     QApplication::quit();
 }
 
