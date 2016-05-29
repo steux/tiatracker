@@ -10,13 +10,22 @@
     <height>783</height>
    </rect>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::StrongFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>TIATracker</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -26,6 +35,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
        </property>
        <attribute name="title">
         <string>Track</string>
@@ -392,6 +404,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <attribute name="title">
         <string>Instruments</string>
        </attribute>
@@ -618,6 +633,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
        </property>
        <attribute name="title">
         <string>Percussion</string>
@@ -1373,7 +1391,11 @@
      </widget>
     </item>
     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-     <widget class="PianoKeyboard" name="pianoKeyboard" native="true"/>
+     <widget class="PianoKeyboard" name="pianoKeyboard" native="true">
+      <property name="focusPolicy">
+       <enum>Qt::StrongFocus</enum>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
