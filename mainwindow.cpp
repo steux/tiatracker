@@ -1104,3 +1104,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     on_actionQuit_triggered();
     event->ignore();
 }
+
+/*************************************************************************/
+
+void MainWindow::keyReleaseEvent(QKeyEvent *event) {
+    pianoKeyReleased();
+}

@@ -141,6 +141,7 @@ private:
     static const int iTabOptions = 4;
 
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
     void saveTrackByName(const QString &fileName);
     void loadTrackByName(const QString &fileName);
