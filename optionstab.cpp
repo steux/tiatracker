@@ -7,6 +7,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include "mainwindow.h"
+#include <QLabel>
 
 
 OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
@@ -42,7 +43,12 @@ void OptionsTab::initOptionsTab() {
 /*************************************************************************/
 
 void OptionsTab::updateOptionsTab() {
-
+    QLabel *infoLabel = findChild<QLabel *>("labelGuideInfo");
+    QComboBox *cbGuides = findChild<QComboBox *>("comboBoxPitchGuide");
+    TiaSound::PitchGuide *pg = &(guides[cbGuides->currentIndex()]);
+    QString tvText = (pg->tvStandard == TiaSound::TvStandard::PAL ? "PAL" : "NTSC");
+    infoLabel->setText("(" + tvText + ", " + QString::number(pg->baseFreq) + "Hz)");
+    update();
 }
 
 /*************************************************************************/
@@ -53,7 +59,7 @@ void OptionsTab::on_comboBoxPitchGuide_currentIndexChanged(int index) {
     TiaSound::PitchGuide *pg = &(guides[cbGuides->currentIndex()]);
     pTrack->guideName = pg->name;
     pTrack->guideBaseFreq = pg->baseFreq;
-
+    updateOptionsTab();
     emit setPitchGuide(guides[index]);
 }
 
@@ -85,7 +91,7 @@ void OptionsTab::addGuide(TiaSound::PitchGuide newGuide) {
     QComboBox *cbGuides = findChild<QComboBox *>("comboBoxPitchGuide");
     cbGuides->addItem(newGuide.name);
     cbGuides->setCurrentIndex(cbGuides->count() - 1);
-    update();
+    updateOptionsTab();
 }
 
 /*************************************************************************/

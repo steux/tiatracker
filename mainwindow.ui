@@ -27,7 +27,7 @@
        <enum>Qt::StrongFocus</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="TrackTab" name="tabTrack">
        <property name="sizePolicy">
@@ -1309,6 +1309,13 @@
             <widget class="QComboBox" name="comboBoxPitchGuide">
              <property name="maxVisibleItems">
               <number>15</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelGuideInfo">
+             <property name="text">
+              <string>(Hz, TvStandard)</string>
              </property>
             </widget>
            </item>
