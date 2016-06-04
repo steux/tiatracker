@@ -150,7 +150,7 @@ void Player::playTrack(int start1, int start2) {
     trackCurNote[0] = startNote;
     trackCurNote[1] = startNote;
     trackIsOverlay[0] = false;
-    trackIsOverlay[0] = false;
+    trackIsOverlay[1] = false;
     mode = PlayMode::Track;
     isFirstNote = true;
     pTrack->unlock();
