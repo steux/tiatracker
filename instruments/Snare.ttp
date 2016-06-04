@@ -1,0 +1,30 @@
+{
+    "envelopeLength": 6,
+    "frequencies": [
+        5,
+        27,
+        8,
+        5,
+        5,
+        5
+    ],
+    "name": "Snare",
+    "overlay": false,
+    "version": 1,
+    "volumes": [
+        15,
+        15,
+        15,
+        9,
+        6,
+        3
+    ],
+    "waveforms": [
+        8,
+        12,
+        6,
+        8,
+        8,
+        8
+    ]
+}

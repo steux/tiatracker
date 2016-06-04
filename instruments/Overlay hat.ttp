@@ -1,0 +1,15 @@
+{
+    "envelopeLength": 1,
+    "frequencies": [
+        2
+    ],
+    "name": "Hat",
+    "overlay": true,
+    "version": 1,
+    "volumes": [
+        4
+    ],
+    "waveforms": [
+        8
+    ]
+}
