@@ -203,6 +203,7 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curInstrumentsDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilter("*.tti");
@@ -217,6 +218,7 @@ void InstrumentsTab::on_buttonInstrumentExport_clicked() {
         return;
     }
     QString fileName = fileNames[0];
+    curInstrumentsDialogPath = dialog.directory().absolutePath();
     QFile saveFile(fileName);
 
     // Export instrument
@@ -255,6 +257,7 @@ void InstrumentsTab::on_buttonInstrumentImport_clicked() {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curInstrumentsDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter("*.tti");
@@ -269,6 +272,7 @@ void InstrumentsTab::on_buttonInstrumentImport_clicked() {
         return;
     }
     QString fileName = fileNames[0];
+    curInstrumentsDialogPath = dialog.directory().absolutePath();
     QFile loadFile(fileName);
     if (!loadFile.open(QIODevice::ReadOnly)) {
         MainWindow::displayMessage("Unable to open file!");

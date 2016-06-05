@@ -33,6 +33,8 @@ public:
     int getSelectedInstrumentIndex();
     Track::Instrument * getSelectedInstrument();
 
+    QString curInstrumentsDialogPath;
+
 signals:
     void setWaveform(TiaSound::Distortion dist);
 

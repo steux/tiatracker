@@ -168,6 +168,7 @@ void PercussionTab::on_buttonPercussionExport_clicked() {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curPercussionDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilter("*.ttp");
@@ -182,6 +183,7 @@ void PercussionTab::on_buttonPercussionExport_clicked() {
         return;
     }
     QString fileName = fileNames[0];
+    curPercussionDialogPath = dialog.directory().absolutePath();
     QFile saveFile(fileName);
 
     // Export Percussion
@@ -220,6 +222,7 @@ void PercussionTab::on_buttonPercussionImport_clicked() {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curPercussionDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter("*.ttp");
@@ -234,6 +237,7 @@ void PercussionTab::on_buttonPercussionImport_clicked() {
         return;
     }
     QString fileName = fileNames[0];
+    curPercussionDialogPath = dialog.directory().absolutePath();
     QFile loadFile(fileName);
     if (!loadFile.open(QIODevice::ReadOnly)) {
         MainWindow::displayMessage("Unable to open file!");

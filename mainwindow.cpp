@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // Read in settings
     QSettings settings("Kylearan", "TIATracker");
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("state").toByteArray(), 1);
@@ -63,6 +64,16 @@ MainWindow::MainWindow(QWidget *parent) :
         curSongsDialogPath = settings.value("songsPath").toString();
     } else {
         curSongsDialogPath = QDir::currentPath() + "/songs";
+    }
+    if (settings.contains("instrumentsPath")) {
+        ui->tabInstruments->curInstrumentsDialogPath = settings.value("instrumentsPath").toString();
+    } else {
+        ui->tabInstruments->curInstrumentsDialogPath = QDir::currentPath() + "/instruments";
+    }
+    if (settings.contains("percussionPath")) {
+        ui->tabPercussion->curPercussionDialogPath = settings.value("percussionPath").toString();
+    } else {
+        ui->tabPercussion->curPercussionDialogPath = QDir::currentPath() + "/instruments";
     }
 
     // Context menu for envelope widgets
@@ -557,6 +568,7 @@ void MainWindow::playTrackFrom(int channel, int row) {
 void MainWindow::on_actionSaveAs_triggered() {
     emit stopTrack();
     QFileDialog dialog(this);
+    dialog.setDirectory(curSongsDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilter("*.ttt");
@@ -571,6 +583,7 @@ void MainWindow::on_actionSaveAs_triggered() {
         return;
     }
     QString fileName = fileNames[0];
+    curSongsDialogPath = dialog.directory().absolutePath();
     saveTrackByName(fileName);
 }
 
@@ -657,6 +670,8 @@ void MainWindow::on_actionQuit_triggered() {
     settings.setValue("geometry", saveGeometry());
     settings.setValue("state", saveState(1));
     settings.setValue("songsPath", curSongsDialogPath);
+    settings.setValue("instrumentsPath", ui->tabInstruments->curInstrumentsDialogPath);
+    settings.setValue("percussionPath", ui->tabPercussion->curPercussionDialogPath);
 
     QApplication::quit();
 }

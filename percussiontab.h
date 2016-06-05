@@ -40,6 +40,8 @@ public:
     int getSelectedPercussionIndex();
     Track::Percussion * getSelectedPercussion();
 
+    QString curPercussionDialogPath;
+
 signals:
     void playWaveform(TiaSound::Distortion waveform, int frequency, int volume);
 
