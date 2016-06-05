@@ -59,6 +59,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QSettings settings("Kylearan", "TIATracker");
     restoreGeometry(settings.value("geometry").toByteArray());
     restoreState(settings.value("state").toByteArray(), 1);
+    if (settings.contains("songsPath")) {
+        curSongsDialogPath = settings.value("songsPath").toString();
+    } else {
+        curSongsDialogPath = QDir::currentPath() + "/songs";
+    }
 
     // Context menu for envelope widgets
     waveformContextMenu.addAction(&actionInsertBefore);
@@ -585,6 +590,7 @@ void MainWindow::on_actionOpen_triggered() {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curSongsDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter("*.ttt");
@@ -599,6 +605,7 @@ void MainWindow::on_actionOpen_triggered() {
         return;
     }
     QString fileName = fileNames[0];
+    curSongsDialogPath = dialog.directory().absolutePath();
     loadTrackByName(fileName);
     // Create pitch guide if not there already
     if (pTrack->guideBaseFreq != 0.0) {
@@ -645,9 +652,11 @@ void MainWindow::on_actionQuit_triggered() {
         return;
     }
 
+    // Save settings
     QSettings settings("Kylearan", "TIATracker");
     settings.setValue("geometry", saveGeometry());
     settings.setValue("state", saveState(1));
+    settings.setValue("songsPath", curSongsDialogPath);
 
     QApplication::quit();
 }
