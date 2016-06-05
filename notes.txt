@@ -1,16 +1,53 @@
-TODO:
-- check for limits (7 instruments, frames etc.) on export
-- lock ins/perc for import
-- Sensible cycle values for sdlSound.set() calls (look up in real player)
-- in emulation/bspf.h: #define BSPF_WINDOWS is hardcoded for Windows build
-- Recover gracefully after trying to load corrupted track
-- Set Goto dialog: Either a dropdown list of all sequence entries, or a label showing the target name for a given value
-- Should paintEvents (timeline, patternEditor) obey the Track mutex?
-  updateFirstNoteNumbers might otherwise be not fast enough in some cases?
-- When exporting PURE_COMBINED, check if really both waveforms are used.
-  (Store occurence in hashmap individually for 4 and 12)
-- On new or open track, current perc (ins?) name gets taken over...?
-- Add octave spinbox to PianoKeyboard
-- Check for same envelopes in ins/perc on export, to save ROM
-- add "freehand" option to Instruments tab
-- Save import/export/load/save dirs in property file
+/* notice that thread no longer inherits from QThread */
+class thread : public QObject
+{
+  Q_OBJECT
+
+ private:
+  QTimer *_timer;
+
+ public slots:
+  void startTimer(int timeout);
+  void _timeout(void);
+
+};
+
+void
+thread::startTimer(int timeout) {
+  if(!_timer)
+    _timer = new QTimer();
+
+      QObject::connect(_timer, SIGNAL(timeout()), this, SLOT(_timeout()));
+
+  _timer->setInterval(timeout);
+  _timer->start();
+}
+
+void
+threadn::_timeout(void) {
+  qDebug() << "timeout from" << QThread::currentThreadId();
+}
+
+
+---
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+  ui->setupUi(this);
+
+  thread *t = new thread();
+  QThread *qthread = new QThread();
+
+  QObject::connect(this, SIGNAL(startTimer(int)), t, SLOT(startTimer(mode,int)), Qt::QueuedConnection);
+  t->moveToThread(qthread);
+
+  qthread->start(QThread::HighestPriority);
+
+  qDebug() << "Hello from " << QThread::currentThreadId();
+
+  emit startTimer(1000);
+}
+
+
