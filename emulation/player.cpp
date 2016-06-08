@@ -13,6 +13,8 @@
 #include "player.h"
 #include <SDL.h>
 #include <QElapsedTimer>
+#include <QVector>
+
 
 namespace Emulation {
 
@@ -35,6 +37,12 @@ Player::Player(Track::Track *parentTrack, QObject *parent) : QThread(parent)
 Player::~Player()
 {
     delete timer;
+    delete eTimer;
+
+    for (int i = 0; i < deltas.size(); ++i) {
+        std::cout << deltas[i] << ", ";
+    }
+    std::cout << "\nnumFrames: " << statsNumFrames - 120 << ", average delta: " << double(statsJitterSum)/double(statsNumFrames - 120) << ", max: " << statsJitterMax << "\n";
 }
 
 /*************************************************************************/
@@ -44,6 +52,9 @@ void Player::run() {
     timer->setTimerType(Qt::PreciseTimer);
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
     timer->start(1000/50);
+
+    eTimer = new QElapsedTimer;
+    eTimer->start();
 }
 
 /*************************************************************************/
@@ -415,6 +426,19 @@ void Player::updateTrack() {
 /*************************************************************************/
 
 void Player::timerFired() {
+    // Jitter test statistics
+    long elapsed = (long)eTimer->elapsed();
+    eTimer->restart();
+    deltas.append(int(50 - elapsed));
+    statsNumFrames++;
+    if (statsNumFrames >= 120) {
+        long delta = std::abs(50 - elapsed);
+        statsJitterSum += delta;
+        if (delta > statsJitterMax) {
+            statsJitterMax = delta;
+        }
+    }
+
     pTrack->lock();
     switch (mode) {
     case PlayMode::Instrument:

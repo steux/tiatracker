@@ -18,6 +18,7 @@
 #include "emulation/TIASnd.h"
 #include "emulation/SoundSDL2.h"
 #include <QElapsedTimer>
+#include <QVector>
 
 
 namespace Emulation {
@@ -91,6 +92,13 @@ private:
     Emulation::SoundSDL2 sdlSound{&tiaSound};
 
     QTimer *timer = nullptr;
+
+    // Jitter test statistics
+    QElapsedTimer *eTimer;
+    long statsJitterSum = 0;
+    long statsNumFrames = 0;
+    long statsJitterMax = 0;
+    QVector<int> deltas;
 
     // Play mode we are in
     enum class PlayMode {
