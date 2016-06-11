@@ -15,12 +15,18 @@ OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
     TiaSound::PitchGuideFactory pgFactory;
     guides.append(pgFactory.getPitchPerfectPalGuide());
     guides.append(pgFactory.getOptimizedPurePalGuide());
+    guides.append(pgFactory.getOptimizedDiv232PalGuide());
+    guides.append(pgFactory.getOptimizedDiv93PalGuide());
     guides.append(pgFactory.getOptimizedDiv31PalGuide());
+    guides.append(pgFactory.getOptimizedDiv15PalGuide());
     guides.append(pgFactory.getOptimizedDiv6PalGuide());
     guides.append(pgFactory.getOptimizedDiv2PalGuide());
     guides.append(pgFactory.getPitchPerfectNtscGuide());
     guides.append(pgFactory.getOptimizedPureNtscGuide());
+    guides.append(pgFactory.getOptimizedDiv232NtscGuide());
+    guides.append(pgFactory.getOptimizedDiv93NtscGuide());
     guides.append(pgFactory.getOptimizedDiv31NtscGuide());
+    guides.append(pgFactory.getOptimizedDiv15NtscGuide());
     guides.append(pgFactory.getOptimizedDiv6NtscGuide());
     guides.append(pgFactory.getOptimizedDiv2NtscGuide());
 }

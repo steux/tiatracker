@@ -49,49 +49,85 @@ PitchGuide PitchGuideFactory::getPitchPerfectNtscGuide() {
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedPurePalGuide() {
-    return calculateGuide("PAL Optimized Pure A4=345.4Hz", TvStandard::PAL, 345.4);
+    return calculateGuide("PAL Optimized Pure A4=615.4Hz", TvStandard::PAL, 615.427);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedPureNtscGuide() {
-    return calculateGuide("NTSC Optimized Pure A4=413.9Hz", TvStandard::NTSC, 413.9);
+    return calculateGuide("NTSC Optimized Pure A4=585.3Hz", TvStandard::NTSC, 585.327);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv232PalGuide() {
+    return calculateGuide("PAL Optimized Buzzy Rumble, A4=338.8Hz", TvStandard::PAL, 338.827);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv232NtscGuide() {
+    return calculateGuide("NTSC Optimized Buzzy Rumble, A4=322.2Hz", TvStandard::NTSC, 322.227);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv93PalGuide() {
+    return calculateGuide("PAL Optimized Electronic Rumble, A4=336.1Hz", TvStandard::PAL, 336.127);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv93NtscGuide() {
+    return calculateGuide("NTSC Optimized Electronic Rumble, A4=319.7Hz", TvStandard::NTSC, 319.727);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv31PalGuide() {
-    return calculateGuide("PAL Optimized Flangy/Wavering, Pure Buzzy, White Noise A4=336.5Hz", TvStandard::PAL, 336.5);
+    return calculateGuide("PAL Optimized Flangy/Wavering, Pure Buzzy, Reedy Rumble, White Noise, Electronic Squal, A4=317.6Hz", TvStandard::PAL, 317.627);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv31NtscGuide() {
-    return calculateGuide("NTSC Optimized Flangy/Wavering, Pure Buzzy, White Noise A4=339.1Hz", TvStandard::NTSC, 339.1);
+    return calculateGuide("NTSC Optimized Flangy/Wavering, Pure Buzzy, Reedy Rumble, White Noise, Electronic Squal, A4=339.1Hz", TvStandard::NTSC, 339.127);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv15PalGuide() {
+    return calculateGuide("PAL Optimized Buzzy, A4=328.2Hz", TvStandard::PAL, 328.227);
+}
+
+/*************************************************************************/
+
+PitchGuide PitchGuideFactory::getOptimizedDiv15NtscGuide() {
+    return calculateGuide("NTSC Optimized Buzzy, A4=330.7Hz", TvStandard::NTSC, 330.727);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv6PalGuide() {
-    return calculateGuide("PAL Optimized Pure Low, Electronic Aqueal A4=345.0Hz", TvStandard::PAL, 345.0);
+    return calculateGuide("PAL Optimized Pure Low, A4=580.2Hz", TvStandard::PAL, 580.227);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv6NtscGuide() {
-    return calculateGuide("NTSC Optimized Pure Low, Electronic Aqueal A4=368.3Hz", TvStandard::NTSC, 368.3);
+    return calculateGuide("NTSC Optimized Pure Low, A4=619.4Hz", TvStandard::NTSC, 619.427);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv2PalGuide() {
-    return calculateGuide("PAL Optimized Pure High, Reedy Rumble A4=345.4Hz", TvStandard::PAL, 345.4);
+    return calculateGuide("PAL Optimized Pure High, A4=580.8Hz", TvStandard::PAL, 580.827);
 }
 
 /*************************************************************************/
 
 PitchGuide PitchGuideFactory::getOptimizedDiv2NtscGuide() {
-    return calculateGuide("NTSC Optimized Pure High, Reedy Rumble A4=413.9Hz", TvStandard::NTSC, 413.9);
+    return calculateGuide("NTSC Optimized Pure High, A4=585.3Hz", TvStandard::NTSC, 585.327);
 }
 
 /*************************************************************************/

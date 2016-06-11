@@ -32,8 +32,14 @@ public:
     PitchGuide getPitchPerfectNtscGuide();
     PitchGuide getOptimizedPurePalGuide();
     PitchGuide getOptimizedPureNtscGuide();
+    PitchGuide getOptimizedDiv232PalGuide();
+    PitchGuide getOptimizedDiv232NtscGuide();
+    PitchGuide getOptimizedDiv93PalGuide();
+    PitchGuide getOptimizedDiv93NtscGuide();
     PitchGuide getOptimizedDiv31PalGuide();
     PitchGuide getOptimizedDiv31NtscGuide();
+    PitchGuide getOptimizedDiv15PalGuide();
+    PitchGuide getOptimizedDiv15NtscGuide();
     PitchGuide getOptimizedDiv6PalGuide();
     PitchGuide getOptimizedDiv6NtscGuide();
     PitchGuide getOptimizedDiv2PalGuide();
