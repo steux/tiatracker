@@ -61,7 +61,7 @@ Start   SUBROUTINE
         txa
 .clearLoop:
         dex
-        tsx
+        txs
         pha
         bne .clearLoop
 
