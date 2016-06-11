@@ -37,12 +37,14 @@ Player::Player(Track::Track *parentTrack, QObject *parent) : QObject(parent)
 Player::~Player()
 {
     delete timer;
+/*
     delete eTimer;
 
     for (int i = 0; i < deltas.size(); ++i) {
         std::cout << elapsedValues[i] << "/" << deltas[i] << ", ";
     }
     std::cout << "\nnumFrames: " << statsNumFrames - 120 << ", average delta: " << double(statsJitterSum)/double(statsNumFrames - 120) << ", max: " << statsJitterMax << "\n";
+*/
 }
 
 /*************************************************************************/
@@ -62,8 +64,10 @@ void Player::startTimer() {
     QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
     timer->start(1000/50);
 
+/*
     eTimer = new QElapsedTimer;
     eTimer->start();
+*/
 }
 
 /*************************************************************************/
@@ -426,6 +430,7 @@ void Player::updateTrack() {
 /*************************************************************************/
 
 void Player::timerFired() {
+/*
     // Jitter test statistics
     long elapsed = (long)eTimer->elapsed();
     eTimer->restart();
@@ -439,6 +444,7 @@ void Player::timerFired() {
             statsJitterMax = delta;
         }
     }
+*/
 
     pTrack->lock();
     switch (mode) {

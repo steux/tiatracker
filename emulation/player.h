@@ -92,7 +92,7 @@ private:
     Emulation::SoundSDL2 sdlSound{&tiaSound};
 
     QTimer *timer = nullptr;
-
+/*
     // Jitter test statistics
     QElapsedTimer *eTimer;
     long statsJitterSum = 0;
@@ -100,7 +100,7 @@ private:
     long statsJitterMax = 0;
     QVector<int> deltas;
     QVector<long> elapsedValues;
-
+*/
     // Play mode we are in
     enum class PlayMode {
         None, Instrument, InstrumentOnce, Percussion, Waveform, Track
