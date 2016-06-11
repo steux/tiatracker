@@ -206,6 +206,12 @@ void MainWindow::initConnections() {
 
 /*************************************************************************/
 
+void MainWindow::initPlayer() {
+    emit initPlayerTimer();
+}
+
+/*************************************************************************/
+
 void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
     setTrackName(pTrack->name);

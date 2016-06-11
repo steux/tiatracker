@@ -79,30 +79,35 @@ int main(int argc, char *argv[])
     w.initConnections();
 
     /* Create and initialize player thread */
-    Emulation::Player tiaPlayer(&myTrack);
-    QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
-    QObject::connect(&w, SIGNAL(playInstrumentOnce(Track::Instrument*,int)), &tiaPlayer, SLOT(playInstrumentOnce(Track::Instrument*,int)));
-    QObject::connect(&w, SIGNAL(stopInstrument()), &tiaPlayer, SLOT(stopInstrument()));
-    QObject::connect(pt, SIGNAL(playWaveform(TiaSound::Distortion,int,int)), &tiaPlayer, SLOT(playWaveform(TiaSound::Distortion,int,int)));
-    QObject::connect(&w, SIGNAL(playPercussion(Track::Percussion*)), &tiaPlayer, SLOT(playPercussion(Track::Percussion*)));
-    QObject::connect(&w, SIGNAL(stopPercussion()), &tiaPlayer, SLOT(stopPercussion()));
-    QObject::connect(&w, SIGNAL(playTrack(int,int)), &tiaPlayer, SLOT(playTrack(int,int)));
-    QObject::connect(&w, SIGNAL(stopTrack()), &tiaPlayer, SLOT(stopTrack()));
+    Emulation::Player *tiaPlayer = new Emulation::Player(&myTrack);
+    QThread *thread = new QThread();
+    QObject::connect(&w, SIGNAL(initPlayerTimer()), tiaPlayer, SLOT(startTimer()));
+    tiaPlayer->moveToThread(thread);
+    QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
+    QObject::connect(&w, SIGNAL(playInstrumentOnce(Track::Instrument*,int)), tiaPlayer, SLOT(playInstrumentOnce(Track::Instrument*,int)));
+    QObject::connect(&w, SIGNAL(stopInstrument()), tiaPlayer, SLOT(stopInstrument()));
+    QObject::connect(pt, SIGNAL(playWaveform(TiaSound::Distortion,int,int)), tiaPlayer, SLOT(playWaveform(TiaSound::Distortion,int,int)));
+    QObject::connect(&w, SIGNAL(playPercussion(Track::Percussion*)), tiaPlayer, SLOT(playPercussion(Track::Percussion*)));
+    QObject::connect(&w, SIGNAL(stopPercussion()), tiaPlayer, SLOT(stopPercussion()));
+    QObject::connect(&w, SIGNAL(playTrack(int,int)), tiaPlayer, SLOT(playTrack(int,int)));
+    QObject::connect(&w, SIGNAL(stopTrack()), tiaPlayer, SLOT(stopTrack()));
     Timeline *tl = w.findChild<Timeline *>("trackTimeline");
     PatternEditor *editor = w.findChild<PatternEditor *>("trackEditor");
-    QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
-    QObject::connect(&tiaPlayer, SIGNAL(newPlayerPos(int,int)), editor, SLOT(newPlayerPos(int,int)));
-    QObject::connect(&tiaPlayer, SIGNAL(invalidNoteFound(int,int,int,QString)), tt, SLOT(invalidNoteFound(int,int,int,QString)));
-    QObject::connect(tt, SIGNAL(stopTrack()), &tiaPlayer, SLOT(stopTrack()));
-    QObject::connect(editor, SIGNAL(editChannelChanged(int)), &tiaPlayer, SLOT(selectedChannelChanged(int)));
+    QObject::connect(tiaPlayer, SIGNAL(newPlayerPos(int,int)), tl, SLOT(playerPosChanged(int,int)));
+    QObject::connect(tiaPlayer, SIGNAL(newPlayerPos(int,int)), editor, SLOT(newPlayerPos(int,int)));
+    QObject::connect(tiaPlayer, SIGNAL(invalidNoteFound(int,int,int,QString)), tt, SLOT(invalidNoteFound(int,int,int,QString)));
+    QObject::connect(tt, SIGNAL(stopTrack()), tiaPlayer, SLOT(stopTrack()));
+    QObject::connect(editor, SIGNAL(editChannelChanged(int)), tiaPlayer, SLOT(selectedChannelChanged(int)));
     QCheckBox *cbLoop = w.findChild<QCheckBox *>("checkBoxLoop");
-    QObject::connect(cbLoop, SIGNAL(toggled(bool)), &tiaPlayer, SLOT(toggleLoop(bool)));
-    QObject::connect(ot, SIGNAL(setTVStandard(TiaSound::TvStandard)), &tiaPlayer, SLOT(setTVStandard(TiaSound::TvStandard)));
+    QObject::connect(cbLoop, SIGNAL(toggled(bool)), tiaPlayer, SLOT(toggleLoop(bool)));
+    QObject::connect(ot, SIGNAL(setTVStandard(TiaSound::TvStandard)), tiaPlayer, SLOT(setTVStandard(TiaSound::TvStandard)));
 
-    pt->connectPlayer(&tiaPlayer);
-    tt->registerPlayer(&tiaPlayer);
-    editor->registerPlayer(&tiaPlayer);
-    tiaPlayer.run();
+    pt->connectPlayer(tiaPlayer);
+    tt->registerPlayer(tiaPlayer);
+    editor->registerPlayer(tiaPlayer);
+
+    thread->start(QThread::HighestPriority);
+    w.initPlayer();
 
     w.updateAllTabs();
 
@@ -110,5 +115,7 @@ int main(int argc, char *argv[])
     w.resize(0, 0);
     w.show();
 
-    return a.exec();
+    int result = a.exec();
+    delete tiaPlayer;
+    return result;
 }

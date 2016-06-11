@@ -56,6 +56,9 @@ public:
     /* Initializes signal/slot connections */
     void initConnections();
 
+    /* Initializes the player thread */
+    void initPlayer();
+
     void registerTrack(Track::Track *newTrack);
 
     TiaSound::PitchGuide *getPitchGuide();
@@ -73,6 +76,7 @@ public slots:
     void setWaveform(TiaSound::Distortion dist);
 
 signals:
+    void initPlayerTimer();
     void playInstrument(Track::Instrument *instrument, int frequency);
     void playInstrumentOnce(Track::Instrument *instrument, int frequency);
     void stopInstrument();

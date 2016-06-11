@@ -18,7 +18,7 @@
 
 namespace Emulation {
 
-Player::Player(Track::Track *parentTrack, QObject *parent) : QThread(parent)
+Player::Player(Track::Track *parentTrack, QObject *parent) : QObject(parent)
 {
     pTrack = parentTrack;
 
@@ -40,21 +40,9 @@ Player::~Player()
     delete eTimer;
 
     for (int i = 0; i < deltas.size(); ++i) {
-        std::cout << deltas[i] << ", ";
+        std::cout << elapsedValues[i] << "/" << deltas[i] << ", ";
     }
     std::cout << "\nnumFrames: " << statsNumFrames - 120 << ", average delta: " << double(statsJitterSum)/double(statsNumFrames - 120) << ", max: " << statsJitterMax << "\n";
-}
-
-/*************************************************************************/
-
-void Player::run() {
-    timer = new QTimer(this);
-    timer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
-    timer->start(1000/50);
-
-    eTimer = new QElapsedTimer;
-    eTimer->start();
 }
 
 /*************************************************************************/
@@ -64,6 +52,18 @@ void Player::setFrameRate(float rate) {
     sdlSound.setFrameRate(rate);
     sdlSound.open();
     timer->setInterval(int(1000/rate));
+}
+
+/*************************************************************************/
+
+void Player::startTimer() {
+    timer = new QTimer(this);
+    timer->setTimerType(Qt::PreciseTimer);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
+    timer->start(1000/50);
+
+    eTimer = new QElapsedTimer;
+    eTimer->start();
 }
 
 /*************************************************************************/
@@ -429,10 +429,11 @@ void Player::timerFired() {
     // Jitter test statistics
     long elapsed = (long)eTimer->elapsed();
     eTimer->restart();
-    deltas.append(int(50 - elapsed));
+    elapsedValues.append(elapsed);
+    deltas.append(int(20 - elapsed));
     statsNumFrames++;
     if (statsNumFrames >= 120) {
-        long delta = std::abs(50 - elapsed);
+        long delta = std::abs(20 - elapsed);
         statsJitterSum += delta;
         if (delta > statsJitterMax) {
             statsJitterMax = delta;

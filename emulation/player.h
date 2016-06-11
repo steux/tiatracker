@@ -23,7 +23,7 @@
 
 namespace Emulation {
 
-class Player : public QThread {
+class Player : public QObject {
     Q_OBJECT
 
 public:
@@ -49,13 +49,13 @@ public:
     explicit Player(Track::Track *parentTrack, QObject *parent = 0);
     ~Player();
 
-    /* Start the thread, i.e. initialize */
-    void run();
-
     /* Set framerate to play at */
     void setFrameRate(float rate);
 
 public slots:
+    /* Initialize */
+    void startTimer();
+
     // Stop everything next frame
     void silence();
 
@@ -99,6 +99,7 @@ private:
     long statsNumFrames = 0;
     long statsJitterMax = 0;
     QVector<int> deltas;
+    QVector<long> elapsedValues;
 
     // Play mode we are in
     enum class PlayMode {
