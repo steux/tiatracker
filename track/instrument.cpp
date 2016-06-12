@@ -339,7 +339,7 @@ int Instrument::getReleaseStart() const {
 
 int Instrument::calcEffectiveSize() {
     int realSize = envelopeLength;
-    while (realSize > 0 && frequencies[realSize - 1] == 0 && volumes[realSize - 1] == 0) {
+    while (realSize > (releaseStart + 1) && frequencies[realSize - 1] == 0 && volumes[realSize - 1] == 0) {
         realSize--;
     }
     return realSize + 1;
