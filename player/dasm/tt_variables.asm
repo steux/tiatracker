@@ -26,7 +26,7 @@ TT_ODD_SPEED            = %%ODDSPEED%%
 
 ; 1: Overlay percussion, +40 bytes
 TT_USE_OVERLAY          = %%USEOVERLAY%%
-; 1: Melodic instrument slide, +11 bytes
+; 1: Melodic instrument slide, +7 bytes
 TT_USE_SLIDE            = %%USESLIDE%%
 ; 1: Goto pattern, +8 bytes
 TT_USE_GOTO             = %%USEGOTO%%

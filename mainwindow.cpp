@@ -516,7 +516,7 @@ void MainWindow::updateInfo() {
     int sequencesSize = pTrack->sequencesSize();
     ui->labelSequencesRom->setText(QString::number(sequencesSize));
     int totalRom =
-            Emulation::Player::RomTrack
+            Emulation::Player::RomPlayerCore
             + (usesGoto ? Emulation::Player::RomGoto : 0)
             + (usesSlide ? Emulation::Player::RomSlide : 0)
             + (usesOverlay ? Emulation::Player::RomOverlay : 0)
