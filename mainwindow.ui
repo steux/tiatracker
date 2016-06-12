@@ -1308,7 +1308,7 @@
            <item>
             <widget class="QComboBox" name="comboBoxPitchGuide">
              <property name="maxVisibleItems">
-              <number>15</number>
+              <number>17</number>
              </property>
             </widget>
            </item>

@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     Emulation::Player *tiaPlayer = new Emulation::Player(&myTrack);
     QThread *thread = new QThread();
     QObject::connect(&w, SIGNAL(initPlayerTimer()), tiaPlayer, SLOT(startTimer()));
+    QObject::connect(&w, SIGNAL(stopPlayerTimer()), tiaPlayer, SLOT(stopTimer()));
     tiaPlayer->moveToThread(thread);
     QObject::connect(&w, SIGNAL(playInstrument(Track::Instrument*,int)), tiaPlayer, SLOT(playInstrument(Track::Instrument*,int)));
     QObject::connect(&w, SIGNAL(playInstrumentOnce(Track::Instrument*,int)), tiaPlayer, SLOT(playInstrumentOnce(Track::Instrument*,int)));
@@ -116,6 +117,7 @@ int main(int argc, char *argv[])
     w.show();
 
     int result = a.exec();
+    w.stopPlayer();
     delete tiaPlayer;
     return result;
 }

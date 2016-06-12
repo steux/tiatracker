@@ -58,6 +58,8 @@ public:
 
     /* Initializes the player thread */
     void initPlayer();
+    /* Stop the timer in the player thread */
+    void stopPlayer();
 
     void registerTrack(Track::Track *newTrack);
 
@@ -77,6 +79,7 @@ public slots:
 
 signals:
     void initPlayerTimer();
+    void stopPlayerTimer();
     void playInstrument(Track::Instrument *instrument, int frequency);
     void playInstrumentOnce(Track::Instrument *instrument, int frequency);
     void stopInstrument();

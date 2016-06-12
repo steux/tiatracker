@@ -55,8 +55,8 @@ public:
     void setFrameRate(float rate);
 
 public slots:
-    /* Initialize */
     void startTimer();
+    void stopTimer();
 
     // Stop everything next frame
     void silence();

@@ -212,6 +212,12 @@ void MainWindow::initPlayer() {
 
 /*************************************************************************/
 
+void MainWindow::stopPlayer() {
+    emit stopPlayerTimer();
+}
+
+/*************************************************************************/
+
 void MainWindow::registerTrack(Track::Track *newTrack) {
     pTrack = newTrack;
     setTrackName(pTrack->name);
