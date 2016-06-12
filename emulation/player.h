@@ -33,7 +33,9 @@ public:
     static const int RomOverlay = 40;
     static const int RomFunktempo = 7;
     static const int RomStartsWithHold = 2;
+    // ADIndex + SustainIndex + ReleaseIndex + DummyByte + EndByte
     static const int RomPerInstrument = 5;
+    // PercIndex + 2 end bytes
     static const int RomPerPercussion = 3;
     static const int RomPerPattern = 3;
     static const int RomPerSequence = 1;

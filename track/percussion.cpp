@@ -260,7 +260,7 @@ int Percussion::calcEffectiveSize() {
     while (realSize > 0 && waveforms[realSize - 1] == TiaSound::Distortion::SILENT && volumes[realSize - 1] == 0) {
         realSize--;
     }
-    return realSize + 1;
+    return realSize + 1;    // +1 for End byte
 }
 
 }

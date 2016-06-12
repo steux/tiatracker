@@ -399,8 +399,7 @@ int Track::calcInstrumentsSize() {
     for (int i = 0; i < numInstruments; ++i) {
         if (found[i] != 0) {
             result += found[i]*Emulation::Player::RomPerInstrument;
-            // +1 b/c of dummy byte between sustain and release
-            result += instruments[i].calcEffectiveSize() + 1;
+            result += instruments[i].calcEffectiveSize();
         }
     }
     return result;
@@ -422,7 +421,8 @@ int Track::calcPercussionSize() {
     for (int i = 0; i < numPercussion; ++i) {
         if (found[i] != 0) {
             result += Emulation::Player::RomPerPercussion;
-            result += 2*percussion[i].calcEffectiveSize();
+            // -1 because calcEffectiveSize includes end marker that is also in RomPerPercussion
+            result += 2*(percussion[i].calcEffectiveSize() - 1);
         }
     }
     return result;

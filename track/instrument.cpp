@@ -342,7 +342,7 @@ int Instrument::calcEffectiveSize() {
     while (realSize > (releaseStart + 1) && frequencies[realSize - 1] == 0 && volumes[realSize - 1] == 0) {
         realSize--;
     }
-    return realSize + 1;
+    return realSize + 1;    // +1 for "end of instrument" 0 byte
 }
 
 /*************************************************************************/
