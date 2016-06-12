@@ -24,7 +24,7 @@ public:
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updateOptionsTab();
 
-
+    QString curGuidesDialogPath;
     QList<TiaSound::PitchGuide> guides{};
 
 signals:

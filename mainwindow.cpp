@@ -75,6 +75,11 @@ MainWindow::MainWindow(QWidget *parent) :
     } else {
         ui->tabPercussion->curPercussionDialogPath = QDir::currentPath() + "/instruments";
     }
+    if (settings.contains("guidesPath")) {
+        ui->tabOptions->curGuidesDialogPath = settings.value("guidesPath").toString();
+    } else {
+        ui->tabOptions->curGuidesDialogPath = QDir::currentPath() + "/guides";
+    }
 
     // Context menu for envelope widgets
     waveformContextMenu.addAction(&actionInsertBefore);
@@ -684,6 +689,7 @@ void MainWindow::on_actionQuit_triggered() {
     settings.setValue("songsPath", curSongsDialogPath);
     settings.setValue("instrumentsPath", ui->tabInstruments->curInstrumentsDialogPath);
     settings.setValue("percussionPath", ui->tabPercussion->curPercussionDialogPath);
+    settings.setValue("guidesPath", ui->tabOptions->curGuidesDialogPath);
 
     QApplication::quit();
 }

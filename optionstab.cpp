@@ -117,6 +117,7 @@ void OptionsTab::on_pushButtonGuideCreate_clicked(bool) {
 void OptionsTab::on_pushButtonGuideImport_clicked(bool) {
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curGuidesDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     dialog.setFileMode(QFileDialog::ExistingFile);
     dialog.setNameFilter("*.ttg");
@@ -131,6 +132,7 @@ void OptionsTab::on_pushButtonGuideImport_clicked(bool) {
         return;
     }
     QString fileName = fileNames[0];
+    curGuidesDialogPath = dialog.directory().absolutePath();
     QFile loadFile(fileName);
     if (!loadFile.open(QIODevice::ReadOnly)) {
         MainWindow::displayMessage("Unable to open file!");
@@ -157,6 +159,7 @@ void OptionsTab::on_pushButtonGuideExport_clicked(bool) {
 
     // Ask for filename
     QFileDialog dialog(this);
+    dialog.setDirectory(curGuidesDialogPath);
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setNameFilter("*.ttg");
@@ -171,6 +174,7 @@ void OptionsTab::on_pushButtonGuideExport_clicked(bool) {
         return;
     }
     QString fileName = fileNames[0];
+    curGuidesDialogPath = dialog.directory().absolutePath();
     QFile saveFile(fileName);
 
     // Export guide
