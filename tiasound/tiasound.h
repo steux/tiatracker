@@ -91,7 +91,7 @@ int getDistortionInt(Distortion dist);
 
 /* TV Standards
  */
-enum class TvStandard {
+enum class TvStandard : int {
     PAL, NTSC
 };
 

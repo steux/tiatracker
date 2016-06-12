@@ -185,8 +185,9 @@ void Player::toggleLoop(bool toggle) {
 
 /*************************************************************************/
 
-void Player::setTVStandard(TiaSound::TvStandard newStandard) {
+void Player::setTVStandard(int iNewStandard) {
     timer->stop();
+    TiaSound::TvStandard newStandard = static_cast<TiaSound::TvStandard>(iNewStandard);
     if (newStandard == TiaSound::TvStandard::PAL) {
         setFrameRate(50.0);
         timer->start(1000/50);

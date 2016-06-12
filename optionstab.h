@@ -28,7 +28,7 @@ public:
     QList<TiaSound::PitchGuide> guides{};
 
 signals:
-    void setTVStandard(TiaSound::TvStandard newStandard);
+    void setTVStandard(int);
     void setPitchGuide(TiaSound::PitchGuide newGuide);
     void setOffTuneThreshold(int value);
 
