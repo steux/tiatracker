@@ -496,6 +496,7 @@ void MainWindow::updateAllTabs() {
 /*************************************************************************/
 
 void MainWindow::updateInfo() {
+    ui->labelCoreRom->setText(QString::number(Emulation::Player::RomPlayerCore));
     bool usesGoto = pTrack->usesGoto();
     ui->labelGotoUsed->setText(usesGoto ? "X" : "-");
     ui->labelGotoRom->setText(usesGoto ? QString::number(Emulation::Player::RomGoto) : "<s>" + QString::number(Emulation::Player::RomGoto) + "</s>");
