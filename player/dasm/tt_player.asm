@@ -131,7 +131,7 @@ tt_Player SUBROUTINE
         sec
         sbc #8
         sta tt_cur_ins_c0,x
-        bne .finishedNewNote            ; unconditional, sind ins>0
+        bcs .finishedNewNote            ; unconditional, since legally no underflow can happen (ins>0 or HOLD for ins=0)
     ENDIF
   
         ; --- pause ---

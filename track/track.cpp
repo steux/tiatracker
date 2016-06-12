@@ -301,7 +301,7 @@ bool Track::usesGoto() {
 /*************************************************************************/
 
 bool Track::startsWithHold() {
-    return (getNote(0, 0)->type == Note::instrumentType::Hold && getNote(1, 0)->type == Note::instrumentType::Hold);
+    return (getNote(0, 0)->type == Note::instrumentType::Hold || getNote(1, 0)->type == Note::instrumentType::Hold);
 }
 
 /*************************************************************************/
