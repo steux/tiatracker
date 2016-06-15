@@ -106,7 +106,7 @@ void PercussionTab::updatePercussionTab() {
     lPercussionUsed->setText(percussionUsedString);
     // Names
     QComboBox *cbPercussion = findChild<QComboBox *>("comboBoxPercussion");
-    for (int perc = 0; perc < pTrack->getNumUsedPercussion(); ++perc) {
+    for (int perc = 0; perc < pTrack->numPercussion; ++perc) {
         cbPercussion->setItemText(perc, pTrack->percussion[perc].name);
     }
 

@@ -110,7 +110,7 @@ void InstrumentsTab::updateInstrumentsTab() {
     lInstrumentsUsed->setText(instrumentsUsedString);
     // Names
     QComboBox *cbInstruments = findChild<QComboBox *>("comboBoxInstruments");
-    for (int ins = 0; ins < pTrack->getNumUsedInstruments(); ++ins) {
+    for (int ins = 0; ins < pTrack->numInstruments; ++ins) {
         cbInstruments->setItemText(ins, pTrack->instruments[ins].name);
     }
 
