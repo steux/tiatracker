@@ -66,6 +66,7 @@ void Instrument::toJson(QJsonObject &json) {
 bool Instrument::import(const QJsonObject &json) {
     int version = json["version"].toInt();
     if (version > MainWindow::version) {
+        MainWindow::displayMessage("An instrument is from a later version of TIATracker!");
         return false;
     }
 
@@ -78,18 +79,22 @@ bool Instrument::import(const QJsonObject &json) {
     QJsonArray volArray = json["volumes"].toArray();
 
     // Check for data validity
-    if (newName.length() < 1 || newName.length() > InstrumentsTab::maxInstrumentNameLength) {
+    if (newName.length() > InstrumentsTab::maxInstrumentNameLength) {
+        MainWindow::displayMessage("An instrument has an invalid name: " + newName);
         return false;
     }
     if (newWaveform < 0 || newWaveform > 16) {
+        MainWindow::displayMessage("An instrument has an invalid waveform: " + newName);
         return false;
     }
     if (newEnvelopeLength < 2 || newEnvelopeLength > 99
             || newSustainStart < 0 || newSustainStart >= newEnvelopeLength - 1
             || newReleaseStart <= newSustainStart || newReleaseStart > newEnvelopeLength - 1) {
+        MainWindow::displayMessage("An instrument has an invalid envelope structure: " + newName);
         return false;
     }
     if (newEnvelopeLength != freqArray.size() || newEnvelopeLength != volArray.size()) {
+        MainWindow::displayMessage("An instrument has an invalid frequency envelope: " + newName);
         return false;
     }
 

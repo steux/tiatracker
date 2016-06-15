@@ -7,6 +7,7 @@
 
 #include "sequence.h"
 #include <QJsonArray>
+#include "mainwindow.h"
 
 
 namespace Track {
@@ -36,10 +37,12 @@ bool Sequence::fromJson(const QJsonObject &json) {
     for (int i = 0; i < seqArray.size(); ++i) {
         SequenceEntry se;
         if (!se.fromJson(seqArray[i].toObject())) {
+            MainWindow::displayMessage("Invalid sequence entry at " + QString::number(i));
             return false;
         }
         if (se.gotoTarget < -1 || se.gotoTarget >= seqArray.size()
                 || se.patternIndex < 0) {
+            MainWindow::displayMessage("Invalid goto target at " + QString::number(i));
             return false;
         }
         sequence.append(se);

@@ -6,6 +6,8 @@
  */
 
 #include "sequenceentry.h"
+#include "mainwindow.h"
+
 
 namespace Track {
 

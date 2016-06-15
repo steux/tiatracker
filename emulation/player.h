@@ -110,7 +110,7 @@ private:
     PlayMode mode = PlayMode::None;
 
     /* Current values for instrument play */
-    Track::Instrument *currentInstrument;
+    Track::Instrument *currentInstrument = nullptr;
     int currentInstrumentFrequency;
     int currentInstrumentFrame;
 

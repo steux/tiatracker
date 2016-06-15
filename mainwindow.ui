@@ -27,7 +27,7 @@
        <enum>Qt::StrongFocus</enum>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>4</number>
       </property>
       <widget class="TrackTab" name="tabTrack">
        <property name="sizePolicy">

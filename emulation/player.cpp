@@ -105,7 +105,9 @@ void Player::playInstrumentOnce(Track::Instrument *instrument, int frequency) {
 /*************************************************************************/
 
 void Player::stopInstrument() {
-    currentInstrumentFrame = currentInstrument->getReleaseStart();
+    if (currentInstrument != nullptr) {
+        currentInstrumentFrame = currentInstrument->getReleaseStart();
+    }
 }
 
 /*************************************************************************/

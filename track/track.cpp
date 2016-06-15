@@ -531,6 +531,7 @@ void Track::toJson(QJsonObject &json) {
 bool Track::fromJson(const QJsonObject &json) {
     int version = json["version"].toInt();
     if (version > MainWindow::version) {
+        MainWindow::displayMessage("This song is from a later version of TIATracker!");
         return false;
     }
     if (json["tvmode"] == "pal") {
@@ -538,6 +539,7 @@ bool Track::fromJson(const QJsonObject &json) {
     } else if (json["tvmode"] == "ntsc") {
         tvMode = TiaSound::TvStandard::NTSC;
     } else {
+        MainWindow::displayMessage("Invalid tv mode!");
         return false;
     }
     evenSpeed = json["evenspeed"].toInt();
@@ -555,6 +557,7 @@ bool Track::fromJson(const QJsonObject &json) {
     // Instruments
     QJsonArray insArray = json["instruments"].toArray();
     if (insArray.size() != numInstruments) {
+        MainWindow::displayMessage("Invalid number of instruments!");
         return false;
     }
     instruments.clear();
@@ -569,6 +572,7 @@ bool Track::fromJson(const QJsonObject &json) {
     // Percussion
     QJsonArray percArray = json["percussion"].toArray();
     if (percArray.size() != numPercussion) {
+        MainWindow::displayMessage("Invalid number of percussions!");
         return false;
     }
     percussion.clear();
@@ -594,6 +598,7 @@ bool Track::fromJson(const QJsonObject &json) {
     // Sequences
     QJsonArray chanArray = json["channels"].toArray();
     if (chanArray.size() != 2) {
+        MainWindow::displayMessage("There are not exactly 2 sequences!");
         return false;
     }
     channelSequences.clear();

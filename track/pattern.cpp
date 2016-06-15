@@ -7,6 +7,7 @@
 
 #include "pattern.h"
 #include <QJsonArray>
+#include <mainwindow.h>
 
 
 namespace Track {
@@ -38,6 +39,7 @@ bool Pattern::fromJson(const QJsonObject &json) {
     for (int i = 0; i < noteArray.size(); ++i) {
         Note newNote;
         if (!newNote.fromJson(noteArray[i].toObject())) {
+            MainWindow::displayMessage("A pattern has an invalid note: " + name);
             return false;
         }
         notes.append(newNote);

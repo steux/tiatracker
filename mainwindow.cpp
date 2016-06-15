@@ -455,7 +455,6 @@ void MainWindow::loadTrackByName(const QString &fileName) {
     pTrack->lock();
     // Parse in data
     if (!pTrack->fromJson(loadDoc.object())) {
-        displayMessage("Unable to parse track!");
         pTrack->unlock();
         return;
     }

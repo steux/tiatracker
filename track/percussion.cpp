@@ -91,6 +91,7 @@ void Percussion::toJson(QJsonObject &json) {
 bool Percussion::import(const QJsonObject &json) {
     int version = json["version"].toInt();
     if (version > MainWindow::version) {
+        MainWindow::displayMessage("A percussion is from a later version of TIATracker!");
         return false;
     }
 
@@ -102,14 +103,17 @@ bool Percussion::import(const QJsonObject &json) {
     QJsonArray waveformArray = json["waveforms"].toArray();
 
     // Check for data validity
-    if (newName.length() < 1 || newName.length() > PercussionTab::maxPercussionNameLength) {
+    if (newName.length() > PercussionTab::maxPercussionNameLength) {
+        MainWindow::displayMessage("A percussion has an invalid name: " + newName);
         return false;
     }
     if (newEnvelopeLength < 1 || newEnvelopeLength > 99) {
+        MainWindow::displayMessage("A percussion has an invalid envelope length: " + newName);
         return false;
     }
     if (newEnvelopeLength != freqArray.size() || newEnvelopeLength != volArray.size()
             || newEnvelopeLength != waveformArray.size()) {
+        MainWindow::displayMessage("A percussion has an invalid envelope: " + newName);
         return false;
     }
 
