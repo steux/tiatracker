@@ -187,6 +187,8 @@ void MainWindow::initConnections() {
     QObject::connect(ui->pushButtonGuideCreate, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideCreate_clicked(bool)));
     QObject::connect(ui->pushButtonGuideExport, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideExport_clicked(bool)));
     QObject::connect(ui->pushButtonGuideImport, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideImport_clicked(bool)));
+    QObject::connect(ui->lineEditAuthor, SIGNAL(textChanged(QString)), ui->tabOptions, SLOT(on_lineEditAuthor_textChanged(QString)));
+    QObject::connect(ui->lineEditSongName, SIGNAL(textChanged(QString)), ui->tabOptions, SLOT(on_lineEditSongName_textChanged(QString)));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();
@@ -485,6 +487,10 @@ void MainWindow::updateAllTabs() {
     PercussionTab *percTab = findChild<PercussionTab *>("tabPercussion");
     percTab->updatePercussionTab();
     percTab->update();
+
+    OptionsTab *optionsTab = findChild<OptionsTab *>("tabOptions");
+    optionsTab->updateOptionsTab();
+    optionsTab->update();
 
     InstrumentSelector *insSel = findChild<InstrumentSelector *>("trackInstrumentSelector");
     insSel->setSelectedInstrument(0);
@@ -846,6 +852,8 @@ bool MainWindow::exportFlags(QString fileName) {
     if (flagsString == "") {
         return false;
     }
+    flagsString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    flagsString.replace("%%NAME%%", pTrack->metaName);
     flagsString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
     flagsString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
     bool usesGoto = pTrack->usesGoto();
@@ -876,6 +884,8 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
     if (trackString == "") {
         return false;
     }
+    trackString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    trackString.replace("%%NAME%%", pTrack->metaName);
     // Mapping of encountered to real, to weed out the unused
     QMap<int, int> insMapping{};
     int numInstruments = 0;
@@ -1072,6 +1082,8 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
     if (initString == "") {
         return false;
     }
+    initString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    initString.replace("%%NAME%%", pTrack->metaName);
     initString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
     initString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
     // Write init
@@ -1104,6 +1116,8 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     if (playerString == "") {
         return;
     }
+    playerString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    playerString.replace("%%NAME%%", pTrack->metaName);
     if (!writeAsm(fileName, playerString, "_player.asm")) {
         displayMessage("Unable to write player file!");
         return;
@@ -1113,6 +1127,8 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     if (frameworkString == "") {
         return;
     }
+    frameworkString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    frameworkString.replace("%%NAME%%", pTrack->metaName);
     if (pTrack->getTvMode() == TiaSound::TvStandard::PAL) {
         frameworkString.replace("%%PAL%%", "1");
         frameworkString.replace("%%NTSC%%", "0");

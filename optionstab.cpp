@@ -8,6 +8,8 @@
 #include <QJsonDocument>
 #include "mainwindow.h"
 #include <QLabel>
+#include <QLineEdit>
+#include <QRadioButton>
 
 
 OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
@@ -49,6 +51,26 @@ void OptionsTab::initOptionsTab() {
 /*************************************************************************/
 
 void OptionsTab::updateOptionsTab() {
+    // TvStandard
+    QRadioButton *rbPal = findChild<QRadioButton *>("radioButtonPal");
+    QRadioButton *rbNtsc = findChild<QRadioButton *>("radioButtonNtsc");
+    if (pTrack->getTvMode() == TiaSound::TvStandard::PAL) {
+        rbPal->setChecked(true);
+        rbNtsc->setChecked(false);
+        emit setTVStandard(static_cast<int>(TiaSound::TvStandard::PAL));
+    } else {
+        rbPal->setChecked(false);
+        rbNtsc->setChecked(true);
+        emit setTVStandard(static_cast<int>(TiaSound::TvStandard::NTSC));
+    }
+    // Meta data
+    QLineEdit *leAuthor = findChild<QLineEdit *>("lineEditAuthor");
+    leAuthor->setText(pTrack->metaAuthor);
+    leAuthor->update();
+    QLineEdit *leSongName = findChild<QLineEdit *>("lineEditSongName");
+    leSongName->setText(pTrack->metaName);
+    leAuthor->update();
+    // Pitch guide
     QLabel *infoLabel = findChild<QLabel *>("labelGuideInfo");
     QComboBox *cbGuides = findChild<QComboBox *>("comboBoxPitchGuide");
     TiaSound::PitchGuide *pg = &(guides[cbGuides->currentIndex()]);
@@ -187,4 +209,16 @@ void OptionsTab::on_pushButtonGuideExport_clicked(bool) {
     QJsonDocument saveDoc(insObject);
     saveFile.write(saveDoc.toJson());
     saveFile.close();
+}
+
+/*************************************************************************/
+
+void OptionsTab::on_lineEditAuthor_textChanged(const QString newText) {
+    pTrack->metaAuthor = newText;
+}
+
+/*************************************************************************/
+
+void OptionsTab::on_lineEditSongName_textChanged(const QString newText) {
+    pTrack->metaName = newText;
 }

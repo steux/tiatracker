@@ -123,6 +123,9 @@ public:
     double guideBaseFreq = 0.0;
     TiaSound::TvStandard guideTvStandard;
 
+    QString metaAuthor;
+    QString metaName;
+
 private:
     QMutex mutex;
 

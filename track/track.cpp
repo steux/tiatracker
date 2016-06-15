@@ -488,6 +488,8 @@ void Track::toJson(QJsonObject &json) {
         json["pitchGuideBaseFrequency"] = guideBaseFreq;
         json["pitchGuideTvStandard"] = (guideTvStandard == TiaSound::TvStandard::PAL ? "PAL" : "NTSC");
     }
+    json["metaAuthor"] = metaAuthor;
+    json["metaName"] = metaName;
 
     // Instruments
     QJsonArray insArray;
@@ -552,6 +554,14 @@ bool Track::fromJson(const QJsonObject &json) {
         guideTvStandard = (json["pitchGuideTvStandard"].toString() == "PAL" ? TiaSound::TvStandard::PAL : TiaSound::TvStandard::NTSC);
     } else {
         guideBaseFreq = 0.0;
+    }
+    // Author and name are optional
+    if (json.contains("metaAuthor")) {
+        metaAuthor = json["metaAuthor"].toString();
+        metaName = json["metaName"].toString();
+    } else {
+        metaAuthor = "";
+        metaName = "";
     }
 
     // Instruments

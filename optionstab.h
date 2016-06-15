@@ -53,6 +53,10 @@ private slots:
 
     void on_pushButtonGuideExport_clicked(bool);
 
+    void on_lineEditAuthor_textChanged(const QString newText);
+    void on_lineEditSongName_textChanged(const QString newText);
+
+
 };
 
 #endif // OPTIONSTAB_H
