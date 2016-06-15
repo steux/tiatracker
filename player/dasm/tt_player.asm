@@ -116,11 +116,13 @@ tt_Player SUBROUTINE
     ENDIF
         ; Parse new note from pattern
         cmp #TT_INS_PAUSE
-        beq .pause
-        bcs .newNote                    ; > means instrument or percussion
     IF TT_USE_SLIDE = 0
-        bcc .finishedNewNote
-    ELSE  
+        bcc .finishedNewNote	
+        bne .newNote
+    ELSE
+        beq .pause
+        bcs .newNote
+
         ; --- slide/hold ---
         ; Adjust frequency and hold note in sustain.
         ; composer/tracker has to make sure that no unwanted

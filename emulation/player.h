@@ -29,7 +29,7 @@ class Player : public QObject {
 public:
     /* Player ROM usage per feature */
     static const int RomGoto = 8;
-    static const int RomSlide = 7;
+    static const int RomSlide = 9;
     static const int RomOverlay = 40;
     static const int RomFunktempo = 7;
     static const int RomStartsWithHold = 2;
@@ -39,7 +39,7 @@ public:
     static const int RomPerPercussion = 3;
     static const int RomPerPattern = 3;
     static const int RomPerSequence = 1;
-    static const int RomPlayerCore = 168    ;
+    static const int RomPlayerCore = 166;
 
     /* Note constants from player routine */
     static const int NoteHold = 8;
