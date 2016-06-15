@@ -55,6 +55,7 @@ private slots:
 
     void on_lineEditAuthor_textChanged(const QString newText);
     void on_lineEditSongName_textChanged(const QString newText);
+    void on_plainTextEditComment_textChanged();
 
 
 };

@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QPlainTextEdit>
+#include <QTextDocument>
 
 
 OptionsTab::OptionsTab(QWidget *parent) : QWidget(parent)
@@ -70,6 +72,9 @@ void OptionsTab::updateOptionsTab() {
     QLineEdit *leSongName = findChild<QLineEdit *>("lineEditSongName");
     leSongName->setText(pTrack->metaName);
     leAuthor->update();
+    QPlainTextEdit *te = findChild<QPlainTextEdit *>("plainTextEditComment");
+    te->setPlainText(pTrack->metaComment);
+
     // Pitch guide
     QLabel *infoLabel = findChild<QLabel *>("labelGuideInfo");
     QComboBox *cbGuides = findChild<QComboBox *>("comboBoxPitchGuide");
@@ -221,4 +226,11 @@ void OptionsTab::on_lineEditAuthor_textChanged(const QString newText) {
 
 void OptionsTab::on_lineEditSongName_textChanged(const QString newText) {
     pTrack->metaName = newText;
+}
+
+/*************************************************************************/
+
+void OptionsTab::on_plainTextEditComment_textChanged() {
+    QPlainTextEdit *te = findChild<QPlainTextEdit *>("plainTextEditComment");
+    pTrack->metaComment = te->document()->toPlainText();
 }

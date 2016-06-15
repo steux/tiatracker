@@ -189,6 +189,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->pushButtonGuideImport, SIGNAL(clicked(bool)), ui->tabOptions, SLOT(on_pushButtonGuideImport_clicked(bool)));
     QObject::connect(ui->lineEditAuthor, SIGNAL(textChanged(QString)), ui->tabOptions, SLOT(on_lineEditAuthor_textChanged(QString)));
     QObject::connect(ui->lineEditSongName, SIGNAL(textChanged(QString)), ui->tabOptions, SLOT(on_lineEditSongName_textChanged(QString)));
+    QObject::connect(ui->plainTextEditComment, SIGNAL(textChanged()), ui->tabOptions, SLOT(on_plainTextEditComment_textChanged()));
 
     // PianoKeyboard
     ui->pianoKeyboard->initPianoKeyboard();

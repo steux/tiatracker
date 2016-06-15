@@ -490,6 +490,7 @@ void Track::toJson(QJsonObject &json) {
     }
     json["metaAuthor"] = metaAuthor;
     json["metaName"] = metaName;
+    json["metaComment"] = metaComment;
 
     // Instruments
     QJsonArray insArray;
@@ -562,6 +563,12 @@ bool Track::fromJson(const QJsonObject &json) {
     } else {
         metaAuthor = "";
         metaName = "";
+    }
+    // Comment is optional
+    if (json.contains("metaComment")) {
+        metaComment = json["metaComment"].toString();
+    } else {
+        metaComment = "";
     }
 
     // Instruments

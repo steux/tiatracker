@@ -125,6 +125,7 @@ public:
 
     QString metaAuthor;
     QString metaName;
+    QString metaComment;
 
 private:
     QMutex mutex;
