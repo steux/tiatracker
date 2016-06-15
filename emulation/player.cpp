@@ -36,7 +36,6 @@ Player::Player(Track::Track *parentTrack, QObject *parent) : QObject(parent)
 
 Player::~Player()
 {
-    delete timer;
 /*
     delete eTimer;
 
