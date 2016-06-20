@@ -5,7 +5,8 @@ A music tracker for making Atari VCS 2600 music on the PC, including a new sound
 (c) 2016 by Andre "Kylearan" Wichmann (andre.wichmann@gmx.de)
 
 * Manual: [https://bitbucket.org/kylearan/tiatracker/raw/master/data/TIATracker_manual.pdf](https://bitbucket.org/kylearan/tiatracker/raw/master/data/TIATracker_manual.pdf)
-* Windows binaries: [http://www.compoundeye.net/demoscene/TIATracker.zip](http://www.compoundeye.net/demoscene/TIATracker.zip) (for Linux and OS X, use "wine" or compile the source)
+* Windows binaries: [http://www.compoundeye.net/demoscene/TIATracker.zip](http://www.compoundeye.net/demoscene/TIATracker.zip)
+* For Linux and OS X, use "wine" or compile the source (uses Qt and SDL)
 * Source: [https://bitbucket.org/kylearan/tiatracker](https://bitbucket.org/kylearan/tiatracker)
 * Seminar talk from Revision 2016 about VCS music in general and TIATracker in particular: [https://www.youtube.com/watch?v=PVujzQySZls](https://www.youtube.com/watch?v=PVujzQySZls)
 
@@ -29,3 +30,12 @@ Tracker features:
 * Timeline "mini map" displaying the pattern sequences
 * Sound emulation from the Stella emulator for playback
 * Export to dasm
+
+## Planned enhancements
+
+* Export to .k65
+* More precise playback timing in the tracker emulation
+* Undo/Redo
+* Backport the upcoming major improvements in Stella's sound emulation to the tracker
+
+For feedback, bug reports and feature requests, send a mail to andre.wichmann@gmx.de!
