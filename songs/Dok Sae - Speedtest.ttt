@@ -8332,8 +8332,8 @@
             ]
         }
     ],
-    "pitchGuideBaseFrequency": 615.42700000000002,
-    "pitchGuideName": "PAL Optimized Pure A4=615.4Hz",
+    "pitchGuideBaseFrequency": 440,
+    "pitchGuideName": "PAL Pitch-perfect A4=440Hz",
     "pitchGuideTvStandard": "PAL",
     "rowsperbeat": 4,
     "tvmode": "pal",
