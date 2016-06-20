@@ -92,6 +92,7 @@ void OptionsTab::on_comboBoxPitchGuide_currentIndexChanged(int index) {
     TiaSound::PitchGuide *pg = &(guides[cbGuides->currentIndex()]);
     pTrack->guideName = pg->name;
     pTrack->guideBaseFreq = pg->baseFreq;
+    pTrack->guideTvStandard = pg->tvStandard;
     updateOptionsTab();
     emit setPitchGuide(guides[index]);
 }

@@ -121,7 +121,7 @@ public:
 
     QString guideName;
     double guideBaseFreq = 0.0;
-    TiaSound::TvStandard guideTvStandard;
+    TiaSound::TvStandard guideTvStandard = TiaSound::TvStandard::PAL;
 
     QString metaAuthor;
     QString metaName;
