@@ -33,6 +33,7 @@ Tracker features:
 
 ## Planned enhancements
 
+* More sensible "loop pattern" behavior
 * Export to .k65
 * More precise playback timing in the tracker emulation
 * Undo/Redo
