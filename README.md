@@ -4,6 +4,11 @@ A music tracker for making Atari VCS 2600 music on the PC, including a new sound
 
 (c) 2016 by Andre "Kylearan" Wichmann (andre.wichmann@gmx.de)
 
+* Manual: [https://bitbucket.org/kylearan/tiatracker/src/master/data/TIATracker_manual.pdf](https://bitbucket.org/kylearan/tiatracker/src/master/data/TIATracker_manual.pdf)
+* Windows binaries: [http://www.compoundeye.net/demoscene/TIATracker.zip](http://www.compoundeye.net/demoscene/TIATracker.zip) (for Linux and OS X, use "wine" or compile the source)
+* Source: [https://bitbucket.org/kylearan/tiatracker](https://bitbucket.org/kylearan/tiatracker]
+
+
 VCS sound routine features:
 
 * Up to 7 melodic and 15 percussion instruments
