@@ -772,9 +772,12 @@ void MainWindow::on_actionNew_triggered() {
     }
     pTrack->lock();
     pTrack->newTrack();
+    setTrackName(pTrack->name);
     ui->trackEditor->setEditPos(0);
     updateAllTabs();
     pTrack->unlock();
+    QComboBox *cbGuides = findChild<QComboBox *>("comboBoxPitchGuide");
+    cbGuides->setCurrentIndex(0);
     update();
 }
 

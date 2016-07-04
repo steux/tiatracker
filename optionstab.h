@@ -33,6 +33,7 @@ signals:
     void setOffTuneThreshold(int value);
 
 public slots:
+    void on_comboBoxPitchGuide_currentIndexChanged(int index);
 
 private:
 
@@ -41,7 +42,6 @@ private:
     void addGuide(TiaSound::PitchGuide newGuide);
 
 private slots:
-    void on_comboBoxPitchGuide_currentIndexChanged(int index);
 
     void on_radioButtonPal_toggled(bool checked);
 

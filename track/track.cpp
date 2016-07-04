@@ -67,6 +67,13 @@ void Track::newTrack() {
     playPos[0] = 0;
     playPos[1] = 0;
     tvMode = TiaSound::TvStandard::PAL;
+    metaAuthor = "";
+    metaName = "";
+    metaComment = "";
+    guideName = "";
+    guideBaseFreq = 0.0;
+    guideTvStandard = TiaSound::TvStandard::PAL;
+
     updateFirstNoteNumbers();
 }
 
