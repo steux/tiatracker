@@ -1,3 +1,4 @@
 - Improved timing precision of the tracker replayer
+- Added ability to export song data to .csv (helps e.g. for syncing)
 - Fix: "New..." now properly clears meta-data (author, name, comment, used pitch guide)
 - Fix: "Play" in the tracker with each channel having varying pattern lengths now starts replay at the correct position for channel 1
