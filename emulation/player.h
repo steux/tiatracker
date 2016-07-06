@@ -93,7 +93,10 @@ private:
     Emulation::TIASound tiaSound;
     Emulation::SoundSDL2 sdlSound{&tiaSound};
 
-    QTimer *timer = nullptr;
+    TiaSound::TvStandard replayTvStandard = TiaSound::TvStandard::PAL;
+    bool doReplay;
+
+    //QTimer *timer = nullptr;
 /*
     // Jitter test statistics
     QElapsedTimer *eTimer;

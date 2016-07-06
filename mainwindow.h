@@ -139,6 +139,12 @@ private slots:
 
     void on_spinBoxRowsPerBeat_valueChanged(int);
 
+    void on_actionExport_track_data_to_k65_triggered();
+
+    void on_actionExport_complete_player_to_k65_triggered();
+
+    void on_actionExport_track_data_to_csv_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;

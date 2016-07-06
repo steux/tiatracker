@@ -14,6 +14,7 @@
 #include <SDL.h>
 #include <QElapsedTimer>
 #include <QVector>
+#include <QCoreApplication>
 
 
 namespace Emulation {
@@ -52,16 +53,33 @@ void Player::setFrameRate(float rate) {
     sdlSound.close();
     sdlSound.setFrameRate(rate);
     sdlSound.open();
-    timer->setInterval(int(1000/rate));
 }
 
 /*************************************************************************/
 
 void Player::startTimer() {
-    timer = new QTimer(this);
-    timer->setTimerType(Qt::PreciseTimer);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(timerFired()));
-    timer->start(1000/50);
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
+    double lastReplayTime = 0;
+    doReplay = true;
+    unsigned long long timestamp;
+    // Replay loop
+    while (doReplay) {
+        double frameDuration = replayTvStandard == TiaSound::TvStandard::PAL ? 1000.0/50.0 : 1000.0/60.0;
+        // Wait and allow events until shortly before next update
+        while (elapsedTimer.elapsed() < lastReplayTime + (frameDuration - 10.0)) {
+            QCoreApplication::processEvents(QEventLoop::AllEvents, 5);
+        }
+        // Busy-wait until next update
+        do {
+            timestamp = elapsedTimer.elapsed();
+        } while (timestamp < lastReplayTime + frameDuration);
+        // Do updates
+        while (lastReplayTime < timestamp) {
+            timerFired();
+            lastReplayTime += frameDuration;
+        }
+    }
 
 /*
     eTimer = new QElapsedTimer;
@@ -72,7 +90,8 @@ void Player::startTimer() {
 /*************************************************************************/
 
 void Player::stopTimer() {
-    timer->stop();
+    //timer->stop();
+    doReplay = false;
 }
 
 /*************************************************************************/
@@ -163,7 +182,7 @@ void Player::playTrack(int start1, int start2) {
     trackCurNoteIndex[0] = pTrack->getNoteIndexInPattern(0, start1);
     trackCurNoteIndex[1] = pTrack->getNoteIndexInPattern(1, start2);
     trackCurEntryIndex[0] = pTrack->getSequenceEntryIndex(0, start1);
-    trackCurEntryIndex[1] = pTrack->getSequenceEntryIndex(0, start2);
+    trackCurEntryIndex[1] = pTrack->getSequenceEntryIndex(1, start2);
     trackCurTick = 0;
     trackMode[0] = Track::Note::instrumentType::Hold;
     trackMode[1] = Track::Note::instrumentType::Hold;
@@ -193,14 +212,11 @@ void Player::toggleLoop(bool toggle) {
 /*************************************************************************/
 
 void Player::setTVStandard(int iNewStandard) {
-    timer->stop();
-    TiaSound::TvStandard newStandard = static_cast<TiaSound::TvStandard>(iNewStandard);
-    if (newStandard == TiaSound::TvStandard::PAL) {
+    replayTvStandard = static_cast<TiaSound::TvStandard>(iNewStandard);
+    if (replayTvStandard == TiaSound::TvStandard::PAL) {
         setFrameRate(50.0);
-        timer->start(1000/50);
     } else {
         setFrameRate(60.0);
-        timer->start(1000/60);
     }
 }
 

@@ -471,7 +471,7 @@ void MainWindow::loadTrackByName(const QString &fileName) {
 
 void MainWindow::setTrackName(QString name) {
     pTrack->name = name;
-    setWindowTitle("TIATracker v1.0 - " + pTrack->name);
+    setWindowTitle("TIATracker v1.1 - " + pTrack->name);
 }
 
 /*************************************************************************/
@@ -1182,4 +1182,104 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
     if (!event->isAutoRepeat()) {
         pianoKeyReleased();
     }
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_track_data_to_k65_triggered() {
+
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_complete_player_to_k65_triggered() {
+
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_track_data_to_csv_triggered() {
+    emit stopTrack();
+
+    // Ask for filename
+    QFileDialog dialog(this);
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter("*.csv");
+    dialog.setDefaultSuffix("csv");
+    dialog.setViewMode(QFileDialog::Detail);
+    QString trackName = pTrack->name;
+    if (trackName.endsWith(".ttt")) {
+        trackName.truncate(trackName.length() - 4);
+    }
+    if (!trackName.endsWith(".csv")) {
+        trackName.append(".csv");
+    }
+    dialog.selectFile(trackName);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        fileNames = dialog.selectedFiles();
+    }
+    if (fileNames.isEmpty()) {
+        return;
+    }
+    QString fileName = fileNames[0];
+
+    // Export to csv
+    QFile outFile(fileName);
+    if (!outFile.open(QIODevice::WriteOnly)) {
+        displayMessage("Unable to open file!");
+        return;
+    }
+    QTextStream outStream(&outFile);
+
+    // Write format description
+    outStream << "tick, C0 sequence, C0 pattern, C0 pattern name, C0 row, C0 note, C1 sequence, C1 pattern, C1 pattern name, C1 row, C1 note\n";
+
+    // Go through notes and write
+    int startIndex1 = pTrack->startPatterns[0];
+    int curNote1 = pTrack->channelSequences[0].sequence[startIndex1].firstNoteNumber;
+    int startIndex2 = pTrack->startPatterns[1];
+    int curNote2 = pTrack->channelSequences[1].sequence[startIndex2].firstNoteNumber;
+
+    QMap<int, bool> visited;
+    int numRow = 0;
+    while (curNote1 != -1 && curNote2 != -1
+           && !visited.contains(curNote1)) {
+        // Construct and write line
+        QString line = QString::number(numRow);
+
+        int seqEntry1 = pTrack->getSequenceEntryIndex(0, curNote1);
+        int pattern1 = pTrack->getPatternIndex(0, curNote1);
+        int row1 = pTrack->getNoteIndexInPattern(0, curNote1);
+        QString patName1 = pTrack->patterns[pattern1].name;
+        patName1.replace(',', ' ');
+        line.append(", " + QString::number(seqEntry1));
+        line.append(", " + QString::number(pattern1));
+        line.append(", " + patName1);
+        line.append(", " + QString::number(row1));
+        line.append(", " + ui->trackEditor->constructRowString(row1, &(pTrack->patterns[pattern1])));
+
+        int seqEntry2 = pTrack->getSequenceEntryIndex(1, curNote2);
+        int pattern2 = pTrack->getPatternIndex(1, curNote2);
+        int row2 = pTrack->getNoteIndexInPattern(1, curNote2);
+        QString patName2 = pTrack->patterns[pattern2].name;
+        patName2.replace(',', ' ');
+        line.append(", " + QString::number(seqEntry2));
+        line.append(", " + QString::number(pattern2));
+        line.append(", " + patName2);
+        line.append(", " + QString::number(row2));
+        line.append(", " + ui->trackEditor->constructRowString(row2, &(pTrack->patterns[pattern2])));
+
+        outStream << line << "\n";
+
+        // Mark visited and go to next row
+        visited[curNote1] = true;
+        curNote1 = pTrack->getNextNoteWithGoto(0, curNote1);
+        curNote2 = pTrack->getNextNoteWithGoto(1, curNote2);
+        numRow++;
+    }
+
+    outFile.close();
+
 }

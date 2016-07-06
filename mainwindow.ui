@@ -1416,7 +1416,7 @@
               <item>
                <widget class="QLabel" name="label_17">
                 <property name="text">
-                 <string>          </string>
+                 <string/>
                 </property>
                </widget>
               </item>
@@ -1489,8 +1489,13 @@
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="separator"/>
     <addaction name="actionExportDasm"/>
     <addaction name="actionExport_complete_player_to_dasm"/>
+    <addaction name="actionExport_track_data_to_k65"/>
+    <addaction name="actionExport_complete_player_to_k65"/>
+    <addaction name="actionExport_track_data_to_csv"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -1602,6 +1607,21 @@
   <action name="actionPlay_pattern">
    <property name="text">
     <string>Play pattern</string>
+   </property>
+  </action>
+  <action name="actionExport_track_data_to_k65">
+   <property name="text">
+    <string>Export track data to k65...</string>
+   </property>
+  </action>
+  <action name="actionExport_complete_player_to_k65">
+   <property name="text">
+    <string>Export complete player to k65...</string>
+   </property>
+  </action>
+  <action name="actionExport_track_data_to_csv">
+   <property name="text">
+    <string>Export track data to csv...</string>
    </property>
   </action>
  </widget>

@@ -35,6 +35,8 @@ public:
     int getEditPos();
     int getSelectedChannel();
 
+    QString constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern);
+
     QSize sizeHint() const;
 
 signals:
@@ -85,7 +87,6 @@ private:
     static const int patternNameMargin = 4;
     static const int minHeight = 400;
 
-    QString constructRowString(int curPatternNoteIndex, Track::Pattern *curPattern);
     void drawPatternNameAndSeparator(int yPos, int nameXPos, int curPatternNoteIndex, int channel, int xPos, int curEntryIndex, QPainter *painter, Track::Pattern *curPattern);
     void drawGoto(int channel, int yPos, Track::Pattern *curPattern, Track::SequenceEntry *curEntry, QPainter *painter, int nameXPos, int curPatternNoteIndex);
     void drawTimestamp(int row, QPainter *painter, int yPos, int channel);
