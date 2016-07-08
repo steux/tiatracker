@@ -40,3 +40,7 @@ Tracker features:
 * Backport the upcoming major improvements in Stella's sound emulation to the tracker
 
 For feedback, bug reports and feature requests, send a mail to andre.wichmann@gmx.de!
+
+## Compiling from source
+
+You need Qt5 and SDL to build TIATracker from source. Open the project in Qt Creator and add a "make install" build step to the project, then compile it.
