@@ -1,0 +1,396 @@
+/*
+ * TIATracker music player
+ * Copyright 2016 Andre "Kylearan" Wichmann
+ * Website: https://bitbucket.org/kylearan/tiatracker
+ * Email: andre.wichmann@gmx.de
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * Song author: %%AUTHOR%%
+ * Song name: %%NAME%%
+ */
+
+
+
+/* =====================================================================
+ * Flags
+ * =====================================================================
+ */
+[
+    // duration (number of TV frames) of a note
+    TT_SPEED                = %%EVENSPEED%%,
+    // duration of odd frames (needs TT_USE_FUNKTEMPO)
+    TT_ODD_SPEED            = %%ODDSPEED%%,
+
+    // 1: Overlay percussion, +40 bytes
+    TT_USE_OVERLAY          = %%USEOVERLAY%%,
+    // 1: Melodic instrument slide, +9 bytes
+    TT_USE_SLIDE            = %%USESLIDE%%,
+    // 1: Goto pattern, +8 bytes
+    TT_USE_GOTO             = %%USEGOTO%%,
+    // 1: Odd/even rows have different SPEED values, +7 bytes
+    TT_USE_FUNKTEMPO        = %%USEFUNKTEMPO%%,
+    // If the very first notes played on each channel are not PAUSE, HOLD or
+    // SLIDE, i.e. if they start with an instrument or percussion, then set
+    // this flag to 0 to save 2 bytes.
+    // 0: +2 bytes
+    TT_STARTS_WITH_NOTES    = %%STARTSWITHNOTES%%
+]
+
+/* =====================================================================
+ * Permanent variables. These are states needed by the player.
+ * =====================================================================
+ */
+var tt_timer,               // current music timer value
+    tt_cur_pat_index[2],    // current pattern index into tt_SequenceTable
+    tt_cur_note_index[2],   // note index into current pattern
+    tt_envelope_index[2],   // index into ADSR envelope
+    tt_cur_ins[2];          // current instrument
+
+
+/* =====================================================================
+ * Temporary variables. These will be overwritten during a call to the
+ * player routine, but can be used between calls for other things.
+ * =====================================================================
+ */
+var tt_ptr[2];
+
+
+
+/* =====================================================================
+ * Initialize music.
+ * Set tt_cur_pat_index_c0/1 to the indexes of the first patterns from
+ * tt_SequenceTable for each channel.
+ * Set tt_timer and tt_cur_note_index_c0/1 to 0.
+ * All other variables can start with any value.
+ * =====================================================================
+ */
+inline tt_init {
+    tt_cur_pat_index=a=%%C0INIT%%
+    tt_cur_pat_index+1=a=%%C1INIT%%
+    // the rest should be 0 already from startup code. If not,
+    // set the following variables to 0 manually:
+    // - tt_timer
+    // - tt_cur_pat_index[2]
+    // - tt_cur_note_index[2]
+}
+
+
+
+/* =====================================================================
+ * TIATracker Player
+ * =====================================================================
+ */
+
+// PLANNED PLAYER VARIANTS:
+// - RAM, speed, player ROM: c0/c1 patterns have same length
+// - RAM: Pack 2 values (out of cur_pat_index, cur_note_index, envelope_index)
+//       into one and use lsr/asl to unpack them, allowing only ranges of
+//       16/16 or 32/8 for them, depending on number of patterns, max
+//       pattern size and max ADSR size
+// - ROM: Check if tt_SequenceTable can hold ptrs directly without indexing
+//       tt_PatternPtrLo/Hi. Can be smaller if not many patterns get repeated
+//       (saves table and decode routine)
+// - Speed: Inline tt_calcInsIndex
+// - Speed: Store ptr to current note in RAM instead of reconstructing it?
+//       Might also save the need for cur_note_index
+
+
+/* =====================================================================
+ * Helper function: Retrieves current note. May advance pattern if needed.
+ * Gets inlined or becomes a subroutine if TT_USE_OVERLAY is used.
+ * =====================================================================
+ */
+
+#IF TT_USE_GOTO
+inline tt_getSequenceEntry {
+    y=tt_cur_pat_index,x
+    a=tt_SequenceTable,y
+}
+#ELSE
+inline tt_getSequenceEntry {
+.constructPatPtr:
+    y=tt_cur_pat_index,x
+    a=tt_SequenceTable,y <0{
+        a&0b01111111 tt_cur_pat_index,x=a >=goto .constructPatPtr
+    }
+}
+#ENDIF
+
+#IF TT_USE_OVERLAY
+inline tt_getCurNoteIndex {
+    y=tt_cur_note_index,x
+}
+#ELSE
+inline tt_getCurNoteIndex {
+    // If the V flag is set and if the new note is an instrument,
+    // it means it got pre-fetched by an overlay percussion, it has
+    // to remain in sustain.
+    v-
+    // check if note had been pre-fetched by overlay perc already
+    a=tt_cur_note_index,x <0{
+        // If so, remove flag
+       a&0b01111111 tt_cur_note_index,x=a
+       // Set V flag for later
+       // TODO
+       bit tt_Bit6Set
+    }
+    y=a
+}
+#ENDIF
+
+inine tt_fetchCurrentNoteImpl {
+    // Construct pattern pointer
+.constructPatPtr:
+    tt_getSequenceEntry
+    y=a tt_ptr=a=tt_PatternPtrLo,y tt_ptr+1=a=tt_PatternPtrHi,y
+    // Get new note
+    tt_getCurNoteIndex a=(tt_ptr),y
+    // Pre-process new note
+    // 7..5: instrument (1..7), 4..0 (0..31): frequency
+    // 0/0: End of pattern
+    =={
+        // End of pattern: Advance to next pattern
+        tt_cur_note_index,x=a       // a is 0
+        tt_cur_cur_pat_index,x++
+        !=goto .constructPatPtr     //unconditional
+    }
+}
+
+#IF TT_USE_OVERLAY
+func tt_fetchCurrentNote { tt_fetchCurrentNoteImpl }
+#ELSE
+inline tt_fetchCurrentNote { tt_fetchCurrentNoteImpl }
+#ENDIF
+
+/* =====================================================================
+ * Helper subroutine to minimize ROM footprint.
+ * =====================================================================
+ */
+func tt_calcInsIndex {
+    // move upper 3 bits to lower 3
+    a>> a>> a>> a>> a>>
+    y=a
+}
+
+
+/* =====================================================================
+ * Sequencer
+ * =====================================================================
+ */
+
+#IF TT_USE_FUNKTEMPO
+inline tt_getNextTimerValue {
+    x=[TT_SPEED-1]
+}
+#ELSE
+inline tt_getNextTimerValue {
+    x=[TT_SPEED-1]
+    a=tt_cur_note_index a>> >={ x=[TT_ODD_SPEED-1] }
+}
+#ENDIF
+
+#IF TT_USE_SLIDE
+inline tt_slideHoldSwitch {
+    ==goto tt_pause
+    >=goto tt_newNote
+    
+}
+#ELSE
+inline tt_slideHoldSwitch {
+    <goto tt_finishedNewNote
+    !=goto tt_newNote
+    // --- slide/hold ---
+    // Adjust frequency and hold note in sustain.
+    // composer/tracker has to make sure that no unwanted
+    // under/overflow happens.
+    // Note: f = f + (8-(16-x)) = x + f - 8
+    a+tt_cur_ins,x c+ a-8 tt_cur_ins,x=a
+    >=goto tt_finishedNewNote
+}
+#ENDIF
+
+#IF TT_USE_OVERLAY
+inline tt_checkForOverlay {
+    // If V flag is set, this note had been pre-fetched. That means
+    // it should remain in sustain.
+    <<=goto tt_finishedNewNote
+}
+#ELSE
+inline tt_checkForOverlay {
+}
+#ENDIF
+
+
+inline tt_Sequencer {
+    // Decrease speed timer
+    tt_timer-- <0{
+        // Timer ran out: Reset and do sequencer
+        tt_getNextTimerValue tt_timer=x
+
+        // Advance to next note for each channel
+        x=1 {
+            tt_fetchCurrentNote
+            // Parse new note from pattern
+            a?[TT_INS_PAUSE] tt_slideHoldSwitch
+            
+            // --- pause ---
+tt_pause:
+            // Get release index for current instrument. Since a pause can
+            // only follow an instrument, we don't need to handle percussion
+            // or commands.
+            a=tt_cur_ins,x tt_calcInsIndex
+            a=tt_InsReleaseIndexes-1,y      // -1 b/c instruments start at #1
+            // Put it into release. Skip junk byte so index no longer indicates
+            // sustain phase.
+            c- a+1 <goto tt_storeADIndex    // unconditional
+            
+            // --- start instrument or percussion ---
+tt_newNote:
+            tt_cur_ins,x=a                  // set new instrument
+            // Instrument or percussion?
+            a?[TT_FREQ_MASK+1] >=goto tt_startInstrument
+            
+            // --- start percussion ---
+            // Get index of envelope
+            y=a
+            // -17 because percussion start with 17
+            a=tt_PercIndexes-17,y
+            !=goto tt_storeADIndex          // unconditional, since index values are >0
+
+            // --- start instrument ---
+tt_startInstrument:
+            tt_checkForOverlay
+            // Put note into attack/decay
+            tt_calcInsIndex
+            a=tt_InsADIndexes-1,y           // -1 because instruments start at #1
+tt_storeADIndex:
+            tt_envelope_index,x=a
+            
+            // --- Finished parsing new note ---
+tt_finishedNewNote:
+            // increase note index into pattern
+            tt_cur_note_index,x++
+
+            // Next channel
+            x--
+        }>=0
+    }
+}
+
+
+/* =====================================================================
+ * Update registers
+ * =====================================================================
+ */
+ 
+#IF TT_STARTS_WITH_NOTES
+inline tt_checkForStartsWithNotes {
+}
+#ELSE
+inline tt_checkForStartsWithNotes {
+    // This branch can be removed if track starts with a note in each channel
+    ==goto tt_afterAudioUpdate
+}
+#ENDIF
+
+inline tt_UpdateRegisters {
+    x=1 {
+        // Percussion or melodic instrument?
+        a=tt_cur_ins,x tt_checkForStartsWithNotes
+        a?[TT_FREQ_MASK+1] >=goto tt_instrument
+
+        // --- Percussion: Get envelope index ---
+        y=tt_envelope_index,x
+        // Set AUDC and AUDV value from envelope
+        a=tt_PercCtrlVolTable-1,y       // -1 because values are stored +1
+        !={ tt_envelope_index,x++ }     // 0 means end of percussion data
+        AUDV0,x=a a>> a>> a>> a>> AUDC0,x=a
+        // Set AUDF
+        
+        // XXX TODO XXX
+        lda tt_PercFreqTable-1,y        ; -1 because values are stored +1
+        ; Bit 7 (overlay) might be set, but is unused in AUDF
+        sta AUDF0,x
+    IF TT_USE_OVERLAY = 1
+        bpl .afterAudioUpdate
+        ; Overlay percussion: Fetch next note out of order
+        jsr tt_FetchNote
+        ; Only do something if it's a melodic instrument
+        cmp #TT_FREQ_MASK+1
+        bcc .afterAudioUpdate
+        ; Instrument: Put into sustain
+        sta tt_cur_ins_c0,x             ; set new instrument
+        jsr tt_calcInsIndex
+        lda tt_InsSustainIndexes-1,y    ; -1 because instruments start at #1
+        sta tt_envelope_index_c0,x      
+        ; Set prefetch flag. asl-sec-ror is smaller than lda-ora #128-sta
+        asl tt_cur_note_index_c0,x
+        sec
+        ror tt_cur_note_index_c0,x
+        bmi .afterAudioUpdate           ; unconditional
+    ELSE  
+        jmp .afterAudioUpdate
+    ENDIF
+
+tt_instrument:
+        ; --- Melodic instrument ---
+        ; Compute index into ADSR indexes and master Ctrl tables
+        jsr tt_calcInsIndex
+        ; Set AUDC with master value for this instrument, while we are at it
+        lda tt_InsCtrlTable-1,y ; -1 because instruments start with #1
+        sta AUDC0,x
+        ; advance ADSR counter and compare to end of Sustain
+        lda tt_envelope_index_c0,x
+        cmp tt_InsReleaseIndexes-1,y    ; -1 because instruments start with #1
+        bne .noEndOfSustain
+        ; End of sustain: Go back to start of sustain
+        lda tt_InsSustainIndexes-1,y    ; -1 because instruments start with #1
+.noEndOfSustain:
+        tay
+        ; Set volume from envelope
+        lda tt_InsFreqVolTable,y
+        beq .endOfEnvelope              ; 0 means end of release has been reached:
+        iny                             ; advance index otherwise
+.endOfEnvelope:
+        sty tt_envelope_index_c0,x
+        sta AUDV0,x
+        ; Now adjust frequency with ADSR value from envelope
+        lsr
+        lsr
+        lsr
+        lsr     
+        clc
+        adc tt_cur_ins_c0,x
+        sec
+        sbc #8
+        sta AUDF0,x
+
+tt_afterAudioUpdate:
+
+        // Next channel
+        x--
+    }>=0
+}
+
+
+/* =====================================================================
+ * Music player entry. Call once per frame.
+ * =====================================================================
+ */
+inline tt_Player {
+    tt_Sequencer
+    tt_UpdateRegisters
+}
