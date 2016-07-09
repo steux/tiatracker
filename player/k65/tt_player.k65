@@ -306,6 +306,28 @@ inline tt_checkForStartsWithNotes {
 }
 #ENDIF
 
+#IF TT_USE_OVERLAY = 1
+inline tt_doOverlay {
+	>=0goto tt_afterAudioUpdate
+	// Overlay percussion: Fetch next note out of order
+	tt_FetchNote
+	// Only do something if it's a melodic instrument
+	a?[TT_FREQ_MASK+1]
+	<goto tt_afterAudioUpdate
+	// Instrument: Put into sustain
+	tt_cur_ins,x=a				// set new instrument
+	tt_calcInsIndex
+	tt_envelope_index,x=a=tt_InsSustainIndexes-1,y
+	// Set prefetch flag. asl-sec-ror is smaller than lda-ora #128-sta
+	tt_cur_note_index_c0,x<< c+ tt_cur_note_index_c0,x>>>
+	<0goto tt_afterAudioUpdate
+}
+#ELSE
+inline tt_doOverlay {
+	goto tt_afterAudioUpdate
+}
+#ENDIF
+
 inline tt_UpdateRegisters {
     x=1 {
         // Percussion or melodic instrument?
@@ -319,67 +341,29 @@ inline tt_UpdateRegisters {
         !={ tt_envelope_index,x++ }     // 0 means end of percussion data
         AUDV0,x=a a>> a>> a>> a>> AUDC0,x=a
         // Set AUDF
-        
-        // XXX TODO XXX
-        lda tt_PercFreqTable-1,y        ; -1 because values are stored +1
-        ; Bit 7 (overlay) might be set, but is unused in AUDF
-        sta AUDF0,x
-    IF TT_USE_OVERLAY = 1
-        bpl .afterAudioUpdate
-        ; Overlay percussion: Fetch next note out of order
-        jsr tt_FetchNote
-        ; Only do something if it's a melodic instrument
-        cmp #TT_FREQ_MASK+1
-        bcc .afterAudioUpdate
-        ; Instrument: Put into sustain
-        sta tt_cur_ins_c0,x             ; set new instrument
-        jsr tt_calcInsIndex
-        lda tt_InsSustainIndexes-1,y    ; -1 because instruments start at #1
-        sta tt_envelope_index_c0,x      
-        ; Set prefetch flag. asl-sec-ror is smaller than lda-ora #128-sta
-        asl tt_cur_note_index_c0,x
-        sec
-        ror tt_cur_note_index_c0,x
-        bmi .afterAudioUpdate           ; unconditional
-    ELSE  
-        jmp .afterAudioUpdate
-    ENDIF
+        a=tt_PercFreqTable-1,y			// -1 because values are stored +1
+		// Bit 7 (overlay) might be set, but is unused in AUDF
+		AUDF0,x=a
+		tt_doOverlay
 
 tt_instrument:
-        ; --- Melodic instrument ---
-        ; Compute index into ADSR indexes and master Ctrl tables
-        jsr tt_calcInsIndex
-        ; Set AUDC with master value for this instrument, while we are at it
-        lda tt_InsCtrlTable-1,y ; -1 because instruments start with #1
-        sta AUDC0,x
-        ; advance ADSR counter and compare to end of Sustain
-        lda tt_envelope_index_c0,x
-        cmp tt_InsReleaseIndexes-1,y    ; -1 because instruments start with #1
-        bne .noEndOfSustain
-        ; End of sustain: Go back to start of sustain
-        lda tt_InsSustainIndexes-1,y    ; -1 because instruments start with #1
-.noEndOfSustain:
-        tay
-        ; Set volume from envelope
-        lda tt_InsFreqVolTable,y
-        beq .endOfEnvelope              ; 0 means end of release has been reached:
-        iny                             ; advance index otherwise
-.endOfEnvelope:
-        sty tt_envelope_index_c0,x
-        sta AUDV0,x
-        ; Now adjust frequency with ADSR value from envelope
-        lsr
-        lsr
-        lsr
-        lsr     
-        clc
-        adc tt_cur_ins_c0,x
-        sec
-        sbc #8
-        sta AUDF0,x
-
+        // --- Melodic instrument ---
+        // Compute index into ADSR indexes and master Ctrl tables
+		tt_calcInsIndex
+        // Set AUDC with master value for this instrument, while we are at it
+		AUDC0,x=a=tt_InsCtrlTable-1,y
+        // advance ADSR counter and compare to end of Sustain
+		a=tt_envelope_index_c0,x a?tt_InsReleaseIndexes-1,y =={ a=tt_InsSustainIndexes-1,y }
+		y=a
+        // Set volume from envelope
+		a=tt_InsFreqVolTable,y !={ y++ }	// 0 means end of release has been reached
+		tt_envelope_index_c0,x=y
+        AUDV0,x=a
+        // Now adjust frequency with ADSR value from envelope
+		a>> a>> a>> a>> c- a+tt_cur_ins_c0,x c+ a-8
+        AUDF0,x=a
+		
 tt_afterAudioUpdate:
-
         // Next channel
         x--
     }>=0
