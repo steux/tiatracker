@@ -144,8 +144,7 @@ inline tt_getCurNoteIndex {
         // If so, remove flag
        a&0b01111111 tt_cur_note_index,x=a
        // Set V flag for later
-       // TODO
-       bit tt_Bit6Set
+       bit tt_calcInsIndex
     }
     y=a
 }
@@ -181,6 +180,8 @@ inline tt_fetchCurrentNote { tt_fetchCurrentNoteImpl }
  */
 func tt_calcInsIndex {
     // move upper 3 bits to lower 3
+    // The lsr opcode has bit 6 set and thus is used for a "bit"
+    // instruction in the player!
     a>> a>> a>> a>> a>>
     y=a
 }
