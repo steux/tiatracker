@@ -803,7 +803,7 @@ bool MainWindow::writeAsm(QString fileName, QString content, QString extension) 
         return false;
     }
     QTextStream outStream(&outFile);
-    outStream << content;
+    outStream << content.toUtf8();
     outFile.close();
     return true;
 }

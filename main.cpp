@@ -33,6 +33,7 @@
 #include <patterneditor.h>
 #include <QCheckBox>
 #include "optionstab.h"
+#include <QTextStream>
 
 
 #include "SDL.h"
