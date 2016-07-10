@@ -168,10 +168,12 @@ private:
 
     QString readAsm(QString fileName);
     bool writeAsm(QString fileName, QString content, QString extension);
-    QString listToBytes(QList<int> list);
+    QString listToDasmBytes(QList<int> list);
+    QString listToK65Bytes(QList<int> list);
     QString getExportFileName();
-    bool exportFlags(QString fileName);
-    bool exportTrackSpecifics(QString fileName);
+    bool exportDasmFlags(QString fileName);
+    bool exportTrackSpecificsDasm(QString fileName);
+    bool exportTrackSpecificsK65(QString fileName);
 
     Ui::MainWindow *ui = nullptr;
     Track::Track *pTrack = nullptr;

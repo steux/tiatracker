@@ -795,6 +795,8 @@ QString MainWindow::readAsm(QString fileName) {
     return inString;
 }
 
+/*************************************************************************/
+
 bool MainWindow::writeAsm(QString fileName, QString content, QString extension) {
     QFile outFile(fileName + extension);
     if (!outFile.open(QIODevice::WriteOnly)) {
@@ -806,7 +808,9 @@ bool MainWindow::writeAsm(QString fileName, QString content, QString extension) 
     return true;
 }
 
-QString MainWindow::listToBytes(QList<int> list) {
+/*************************************************************************/
+
+QString MainWindow::listToDasmBytes(QList<int> list) {
     QString out;
     for (int i = 0; i < list.size(); ++i) {
         if (i%8 == 0) {
@@ -823,6 +827,28 @@ QString MainWindow::listToBytes(QList<int> list) {
     out.append("\n");
     return out;
 }
+
+/*************************************************************************/
+
+QString MainWindow::listToK65Bytes(QList<int> list) {
+    QString out;
+    for (int i = 0; i < list.size(); ++i) {
+        if (i%8 == 0) {
+            if (i > 0) {
+                out.append("\n");
+            }
+            out.append("        ");
+        }
+        out = (out + "0x%1").arg(list[i], 2, 16, QChar('0'));
+        if (i%8 != 7 && i != list.size() - 1) {
+            out.append(" ");
+        }
+    }
+    out.append("\n");
+    return out;
+}
+
+/*************************************************************************/
 
 QString MainWindow::getExportFileName() {
     QFileDialog dialog(this);
@@ -850,7 +876,9 @@ QString MainWindow::getExportFileName() {
     return fileName;
 }
 
-bool MainWindow::exportFlags(QString fileName) {
+/*************************************************************************/
+
+bool MainWindow::exportDasmFlags(QString fileName) {
     // Export flags
     QString flagsString = readAsm("player/dasm/tt_variables.asm");
     if (flagsString == "") {
@@ -878,8 +906,10 @@ bool MainWindow::exportFlags(QString fileName) {
     return true;
 }
 
-bool MainWindow::exportTrackSpecifics(QString fileName) {
-    if (!exportFlags(fileName)) {
+/*************************************************************************/
+
+bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
+    if (!exportDasmFlags(fileName)) {
         return false;
     }
 
@@ -968,7 +998,7 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
                                 insString.append("+" + QString::number(numInstruments + 1));
                             }
                             insString.append(": " + ins->name + "\n");
-                            insString.append(listToBytes(insEnvelopeValues));
+                            insString.append(listToDasmBytes(insEnvelopeValues));
                             // Increase running instrument index
                             numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
                             // +1 for dummy byte, +1 for end marker
@@ -1016,9 +1046,9 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
                             percStarts.append(percEnvelopeIndex + 1);
                             // Write out percussion data
                             percFreqString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
-                            percFreqString.append(listToBytes(percFreqValues));
+                            percFreqString.append(listToDasmBytes(percFreqValues));
                             percCtrlVolString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
-                            percCtrlVolString.append(listToBytes(percCtrlVolValues));
+                            percCtrlVolString.append(listToDasmBytes(percCtrlVolValues));
                             // Increase running percussion index
                             numPercussion++;
                             // +1 for end marker
@@ -1036,7 +1066,7 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
                 }
                 // Pattern end marker
                 patternValues.append(0);
-                patternString.append(listToBytes(patternValues));
+                patternString.append(listToDasmBytes(patternValues));
                 patternString.append("\n");
                 // Pattern ptr
                 if ((patternMapping.size())%4 == 1) {
@@ -1061,15 +1091,15 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
         }
     }
     trackString.replace("%%INSFREQVOLTABLE%%", insString);
-    trackString.replace("%%INSCTRLTABLE%%", listToBytes(insWaveforms));
-    trackString.replace("%%INSADINDEXES%%", listToBytes(insADStarts));
-    trackString.replace("%%INSSUSTAININDEXES%%", listToBytes(insSustainStarts));
-    trackString.replace("%%INSRELEASEINDEXES%%", listToBytes(insReleaseStarts));
-    trackString.replace("%%PERCINDEXES%%", listToBytes(percStarts));
+    trackString.replace("%%INSCTRLTABLE%%", listToDasmBytes(insWaveforms));
+    trackString.replace("%%INSADINDEXES%%", listToDasmBytes(insADStarts));
+    trackString.replace("%%INSSUSTAININDEXES%%", listToDasmBytes(insSustainStarts));
+    trackString.replace("%%INSRELEASEINDEXES%%", listToDasmBytes(insReleaseStarts));
+    trackString.replace("%%PERCINDEXES%%", listToDasmBytes(percStarts));
     trackString.replace("%%PERCFREQTABLE%%", percFreqString);
     trackString.replace("%%PERCCTRLVOLTABLE%%", percCtrlVolString);
-    trackString.replace("%%SEQUENCECHANNEL0%%", listToBytes(sequence[0]));
-    trackString.replace("%%SEQUENCECHANNEL1%%", listToBytes(sequence[1]));
+    trackString.replace("%%SEQUENCECHANNEL0%%", listToDasmBytes(sequence[0]));
+    trackString.replace("%%SEQUENCECHANNEL1%%", listToDasmBytes(sequence[1]));
     trackString.replace("%%PATTERNDEFS%%", patternString);
     trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
     patternPtrString.replace("<", ">");
@@ -1099,10 +1129,245 @@ bool MainWindow::exportTrackSpecifics(QString fileName) {
     return true;
 }
 
+/*************************************************************************/
+
+bool MainWindow::exportTrackSpecificsK65(QString fileName) {
+    // Export track data
+    QString trackString = readAsm("player/k65/tt_trackdata.k65");
+    if (trackString == "") {
+        return false;
+    }
+    trackString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    trackString.replace("%%NAME%%", pTrack->metaName);
+    // Mapping of encountered to real, to weed out the unused
+    QMap<int, int> insMapping{};
+    int numInstruments = 0;
+    QList<int> insWaveforms;
+    QList<int> insADStarts;
+    QList<int> insSustainStarts;
+    QList<int> insReleaseStarts;
+    int insEnvelopeIndex = 0;
+    QString insString;
+    QMap<int, int> percMapping{};
+    int numPercussion = 0;
+    QList<int> percStarts;
+    int percEnvelopeIndex = 0;
+    QString percFreqString;
+    QString percCtrlVolString;
+    QMap<int, int> patternMapping{};
+    QString patternString;
+    QString patternPtrString;
+    QVector<QList<int>> sequence(2);
+    int numPatterns = 0;
+    for (int channel = 0; channel < 2; ++channel) {
+        for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
+            int patternIndex = pTrack->channelSequences[channel].sequence[entry].patternIndex;
+            if (!patternMapping.contains(patternIndex)) {
+                // Pattern not encountered yet
+                patternMapping[patternIndex] = numPatterns;
+                numPatterns++;
+                // Write out pattern
+                patternString.append("// " + pTrack->patterns[patternIndex].name + "\n");
+                patternString.append("data tt_pattern" + QString::number(patternMapping[patternIndex]) + " {\n");
+                // Loop over all notes
+                QList<int> patternValues;
+                for (int n = 0; n < pTrack->patterns[patternIndex].notes.size(); ++n) {
+                    Track::Note *note = &(pTrack->patterns[patternIndex].notes[n]);
+                    switch (note->type) {
+                    case Track::Note::instrumentType::Hold:
+                    {
+                        patternValues.append(int(Emulation::Player::NoteHold));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Instrument:
+                    {
+                        if (!insMapping.contains(note->instrumentNumber)) {
+                            // Instrument not encountered yet
+                            insMapping[note->instrumentNumber] = numInstruments;
+                            Track::Instrument *ins = &(pTrack->instruments[note->instrumentNumber]);
+                            // insSize includes end marker that is not in vol/freq lists, so do -1
+                            int insSize = ins->calcEffectiveSize() - 1;
+                            QList<int> insEnvelopeValues;
+                            for (int i = 0; i < insSize; ++i) {
+                                int freqValue = ins->frequencies[i] + 8;
+                                int volValue = ins->volumes[i];
+                                insEnvelopeValues.append((freqValue<<4)|volValue);
+                            }
+                            // Insert dummy byte between sustain and release
+                            insEnvelopeValues.insert(ins->getReleaseStart(), 0);
+                            // Insert end marker
+                            insEnvelopeValues.append(0);
+                            // Insert indexes. Two times if PURE_COMBINED
+                            for (int i = 0; i < (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1); ++i) {
+                                insADStarts.append(insEnvelopeIndex);
+                                insSustainStarts.append(insEnvelopeIndex + ins->getSustainStart());
+                                // +1 for dummy byte, -1 because player expects that
+                                insReleaseStarts.append(insEnvelopeIndex + ins->getReleaseStart());
+                            }
+                            // Store waveform(s)
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_HIGH));
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_LOW));
+                            } else {
+                                insWaveforms.append(TiaSound::getDistortionInt(ins->baseDistortion));
+                            }
+                            // Write out instrument data
+                            insString.append("// " + QString::number(numInstruments));
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insString.append("+" + QString::number(numInstruments + 1));
+                            }
+                            insString.append(": " + ins->name + "\n");
+                            insString.append(listToK65Bytes(insEnvelopeValues));
+                            // Increase running instrument index
+                            numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
+                            // +1 for dummy byte, +1 for end marker
+                            insEnvelopeIndex += insSize + 2;
+                        }
+                        // +1 because first instrument number is 1
+                        int valueIns = insMapping[note->instrumentNumber] + 1;
+                        if (pTrack->instruments[note->instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED
+                                && note->value > 31) {
+                            valueIns++;
+                        }
+                        int valueFreq = (note->value)%32;
+                        patternValues.append((valueIns<<5)|valueFreq);
+                        break;
+                    }
+                    case Track::Note::instrumentType::Pause:
+                    {
+                        patternValues.append(int(Emulation::Player::NotePause));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Percussion:
+                    {
+                        if (!percMapping.contains(note->instrumentNumber)) {
+                            // Percussion not encountered yet
+                            percMapping[note->instrumentNumber] = numPercussion;
+                            Track::Percussion *perc = &(pTrack->percussion[note->instrumentNumber]);
+                            // percSize includes end marker that is not in lists, so do -1
+                            int percSize = perc->calcEffectiveSize() - 1;
+                            QList<int> percFreqValues;
+                            QList<int> percCtrlVolValues;
+                            for (int i = 0; i < percSize; ++i) {
+                                int freqValue = perc->frequencies[i];
+                                if (perc->overlay && i == percSize - 1) {
+                                    freqValue += 128;
+                                }
+                                percFreqValues.append(freqValue);
+                                int ctrlValue = TiaSound::getDistortionInt(perc->waveforms[i]);
+                                int volValue = perc->volumes[i];
+                                percCtrlVolValues.append((ctrlValue<<4)|volValue);
+                            }
+                            // Insert end marker
+                            percFreqValues.append(0);
+                            percCtrlVolValues.append(0);
+                            // Insert index. +1 because player expects that
+                            percStarts.append(percEnvelopeIndex + 1);
+                            // Write out percussion data
+                            percFreqString.append("// " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percFreqString.append(listToK65Bytes(percFreqValues));
+                            percCtrlVolString.append("// " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percCtrlVolString.append(listToK65Bytes(percCtrlVolValues));
+                            // Increase running percussion index
+                            numPercussion++;
+                            // +1 for end marker
+                            percEnvelopeIndex += percSize + 1;
+                        }
+                        patternValues.append(percMapping[note->instrumentNumber] + Emulation::Player::NoteFirstPerc);
+                        break;
+                    }
+                    case Track::Note::instrumentType::Slide:
+                    {
+                        patternValues.append(Emulation::Player::NoteHold + note->value);
+                        break;
+                    }
+                    }
+                }
+                // Pattern end marker
+                patternValues.append(0);
+                patternString.append(listToK65Bytes(patternValues));
+                patternString.append("\n}\n");
+                // Pattern ptr
+                if ((patternMapping.size())%4 == 1) {
+                    patternPtrString.append("        ");
+                } else {
+                    patternPtrString.append(" ");
+                }
+                patternPtrString.append("&<tt_pattern" + QString::number(patternMapping[patternIndex]));
+                if ((patternMapping.size())%4 == 0) {
+                    patternPtrString.append("\n");
+                }
+            }
+            sequence[channel].append(patternMapping[patternIndex]);
+            int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
+            if (gotoTarget != -1) {
+                int value = 128 + gotoTarget;
+                if (channel == 1) {
+                    value += sequence[0].size();
+                }
+                sequence[channel].append(value);
+            }
+        }
+    }
+    trackString.replace("%%INSFREQVOLTABLE%%", insString);
+    trackString.replace("%%INSCTRLTABLE%%", listToK65Bytes(insWaveforms));
+    trackString.replace("%%INSADINDEXES%%", listToK65Bytes(insADStarts));
+    trackString.replace("%%INSSUSTAININDEXES%%", listToK65Bytes(insSustainStarts));
+    trackString.replace("%%INSRELEASEINDEXES%%", listToK65Bytes(insReleaseStarts));
+    trackString.replace("%%PERCINDEXES%%", listToK65Bytes(percStarts));
+    trackString.replace("%%PERCFREQTABLE%%", percFreqString);
+    trackString.replace("%%PERCCTRLVOLTABLE%%", percCtrlVolString);
+    trackString.replace("%%SEQUENCECHANNEL0%%", listToK65Bytes(sequence[0]));
+    trackString.replace("%%SEQUENCECHANNEL1%%", listToK65Bytes(sequence[1]));
+    trackString.replace("%%PATTERNDEFS%%", patternString);
+    trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
+    patternPtrString.replace("<", ">");
+    trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
+
+    // Write track data
+    if (!writeAsm(fileName, trackString, "_trackdata.k65")) {
+        displayMessage("Unable to write trackdata file!");
+        return false;
+    }
+
+    // Export player
+    // Flags
+    QString playerString = readAsm("player/k65/tt_player.k65");
+    if (playerString == "") {
+        return false;
+    }
+    playerString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    playerString.replace("%%NAME%%", pTrack->metaName);
+    playerString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
+    playerString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
+    bool usesGoto = pTrack->usesGoto();
+    playerString.replace("%%USEGOTO%%", (usesGoto ? "1" : "0"));
+    bool usesSlide = pTrack->usesSlide();
+    playerString.replace("%%USESLIDE%%", (usesSlide ? "1" : "0"));
+    bool usesOverlay = pTrack->usesOverlay();
+    playerString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
+    bool usesFunk = pTrack->usesFunktempo();
+    playerString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    bool startsWithHold = pTrack->startsWithHold();
+    playerString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
+    // Init
+    playerString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
+    playerString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
+    // Write player
+    if (!writeAsm(fileName, playerString, "_player.k65")) {
+        displayMessage("Unable to write player file!");
+        return false;
+    }
+
+    return true;
+}
+
+/*************************************************************************/
+
 void MainWindow::on_actionExportDasm_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecifics(fileName)) {
+    if (!exportTrackSpecificsDasm(fileName)) {
         return;
     }
 }
@@ -1112,7 +1377,7 @@ void MainWindow::on_actionExportDasm_triggered() {
 void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecifics(fileName)) {
+    if (!exportTrackSpecificsDasm(fileName)) {
         return;
     }
     // Player
@@ -1187,13 +1452,52 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 /*************************************************************************/
 
 void MainWindow::on_actionExport_track_data_to_k65_triggered() {
-
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (!exportTrackSpecificsK65(fileName)) {
+        return;
+    }
 }
 
 /*************************************************************************/
 
 void MainWindow::on_actionExport_complete_player_to_k65_triggered() {
-
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (!exportTrackSpecificsK65(fileName)) {
+        return;
+    }
+    // .lst file
+    QString lstString = readAsm("player/k65/tt_player_framework.lst");
+    if (lstString == "") {
+        return;
+    }
+    lstString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    lstString.replace("%%NAME%%", pTrack->metaName);
+    QString baseName(QFileInfo(fileName).fileName());
+    lstString.replace("%%FILENAME%%", baseName);
+    if (!writeAsm(fileName, lstString, "_player_framework.lst")) {
+        displayMessage("Unable to write .lst file!");
+        return;
+    }
+    // _main file
+    QString frameworkString = readAsm("player/k65/tt_player_main.k65");
+    if (frameworkString == "") {
+        return;
+    }
+    frameworkString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    frameworkString.replace("%%NAME%%", pTrack->metaName);
+    if (pTrack->getTvMode() == TiaSound::TvStandard::PAL) {
+        frameworkString.replace("%%PAL%%", "1");
+        frameworkString.replace("%%NTSC%%", "0");
+    } else {
+        frameworkString.replace("%%PAL%%", "0");
+        frameworkString.replace("%%NTSC%%", "1");
+    }
+    if (!writeAsm(fileName, frameworkString, "_player_main.k65")) {
+        displayMessage("Unable to write _main file!");
+        return;
+    }
 }
 
 /*************************************************************************/

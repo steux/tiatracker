@@ -1,5 +1,5 @@
 -system A2600
 
-tt_player_trackdata.k65     core
-tt_player.k65               core
-tt_player_main.k65          core
+%%FILENAME%%_trackdata.k65          core
+%%FILENAME%%_player.k65             core
+%%FILENAME%%_player_main.k65        core

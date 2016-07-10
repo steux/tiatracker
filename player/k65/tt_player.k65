@@ -234,7 +234,7 @@ inline tt_checkForOverlay {
 #ENDIF
 
 
-inline tt_Sequencer {
+inline tt_sequencer {
     // Decrease speed timer
     tt_timer-- <0{
         // Timer ran out: Reset and do sequencer
@@ -328,7 +328,7 @@ inline tt_doOverlay {
 }
 #ENDIF
 
-inline tt_UpdateRegisters {
+inline tt_updateRegisters {
     x=1 {
         // Percussion or melodic instrument?
         a=tt_cur_ins,x tt_checkForStartsWithNotes
@@ -374,7 +374,7 @@ tt_afterAudioUpdate:
  * Music player entry. Call once per frame.
  * =====================================================================
  */
-inline tt_Player {
-    tt_Sequencer
-    tt_UpdateRegisters
+inline tt_player {
+    tt_sequencer
+    tt_updateRegisters
 }
