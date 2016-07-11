@@ -28,33 +28,29 @@
  * =====================================================================
  */
 [
-    PAL     = %%PAL%%
+    PAL     = %%PAL%%,
     NTSC    = %%NTSC%%
 ]
 
-#IF PAL
+#if PAL
 [
-    TIM_VBLANK      = 43
-    TIM_OVERSCAN    = 36
+    TIM_VBLANK      = 43,
+    TIM_OVERSCAN    = 36,
     TIM_KERNEL      = 19
 ]
-#ELIF
+#else
 [
-    TIM_VBLANK      = 45
-    TIM_OVERSCAN    = 38
+    TIM_VBLANK      = 45,
+    TIM_OVERSCAN    = 38,
     TIM_KERNEL      = 15
 ]
-#ENDIF
+#endif
 
 
 /* =====================================================================
  * Variables
  * =====================================================================
  */
-
-// test
-var playerTimeMax=0x80;
-
 
 inline init {
 	i+ d-
@@ -75,15 +71,15 @@ main {
         VBLANK=a=2 TIM64T=a=[TIM_OVERSCAN]
         
         // Call player routine
-        tt_Player
+        tt_player
         
         timwait
         
         // VBlank
       	a=0b00001110
-        {wsync VSYNC=a a>>}!=
+        {WSYNC=a VSYNC=a a>>}!=
         VBLANK=a=2 TIM64T=a=[TIM_VBLANK]
-        timwait wsync VBLANK=a=0
+        timwait WSYNC=a VBLANK=a=0
         
         // Visible area
         T1024T=a=[TIM_KERNEL]

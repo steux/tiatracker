@@ -53,7 +53,7 @@
  * Permanent variables. These are states needed by the player.
  * =====================================================================
  */
-var tt_timer,               // current music timer value
+var tt_timer=0x80,          // current music timer value
     tt_cur_pat_index[2],    // current pattern index into tt_SequenceTable
     tt_cur_note_index[2],   // note index into current pattern
     tt_envelope_index[2],   // index into ADSR envelope
@@ -71,9 +71,9 @@ var tt_ptr[2];
 
 /* =====================================================================
  * Initialize music.
- * Set tt_cur_pat_index_c0/1 to the indexes of the first patterns from
+ * Set tt_cur_pat_index[2] to the indexes of the first patterns from
  * tt_SequenceTable for each channel.
- * Set tt_timer and tt_cur_note_index_c0/1 to 0.
+ * Set tt_timer and tt_cur_note_index[2] to 0.
  * All other variables can start with any value.
  * =====================================================================
  */
@@ -114,12 +114,12 @@ inline tt_init {
  * =====================================================================
  */
 
-#IF TT_USE_GOTO
+#if TT_USE_GOTO
 inline tt_getSequenceEntry {
     y=tt_cur_pat_index,x
     a=tt_SequenceTable,y
 }
-#ELSE
+#else
 inline tt_getSequenceEntry {
 .constructPatPtr:
     y=tt_cur_pat_index,x
@@ -127,30 +127,30 @@ inline tt_getSequenceEntry {
         a&0b01111111 tt_cur_pat_index,x=a >=goto .constructPatPtr
     }
 }
-#ENDIF
+#endif
 
-#IF TT_USE_OVERLAY
+#if TT_USE_OVERLAY
 inline tt_getCurNoteIndex {
     y=tt_cur_note_index,x
 }
-#ELSE
+#else
 inline tt_getCurNoteIndex {
     // If the V flag is set and if the new note is an instrument,
     // it means it got pre-fetched by an overlay percussion, it has
     // to remain in sustain.
-    v-
+    o-
     // check if note had been pre-fetched by overlay perc already
     a=tt_cur_note_index,x <0{
         // If so, remove flag
        a&0b01111111 tt_cur_note_index,x=a
        // Set V flag for later
-       bit tt_calcInsIndex
+       a&?tt_calcInsIndex
     }
     y=a
 }
-#ENDIF
+#endif
 
-inine tt_fetchCurrentNoteImpl {
+inline tt_fetchCurrentNoteImpl {
     // Construct pattern pointer
 .constructPatPtr:
     tt_getSequenceEntry
@@ -163,16 +163,16 @@ inine tt_fetchCurrentNoteImpl {
     =={
         // End of pattern: Advance to next pattern
         tt_cur_note_index,x=a       // a is 0
-        tt_cur_cur_pat_index,x++
+        tt_cur_pat_index,x++
         !=goto .constructPatPtr     //unconditional
     }
 }
 
-#IF TT_USE_OVERLAY
+#if TT_USE_OVERLAY
 func tt_fetchCurrentNote { tt_fetchCurrentNoteImpl }
-#ELSE
+#else
 inline tt_fetchCurrentNote { tt_fetchCurrentNoteImpl }
-#ENDIF
+#endif
 
 /* =====================================================================
  * Helper subroutine to minimize ROM footprint.
@@ -192,24 +192,24 @@ func tt_calcInsIndex {
  * =====================================================================
  */
 
-#IF TT_USE_FUNKTEMPO
+#if TT_USE_FUNKTEMPO
 inline tt_getNextTimerValue {
     x=[TT_SPEED-1]
 }
-#ELSE
+#else
 inline tt_getNextTimerValue {
     x=[TT_SPEED-1]
     a=tt_cur_note_index a>> >={ x=[TT_ODD_SPEED-1] }
 }
-#ENDIF
+#endif
 
-#IF TT_USE_SLIDE
+#if TT_USE_SLIDE
 inline tt_slideHoldSwitch {
     ==goto tt_pause
     >=goto tt_newNote
     
 }
-#ELSE
+#else
 inline tt_slideHoldSwitch {
     <goto tt_finishedNewNote
     !=goto tt_newNote
@@ -221,18 +221,18 @@ inline tt_slideHoldSwitch {
     a+tt_cur_ins,x c+ a-8 tt_cur_ins,x=a
     >=goto tt_finishedNewNote
 }
-#ENDIF
+#endif
 
-#IF TT_USE_OVERLAY
+#if TT_USE_OVERLAY
 inline tt_checkForOverlay {
     // If V flag is set, this note had been pre-fetched. That means
     // it should remain in sustain.
     <<=goto tt_finishedNewNote
 }
-#ELSE
+#else
 inline tt_checkForOverlay {
 }
-#ENDIF
+#endif
 
 
 inline tt_sequencer {
@@ -297,21 +297,21 @@ tt_finishedNewNote:
  * =====================================================================
  */
  
-#IF TT_STARTS_WITH_NOTES
+#if TT_STARTS_WITH_NOTES
 inline tt_checkForStartsWithNotes {
 }
-#ELSE
+#else
 inline tt_checkForStartsWithNotes {
     // This branch can be removed if track starts with a note in each channel
     ==goto tt_afterAudioUpdate
 }
-#ENDIF
+#endif
 
-#IF TT_USE_OVERLAY = 1
+#if TT_USE_OVERLAY
 inline tt_doOverlay {
 	>=0goto tt_afterAudioUpdate
 	// Overlay percussion: Fetch next note out of order
-	tt_FetchNote
+	tt_fetchCurrentNote
 	// Only do something if it's a melodic instrument
 	a?[TT_FREQ_MASK+1]
 	<goto tt_afterAudioUpdate
@@ -320,14 +320,14 @@ inline tt_doOverlay {
 	tt_calcInsIndex
 	tt_envelope_index,x=a=tt_InsSustainIndexes-1,y
 	// Set prefetch flag. asl-sec-ror is smaller than lda-ora #128-sta
-	tt_cur_note_index_c0,x<< c+ tt_cur_note_index_c0,x>>>
+	tt_cur_note_index,x<< c+ tt_cur_note_index,x>>>
 	<0goto tt_afterAudioUpdate
 }
-#ELSE
+#else
 inline tt_doOverlay {
 	goto tt_afterAudioUpdate
 }
-#ENDIF
+#endif
 
 inline tt_updateRegisters {
     x=1 {
@@ -354,14 +354,14 @@ tt_instrument:
         // Set AUDC with master value for this instrument, while we are at it
 		AUDC0,x=a=tt_InsCtrlTable-1,y
         // advance ADSR counter and compare to end of Sustain
-		a=tt_envelope_index_c0,x a?tt_InsReleaseIndexes-1,y =={ a=tt_InsSustainIndexes-1,y }
+		a=tt_envelope_index,x a?tt_InsReleaseIndexes-1,y =={ a=tt_InsSustainIndexes-1,y }
 		y=a
         // Set volume from envelope
 		a=tt_InsFreqVolTable,y !={ y++ }	// 0 means end of release has been reached
-		tt_envelope_index_c0,x=y
+		tt_envelope_index,x=y
         AUDV0,x=a
         // Now adjust frequency with ADSR value from envelope
-		a>> a>> a>> a>> c- a+tt_cur_ins_c0,x c+ a-8
+		a>> a>> a>> a>> c- a+tt_cur_ins,x c+ a-8
         AUDF0,x=a
 		
 tt_afterAudioUpdate:
