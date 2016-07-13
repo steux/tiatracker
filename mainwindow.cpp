@@ -1324,38 +1324,27 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     patternPtrString.replace("<", ">");
     trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
 
+    // Flags
+    trackString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
+    trackString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
+    bool usesGoto = pTrack->usesGoto();
+    trackString.replace("%%USEGOTO%%", (usesGoto ? "1" : "0"));
+    bool usesSlide = pTrack->usesSlide();
+    trackString.replace("%%USESLIDE%%", (usesSlide ? "1" : "0"));
+    bool usesOverlay = pTrack->usesOverlay();
+    trackString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
+    bool usesFunk = pTrack->usesFunktempo();
+    trackString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    bool startsWithHold = pTrack->startsWithHold();
+    trackString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
+
+    // Init
+    trackString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
+    trackString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
+
     // Write track data
     if (!writeAsm(fileName, trackString, "_trackdata.k65")) {
         displayMessage("Unable to write trackdata file!");
-        return false;
-    }
-
-    // Export player
-    // Flags
-    QString playerString = readAsm("player/k65/tt_player.k65");
-    if (playerString == "") {
-        return false;
-    }
-    playerString.replace("%%AUTHOR%%", pTrack->metaAuthor);
-    playerString.replace("%%NAME%%", pTrack->metaName);
-    playerString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
-    playerString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
-    bool usesGoto = pTrack->usesGoto();
-    playerString.replace("%%USEGOTO%%", (usesGoto ? "1" : "0"));
-    bool usesSlide = pTrack->usesSlide();
-    playerString.replace("%%USESLIDE%%", (usesSlide ? "1" : "0"));
-    bool usesOverlay = pTrack->usesOverlay();
-    playerString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
-    bool usesFunk = pTrack->usesFunktempo();
-    playerString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
-    bool startsWithHold = pTrack->startsWithHold();
-    playerString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
-    // Init
-    playerString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
-    playerString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
-    // Write player
-    if (!writeAsm(fileName, playerString, "_player.k65")) {
-        displayMessage("Unable to write player file!");
         return false;
     }
 
@@ -1496,6 +1485,18 @@ void MainWindow::on_actionExport_complete_player_to_k65_triggered() {
     }
     if (!writeAsm(fileName, frameworkString, "_player_main.k65")) {
         displayMessage("Unable to write _main file!");
+        return;
+    }
+    // _player
+    QString playerString = readAsm("player/k65/tt_player.k65");
+    if (playerString == "") {
+        return;
+    }
+    playerString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    playerString.replace("%%NAME%%", pTrack->metaName);
+    // Write player
+    if (!writeAsm(fileName, playerString, "_player.k65")) {
+        displayMessage("Unable to write player file!");
         return;
     }
 }
