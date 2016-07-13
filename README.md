@@ -29,15 +29,7 @@ Tracker features:
 * Integrated pattern editor and sequencer
 * Timeline "mini map" displaying the pattern sequences
 * Sound emulation from the Stella emulator for playback
-* Export to dasm
-
-## Planned enhancements
-
-* More sensible "loop pattern" behavior
-* Export to .k65
-* More precise playback timing in the tracker emulation
-* Undo/Redo
-* Backport the upcoming major improvements in Stella's sound emulation to the tracker
+* Export to dasm, k65 and .csv
 
 For feedback, bug reports and feature requests, send a mail to andre.wichmann@gmx.de!
 
