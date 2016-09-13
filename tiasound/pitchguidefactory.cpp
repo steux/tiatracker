@@ -7,6 +7,7 @@
 
 #include "pitchguidefactory.h"
 #include "percussiontab.h"
+#include <cmath>
 
 
 namespace TiaSound {

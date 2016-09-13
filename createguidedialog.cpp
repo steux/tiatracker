@@ -11,6 +11,7 @@
 #include <QProgressDialog>
 #include "guidekeyboard.h"
 #include <QKeyEvent>
+#include <cmath>
 
 
 CreateGuideDialog::CreateGuideDialog(QWidget *parent) :
