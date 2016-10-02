@@ -157,6 +157,17 @@ TT_FIRST_PERC   = 17
 %%PATTERNDEFS%%
 
 
+; Individual pattern speeds (needs TT_GLOBAL_SPEED = 0).
+; Each byte encodes the speed of one pattern in the order
+; of the tt_PatternPtr tables below.
+; If TT_USE_FUNKTEMPO is 1, then the low nibble encodes
+; the even speed and the high nibble the odd speed.
+    IF TT_GLOBAL_SPEED = 0
+tt_PatternSpeeds:
+%%PATTERNSPEEDS%%
+    ENDIF
+
+
 ; ---------------------------------------------------------------------
 ; Pattern pointers look-up table.
 ; ---------------------------------------------------------------------

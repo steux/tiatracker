@@ -98,17 +98,8 @@ tt_Player SUBROUTINE
         ; Decrease speed timer
         dec tt_timer
         bpl .noNewNote
-        ; Timer ran out: Reset and do sequencer
-        ldx #TT_SPEED-1
-    if TT_USE_FUNKTEMPO = 1
-        lda tt_cur_note_index_c0
-        lsr
-        bcc .noOddFrame
-        ldx #TT_ODD_SPEED-1
-.noOddFrame:
-    ENDIF
-        stx tt_timer
-
+        
+        ; Timer ran out: Do sequencer
         ; Advance to next note
         ldx #1                          ; 2 channels
 .advanceLoop:
@@ -215,6 +206,25 @@ tt_FetchNote:
 .sequencerNextChannel:
         dex
         bpl .advanceLoop
+
+        ; Reset timer value
+    IF TT_GLOBAL_SPEED = 0
+        ; Get timer value for current pattern in channel 0
+        ldx tt_cur_pat_index_c0         ; get current pattern (index into tt_SequenceTable)
+        ldy tt_SequenceTable,x
+        ldx tt_PatternSpeeds,y
+        stx tt_timer
+    ELSE
+        ldx #TT_SPEED-1
+    IF TT_USE_FUNKTEMPO = 1
+        lda tt_cur_note_index_c0
+        lsr
+        bcc .noOddFrame
+        ldx #TT_ODD_SPEED-1
+.noOddFrame:
+    ENDIF
+        stx tt_timer
+    ENDIF
 
         ; No new note to process
 .noNewNote:

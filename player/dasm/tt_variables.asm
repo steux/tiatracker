@@ -22,6 +22,8 @@
 ; Flags
 ; =====================================================================
 
+; 1: Global song speed, 0: Each pattern has individual speed
+TT_GLOBAL_SPEED         = %%GLOBALSPEED%%
 ; duration (number of TV frames) of a note
 TT_SPEED                = %%EVENSPEED%%
 ; duration of odd frames (needs TT_USE_FUNKTEMPO)
