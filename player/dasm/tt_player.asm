@@ -144,22 +144,6 @@ tt_Player SUBROUTINE
         bcc .storeADIndex               ; unconditional
 
 ; ---------------------------------------------------------------------
-; Helper subroutine to minimize ROM footprint.
-; Interleaved here so player routine can be inlined.
-; ---------------------------------------------------------------------
-tt_CalcInsIndex:
-        ; move upper 3 bits to lower 3
-        lsr
-        lsr
-        lsr
-        lsr
-        lsr
-        tay
-tt_Bit6Set:     ; This opcode has bit #6 set, for use with bit instruction
-        rts
-
-
-; ---------------------------------------------------------------------
 ; Helper subroutine to minimize ROM footprint. Will be inlined if
 ; TT_USE_OVERLAY is not used.
 ; Interleaved here so player can be inlined.
@@ -211,20 +195,39 @@ tt_FetchNote:
     IF TT_GLOBAL_SPEED = 0
         ; Get timer value for current pattern in channel 0
         ldx tt_cur_pat_index_c0         ; get current pattern (index into tt_SequenceTable)
-        ldy tt_SequenceTable,x
-        ldx tt_PatternSpeeds,y
-        stx tt_timer
+        ldy tt_SequenceTable,x          ; Current pattern index now in y
+      IF TT_USE_FUNKTEMPO = 0
+        lda tt_PatternSpeeds,y
+        sta tt_timer
+      ELSE
+        ; Test for odd/even frame
+        lda tt_cur_note_index_c0
+        lsr
+        lda tt_PatternSpeeds,y          ; does not affect carry flag
+        bcc .evenFrame
+        and #$0f                        ; does not affect carry flag
+        bcs .storeFunkTempo        
+.evenFrame:
+        lsr
+        lsr
+        lsr
+        lsr
+.storeFunkTempo:
+        sta tt_timer
+      ENDIF   ; TT_USE_FUNKTEMPO = 0
+
     ELSE
+        ; Global tempo
         ldx #TT_SPEED-1
-    IF TT_USE_FUNKTEMPO = 1
+      IF TT_USE_FUNKTEMPO = 1
         lda tt_cur_note_index_c0
         lsr
         bcc .noOddFrame
         ldx #TT_ODD_SPEED-1
 .noOddFrame:
-    ENDIF
+      ENDIF   ; TT_USE_FUNKTEMPO = 1
         stx tt_timer
-    ENDIF
+    ENDIF   ; TT_GLOBAL_SPEED = 0
 
         ; No new note to process
 .noNewNote:
@@ -278,6 +281,23 @@ tt_FetchNote:
     ELSE  
         jmp .afterAudioUpdate
     ENDIF
+
+    
+; ---------------------------------------------------------------------
+; Helper subroutine to minimize ROM footprint.
+; Interleaved here so player routine can be inlined.
+; ---------------------------------------------------------------------
+tt_CalcInsIndex:
+        ; move upper 3 bits to lower 3
+        lsr
+        lsr
+        lsr
+        lsr
+        lsr
+        tay
+tt_Bit6Set:     ; This opcode has bit #6 set, for use with bit instruction
+        rts
+
 
 .instrument:
         ; --- Melodic instrument ---
