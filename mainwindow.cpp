@@ -168,6 +168,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->percussionFrequencyShaper, SIGNAL(envelopeContextEvent(int)), this, SLOT(waveformContextEvent(int)));
 
     // TrackTab
+    QObject::connect(ui->checkBoxGlobalTempo, SIGNAL(toggled(bool)), ui->tabTrack, SLOT(toggleGlobalTempo(bool)));
     QObject::connect(ui->spinBoxRowsPerBeat, SIGNAL(valueChanged(int)), ui->trackEditor, SLOT(setRowsPerBeat(int)));
     QObject::connect(ui->spinBoxEvenTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setEvenSpeed(int)));
     QObject::connect(ui->spinBoxOddTempo, SIGNAL(valueChanged(int)), ui->tabTrack, SLOT(setOddSpeed(int)));

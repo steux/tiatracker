@@ -172,8 +172,23 @@ void TrackTab::updateTrackTab() {
 
 /*************************************************************************/
 
+void TrackTab::toggleGlobalTempo(bool toggled) {
+    pTrack->globalSpeed = toggled;
+    updateTrackStats();
+    updatePatternEditor();
+}
+
+/*************************************************************************/
+
 void TrackTab::setEvenSpeed(int value) {
-    pTrack->evenSpeed = value;
+    if (pTrack->globalSpeed) {
+        pTrack->evenSpeed = value;
+    } else {
+        PatternEditor *pe = findChild<PatternEditor *>("trackEditor");
+        int editPos = pe->getEditPos();
+        int patternIndex = pTrack->getPatternIndex(0, editPos);
+        pTrack->patterns[patternIndex].evenSpeed = value;
+    }
     updateTrackStats();
     updatePatternEditor();
 }
@@ -181,7 +196,14 @@ void TrackTab::setEvenSpeed(int value) {
 /*************************************************************************/
 
 void TrackTab::setOddSpeed(int value) {
-    pTrack->oddSpeed = value;
+    if (pTrack->globalSpeed) {
+        pTrack->oddSpeed = value;
+    } else {
+        PatternEditor *pe = findChild<PatternEditor *>("trackEditor");
+        int editPos = pe->getEditPos();
+        int patternIndex = pTrack->getPatternIndex(0, editPos);
+        pTrack->patterns[patternIndex].oddSpeed = value;
+    }
     updateTrackStats();
     updatePatternEditor();
 }

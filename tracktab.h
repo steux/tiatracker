@@ -44,6 +44,7 @@ signals:
     void stopTrack();
 
 public slots:
+    void toggleGlobalTempo(bool toggled);
     void setEvenSpeed(int value);
     void setOddSpeed(int value);
     void channelContextEvent(int channel, int noteIndex);
