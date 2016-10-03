@@ -7,5 +7,8 @@ globalSpeed:
 - When moving the cursor, adapt even/odd speed gui element
 - When even/odd speed values change, adapt pattern values accordingly (left channel only?)
 - Adapt into tab
+- Update globalSpeed GUI on song load
+- Implement export
+- Update k65 player
 - Change version display to 1.2
 - Update manual
