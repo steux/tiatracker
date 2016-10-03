@@ -21,6 +21,8 @@ Pattern::Pattern()
 
 void Pattern::toJson(QJsonObject &json) {
     json["name"] = name;
+    json["evenspeed"] = evenSpeed;
+    json["oddspeed"] = oddSpeed;
     QJsonArray noteArray;
     for (int i = 0; i < notes.size(); ++i) {
         QJsonObject noteJson;
@@ -34,6 +36,13 @@ void Pattern::toJson(QJsonObject &json) {
 
 bool Pattern::fromJson(const QJsonObject &json) {
     name = json["name"].toString();
+    if (json.contains("evenspeed")) {
+        evenSpeed = json["evenspeed"].toInt();
+        oddSpeed = json["oddspeed"].toInt();
+    } else {
+        evenSpeed = 3;
+        oddSpeed = 3;
+    }
     QJsonArray noteArray = json["notes"].toArray();
     notes.clear();
     for (int i = 0; i < noteArray.size(); ++i) {

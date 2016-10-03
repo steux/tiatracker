@@ -113,6 +113,7 @@ public:
 
     QList<Pattern> patterns{};
     QList<Sequence> channelSequences{{}, {}};
+    bool globalSpeed = true;
     int evenSpeed = 5;
     int oddSpeed = 5;
     int rowsPerBeat = 4;

@@ -27,7 +27,7 @@
        <enum>Qt::StrongFocus</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="TrackTab" name="tabTrack">
        <property name="sizePolicy">
@@ -86,9 +86,19 @@
                <number>0</number>
               </property>
               <item>
+               <widget class="QCheckBox" name="checkBoxGlobalTempo">
+                <property name="text">
+                 <string>Global tempo</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="labelEvenTempo">
                 <property name="text">
-                 <string>Even tempo:</string>
+                 <string>Even:</string>
                 </property>
                </widget>
               </item>
@@ -96,6 +106,9 @@
                <widget class="QSpinBox" name="spinBoxEvenTempo">
                 <property name="minimum">
                  <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>15</number>
                 </property>
                 <property name="value">
                  <number>5</number>
@@ -105,7 +118,7 @@
               <item>
                <widget class="QLabel" name="labelOddTempo">
                 <property name="text">
-                 <string>Odd tempo:</string>
+                 <string>Odd:</string>
                 </property>
                </widget>
               </item>
@@ -113,6 +126,9 @@
                <widget class="QSpinBox" name="spinBoxOddTempo">
                 <property name="minimum">
                  <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>15</number>
                 </property>
                 <property name="value">
                  <number>5</number>

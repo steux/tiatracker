@@ -59,6 +59,7 @@ void Track::newTrack() {
     SequenceEntry newEntryRight(1, -1);
     channelSequences[0].sequence.append(newEntryLeft);
     channelSequences[1].sequence.append(newEntryRight);
+    globalSpeed = true;
     evenSpeed = 5;
     oddSpeed = 5;
     rowsPerBeat = 4;
@@ -486,6 +487,7 @@ void Track::toJson(QJsonObject &json) {
     } else {
         json["tvmode"] = "ntsc";
     }
+    json["globalspeed"] = globalSpeed;
     json["evenspeed"] = evenSpeed;
     json["oddspeed"] = oddSpeed;
     json["rowsperbeat"] = rowsPerBeat;
@@ -553,6 +555,11 @@ bool Track::fromJson(const QJsonObject &json) {
         return false;
     }
     evenSpeed = json["evenspeed"].toInt();
+    if (json.contains("globalspeed")) {
+        globalSpeed = json["globalspeed"].toBool();
+    } else {
+        globalSpeed = true;
+    }
     oddSpeed = json["oddspeed"].toInt();
     rowsPerBeat = json["rowsperbeat"].toInt();
     // Pitch Guide is optional

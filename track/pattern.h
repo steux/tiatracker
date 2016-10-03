@@ -30,6 +30,8 @@ public:
 
     QString name;
     QList<Note> notes;
+    int evenSpeed = 3;
+    int oddSpeed = 3;
 };
 
 }
