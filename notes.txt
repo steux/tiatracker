@@ -11,3 +11,5 @@ globalSpeed:
 - Update manual
 - Adapt timestamps display
 - Adapt trackTab::updateTrackStats()
+- TrackTab::updateTrackStats(): Set even/odd speed if globalTempo is enabled
+- TrackTab::setEven/OddSpeed: What happens if editPos for channel 1 is greater than maxEditPos for channel 0? Catch!
