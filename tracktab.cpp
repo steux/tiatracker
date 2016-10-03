@@ -157,6 +157,8 @@ void TrackTab::initTrackTab() {
 
 void TrackTab::updateTrackTab() {
     // Set GUI elements
+    QCheckBox *cbGlobal = findChild<QCheckBox *>("checkBoxGlobalTempo");
+    cbGlobal->setChecked(pTrack->globalSpeed);
     QSpinBox *spEven = findChild<QSpinBox *>("spinBoxEvenTempo");
     spEven->setValue(pTrack->evenSpeed);
     QSpinBox *spOdd = findChild<QSpinBox *>("spinBoxOddTempo");
@@ -581,10 +583,17 @@ int TrackTab::choosePatternToInsert(bool doBefore) {
                 QString newName = newDialog.getName();
                 int newLength = newDialog.getLength();
                 Track::Pattern newPattern(newName);
+                QSpinBox *spEven = findChild<QSpinBox *>("spinBoxEvenTempo");
+                // Get even/odd speeds from GUI
+                newPattern.evenSpeed = spEven->value();
+                QSpinBox *spOdd = findChild<QSpinBox *>("spinBoxOddTempo");
+                newPattern.oddSpeed = spOdd->value();
+                // Create notes
                 for (int i = 0; i < newLength; ++i) {
                     Track::Note newNote(Track::Note::instrumentType::Hold, 0, 0);
                     newPattern.notes.append(newNote);
                 }
+                // Add new pattern
                 pTrack->patterns.append(newPattern);
                 lastNewPatternLength = newLength;
             } else {

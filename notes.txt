@@ -5,9 +5,9 @@ globalSpeed:
 - React on checkBoxGlobalSpeed (update gui at least)
 - Add pattern tempo display? (In name?)
 - When moving the cursor, adapt even/odd speed gui element
-- When even/odd speed values change, adapt pattern values accordingly (left channel only?)
 - Adapt into tab
-- Update globalSpeed GUI on song load
+- TrackTab::updateTrackTab: Check if we need to distinguish between globalTempo true/false for setting speeds
+- TrackTab::setEven/OddSpeed()
 - Implement export
 - Update k65 player
 - Change version display to 1.2
