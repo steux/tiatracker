@@ -1,4 +1,11 @@
-- Improved timing precision of the tracker replayer
-- Added ability to export song data to .csv (helps e.g. for syncing)
-- Fix: "New..." now properly clears meta-data (author, name, comment, used pitch guide)
-- Fix: "Play" in the tracker with each channel having varying pattern lengths now starts replay at the correct position for channel 1
+globalSpeed:
+- When creating a new pattern, use global even/odd values for init
+- Adapt replayer
+- Adapt bpm display (switch off for localSpeed?)
+- React on checkBoxGlobalSpeed (update gui at least)
+- Add pattern tempo display? (In name?)
+- When moving the cursor, adapt even/odd speed gui element
+- When even/odd speed values change, adapt pattern values accordingly (left channel only?)
+- Adapt into tab
+- Change version display to 1.2
+- Update manual
