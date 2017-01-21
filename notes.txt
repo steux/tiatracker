@@ -13,3 +13,6 @@ globalSpeed:
 - Adapt trackTab::updateTrackStats()
 - TrackTab::updateTrackStats(): Set even/odd speed if globalTempo is enabled
 - TrackTab::setEven/OddSpeed: What happens if editPos for channel 1 is greater than maxEditPos for channel 0? Catch!
+- load: globalSpeed etc., update GUI
+- when global speed checkbox changes, update speed values in GUI!
+- duplicate pattern: odd/even local speeds?

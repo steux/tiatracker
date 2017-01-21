@@ -208,6 +208,7 @@ void MainWindow::initConnections() {
     QObject::connect(ui->tabTrack, SIGNAL(advanceEditPos()), ui->trackEditor, SLOT(advanceEditPos()));
     QObject::connect(ui->checkBoxFollow, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleFollow_clicked(bool)));
     QObject::connect(ui->checkBoxLoop, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleLoop_clicked(bool)));
+    QObject::connect(ui->trackEditor, SIGNAL(channelContextEvent(int,int)), this, SLOT(updateSpeedSpinBoxes(int,int)));
 
     // Timeline
     QObject::connect(ui->trackTimeline, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));
@@ -265,6 +266,20 @@ void MainWindow::setWaveform(TiaSound::Distortion dist) {
     ui->pianoKeyboard->setInstrumentPitchGuide(pIPG);
     ui->pianoKeyboard->setUsePitchGuide(true);
     ui->pianoKeyboard->update();
+}
+
+/*************************************************************************/
+
+void MainWindow::updateSpeedSpinBoxes(int channel, int editPos) {
+    if (!pTrack->globalSpeed) {
+        int patternIndex = pTrack->getPatternIndex(channel, editPos);
+        if (ui->spinBoxEvenTempo->value() != pTrack->patterns[patternIndex].evenSpeed) {
+            ui->spinBoxEvenTempo->setValue(pTrack->patterns[patternIndex].evenSpeed);
+        }
+        if (ui->spinBoxOddTempo->value() != pTrack->patterns[patternIndex].oddSpeed) {
+            ui->spinBoxOddTempo->setValue(pTrack->patterns[patternIndex].oddSpeed);
+        }
+    }
 }
 
 /*************************************************************************/

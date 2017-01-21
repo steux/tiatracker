@@ -35,7 +35,7 @@ public:
     /* Fills GUI elements with data from the track. Called upon changes. */
     void updateTrackTab();
 
-    /* Just updates the number of patterns and track length stats */
+    /* Updates the number of patterns and track length stats */
     void updateTrackStats();
 
 signals:
