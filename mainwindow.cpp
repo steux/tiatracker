@@ -200,6 +200,7 @@ void MainWindow::initConnections() {
 
     // Pattern editor
     QObject::connect(ui->trackEditor, SIGNAL(editPosChanged(int)), ui->trackTimeline, SLOT(editPosChanged(int)));
+    QObject::connect(ui->trackEditor, SIGNAL(editPosChanged(int)), this, SLOT(updateSpeedSpinBoxes(int)));
     QObject::connect(ui->trackTimeline, SIGNAL(changeEditPos(int)), ui->trackEditor, SLOT(setEditPos(int)));
     QObject::connect(ui->trackTimeline, SIGNAL(changeEditPos(int, int)), ui->trackEditor, SLOT(setEditPos(int, int)));
     QObject::connect(ui->trackInstrumentSelector, SIGNAL(setWaveform(TiaSound::Distortion)), this, SLOT(setWaveform(TiaSound::Distortion)));
@@ -208,7 +209,6 @@ void MainWindow::initConnections() {
     QObject::connect(ui->tabTrack, SIGNAL(advanceEditPos()), ui->trackEditor, SLOT(advanceEditPos()));
     QObject::connect(ui->checkBoxFollow, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleFollow_clicked(bool)));
     QObject::connect(ui->checkBoxLoop, SIGNAL(toggled(bool)), ui->trackEditor, SLOT(toggleLoop_clicked(bool)));
-    QObject::connect(ui->trackEditor, SIGNAL(channelContextEvent(int,int)), this, SLOT(updateSpeedSpinBoxes(int,int)));
 
     // Timeline
     QObject::connect(ui->trackTimeline, SIGNAL(channelContextEvent(int,int)), ui->tabTrack, SLOT(channelContextEvent(int,int)));
@@ -270,14 +270,18 @@ void MainWindow::setWaveform(TiaSound::Distortion dist) {
 
 /*************************************************************************/
 
-void MainWindow::updateSpeedSpinBoxes(int channel, int editPos) {
+void MainWindow::updateSpeedSpinBoxes(int editPos) {
     if (!pTrack->globalSpeed) {
-        int patternIndex = pTrack->getPatternIndex(channel, editPos);
-        if (ui->spinBoxEvenTempo->value() != pTrack->patterns[patternIndex].evenSpeed) {
-            ui->spinBoxEvenTempo->setValue(pTrack->patterns[patternIndex].evenSpeed);
-        }
-        if (ui->spinBoxOddTempo->value() != pTrack->patterns[patternIndex].oddSpeed) {
-            ui->spinBoxOddTempo->setValue(pTrack->patterns[patternIndex].oddSpeed);
+        // Only the left channel is used for local tempo
+        if (pTrack->getChannelNumRows(0) >= editPos) {
+            int patternIndex = pTrack->getPatternIndex(0, editPos);
+
+            if (ui->spinBoxEvenTempo->value() != pTrack->patterns[patternIndex].evenSpeed) {
+                ui->spinBoxEvenTempo->setValue(pTrack->patterns[patternIndex].evenSpeed);
+            }
+            if (ui->spinBoxOddTempo->value() != pTrack->patterns[patternIndex].oddSpeed) {
+                ui->spinBoxOddTempo->setValue(pTrack->patterns[patternIndex].oddSpeed);
+            }
         }
     }
 }

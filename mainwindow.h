@@ -77,7 +77,7 @@ public slots:
     // Set a new pitch guide for the piano keyboard
     void setWaveform(TiaSound::Distortion dist);
     // Update odd and even speeds based on new edit pos (if global tempo is false)
-    void updateSpeedSpinBoxes(int channel, int editPos);
+    void updateSpeedSpinBoxes(int editPos);
 
 signals:
     void initPlayerTimer();

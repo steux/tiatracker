@@ -184,8 +184,10 @@ void TrackTab::setEvenSpeed(int value) {
     if (pTrack->globalSpeed) {
         pTrack->evenSpeed = value;
     } else {
+        std::cout << "TRIGGERED\n"; std::cout.flush();
         PatternEditor *pe = findChild<PatternEditor *>("trackEditor");
         int editPos = pe->getEditPos();
+        // Only the left channel is used for local tempo
         int patternIndex = pTrack->getPatternIndex(0, editPos);
         pTrack->patterns[patternIndex].evenSpeed = value;
     }
