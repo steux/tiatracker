@@ -1,5 +1,4 @@
 globalSpeed:
-- Adapt bpm display (switch off for localSpeed?)
 - Add pattern tempo display? (In name?)
 - Adapt info tab
 - Implement export

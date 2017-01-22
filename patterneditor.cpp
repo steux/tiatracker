@@ -366,24 +366,26 @@ void PatternEditor::drawGoto(int channel, int yPos, Track::Pattern *curPattern, 
 
 void PatternEditor::drawTimestamp(int row, QPainter *painter, int yPos, int channel)
 {
-    int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
-    long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
-    long numEvenTicks = int(row/2)*pTrack->evenSpeed;
-    long numTick = numOddTicks + numEvenTicks;
-    int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
-    if (channel == 0 && numTick%ticksPerSecond < curTicks) {
-        int minute = numTick/(ticksPerSecond*60);
-        int second = (numTick%(ticksPerSecond*60))/ticksPerSecond;
-        QString timestampText = QString::number(minute);
-        if (second < 10) {
-            timestampText.append(":0");
-        } else {
-            timestampText.append(":");
+    if (pTrack->globalSpeed) {
+        int ticksPerSecond = pTrack->getTvMode() == TiaSound::TvStandard::PAL ? 50 : 60;
+        long numOddTicks = int((row + 1)/2)*pTrack->oddSpeed;
+        long numEvenTicks = int(row/2)*pTrack->evenSpeed;
+        long numTick = numOddTicks + numEvenTicks;
+        int curTicks = row%2 == 0 ? pTrack->evenSpeed : pTrack->oddSpeed;
+        if (channel == 0 && numTick%ticksPerSecond < curTicks) {
+            int minute = numTick/(ticksPerSecond*60);
+            int second = (numTick%(ticksPerSecond*60))/ticksPerSecond;
+            QString timestampText = QString::number(minute);
+            if (second < 10) {
+                timestampText.append(":0");
+            } else {
+                timestampText.append(":");
+            }
+            timestampText.append(QString::number(second));
+            painter->setFont(legendFont);
+            painter->setPen(MainWindow::contentDarker);
+            painter->drawText(patternNameWidth + noteAreaWidth, yPos, timeAreaWidth, legendFontHeight, Qt::AlignHCenter, timestampText);
         }
-        timestampText.append(QString::number(second));
-        painter->setFont(legendFont);
-        painter->setPen(MainWindow::contentDarker);
-        painter->drawText(patternNameWidth + noteAreaWidth, yPos, timeAreaWidth, legendFontHeight, Qt::AlignHCenter, timestampText);
     }
 }
 
