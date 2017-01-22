@@ -5,4 +5,3 @@ globalSpeed:
 - Update k65 player
 - Change version display to 1.2
 - Update manual
-- Adapt timestamps display

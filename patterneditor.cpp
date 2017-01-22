@@ -342,6 +342,13 @@ void PatternEditor::drawPatternNameAndSeparator(int yPos, int nameXPos, int curP
         QString patternName = QString::number(curEntryIndex + 1);
         patternName.append(": ");
         patternName.append(curPattern->name);
+        if (!pTrack->globalSpeed && channel == 0) {
+            patternName.append(" (");
+            patternName.append(QString::number(curPattern->evenSpeed));
+            patternName.append("/");
+            patternName.append(QString::number(curPattern->oddSpeed));
+            patternName.append(")");
+        }
         if (curEntryIndex == pTrack->startPatterns[channel]) {
             painter->setPen(MainWindow::green);
 
