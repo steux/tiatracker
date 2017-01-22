@@ -1,5 +1,4 @@
 globalSpeed:
-- Adapt replayer
 - Adapt bpm display (switch off for localSpeed?)
 - Add pattern tempo display? (In name?)
 - Adapt info tab
@@ -8,4 +7,3 @@ globalSpeed:
 - Change version display to 1.2
 - Update manual
 - Adapt timestamps display
-- check tracktab::updatePatternEditor()?

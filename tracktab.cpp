@@ -583,9 +583,13 @@ void TrackTab::updateTrackStats() {
     timeLabel->setText("Total length: " + timeText);
     // BPM
     QLabel *bpmLabel = findChild<QLabel *>("labelBPM");
-    int numTicksSum = pTrack->oddSpeed + pTrack->evenSpeed;
-    double bpm = (60.0*ticksPerSecond)/((numTicksSum/2.0)*pTrack->rowsPerBeat);
-    bpmLabel->setText("(~" + QString::number(bpm, 'f', 2) + " bpm)");
+    if (pTrack->globalSpeed) {
+        int numTicksSum = pTrack->oddSpeed + pTrack->evenSpeed;
+        double bpm = (60.0*ticksPerSecond)/((numTicksSum/2.0)*pTrack->rowsPerBeat);
+        bpmLabel->setText("(~" + QString::number(bpm, 'f', 2) + " bpm)");
+    } else {
+        bpmLabel->setText("n/a (local tempo)");
+    }
 }
 
 /*************************************************************************/
