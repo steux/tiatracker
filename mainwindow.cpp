@@ -534,7 +534,13 @@ void MainWindow::updateInfo() {
     ui->labelOverlayRom->setText(usesOverlay ? QString::number(Emulation::Player::RomOverlay) : "<s>" + QString::number(Emulation::Player::RomOverlay) + "</s>");
     bool usesFunk = pTrack->usesFunktempo();
     ui->labelFunktempoUsed->setText(usesFunk ? "X" : "-");
-    ui->labelFunktempoRom->setText(usesFunk ? QString::number(Emulation::Player::RomFunktempo) : "<s>" + QString::number(Emulation::Player::RomFunktempo) + "</s>");
+    QString funktempoString = QString::number(Emulation::Player::RomFunktempoGlobal) + "/" + QString::number(Emulation::Player::RomFunktempoLocal);
+    ui->labelFunktempoRom->setText(usesFunk ? funktempoString : "<s>" + funktempoString + "</s>");
+    bool usesLocal = !pTrack->globalSpeed;
+    ui->labelLocalSpeedUsed->setText(usesLocal ? "X" : "-");
+    int numPatterns = pTrack->numPatternsUsed();
+    QString localString = QString::number(Emulation::Player::RomLocalNoFunk + numPatterns) + "/" + QString::number(Emulation::Player::RomLocalWithFunk + numPatterns);
+    ui->labelLocalSpeedRom->setText(usesLocal ? localString : "<s>" + localString + "</s>");
     bool startsWithHold = pTrack->startsWithHold();
     ui->labelStartsWithHold->setText(startsWithHold ? "X" : "-");
     ui->labelStartsWithHoldRom->setText(startsWithHold ? QString::number(Emulation::Player::RomStartsWithHold) : "<s>" + QString::number(Emulation::Player::RomStartsWithHold) + "</s>");
@@ -547,18 +553,32 @@ void MainWindow::updateInfo() {
     ui->labelInstrumentsRom->setText(QString::number(instrumentsSize));
     int percussionSize = pTrack->calcPercussionSize();
     ui->labelPercussionRom->setText(QString::number(percussionSize));
-    int numPatterns = pTrack->numPatternsUsed();
     ui->labelInfoPatterns->setText(QString::number(numPatterns));
     int patternSize = pTrack->calcPatternSize();
     ui->labelPatternsRom->setText(QString::number(patternSize));
     int sequencesSize = pTrack->sequencesSize();
     ui->labelSequencesRom->setText(QString::number(sequencesSize));
+
+    int sizeLocalFunk;
+    if (usesLocal) {
+        if (usesFunk) {
+            sizeLocalFunk = Emulation::Player::RomFunktempoLocal + numPatterns;
+        } else {
+            sizeLocalFunk = Emulation::Player::RomLocalNoFunk + numPatterns;
+        }
+    } else {
+        if (usesFunk) {
+            sizeLocalFunk = Emulation::Player::RomFunktempoGlobal;
+        } else {
+            sizeLocalFunk = Emulation::Player::RomLocalWithFunk;
+        }
+    }
     int totalRom =
             Emulation::Player::RomPlayerCore
             + (usesGoto ? Emulation::Player::RomGoto : 0)
             + (usesSlide ? Emulation::Player::RomSlide : 0)
             + (usesOverlay ? Emulation::Player::RomOverlay : 0)
-            + (usesFunk ? Emulation::Player::RomFunktempo : 0)
+            + sizeLocalFunk
             + (startsWithHold ? Emulation::Player::RomStartsWithHold : 0)
             + instrumentsSize
             + percussionSize

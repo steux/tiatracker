@@ -31,7 +31,11 @@ public:
     static const int RomGoto = 8;
     static const int RomSlide = 9;
     static const int RomOverlay = 40;
-    static const int RomFunktempo = 7;
+    static const int RomFunktempoGlobal = 7;
+    // +1 per pattern
+    static const int RomFunktempoLocal = 13;
+    static const int RomLocalNoFunk = 6;
+    static const int RomLocalWithFunk = 12;
     static const int RomStartsWithHold = 2;
     // ADIndex + SustainIndex + ReleaseIndex + DummyByte + EndByte
     static const int RomPerInstrument = 5;
