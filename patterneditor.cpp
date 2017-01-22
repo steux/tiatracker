@@ -262,7 +262,7 @@ QString PatternEditor::constructRowString(int curPatternNoteIndex, Track::Patter
     QString rowText = QString::number(curPatternNoteIndex + 1);
     if (curPatternNoteIndex + 1 < 10) {
         rowText.prepend("  ");
-    } else if (curPatternNoteIndex < 100) {
+    } else if (curPatternNoteIndex + 1 < 100) {
         rowText.prepend(" ");
     }
     switch (curPattern->notes[curPatternNoteIndex].type) {

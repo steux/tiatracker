@@ -1,7 +1,13 @@
 globalSpeed:
-- Add pattern tempo display? (In name?)
 - Adapt info tab
 - Implement export
 - Update k65 player
 - Change version display to 1.2
 - Update manual
+
+
+
+
+VERSION 1.2
+- global speed/tempo
+- fix: row "100" was indented incorrectly in editor

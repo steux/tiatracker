@@ -916,6 +916,7 @@ bool MainWindow::exportDasmFlags(QString fileName) {
     flagsString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
     bool usesFunk = pTrack->usesFunktempo();
     flagsString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    flagsString.replace("%%GLOBALSPEED%%", (pTrack->globalSpeed ? "1" : "0"));
     bool startsWithHold = pTrack->startsWithHold();
     flagsString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
     // Write flags
@@ -959,6 +960,9 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
     QString patternString;
     QString patternPtrString;
     QVector<QList<int>> sequence(2);
+    QList<int> patternSpeeds;
+    QString patternSpeedsString;
+    bool usesFunktempo = pTrack->usesFunktempo();
     int numPatterns = 0;
     for (int channel = 0; channel < 2; ++channel) {
         for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
@@ -1088,6 +1092,16 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
                 patternValues.append(0);
                 patternString.append(listToDasmBytes(patternValues));
                 patternString.append("\n");
+                // Pattern speed, if local tempo
+                if (!pTrack->globalSpeed) {
+                    if (usesFunktempo) {
+                        int evenSpeed = pTrack->patterns[patternIndex].evenSpeed - 1;
+                        int oddSpeed = pTrack->patterns[patternIndex].oddSpeed - 1;
+                        patternSpeeds.append(evenSpeed*16 + oddSpeed);
+                    } else {
+                        patternSpeeds.append(pTrack->patterns[patternIndex].evenSpeed - 1);
+                    }
+                }
                 // Pattern ptr
                 if ((patternMapping.size())%4 == 1) {
                     patternPtrString.append("        dc.b ");
@@ -1121,6 +1135,9 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
     trackString.replace("%%SEQUENCECHANNEL0%%", listToDasmBytes(sequence[0]));
     trackString.replace("%%SEQUENCECHANNEL1%%", listToDasmBytes(sequence[1]));
     trackString.replace("%%PATTERNDEFS%%", patternString);
+    if (!pTrack->globalSpeed) {
+        trackString.replace("%%PATTERNSPEEDS%%", listToDasmBytes(patternSpeeds));
+    }
     trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
     patternPtrString.replace("<", ">");
     trackString.replace("%%PATTERNPTRHI%%", patternPtrString);

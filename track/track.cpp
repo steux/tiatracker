@@ -342,7 +342,16 @@ bool Track::usesOverlay() {
 /*************************************************************************/
 
 bool Track::usesFunktempo() {
-    return (evenSpeed != oddSpeed);
+    if (globalSpeed) {
+        return (evenSpeed != oddSpeed);
+    }
+    for (int i = 0; i < channelSequences[0].sequence.size(); ++i) {
+        int patternIndex = channelSequences[0].sequence[i].patternIndex;
+        if (patterns[patternIndex].evenSpeed != patterns[patternIndex].oddSpeed) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*************************************************************************/
