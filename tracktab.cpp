@@ -160,9 +160,19 @@ void TrackTab::updateTrackTab() {
     QCheckBox *cbGlobal = findChild<QCheckBox *>("checkBoxGlobalTempo");
     cbGlobal->setChecked(pTrack->globalSpeed);
     QSpinBox *spEven = findChild<QSpinBox *>("spinBoxEvenTempo");
-    spEven->setValue(pTrack->evenSpeed);
     QSpinBox *spOdd = findChild<QSpinBox *>("spinBoxOddTempo");
-    spOdd->setValue(pTrack->oddSpeed);
+    if (pTrack->globalSpeed) {
+        spEven->setValue(pTrack->evenSpeed);
+        spOdd->setValue(pTrack->oddSpeed);
+    } else {
+        PatternEditor *pe = findChild<PatternEditor *>("trackEditor");
+        int editPos = pe->getEditPos();
+        if (editPos < pTrack->getChannelNumRows(0)) {
+            int patternIndex = pTrack->getPatternIndex(0, editPos);
+            spEven->setValue(pTrack->patterns[patternIndex].evenSpeed);
+            spOdd->setValue(pTrack->patterns[patternIndex].oddSpeed);
+        }
+    }
     QSpinBox *spRowsPerBeat = findChild<QSpinBox *>("spinBoxRowsPerBeat");
     spRowsPerBeat->setValue(pTrack->rowsPerBeat);
 
@@ -174,6 +184,7 @@ void TrackTab::updateTrackTab() {
 
 void TrackTab::toggleGlobalTempo(bool toggled) {
     pTrack->globalSpeed = toggled;
+    updateTrackTab();
     updateTrackStats();
     updatePatternEditor();
 }
@@ -184,7 +195,6 @@ void TrackTab::setEvenSpeed(int value) {
     if (pTrack->globalSpeed) {
         pTrack->evenSpeed = value;
     } else {
-        std::cout << "TRIGGERED\n"; std::cout.flush();
         PatternEditor *pe = findChild<PatternEditor *>("trackEditor");
         int editPos = pe->getEditPos();
         // Only the left channel is used for local tempo
