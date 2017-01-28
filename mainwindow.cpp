@@ -981,7 +981,6 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
     QString patternPtrString;
     QVector<QList<int>> sequence(2);
     QList<int> patternSpeeds;
-    QString patternSpeedsString;
     bool usesFunktempo = pTrack->usesFunktempo();
     int numPatterns = 0;
     for (int channel = 0; channel < 2; ++channel) {
@@ -1215,6 +1214,8 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     QString patternString;
     QString patternPtrString;
     QVector<QList<int>> sequence(2);
+    QList<int> patternSpeeds;
+    bool usesFunktempo = pTrack->usesFunktempo();
     int numPatterns = 0;
     for (int channel = 0; channel < 2; ++channel) {
         for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
@@ -1344,6 +1345,16 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
                 patternValues.append(0);
                 patternString.append(listToK65Bytes(patternValues));
                 patternString.append("\n}\n");
+                // Pattern speed, if local tempo
+                if (!pTrack->globalSpeed) {
+                    if (usesFunktempo) {
+                        int evenSpeed = pTrack->patterns[patternIndex].evenSpeed - 1;
+                        int oddSpeed = pTrack->patterns[patternIndex].oddSpeed - 1;
+                        patternSpeeds.append(evenSpeed*16 + oddSpeed);
+                    } else {
+                        patternSpeeds.append(pTrack->patterns[patternIndex].evenSpeed - 1);
+                    }
+                }
                 // Pattern ptr
                 if ((patternMapping.size())%4 == 1) {
                     patternPtrString.append("        ");
@@ -1377,6 +1388,9 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     trackString.replace("%%SEQUENCECHANNEL0%%", listToK65Bytes(sequence[0]));
     trackString.replace("%%SEQUENCECHANNEL1%%", listToK65Bytes(sequence[1]));
     trackString.replace("%%PATTERNDEFS%%", patternString);
+    if (!pTrack->globalSpeed) {
+        trackString.replace("%%PATTERNSPEEDS%%", listToK65Bytes(patternSpeeds));
+    }
     trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
     patternPtrString.replace("<", ">");
     trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
@@ -1392,6 +1406,7 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     trackString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
     bool usesFunk = pTrack->usesFunktempo();
     trackString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    trackString.replace("%%GLOBALSPEED%%", (pTrack->globalSpeed ? "1" : "0"));
     bool startsWithHold = pTrack->startsWithHold();
     trackString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
 

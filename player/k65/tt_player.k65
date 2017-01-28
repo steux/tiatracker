@@ -129,7 +129,7 @@ func tt_calcInsIndex {
 #if TT_USE_FUNKTEMPO
 inline tt_localSetTimer {
     // Test for odd/even frame
-    a=tt_cur_note_index_c0 a>>
+    a=tt_cur_note_index[0] a>>
     a=tt_PatternSpeeds,y            // does not affect carry flag
     <goto .evenFrame
     a&0x0f                          // does not affect carry flag
@@ -140,7 +140,7 @@ inline tt_localSetTimer {
     tt_timer=a
 }
 inline tt_globalGetNextTimerValue {
-    a=tt_cur_note_index_c0 a>> >={ x=TT_ODD_SPEED-1 }
+    a=tt_cur_note_index[0] a>> >={ x=TT_ODD_SPEED-1 }
 }
 #else
 inline tt_localSetTimer {
@@ -159,7 +159,7 @@ inline tt_setTimerValue {
 #else
 inline tt_setTimerValue {
     // Get current pattern index now in y
-    x=tt_cur_pat_index_c0 y=tt_SequenceTable,x
+    x=tt_cur_pat_index y=tt_SequenceTable,x
     // Set timer depending on TT_USE_FUNKTEMPO
     tt_localSetTimer
 }

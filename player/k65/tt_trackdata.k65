@@ -22,7 +22,7 @@
  * Song name: %%NAME%%
  */
 
- 
+
  /* =====================================================================
  * Flags
  * =====================================================================
@@ -152,7 +152,7 @@ data tt_InsFreqVolTable {
 /*
  * =====================================================================
  * Percussion instrument definitions (up to 15)
- * 
+ *
  * Each percussion instrument is defined by:
  * - tt_PercIndexes: The index of the first percussion frame as defined
  *      in tt_PercFreqTable and tt_PercCtrlVolTable
@@ -186,7 +186,7 @@ data tt_PercCtrlVolTable {
 %%PERCCTRLVOLTABLE%%
 }
 
-        
+
 /*
  * =====================================================================
  * Track definition
@@ -210,7 +210,7 @@ data tt_PercCtrlVolTable {
  * Pattern definitions, one table per pattern. tt_cur_note_index
  * holds the index values into these tables for the current pattern
  * played in channel 0 and 1.
- * 
+ *
  * A pattern is a sequence of notes (one byte per note) ending with a 0.
  * A note can be either:
  * - Pause: Put melodic instrument into release. Must only follow a
@@ -221,7 +221,7 @@ data tt_PercCtrlVolTable {
  * - Play new note with melodic instrument
  * - Play new note with percussion instrument
  * - End of pattern
- * 
+ *
  * A note is defined by:
  * - Bits 7..5: 1-7 means play melodic instrument 1-7 with a new note
  *      and frequency in bits 4..0. If bits 7..5 are 0, bits 4..0 are
@@ -231,7 +231,7 @@ data tt_PercCtrlVolTable {
  *      - 8: Hold
  *      - 16: Pause
  *      - [17..31]: Play percussion instrument 1..15
- * 
+ *
  * The tracker must ensure that a pause only follows a melodic
  * instrument or a hold/slide.
  * =====================================================================
@@ -255,11 +255,11 @@ data tt_PercCtrlVolTable {
  * =====================================================================
  */
 
-#IF TT_GLOBAL_SPEED
+#if !TT_GLOBAL_SPEED
 data tt_PatternSpeeds {
 %%PATTERNSPEEDS%%
 }
-#ENDIF
+#endif
 
 
 /*
@@ -271,7 +271,7 @@ data tt_PatternPtrLo {
 %%PATTERNPTRLO%%
 }
 data tt_PatternPtrHi {
-%%PATTERNPTRHI%%        
+%%PATTERNPTRHI%%
 }
 
 
@@ -281,7 +281,7 @@ data tt_PatternPtrHi {
  * tt_PatternPtrLo/Hi tables where the pointers to the pattern
  * definitions can be found. When a pattern has been played completely,
  * the next byte from this table is used to get the address of the next
- * pattern to play. tt_cur_pat_index_c0/1 hold the current index values
+ * pattern to play. tt_cur_pat_index[0/1] hold the current index values
  * into this table for channels 0 and 1.
  * If TT_USE_GOTO is used, a value >=128 denotes a goto to the pattern
  * number encoded in bits 6..0 (i.e. value AND %01111111).
@@ -290,7 +290,7 @@ data tt_PatternPtrHi {
 data tt_SequenceTable {
     // ---------- Channel 0 ----------
 %%SEQUENCECHANNEL0%%
-        
+
     // ---------- Channel 1 ----------
 %%SEQUENCECHANNEL1%%
 }
