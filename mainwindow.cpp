@@ -1390,6 +1390,8 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     trackString.replace("%%PATTERNDEFS%%", patternString);
     if (!pTrack->globalSpeed) {
         trackString.replace("%%PATTERNSPEEDS%%", listToK65Bytes(patternSpeeds));
+    } else {
+        trackString.replace("%%PATTERNSPEEDS%%", "");
     }
     trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
     patternPtrString.replace("<", ">");

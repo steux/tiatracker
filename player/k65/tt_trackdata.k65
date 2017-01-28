@@ -255,11 +255,9 @@ data tt_PercCtrlVolTable {
  * =====================================================================
  */
 
-#if !TT_GLOBAL_SPEED
 data tt_PatternSpeeds {
 %%PATTERNSPEEDS%%
 }
-#endif
 
 
 /*
