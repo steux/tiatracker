@@ -127,13 +127,41 @@ func tt_calcInsIndex {
  */
 
 #if TT_USE_FUNKTEMPO
-inline tt_getNextTimerValue {
-    x=[TT_SPEED-1]
-    a=tt_cur_note_index a>> >={ x=[TT_ODD_SPEED-1] }
+inline tt_localSetTimer {
+    // Test for odd/even frame
+    a=tt_cur_note_index_c0 a>>
+    a=tt_PatternSpeeds,y            // does not affect carry flag
+    <goto .evenFrame
+    a&0x0f                          // does not affect carry flag
+    >=goto .storeFunkTempo          // unconditional
+.evenFrame:
+    a>> a>> a>> a>>
+.storeFunkTempo:
+    tt_timer=a
+}
+inline tt_globalGetNextTimerValue {
+    a=tt_cur_note_index_c0 a>> >={ x=TT_ODD_SPEED-1 }
 }
 #else
-inline tt_getNextTimerValue {
-    x=[TT_SPEED-1]
+inline tt_localSetTimer {
+    tt_timer=a=tt_PatternSpeeds,y
+}
+inline tt_globalGetNextTimerValue {
+}
+#endif
+
+#if TT_GLOBAL_SPEED
+inline tt_setTimerValue {
+    x=TT_SPEED-1
+    tt_globalGetNextTimerValue
+    tt_timer=x
+}
+#else
+inline tt_setTimerValue {
+    // Get current pattern index now in y
+    x=tt_cur_pat_index_c0 y=tt_SequenceTable,x
+    // Set timer depending on TT_USE_FUNKTEMPO
+    tt_localSetTimer
 }
 #endif
 
@@ -147,7 +175,7 @@ inline tt_slideHoldSwitch {
     // under/overflow happens.
     // Note: f = f + (8-(16-x)) = x + f - 8
     a+tt_cur_ins,x c+ a-8 tt_cur_ins,x=a
-    >=goto tt_finishedNewNote    
+    >=goto tt_finishedNewNote
 }
 #else
 inline tt_slideHoldSwitch {
@@ -171,15 +199,12 @@ inline tt_checkForOverlay {
 inline tt_sequencer {
     // Decrease speed timer
     tt_timer-- <0{
-        // Timer ran out: Reset and do sequencer
-        tt_getNextTimerValue tt_timer=x
-
-        // Advance to next note for each channel
+        // Timer ran out: Advance to next note for each channel
         x=1 {
             tt_fetchCurrentNote
             // Parse new note from pattern
             a?[TT_INS_PAUSE] tt_slideHoldSwitch
-            
+
             // --- pause ---
 tt_pause:
             // Get release index for current instrument. Since a pause can
@@ -190,13 +215,13 @@ tt_pause:
             // Put it into release. Skip junk byte so index no longer indicates
             // sustain phase.
             c- a+1 <goto tt_storeADIndex    // unconditional
-            
+
             // --- start instrument or percussion ---
 tt_newNote:
             tt_cur_ins,x=a                  // set new instrument
             // Instrument or percussion?
             a?[TT_FREQ_MASK+1] >=goto tt_startInstrument
-            
+
             // --- start percussion ---
             // Get index of envelope
             y=a
@@ -212,7 +237,7 @@ tt_startInstrument:
             a=tt_InsADIndexes-1,y           // -1 because instruments start at #1
 tt_storeADIndex:
             tt_envelope_index,x=a
-            
+
             // --- Finished parsing new note ---
 tt_finishedNewNote:
             // increase note index into pattern
@@ -221,6 +246,9 @@ tt_finishedNewNote:
             // Next channel
             x--
         }>=0
+
+        // Reset timer
+        tt_setTimerValue
     }
 }
 
@@ -229,7 +257,7 @@ tt_finishedNewNote:
  * Update registers
  * =====================================================================
  */
- 
+
 #if TT_STARTS_WITH_NOTES
 inline tt_checkForStartsWithNotes {
 }
@@ -296,7 +324,7 @@ tt_instrument:
         // Now adjust frequency with ADSR value from envelope
 		a>> a>> a>> a>> c- a+tt_cur_ins,x c+ a-8
         AUDF0,x=a
-		
+
 tt_afterAudioUpdate:
         // Next channel
         x--
