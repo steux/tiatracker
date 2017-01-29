@@ -1,3 +1,7 @@
+TODO
+- update manual about goto<127
+
+
 VERSION 1.2
 - global speed/tempo
 - updated manual

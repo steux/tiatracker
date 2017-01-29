@@ -365,7 +365,11 @@ void PatternEditor::drawGoto(int channel, int yPos, Track::Pattern *curPattern, 
             && curEntry->gotoTarget != -1) {
         int alignment = channel == 0 ? Qt::AlignRight : Qt::AlignLeft;
         painter->setFont(legendFont);
-        painter->setPen(MainWindow::blue);
+        if (curEntry->gotoTarget < 128) {
+            painter->setPen(MainWindow::blue);
+        } else {
+            painter->setPen(MainWindow::red);
+        }
         painter->drawText(nameXPos, yPos, patternNameWidth - 2*patternNameMargin, legendFontHeight, alignment,
                           "GOTO " + QString::number(curEntry->gotoTarget + 1));
     }

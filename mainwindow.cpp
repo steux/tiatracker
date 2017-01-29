@@ -1139,6 +1139,10 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
                 if (channel == 1) {
                     value += sequence[0].size();
                 }
+                if (value > 255) {
+                    displayMessage("Unable to export: Goto target in channel " + QString::number(channel) + " is out of range (" + QString::number(value) + ")!");
+                    return false;
+                }
                 sequence[channel].append(value);
             }
         }
@@ -1372,6 +1376,10 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
                 int value = 128 + gotoTarget;
                 if (channel == 1) {
                     value += sequence[0].size();
+                }
+                if (value > 255) {
+                    displayMessage("Unable to export: Goto target in channel " + QString::number(channel) + " is out of range (" + QString::number(value) + ")!");
+                    return false;
                 }
                 sequence[channel].append(value);
             }
