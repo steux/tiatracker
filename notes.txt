@@ -1,10 +1,4 @@
-globalSpeed:
-- Change version display to 1.2
-- Update manual
-
-
-
-
 VERSION 1.2
 - global speed/tempo
+- updated manual
 - fix: row "100" was indented incorrectly in editor
