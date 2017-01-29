@@ -7,4 +7,6 @@ VERSION 1.2
 - updated manual
 - fix: row "100" was indented incorrectly in editor
 - goto >127
+- shortcut for insert pattern after
+- added compile command to manual
 
