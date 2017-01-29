@@ -1,8 +1,8 @@
 # TIATracker #
 
-A music tracker for making Atari VCS 2600 music on the PC, including a new sound routine for the VCS.
+A music tracker for making Atari VCS 2600 music on the PC, including a new sound routine for the VCS. Current version: 1.2
 
-(c) 2016 by Andre "Kylearan" Wichmann (andre.wichmann@gmx.de)
+(c) 2016-2017 by Andre "Kylearan" Wichmann (andre.wichmann@gmx.de)
 
 * Manual: [https://bitbucket.org/kylearan/tiatracker/raw/master/data/TIATracker_manual.pdf](https://bitbucket.org/kylearan/tiatracker/raw/master/data/TIATracker_manual.pdf)
 * Windows binaries: [http://www.compoundeye.net/demoscene/TIATracker.zip](http://www.compoundeye.net/demoscene/TIATracker.zip)
@@ -18,6 +18,8 @@ VCS sound routine features:
 * ADSR envelopes for volume and frequency for melodic instruments
 * "Overlay" percussion which will play the next melodic notes immediately
 * Arbitrary and variable pattern lengths individual for each channel
+* An option for different tempo values for odd and even rows ("Funkspeed")
+* An option to have different tempo values per pattern instead of global tempo
 * Highly optimized and configurable replayer routine
 * Richly documented source code, including specifications for all data structures
 
