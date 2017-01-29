@@ -6,3 +6,5 @@ VERSION 1.2
 - global speed/tempo
 - updated manual
 - fix: row "100" was indented incorrectly in editor
+- goto >127
+
