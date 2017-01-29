@@ -41,7 +41,8 @@ TrackTab::TrackTab(QWidget *parent) : QWidget(parent)
     addShortcut(&actionPreviousPattern, "CursorPreviousPattern");
 
     // Pattern
-    addShortcut(&actionInsertPatternBefore, "PatternInsert");
+    addShortcut(&actionInsertPatternBefore, "PatternInsertBefore");
+    addShortcut(&actionInsertPatternAfter, "PatternInsertAfter");
     patternContextMenu.addAction(&actionInsertPatternBefore);
     patternContextMenu.addAction(&actionInsertPatternAfter);
     addShortcut(&actionMovePatternUp, "PatternMoveUp");
