@@ -1,6 +1,4 @@
 globalSpeed:
-- Implement export to k65
-- Update k65 player
 - Change version display to 1.2
 - Update manual
 
