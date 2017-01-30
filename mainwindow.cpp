@@ -1237,6 +1237,7 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     bool usesFunktempo = pTrack->usesFunktempo();
     int numPatterns = 0;
     for (int channel = 0; channel < 2; ++channel) {
+        int gotoOffset = 0;
         for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
             int patternIndex = pTrack->channelSequences[channel].sequence[entry].patternIndex;
             if (!patternMapping.contains(patternIndex)) {
@@ -1388,7 +1389,8 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
             sequence[channel].append(patternMapping[patternIndex]);
             int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
             if (gotoTarget != -1) {
-                int value = 128 + gotoTarget;
+                int value = 128 + gotoTarget + gotoOffset;
+                gotoOffset++;
                 if (channel == 1) {
                     value += sequence[0].size();
                 }
@@ -1436,8 +1438,21 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
     trackString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
 
     // Init
-    trackString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
-    trackString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
+    // Correct start values for any gotos before
+    int start0 = pTrack->startPatterns[0];
+    for (int i = 0; i <= start0; ++i) {
+        if (sequence[0][i] > 127) {
+            start0++;
+        }
+    }
+    trackString.replace("%%C0INIT%%", QString::number(start0));
+    int start1 = pTrack->startPatterns[1];
+    for (int i = 0; i <= start1; ++i) {
+        if (sequence[1][i] > 127) {
+            start1++;
+        }
+    }
+    trackString.replace("%%C1INIT%%", QString::number(start1 + sequence[0].size()));
 
     // Write track data
     if (!writeAsm(fileName, trackString, "_trackdata.k65")) {
