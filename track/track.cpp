@@ -500,6 +500,8 @@ void Track::toJson(QJsonObject &json) {
     json["evenspeed"] = evenSpeed;
     json["oddspeed"] = oddSpeed;
     json["rowsperbeat"] = rowsPerBeat;
+    json["startpattern0"] = startPatterns[0];
+    json["startpattern1"] = startPatterns[1];
     // Pitch Guide is optional
     if (guideBaseFreq != 0.0) {
         json["pitchGuideName"] = guideName;
@@ -571,6 +573,17 @@ bool Track::fromJson(const QJsonObject &json) {
     }
     oddSpeed = json["oddspeed"].toInt();
     rowsPerBeat = json["rowsperbeat"].toInt();
+    // Start patterns
+    if (json.contains("startpattern0")) {
+        startPatterns[0] = json["startpattern0"].toInt();
+    } else {
+        startPatterns[0] = 0;
+    }
+    if (json.contains("startpattern1")) {
+        startPatterns[1] = json["startpattern1"].toInt();
+    } else {
+        startPatterns[1] = 0;
+    }
     // Pitch Guide is optional
     if (json.contains("pitchGuideBaseFrequency")) {
         guideBaseFreq = json["pitchGuideBaseFrequency"].toDouble();
