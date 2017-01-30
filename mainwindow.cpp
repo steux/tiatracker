@@ -984,6 +984,7 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
     bool usesFunktempo = pTrack->usesFunktempo();
     int numPatterns = 0;
     for (int channel = 0; channel < 2; ++channel) {
+        int gotoOffset = 0;
         for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
             int patternIndex = pTrack->channelSequences[channel].sequence[entry].patternIndex;
             if (!patternMapping.contains(patternIndex)) {
@@ -1135,7 +1136,8 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
             sequence[channel].append(patternMapping[patternIndex]);
             int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
             if (gotoTarget != -1) {
-                int value = 128 + gotoTarget;
+                int value = 128 + gotoTarget + gotoOffset;
+                gotoOffset++;
                 if (channel == 1) {
                     value += sequence[0].size();
                 }
@@ -1178,8 +1180,21 @@ bool MainWindow::exportTrackSpecificsDasm(QString fileName) {
     }
     initString.replace("%%AUTHOR%%", pTrack->metaAuthor);
     initString.replace("%%NAME%%", pTrack->metaName);
-    initString.replace("%%C0INIT%%", QString::number(pTrack->startPatterns[0]));
-    initString.replace("%%C1INIT%%", QString::number(pTrack->startPatterns[1] + sequence[0].size()));
+    // Correct start values for any gotos before
+    int start0 = pTrack->startPatterns[0];
+    for (int i = 0; i <= start0; ++i) {
+        if (sequence[0][i] > 127) {
+            start0++;
+        }
+    }
+    initString.replace("%%C0INIT%%", QString::number(start0));
+    int start1 = pTrack->startPatterns[1];
+    for (int i = 0; i <= start1; ++i) {
+        if (sequence[1][i] > 127) {
+            start1++;
+        }
+    }
+    initString.replace("%%C1INIT%%", QString::number(start1 + sequence[0].size()));
     // Write init
     if (!writeAsm(fileName, initString, "_init.asm")) {
         displayMessage("Unable to write init file!");
