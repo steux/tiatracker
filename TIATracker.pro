@@ -99,6 +99,11 @@ FORMS    += mainwindow.ui \
 
 CONFIG += c++11
 
+CONFIG(release, debug|release) {
+    CONFIG += optimize_full
+}
+
+
 RESOURCES += \
     main.qrc
 

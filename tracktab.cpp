@@ -481,7 +481,6 @@ void TrackTab::setPause(bool) {
     pTrack->unlock();
     emit advanceEditPos();
     update();
-
 }
 
 /*************************************************************************/

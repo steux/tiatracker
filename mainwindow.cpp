@@ -273,9 +273,8 @@ void MainWindow::setWaveform(TiaSound::Distortion dist) {
 void MainWindow::updateSpeedSpinBoxes(int editPos) {
     if (!pTrack->globalSpeed) {
         // Only the left channel is used for local tempo
-        if (pTrack->getChannelNumRows(0) >= editPos) {
+        if (pTrack->getChannelNumRows(0) > editPos) {
             int patternIndex = pTrack->getPatternIndex(0, editPos);
-
             if (ui->spinBoxEvenTempo->value() != pTrack->patterns[patternIndex].evenSpeed) {
                 ui->spinBoxEvenTempo->setValue(pTrack->patterns[patternIndex].evenSpeed);
             }
