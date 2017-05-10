@@ -490,7 +490,7 @@ void MainWindow::loadTrackByName(const QString &fileName) {
 
 void MainWindow::setTrackName(QString name) {
     pTrack->name = name;
-    setWindowTitle("TIATracker v1.2 - " + pTrack->name);
+    setWindowTitle("TIATracker v1.3 - " + pTrack->name);
 }
 
 /*************************************************************************/
@@ -869,6 +869,26 @@ QString MainWindow::listToDasmBytes(QList<int> list) {
 
 /*************************************************************************/
 
+QString MainWindow::listToMadsBytes(QList<int> list) {
+    QString out;
+    for (int i = 0; i < list.size(); ++i) {
+        if (i%8 == 0) {
+            if (i > 0) {
+                out.append("\n");
+            }
+            out.append("        .byte ");
+        }
+        out = (out + "$%1").arg(list[i], 2, 16, QChar('0'));
+        if (i%8 != 7 && i != list.size() - 1) {
+            out.append(", ");
+        }
+    }
+    out.append("\n");
+    return out;
+}
+
+/*************************************************************************/
+
 QString MainWindow::listToK65Bytes(QList<int> list) {
     QString out;
     for (int i = 0; i < list.size(); ++i) {
@@ -920,6 +940,37 @@ QString MainWindow::getExportFileName() {
 bool MainWindow::exportDasmFlags(QString fileName) {
     // Export flags
     QString flagsString = readAsm("player/dasm/tt_variables.asm");
+    if (flagsString == "") {
+        return false;
+    }
+    flagsString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    flagsString.replace("%%NAME%%", pTrack->metaName);
+    flagsString.replace("%%EVENSPEED%%", QString::number(pTrack->evenSpeed));
+    flagsString.replace("%%ODDSPEED%%", QString::number(pTrack->oddSpeed));
+    bool usesGoto = pTrack->usesGoto();
+    flagsString.replace("%%USEGOTO%%", (usesGoto ? "1" : "0"));
+    bool usesSlide = pTrack->usesSlide();
+    flagsString.replace("%%USESLIDE%%", (usesSlide ? "1" : "0"));
+    bool usesOverlay = pTrack->usesOverlay();
+    flagsString.replace("%%USEOVERLAY%%", (usesOverlay ? "1" : "0"));
+    bool usesFunk = pTrack->usesFunktempo();
+    flagsString.replace("%%USEFUNKTEMPO%%", (usesFunk ? "1" : "0"));
+    flagsString.replace("%%GLOBALSPEED%%", (pTrack->globalSpeed ? "1" : "0"));
+    bool startsWithHold = pTrack->startsWithHold();
+    flagsString.replace("%%STARTSWITHNOTES%%", (startsWithHold ? "0" : "1"));
+    // Write flags
+    if (!writeAsm(fileName, flagsString, "_variables.asm")) {
+        displayMessage("Unable to write variables file!");
+        return false;
+    }
+    return true;
+}
+
+/*************************************************************************/
+
+bool MainWindow::exportMadsFlags(QString fileName) {
+    // Export flags
+    QString flagsString = readAsm("player/mads/tt_variables.asm");
     if (flagsString == "") {
         return false;
     }
@@ -1467,7 +1518,7 @@ bool MainWindow::exportTrackSpecificsK65(QString fileName) {
 void MainWindow::on_actionExportDasm_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecificsDasm(fileName)) {
+    if (fileName!="" && !exportTrackSpecificsDasm(fileName)) {
         return;
     }
 }
@@ -1477,7 +1528,7 @@ void MainWindow::on_actionExportDasm_triggered() {
 void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecificsDasm(fileName)) {
+    if (fileName!="" && !exportTrackSpecificsDasm(fileName)) {
         return;
     }
     // Player
@@ -1493,6 +1544,316 @@ void MainWindow::on_actionExport_complete_player_to_dasm_triggered() {
     }
     // Framework
     QString frameworkString = readAsm("player/dasm/tt_player_framework.asm");
+    if (frameworkString == "") {
+        return;
+    }
+    frameworkString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    frameworkString.replace("%%NAME%%", pTrack->metaName);
+    if (pTrack->getTvMode() == TiaSound::TvStandard::PAL) {
+        frameworkString.replace("%%PAL%%", "1");
+        frameworkString.replace("%%NTSC%%", "0");
+    } else {
+        frameworkString.replace("%%PAL%%", "0");
+        frameworkString.replace("%%NTSC%%", "1");
+    }
+    // Remove path info from filename
+    QString baseName(QFileInfo(fileName).fileName());
+    frameworkString.replace("%%FILENAME%%", baseName);
+    if (!writeAsm(fileName, frameworkString, "_player_framework.asm")) {
+        displayMessage("Unable to write framework file!");
+        return;
+    }
+}
+
+/*************************************************************************/
+
+bool MainWindow::exportTrackSpecificsMads(QString fileName) {
+    if (!exportMadsFlags(fileName)) {
+        return false;
+    }
+
+    // Export track data
+    QString trackString = readAsm("player/mads/tt_trackdata.asm");
+    if (trackString == "") {
+        return false;
+    }
+    trackString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    trackString.replace("%%NAME%%", pTrack->metaName);
+    // Mapping of encountered to real, to weed out the unused
+    QMap<int, int> insMapping{};
+    int numInstruments = 0;
+    QList<int> insWaveforms;
+    QList<int> insADStarts;
+    QList<int> insSustainStarts;
+    QList<int> insReleaseStarts;
+    int insEnvelopeIndex = 0;
+    QString insString;
+    QMap<int, int> percMapping{};
+    int numPercussion = 0;
+    QList<int> percStarts;
+    int percEnvelopeIndex = 0;
+    QString percFreqString;
+    QString percCtrlVolString;
+    QMap<int, int> patternMapping{};
+    QString patternString;
+    QString patternPtrString;
+    QVector<QList<int>> sequence(2);
+    QList<int> patternSpeeds;
+    bool usesFunktempo = pTrack->usesFunktempo();
+    int numPatterns = 0;
+    for (int channel = 0; channel < 2; ++channel) {
+        int gotoOffset = 0;
+        for (int entry = 0; entry < pTrack->channelSequences[channel].sequence.size(); ++entry) {
+            int patternIndex = pTrack->channelSequences[channel].sequence[entry].patternIndex;
+            if (!patternMapping.contains(patternIndex)) {
+                // Pattern not encountered yet
+                patternMapping[patternIndex] = numPatterns;
+                numPatterns++;
+                // Write out pattern
+                patternString.append("; " + pTrack->patterns[patternIndex].name + "\n");
+                patternString.append("tt_pattern" + QString::number(patternMapping[patternIndex]) + ":\n");
+                // Loop over all notes
+                QList<int> patternValues;
+                for (int n = 0; n < pTrack->patterns[patternIndex].notes.size(); ++n) {
+                    Track::Note *note = &(pTrack->patterns[patternIndex].notes[n]);
+                    switch (note->type) {
+                    case Track::Note::instrumentType::Hold:
+                    {
+                        patternValues.append(int(Emulation::Player::NoteHold));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Instrument:
+                    {
+                        if (!insMapping.contains(note->instrumentNumber)) {
+                            // Instrument not encountered yet
+                            insMapping[note->instrumentNumber] = numInstruments;
+                            Track::Instrument *ins = &(pTrack->instruments[note->instrumentNumber]);
+                            // insSize includes end marker that is not in vol/freq lists, so do -1
+                            int insSize = ins->calcEffectiveSize() - 1;
+                            QList<int> insEnvelopeValues;
+                            for (int i = 0; i < insSize; ++i) {
+                                int freqValue = ins->frequencies[i] + 8;
+                                int volValue = ins->volumes[i];
+                                insEnvelopeValues.append((freqValue<<4)|volValue);
+                            }
+                            // Insert dummy byte between sustain and release
+                            insEnvelopeValues.insert(ins->getReleaseStart(), 0);
+                            // Insert end marker
+                            insEnvelopeValues.append(0);
+                            // Insert indexes. Two times if PURE_COMBINED
+                            for (int i = 0; i < (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1); ++i) {
+                                insADStarts.append(insEnvelopeIndex);
+                                insSustainStarts.append(insEnvelopeIndex + ins->getSustainStart());
+                                // +1 for dummy byte, -1 because player expects that
+                                insReleaseStarts.append(insEnvelopeIndex + ins->getReleaseStart());
+                            }
+                            // Store waveform(s)
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_HIGH));
+                                insWaveforms.append(TiaSound::getDistortionInt(TiaSound::Distortion::PURE_LOW));
+                            } else {
+                                insWaveforms.append(TiaSound::getDistortionInt(ins->baseDistortion));
+                            }
+                            // Write out instrument data
+                            insString.append("; " + QString::number(numInstruments));
+                            if (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED) {
+                                insString.append("+" + QString::number(numInstruments + 1));
+                            }
+                            insString.append(": " + ins->name + "\n");
+                            insString.append(listToMadsBytes(insEnvelopeValues));
+                            // Increase running instrument index
+                            numInstruments += (ins->baseDistortion == TiaSound::Distortion::PURE_COMBINED ? 2 : 1);
+                            // +1 for dummy byte, +1 for end marker
+                            insEnvelopeIndex += insSize + 2;
+                        }
+                        // +1 because first instrument number is 1
+                        int valueIns = insMapping[note->instrumentNumber] + 1;
+                        if (pTrack->instruments[note->instrumentNumber].baseDistortion == TiaSound::Distortion::PURE_COMBINED
+                                && note->value > 31) {
+                            valueIns++;
+                        }
+                        int valueFreq = (note->value)%32;
+                        patternValues.append((valueIns<<5)|valueFreq);
+                        break;
+                    }
+                    case Track::Note::instrumentType::Pause:
+                    {
+                        patternValues.append(int(Emulation::Player::NotePause));
+                        break;
+                    }
+                    case Track::Note::instrumentType::Percussion:
+                    {
+                        if (!percMapping.contains(note->instrumentNumber)) {
+                            // Percussion not encountered yet
+                            percMapping[note->instrumentNumber] = numPercussion;
+                            Track::Percussion *perc = &(pTrack->percussion[note->instrumentNumber]);
+                            // percSize includes end marker that is not in lists, so do -1
+                            int percSize = perc->calcEffectiveSize() - 1;
+                            QList<int> percFreqValues;
+                            QList<int> percCtrlVolValues;
+                            for (int i = 0; i < percSize; ++i) {
+                                int freqValue = perc->frequencies[i];
+                                if (perc->overlay && i == percSize - 1) {
+                                    freqValue += 128;
+                                }
+                                percFreqValues.append(freqValue);
+                                int ctrlValue = TiaSound::getDistortionInt(perc->waveforms[i]);
+                                int volValue = perc->volumes[i];
+                                percCtrlVolValues.append((ctrlValue<<4)|volValue);
+                            }
+                            // Insert end marker
+                            percFreqValues.append(0);
+                            percCtrlVolValues.append(0);
+                            // Insert index. +1 because player expects that
+                            percStarts.append(percEnvelopeIndex + 1);
+                            // Write out percussion data
+                            percFreqString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percFreqString.append(listToMadsBytes(percFreqValues));
+                            percCtrlVolString.append("; " + QString::number(numPercussion) + ": " + perc->name + "\n");
+                            percCtrlVolString.append(listToMadsBytes(percCtrlVolValues));
+                            // Increase running percussion index
+                            numPercussion++;
+                            // +1 for end marker
+                            percEnvelopeIndex += percSize + 1;
+                        }
+                        patternValues.append(percMapping[note->instrumentNumber] + Emulation::Player::NoteFirstPerc);
+                        break;
+                    }
+                    case Track::Note::instrumentType::Slide:
+                    {
+                        patternValues.append(Emulation::Player::NoteHold + note->value);
+                        break;
+                    }
+                    }
+                }
+                // Pattern end marker
+                patternValues.append(0);
+                patternString.append(listToMadsBytes(patternValues));
+                patternString.append("\n");
+                // Pattern speed, if local tempo
+                if (!pTrack->globalSpeed) {
+                    if (usesFunktempo) {
+                        int evenSpeed = pTrack->patterns[patternIndex].evenSpeed - 1;
+                        int oddSpeed = pTrack->patterns[patternIndex].oddSpeed - 1;
+                        patternSpeeds.append(evenSpeed*16 + oddSpeed);
+                    } else {
+                        patternSpeeds.append(pTrack->patterns[patternIndex].evenSpeed - 1);
+                    }
+                }
+                // Pattern ptr
+                if ((patternMapping.size())%4 == 1) {
+                    patternPtrString.append("        .byte ");
+                } else {
+                    patternPtrString.append(", ");
+                }
+                patternPtrString.append("<tt_pattern" + QString::number(patternMapping[patternIndex]));
+                if ((patternMapping.size())%4 == 0) {
+                    patternPtrString.append("\n");
+                }
+            }
+            sequence[channel].append(patternMapping[patternIndex]);
+            int gotoTarget = pTrack->channelSequences[channel].sequence[entry].gotoTarget;
+            if (gotoTarget != -1) {
+                int value = 128 + gotoTarget + gotoOffset;
+                gotoOffset++;
+                if (channel == 1) {
+                    value += sequence[0].size();
+                }
+                if (value > 255) {
+                    displayMessage("Unable to export: Goto target in channel " + QString::number(channel) + " is out of range (" + QString::number(value) + ")!");
+                    return false;
+                }
+                sequence[channel].append(value);
+            }
+        }
+    }
+    trackString.replace("%%INSFREQVOLTABLE%%", insString);
+    trackString.replace("%%INSCTRLTABLE%%", listToMadsBytes(insWaveforms));
+    trackString.replace("%%INSADINDEXES%%", listToMadsBytes(insADStarts));
+    trackString.replace("%%INSSUSTAININDEXES%%", listToMadsBytes(insSustainStarts));
+    trackString.replace("%%INSRELEASEINDEXES%%", listToMadsBytes(insReleaseStarts));
+    trackString.replace("%%PERCINDEXES%%", listToMadsBytes(percStarts));
+    trackString.replace("%%PERCFREQTABLE%%", percFreqString);
+    trackString.replace("%%PERCCTRLVOLTABLE%%", percCtrlVolString);
+    trackString.replace("%%SEQUENCECHANNEL0%%", listToMadsBytes(sequence[0]));
+    trackString.replace("%%SEQUENCECHANNEL1%%", listToMadsBytes(sequence[1]));
+    trackString.replace("%%PATTERNDEFS%%", patternString);
+    if (!pTrack->globalSpeed) {
+        trackString.replace("%%PATTERNSPEEDS%%", listToMadsBytes(patternSpeeds));
+    }
+    trackString.replace("%%PATTERNPTRLO%%", patternPtrString);
+    patternPtrString.replace("<", ">");
+    trackString.replace("%%PATTERNPTRHI%%", patternPtrString);
+
+    // Write track data
+    if (!writeAsm(fileName, trackString, "_trackdata.asm")) {
+        displayMessage("Unable to write trackdata file!");
+        return false;
+    }
+
+    // Export Init
+    QString initString = readAsm("player/mads/tt_init.asm");
+    if (initString == "") {
+        return false;
+    }
+    initString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    initString.replace("%%NAME%%", pTrack->metaName);
+    // Correct start values for any gotos before
+    int start0 = pTrack->startPatterns[0];
+    for (int i = 0; i <= start0; ++i) {
+        if (sequence[0][i] > 127) {
+            start0++;
+        }
+    }
+    initString.replace("%%C0INIT%%", QString::number(start0));
+    int start1 = pTrack->startPatterns[1];
+    for (int i = 0; i <= start1; ++i) {
+        if (sequence[1][i] > 127) {
+            start1++;
+        }
+    }
+    initString.replace("%%C1INIT%%", QString::number(start1 + sequence[0].size()));
+    // Write init
+    if (!writeAsm(fileName, initString, "_init.asm")) {
+        displayMessage("Unable to write init file!");
+        return false;
+    }
+
+    return true;
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_track_data_to_MADS_triggered() {
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (fileName!="" && !exportTrackSpecificsMads(fileName)) {
+        return;
+    }
+
+}
+
+/*************************************************************************/
+
+void MainWindow::on_actionExport_complete_player_to_MADS_triggered() {
+    emit stopTrack();
+    QString fileName = getExportFileName();
+    if (fileName!="" && !exportTrackSpecificsMads(fileName)) {
+        return;
+    }
+    // Player
+    QString playerString = readAsm("player/mads/tt_player.asm");
+    if (playerString == "") {
+        return;
+    }
+    playerString.replace("%%AUTHOR%%", pTrack->metaAuthor);
+    playerString.replace("%%NAME%%", pTrack->metaName);
+    if (!writeAsm(fileName, playerString, "_player.asm")) {
+        displayMessage("Unable to write player file!");
+        return;
+    }
+    // Framework
+    QString frameworkString = readAsm("player/mads/tt_player_framework.asm");
     if (frameworkString == "") {
         return;
     }
@@ -1554,7 +1915,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent *event) {
 void MainWindow::on_actionExport_track_data_to_k65_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecificsK65(fileName)) {
+    if (fileName!="" && !exportTrackSpecificsK65(fileName)) {
         return;
     }
 }
@@ -1564,7 +1925,7 @@ void MainWindow::on_actionExport_track_data_to_k65_triggered() {
 void MainWindow::on_actionExport_complete_player_to_k65_triggered() {
     emit stopTrack();
     QString fileName = getExportFileName();
-    if (!exportTrackSpecificsK65(fileName)) {
+    if (fileName!="" && !exportTrackSpecificsK65(fileName)) {
         return;
     }
     // .lst file

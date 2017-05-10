@@ -1535,6 +1535,8 @@
     <addaction name="separator"/>
     <addaction name="actionExportDasm"/>
     <addaction name="actionExport_complete_player_to_dasm"/>
+    <addaction name="actionExport_track_data_to_MADS"/>
+    <addaction name="actionExport_complete_player_to_MADS"/>
     <addaction name="actionExport_track_data_to_k65"/>
     <addaction name="actionExport_complete_player_to_k65"/>
     <addaction name="actionExport_track_data_to_csv"/>
@@ -1665,6 +1667,16 @@
   <action name="actionExport_track_data_to_csv">
    <property name="text">
     <string>Export track data to csv...</string>
+   </property>
+  </action>
+  <action name="actionExport_track_data_to_MADS">
+   <property name="text">
+    <string>Export track data to MADS...</string>
+   </property>
+  </action>
+  <action name="actionExport_complete_player_to_MADS">
+   <property name="text">
+    <string>Export complete player to MADS...</string>
    </property>
   </action>
  </widget>
