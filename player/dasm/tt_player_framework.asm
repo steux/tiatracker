@@ -18,6 +18,8 @@
 ; Song author: %%AUTHOR%%
 ; Song name: %%NAME%%
 
+; @com.wudsn.ide.asm.hardware=ATARI2600
+
         processor 6502
         include vcs.h
         

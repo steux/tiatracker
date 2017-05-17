@@ -18,6 +18,8 @@
 ; Song author: %%AUTHOR%%
 ; Song name: %%NAME%%
 
+; @com.wudsn.ide.asm.hardware=ATARI2600
+
 ; =====================================================================
 ; Initialize music.
 ; Set tt_cur_pat_index_c0/1 to the indexes of the first patterns from
