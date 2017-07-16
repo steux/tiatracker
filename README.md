@@ -1,6 +1,6 @@
 # TIATracker #
 
-A music tracker for making Atari VCS 2600 music on the PC, including a new sound routine for the VCS. Current version: 1.2
+A music tracker for making Atari VCS 2600 music on the PC, including a new sound routine for the VCS. Current version: 1.3
 
 (c) 2016-2017 by Andre "Kylearan" Wichmann (andre.wichmann@gmx.de)
 
