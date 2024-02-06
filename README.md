@@ -1,6 +1,6 @@
 This is a fork of TIATracker that integrates C code generation for cc2600 & cc7800. The original repository can be found on BitBucket at [https://bitbucket.org/kylearan/tiatracker](https://bitbucket.org/kylearan/tiatracker).
 
-# TIATrac aker #
+# TIATracker #
 
 A music tracker for making Atari VCS 2600 music on the PC, including a new sound routine for the VCS. Current version: 1.3
 
