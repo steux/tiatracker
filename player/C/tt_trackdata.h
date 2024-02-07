@@ -91,7 +91,7 @@ const char tt_InsFreqVolTable[] = {
 // real index, subtract 1.
 const char tt_PercIndexes[] = {
 %%PERCINDEXES%%
-}
+};
 
 // The AUDF frequency values for the percussion instruments.
 // If the second to last value is negative (>=128), it means it's an
@@ -168,7 +168,7 @@ const char TT_FIRST_PERC   = 17;
 // of the tt_PatternPtr tables below.
 // If TT_USE_FUNKTEMPO is 1, then the low nibble encodes
 // the even speed and the high nibble the odd speed.
-#ifndef TT_GLOBAL_SPEED
+#if _TT_GLOBAL_SPEED == 0
 const char tt_PatternSpeeds[] = {
 %%PATTERNSPEEDS%%
 };

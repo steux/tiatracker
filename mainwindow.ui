@@ -1521,7 +1521,7 @@
      <x>0</x>
      <y>0</y>
      <width>1064</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1535,6 +1535,8 @@
     <addaction name="separator"/>
     <addaction name="actionExportDasm"/>
     <addaction name="actionExport_complete_player_to_dasm"/>
+    <addaction name="actionExport_track_data_to_C"/>
+    <addaction name="actionExport_complete_player_to_C"/>
     <addaction name="actionExport_track_data_to_MADS"/>
     <addaction name="actionExport_complete_player_to_MADS"/>
     <addaction name="actionExport_track_data_to_k65"/>
@@ -1677,6 +1679,16 @@
   <action name="actionExport_complete_player_to_MADS">
    <property name="text">
     <string>Export complete player to MADS...</string>
+   </property>
+  </action>
+  <action name="actionExport_track_data_to_C">
+   <property name="text">
+    <string>Export track data to C...</string>
+   </property>
+  </action>
+  <action name="actionExport_complete_player_to_C">
+   <property name="text">
+    <string>Export complete player to C...</string>
    </property>
   </action>
  </widget>

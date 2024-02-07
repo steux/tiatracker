@@ -151,6 +151,10 @@ private slots:
 
     void on_actionExport_complete_player_to_MADS_triggered();
 
+    void on_actionExport_track_data_to_C_triggered();
+
+    void on_actionExport_complete_player_to_C_triggered();
+
 private:
     /* Tab index values */
     static const int iTabTrack = 0;
@@ -175,12 +179,15 @@ private:
     QString readAsm(QString fileName);
     bool writeAsm(QString fileName, QString content, QString extension);
     QString listToDasmBytes(QList<int> list);
+    QString listToCBytes(QList<int> list);
     QString listToMadsBytes(QList<int> list);
     QString listToK65Bytes(QList<int> list);
     QString getExportFileName();
     bool exportDasmFlags(QString fileName);
+    bool exportCFlags(QString fileName);
     bool exportMadsFlags(QString fileName);
     bool exportTrackSpecificsDasm(QString fileName);
+    bool exportTrackSpecificsC(QString fileName);
     bool exportTrackSpecificsMads(QString fileName);
     bool exportTrackSpecificsK65(QString fileName);
 
